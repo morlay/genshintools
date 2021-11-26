@@ -1,0 +1,23 @@
+{
+  "name": "genshintools",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^17.0.2",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 120
+  },
+  "dependencies": {
+    "@fast-csv/parse": "^4.3.6",
+    "@types/lodash-es": "^4.17.5",
+    "formdata-node": "^4.3.1",
+    "lodash-es": "^4.17.21",
+    "node-fetch": "^3.1.0"
+  }
+}

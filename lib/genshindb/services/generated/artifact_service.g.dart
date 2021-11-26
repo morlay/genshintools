@@ -1,0 +1,136 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of '../artifact_service.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$_ArtifactService _$$_ArtifactServiceFromJson(Map<String, dynamic> json) =>
+    _$_ArtifactService(
+      artifacts: (json['Artifacts'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(
+            int.parse(k), GSArtifact.fromJson(e as Map<String, dynamic>)),
+      ),
+      artifactSets: (json['ArtifactSets'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(
+            int.parse(k), GSArtifactSet.fromJson(e as Map<String, dynamic>)),
+      ),
+      artifactMainPropDepots:
+          (json['ArtifactMainPropDepots'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(
+            int.parse(k),
+            (e as List<dynamic>)
+                .map((e) => $enumDecode(_$FightPropEnumMap, e))
+                .toList()),
+      ),
+      artifactAppendPropDepots:
+          (json['ArtifactAppendPropDepots'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(int.parse(k),
+            GSArtifactAppendDepot.fromJson(e as Map<String, dynamic>)),
+      ),
+      artifactLevelupExps: (json['ArtifactLevelupExps'] as List<dynamic>?)
+          ?.map((e) => (e as List<dynamic>).map((e) => e as int).toList())
+          .toList(),
+      artifactLevelupMainPropValues:
+          (json['ArtifactLevelupMainPropValues'] as List<dynamic>?)
+              ?.map((e) => (e as List<dynamic>)
+                  .map((e) => (e as Map<String, dynamic>).map(
+                        (k, e) => MapEntry($enumDecode(_$FightPropEnumMap, k),
+                            (e as num).toDouble()),
+                      ))
+                  .toList())
+              .toList(),
+    );
+
+Map<String, dynamic> _$$_ArtifactServiceToJson(_$_ArtifactService instance) =>
+    <String, dynamic>{
+      'Artifacts': instance.artifacts?.map((k, e) => MapEntry(k.toString(), e)),
+      'ArtifactSets':
+          instance.artifactSets?.map((k, e) => MapEntry(k.toString(), e)),
+      'ArtifactMainPropDepots': instance.artifactMainPropDepots?.map((k, e) =>
+          MapEntry(k.toString(), e.map((e) => _$FightPropEnumMap[e]).toList())),
+      'ArtifactAppendPropDepots': instance.artifactAppendPropDepots
+          ?.map((k, e) => MapEntry(k.toString(), e)),
+      'ArtifactLevelupExps': instance.artifactLevelupExps,
+      'ArtifactLevelupMainPropValues': instance.artifactLevelupMainPropValues
+          ?.map((e) => e
+              .map((e) => e.map((k, e) => MapEntry(_$FightPropEnumMap[k], e)))
+              .toList())
+          .toList(),
+    };
+
+const _$FightPropEnumMap = {
+  FightProp.LEVEL: 'FIGHT_PROP_LEVEL',
+  FightProp.ENEMY_ADD_LEVEL: 'FIGHT_PROP_ENEMY_ADD_LEVEL',
+  FightProp.ADD_LEVEL: 'FIGHT_PROP_ADD_LEVEL',
+  FightProp.ADD_ELEMENTAL_SKILL_LEVEL: 'FIGHT_PROP_ADD_ELEMENTAL_SKILL_LEVEL',
+  FightProp.ADD_ELEMENTAL_BURST_LEVEL: 'FIGHT_PROP_ADD_ELEMENTAL_BURST_LEVEL',
+  FightProp.BASE_HP: 'FIGHT_PROP_BASE_HP',
+  FightProp.BASE_ATTACK: 'FIGHT_PROP_BASE_ATTACK',
+  FightProp.BASE_DEFENSE: 'FIGHT_PROP_BASE_DEFENSE',
+  FightProp.HP: 'FIGHT_PROP_HP',
+  FightProp.HP_PERCENT: 'FIGHT_PROP_HP_PERCENT',
+  FightProp.ATTACK: 'FIGHT_PROP_ATTACK',
+  FightProp.ATTACK_PERCENT: 'FIGHT_PROP_ATTACK_PERCENT',
+  FightProp.DEFENSE: 'FIGHT_PROP_DEFENSE',
+  FightProp.DEFENSE_PERCENT: 'FIGHT_PROP_DEFENSE_PERCENT',
+  FightProp.CRITICAL: 'FIGHT_PROP_CRITICAL',
+  FightProp.CRITICAL_HURT: 'FIGHT_PROP_CRITICAL_HURT',
+  FightProp.CHARGE_EFFICIENCY: 'FIGHT_PROP_CHARGE_EFFICIENCY',
+  FightProp.HEAL_ADD: 'FIGHT_PROP_HEAL_ADD',
+  FightProp.HEALED_ADD: 'FIGHT_PROP_HEALED_ADD',
+  FightProp.ELEMENT_MASTERY: 'FIGHT_PROP_ELEMENT_MASTERY',
+  FightProp.FIRE_ADD_HURT: 'FIGHT_PROP_FIRE_ADD_HURT',
+  FightProp.ELEC_ADD_HURT: 'FIGHT_PROP_ELEC_ADD_HURT',
+  FightProp.WATER_ADD_HURT: 'FIGHT_PROP_WATER_ADD_HURT',
+  FightProp.WIND_ADD_HURT: 'FIGHT_PROP_WIND_ADD_HURT',
+  FightProp.ROCK_ADD_HURT: 'FIGHT_PROP_ROCK_ADD_HURT',
+  FightProp.GRASS_ADD_HURT: 'FIGHT_PROP_GRASS_ADD_HURT',
+  FightProp.ICE_ADD_HURT: 'FIGHT_PROP_ICE_ADD_HURT',
+  FightProp.PHYSICAL_ADD_HURT: 'FIGHT_PROP_PHYSICAL_ADD_HURT',
+  FightProp.FIRE_SUB_HURT: 'FIGHT_PROP_FIRE_SUB_HURT',
+  FightProp.ELEC_SUB_HURT: 'FIGHT_PROP_ELEC_SUB_HURT',
+  FightProp.WATER_SUB_HURT: 'FIGHT_PROP_WATER_SUB_HURT',
+  FightProp.WIND_SUB_HURT: 'FIGHT_PROP_WIND_SUB_HURT',
+  FightProp.ROCK_SUB_HURT: 'FIGHT_PROP_ROCK_SUB_HURT',
+  FightProp.GRASS_SUB_HURT: 'FIGHT_PROP_GRASS_SUB_HURT',
+  FightProp.ICE_SUB_HURT: 'FIGHT_PROP_ICE_SUB_HURT',
+  FightProp.PHYSICAL_SUB_HURT: 'FIGHT_PROP_PHYSICAL_SUB_HURT',
+  FightProp.ADD_HURT: 'FIGHT_PROP_ADD_HURT',
+  FightProp.SUB_HURT: 'FIGHT_PROP_SUB_HURT',
+  FightProp.NORMAL_ATTACK_ADD_HURT: 'FIGHT_PROP_NORMAL_ATTACK_ADD_HURT',
+  FightProp.NORMAL_ATTACK_ADD_CRITICAL: 'FIGHT_PROP_NORMAL_ATTACK_ADD_CRITICAL',
+  FightProp.CHARGED_ATTACK_ADD_HURT: 'FIGHT_PROP_CHARGED_ATTACK_ADD_HURT',
+  FightProp.CHARGED_ATTACK_ADD_CRITICAL:
+      'FIGHT_PROP_CHARGED_ATTACK_ADD_CRITICAL',
+  FightProp.PLUNGING_ATTACK_ADD_HURT: 'FIGHT_PROP_PLUNGING_ATTACK_ADD_HURT',
+  FightProp.PLUNGING_ATTACK_ADD_CRITICAL:
+      'FIGHT_PROP_PLUNGING_ATTACK_ADD_CRITICAL',
+  FightProp.ELEMENTAL_SKILL_ADD_HURT: 'FIGHT_PROP_ELEMENTAL_SKILL_ADD_HURT',
+  FightProp.ELEMENTAL_SKILL_ADD_CRITICAL:
+      'FIGHT_PROP_ELEMENTAL_SKILL_ADD_CRITICAL',
+  FightProp.ELEMENTAL_BURST_ADD_HURT: 'FIGHT_PROP_ELEMENTAL_BURST_ADD_HURT',
+  FightProp.ELEMENTAL_BURST_ADD_CRITICAL:
+      'FIGHT_PROP_ELEMENTAL_BURST_ADD_CRITICAL',
+  FightProp.MELT_ADD_HURT: 'FIGHT_PROP_MELT_ADD_HURT',
+  FightProp.VAPORIZE_ADD_HURT: 'FIGHT_PROP_VAPORIZE_ADD_HURT',
+  FightProp.SUPER_CONDUCT_ADD_HURT: 'FIGHT_PROP_SUPER_CONDUCT_ADD_HURT',
+  FightProp.SWIRL_ADD_HURT: 'FIGHT_PROP_SWIRL_ADD_HURT',
+  FightProp.ELECTRO_CHARGED_ADD_HURT: 'FIGHT_PROP_ELECTRO_CHARGED_ADD_HURT',
+  FightProp.OVERLOADED_ADD_HURT: 'FIGHT_PROP_OVERLOADED_ADD_HURT',
+  FightProp.SHATTERED_ADD_HURT: 'FIGHT_PROP_SHATTERED_ADD_HURT',
+  FightProp.SHIELD_COST_MINUS_RATIO: 'FIGHT_PROP_SHIELD_COST_MINUS_RATIO',
+  FightProp.ENEMY_LEVEL: 'FIGHT_PROP_ENEMY_LEVEL',
+  FightProp.ENEMY_RESISTANCE: 'FIGHT_PROP_ENEMY_RESISTANCE',
+  FightProp.ENEMY_SUB_RESISTANCE: 'FIGHT_PROP_ENEMY_SUB_RESISTANCE',
+  FightProp.ENEMY_SUB_DEFENSE: 'FIGHT_PROP_ENEMY_SUB_DEFENSE',
+  FightProp.SPEED_PERCENT: 'FIGHT_PROP_SPEED_PERCENT',
+  FightProp.SKILL_CD_MINUS_RATIO: 'FIGHT_PROP_SKILL_CD_MINUS_RATIO',
+  FightProp.ATTACK_ADD_RADIO: 'FIGHT_PROP_ATTACK_ADD_RADIO',
+  FightProp.ELEMENTAL_BURST_ADD_HURT_ON_CHARGE_EFFICIENCY:
+      'FIGHT_PROP_ELEMENTAL_BURST_ADD_HURT_ON_CHARGE_EFFICIENCY',
+  FightProp.ATTACK_PERCENT_ON_CHARGE_EFFICIENCY:
+      'FIGHT_PROP_ATTACK_PERCENT_ON_CHARGE_EFFICIENCY',
+  FightProp.ATTACK_PERCENT_ON_HP: 'FIGHT_PROP_ATTACK_PERCENT_ON_HP',
+};
