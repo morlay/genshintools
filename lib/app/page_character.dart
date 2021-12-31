@@ -918,7 +918,7 @@ class CurrentArtifact extends StatelessWidget {
               optionBuilder: (context, option, selected) {
                 return PlayerArtifactListTile(
                   pa: option.value,
-                  onTap: () {
+                  onAvatarTap: () {
                     option.select();
                   },
                 );
@@ -926,7 +926,7 @@ class CurrentArtifact extends StatelessWidget {
               tileBuilder: (context, selected) {
                 return selected.value?.let((pa) => PlayerArtifactListTile(
                         pa: pa,
-                        onTap: () {
+                        onAvatarTap: () {
                           selected.showOptions(context);
                         })) ??
                     ListTile(

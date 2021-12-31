@@ -105,11 +105,11 @@ class PlayerArtifactListTile extends HookWidget {
   const PlayerArtifactListTile({
     Key? key,
     required this.pa,
-    this.onTap,
+    this.onAvatarTap,
   }) : super(key: key);
 
   final PlayerArtifact pa;
-  final void Function()? onTap;
+  final void Function()? onAvatarTap;
 
   @override
   Widget build(BuildContext context) {
@@ -121,50 +121,48 @@ class PlayerArtifactListTile extends HookWidget {
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      onTap: onTap,
-      leading: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          WithLevel(
-            level: pa.level,
-            child: GSImage(
-              domain: 'artifact',
-              nameID: a.nameID,
-              rarity: pa.rarity,
-              size: 48,
+      onTap: () => PageArtifactAdd.show(context, pa.equipType, pa),
+      onLongPress: () => _remove(context, pa),
+      leading: GestureDetector(
+        onTap: onAvatarTap,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            WithLevel(
+              level: pa.level,
+              child: GSImage(
+                domain: 'artifact',
+                nameID: a.nameID,
+                rarity: pa.rarity,
+                size: 48,
+              ),
             ),
-          ),
-          Positioned(
-            right: -8,
-            top: -8,
-            child: Column(
-              children: [
-                ...?db.character.findOrNull("${pa.usedBy}")?.let((c) => [
-                      SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: GSImage(
-                          domain: "character",
-                          rarity: c.rarity,
-                          nameID: c.nameID,
-                          rounded: true,
-                          borderSize: 2,
-                        ),
-                      )
-                    ]),
-              ],
+            Positioned(
+              right: -8,
+              top: -8,
+              child: Column(
+                children: [
+                  ...?db.character.findOrNull("${pa.usedBy}")?.let((c) => [
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: GSImage(
+                            domain: "character",
+                            rarity: c.rarity,
+                            nameID: c.nameID,
+                            rounded: true,
+                            borderSize: 2,
+                          ),
+                        )
+                      ]),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       title: Row(
         children: [
-          ViewFightProps(
-            shouldHighlight: (fp) => true,
-            fightProps: FightProps({
-              pa.main: db.artifact.mainFightProp(pa.main, pa.rarity, pa.level)
-            }),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -175,34 +173,11 @@ class PlayerArtifactListTile extends HookWidget {
               ),
             ),
           ),
-          Wrap(
-            spacing: 8,
-            children: [
-              CupertinoButton(
-                minSize: double.minPositive,
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  _remove(context, pa);
-                },
-                child: Icon(
-                  Icons.delete,
-                  size: 16,
-                  color: Theme.of(context).iconTheme.color,
-                ),
-              ),
-              CupertinoButton(
-                minSize: double.minPositive,
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  PageArtifactAdd.show(context, pa.equipType, pa);
-                },
-                child: Icon(
-                  Icons.edit,
-                  size: 16,
-                  color: Theme.of(context).iconTheme.color,
-                ),
-              )
-            ],
+          ViewFightProps(
+            shouldHighlight: (fp) => true,
+            fightProps: FightProps({
+              pa.main: db.artifact.mainFightProp(pa.main, pa.rarity, pa.level)
+            }),
           ),
         ],
       ),
@@ -228,7 +203,7 @@ class PlayerArtifactListTile extends HookWidget {
                   fightProps: FightProps({
                     fp: appendDepot.valueFor(fp, pa.appends[fp]),
                   }),
-                )
+                ),
               ],
             );
           })

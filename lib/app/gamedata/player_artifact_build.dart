@@ -90,7 +90,11 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
     builds[newPa] = newPa.usedBy;
 
     if (fromPa != null) {
-      builds[fromPa] = usedBy;
+      if ((builds[fromPa] ?? 0) == newPa.usedBy) {
+        builds.remove(fromPa);
+      } else {
+        builds[fromPa] = usedBy;
+      }
     }
 
     for (var pa in builds.keys) {
