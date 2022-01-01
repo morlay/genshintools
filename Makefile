@@ -19,10 +19,10 @@ distribute.android.beta:
 	CHANNEL=beta $(TS_NODE) ./scripts/distribute.ts
 
 build.android:
-	flutter build apk --release --build-number=$(shell date +%m%d%H%M)
+	flutter build apk --release --build-number=$(shell date +%y%m%d%H)
 
 build.ios:
-	flutter build ios --no-codesign --release --build-number=$(shell date +%m%d%H%M)
+	flutter build ios --no-codesign --release --build-number=$(shell date +%y%m%d%H)
 
 clean:
 	flutter clean
