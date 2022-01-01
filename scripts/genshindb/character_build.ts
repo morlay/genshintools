@@ -1,4 +1,4 @@
-import { reduce, snakeCase, trim, uniqBy } from "lodash-es";
+import { reduce, snakeCase, trim, uniq, uniqBy } from "lodash-es";
 import { findWeapon } from "./domain_weapon";
 import { findArtifactSet } from "./domain_artifact";
 
@@ -90,6 +90,27 @@ const artifactAliases: { [k: string]: string } = {
 };
 
 export const characterBuild = (name: string, b: any) => {
+  function completeArtifactAffixPropTypes(list: string[]) {
+    return uniq(
+      reduce(
+        list,
+        (ret, f) => {
+          if (f == "FIGHT_PROP_HP_PERCENT") {
+            return [...ret, f, "FIGHT_PROP_HP"];
+          }
+          if (f == "FIGHT_PROP_ATTACK_PERCENT") {
+            return [...ret, f, "FIGHT_PROP_ATTACK"];
+          }
+          if (f == "FIGHT_PROP_DEFENSE_PERCENT") {
+            return [...ret, f, "FIGHT_PROP_DEFENSE"];
+          }
+          return [...ret, f];
+        },
+        [] as string[],
+      ),
+    );
+  }
+
   return {
     Role: b.role,
     Weapons: b.weapons
@@ -107,7 +128,9 @@ export const characterBuild = (name: string, b: any) => {
       EQUIP_RING: resolvePropTypes(b.mainStats.goblet),
       EQUIP_DRESS: resolvePropTypes(b.mainStats.circlet),
     },
-    ArtifactAffixPropTypes: reduce(b.subStats, (ret: string[], s: string) => [...ret, ...resolvePropTypes(s)], []),
+    ArtifactAffixPropTypes: completeArtifactAffixPropTypes(
+      reduce(b.subStats, (ret: string[], s: string) => [...ret, ...resolvePropTypes(s)], []),
+    ),
     ArtifactSetPairs: uniqBy(
       b.artifacts.reduce((ret: string[][], sets: string[]) => {
         const pair = sets
