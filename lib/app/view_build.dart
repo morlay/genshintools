@@ -378,7 +378,7 @@ class ViewBuildArtifacts extends HookWidget {
       runSpacing: 2,
       children: [
         ...{
-          a.main,
+          ...?state.defaultBuild?.artifact(et).let((a) => [a.main]),
           ...?builds.artifactMainPropTypes?[et],
         }.map((fp) => Opacity(
               opacity: fp == a.main ? 1 : 0.5,
