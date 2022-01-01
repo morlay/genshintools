@@ -168,11 +168,11 @@ class PageArtifactAdd extends HookWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 24,
+                vertical: 12,
+                horizontal: 16,
               ),
               child: Text(fp.label(),
-                  style: Theme.of(context).textTheme.headline6),
+                  style: Theme.of(context).textTheme.subtitle1),
             ),
             const Divider(height: 1),
             Expanded(
@@ -190,7 +190,11 @@ class PageArtifactAdd extends HookWidget {
           },
           selected: option.value == selected.value,
           selectedTileColor: Theme.of(context).focusColor,
-          title: buildAppendValue(artifactAppendDepot, fp, option.value),
+          title: Row(
+            children: [
+              buildAppendValue(artifactAppendDepot, fp, option.value),
+            ],
+          ),
         );
       },
       tileBuilder: (context, selected) {

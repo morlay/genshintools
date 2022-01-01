@@ -377,7 +377,10 @@ class ViewBuildArtifacts extends HookWidget {
     return Wrap(
       runSpacing: 2,
       children: [
-        ...?builds.artifactMainPropTypes?[et]?.map((fp) => Opacity(
+        ...{
+          a.main,
+          ...?builds.artifactMainPropTypes?[et],
+        }.map((fp) => Opacity(
               opacity: fp == a.main ? 1 : 0.5,
               child: GestureDetector(
                 onTap: () {

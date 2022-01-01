@@ -145,6 +145,22 @@ class FormSyncSetting extends HookWidget {
                 child: const Text('从 WebDAV 同步到本地'),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: ElevatedButton(
+                onPressed: blocSyncer.state?.let((it) {
+                  if (it.valid == true) {
+                    return () => showAlert(context,
+                        content: const Text("本次操作将覆盖 WebDAV 数据，是否确认？"),
+                        onConfirm: () => blocSyncer.sync());
+                  }
+                }),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40),
+                ),
+                child: const Text('从本地同步到 WebDAV'),
+              ),
+            ),
           ],
         ),
       ),

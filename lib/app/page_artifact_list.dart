@@ -164,49 +164,60 @@ class PlayerArtifactListTile extends HookWidget {
       title: Row(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  Text(pa.name),
-                ],
-              ),
-            ),
-          ),
-          ViewFightProps(
-            shouldHighlight: (fp) => true,
-            fightProps: FightProps({
-              pa.main: db.artifact.mainFightProp(pa.main, pa.rarity, pa.level)
-            }),
-          ),
-        ],
-      ),
-      subtitle: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ...pa.appends.keys.map((fp) {
-            return Stack(
-              clipBehavior: Clip.none,
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Positioned(
-                  bottom: -4,
-                  left: 2,
-                  child: AppendValueIndex(
-                    indexes: appendDepot.valueIndexes(fp, pa.appends[fp]),
-                  ),
-                ),
+                Text(pa.name),
                 ViewFightProps(
-                  shouldHighlight: (fp) {
-                    return builds?.artifactAffixPropTypes?.contains(fp) ??
-                        false;
-                  },
+                  shouldHighlight: (fp) => true,
                   fightProps: FightProps({
-                    fp: appendDepot.valueFor(fp, pa.appends[fp]),
+                    pa.main: db.artifact.mainFightProp(
+                      pa.main,
+                      pa.rarity,
+                      pa.level,
+                    )
                   }),
                 ),
               ],
-            );
-          })
+            ),
+          ),
+          const SizedBox(
+            height: 56,
+            child: VerticalDivider(),
+          ),
+          Expanded(
+            flex: 3,
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ...pa.appends.keys.map((fp) {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        bottom: -4,
+                        left: 2,
+                        child: AppendValueIndex(
+                          indexes: appendDepot.valueIndexes(fp, pa.appends[fp]),
+                        ),
+                      ),
+                      ViewFightProps(
+                        shouldHighlight: (fp) {
+                          return builds?.artifactAffixPropTypes?.contains(fp) ??
+                              false;
+                        },
+                        fightProps: FightProps({
+                          fp: appendDepot.valueFor(fp, pa.appends[fp]),
+                        }),
+                      ),
+                    ],
+                  );
+                })
+              ],
+            ),
+          )
         ],
       ),
     );
