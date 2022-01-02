@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:genshintools/gameinfo/gameinfo.dart';
@@ -109,10 +110,12 @@ class BlocGameData extends HydratedCubit<PlayerStates> {
           var d = await client.getAvatarDetail(uid, c.id);
           var skillLevelsLastSyncAt = DateTime.now();
 
+          var skillList = d.skillList.where((e) => e.maxLevel == 10).toList();
+
           var skillLevels = {
-            SkillType.NORMAL_ATTACK: d.skillList[0].levelCurrent,
-            SkillType.ELEMENTAL_SKILL: d.skillList[1].levelCurrent,
-            SkillType.ELEMENTAL_BURST: d.skillList[2].levelCurrent,
+            SkillType.NORMAL_ATTACK: skillList[0].levelCurrent,
+            SkillType.ELEMENTAL_SKILL: skillList[1].levelCurrent,
+            SkillType.ELEMENTAL_BURST: skillList[2].levelCurrent,
           };
 
           updateCharacterState(uid, c.id, (CharacterState state) {
@@ -180,24 +183,27 @@ class BlocGameData extends HydratedCubit<PlayerStates> {
       return null;
     }
 
-    var artifacts = avatar.reliquaries?.asMap().map(
-      (i, e) {
-        var equipType = EquipType.values[e.pos - 1];
+    var builds = c.character.characterAllBuilds();
 
-        var builds = c.character.characterAllBuilds();
+    var artifacts = db.artifact
+        .buildArtifactsBySetPair(
+            builds.artifactSetPairs?[0] ?? ["角斗士的终幕礼"], builds, null)
+        .map(
+      (equipType, pa) {
+        var pos = EquipType.values.indexOf(equipType) + 1;
 
-        return MapEntry(
-          equipType,
-          PlayerArtifact(
-            name: e.name,
-            equipType: equipType,
-            rarity: e.rarity,
-            level: e.level,
-            main: builds.artifactMainPropTypes?[equipType]?[0] ?? FightProp.HP,
-            usedBy: 0,
-            appends: {},
-          ),
-        );
+        var e = avatar.reliquaries?.firstWhereOrNull((e) => e.pos == pos);
+
+        if (e != null) {
+          return MapEntry(
+              equipType,
+              pa.copyWith(
+                name: e.name,
+                rarity: e.rarity,
+                level: e.level,
+              ));
+        }
+        return MapEntry(equipType, pa);
       },
     );
 
@@ -205,7 +211,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> {
       weaponID: weapon?.id ?? 0,
       weaponLevel: weapon?.level ?? 0,
       weaponAffixLevel: weapon?.affixLevel ?? 1,
-      artifacts: artifacts ?? {},
+      artifacts: artifacts,
     );
 
     return c.state.copyWith(

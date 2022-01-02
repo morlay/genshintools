@@ -391,7 +391,9 @@ class ViewBuildArtifacts extends HookWidget {
                   );
                 },
                 child: ViewFightProps(
-                  shouldHighlight: (fightProp) => true,
+                  shouldHighlight: (fightProp) =>
+                      builds.artifactMainPropTypes?[et]?.contains(fightProp) ??
+                      false,
                   fightProps: FightProps({
                     fp: db.artifact.mainFightProp(fp, a.rarity, a.level),
                   }),

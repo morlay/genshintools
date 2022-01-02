@@ -153,8 +153,9 @@ class ViewFightProps extends HookWidget {
                 fontSize: 9,
                 color: Theme.of(context).hintColor,
                 fontWeight: shouldHighlight
-                    ?.let((fn) => fn(k))
-                    .ifTrueOrNull(() => FontWeight.bold),
+                        ?.let((fn) => fn(k))
+                        .ifTrueOrNull(() => FontWeight.w900) ??
+                    FontWeight.w300,
               ),
             ),
           ),

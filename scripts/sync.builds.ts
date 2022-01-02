@@ -121,7 +121,42 @@ const fromCSV = async (csv: string, grid: Grid) => {
   });
 };
 
-let v: any = {};
+let v: any = {
+  yun_jin: {
+    Role: "SUPPORT",
+    Weapons: [],
+    ArtifactMainPropTypes: {
+      EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
+      EQUIP_RING: ["FIGHT_PROP_DEFENSE_PERCENT"],
+      EQUIP_DRESS: ["FIGHT_PROP_DEFENSE_PERCENT"],
+    },
+    ArtifactAffixPropTypes: [
+      "FIGHT_PROP_CHARGE_EFFICIENCY",
+      "FIGHT_PROP_DEFENSE_PERCENT",
+      "FIGHT_PROP_DEFENSE",
+    ],
+    ArtifactSetPairs: [
+      ["华馆梦醒形骸记"],
+    ],
+    SkillPriority: [["Q"], ["E"]],
+  },
+  shenhe: {
+    Role: "SUPPORT",
+    Weapons: [],
+    ArtifactMainPropTypes: {
+      EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
+      EQUIP_RING: ["FIGHT_PROP_ATTACK_PERCENT"],
+      EQUIP_DRESS: ["FIGHT_PROP_ATTACK_PERCENT"],
+    },
+    ArtifactAffixPropTypes: [
+      "FIGHT_PROP_CHARGE_EFFICIENCY",
+      "FIGHT_PROP_ATTACK_PERCENT",
+      "FIGHT_PROP_ATTACK",
+    ],
+    ArtifactSetPairs: [],
+    SkillPriority: [["Q"], ["E"]],
+  },
+};
 
 for (const p of [Grid.Pyro, Grid.Anemo, Grid.Electro, Grid.Cryo, Grid.Hydro, Grid.Geo]) {
   v = {
