@@ -2,19 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:genshintools/app/gamedata/player_state.dart';
+import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/gameinfo/gameinfo.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
+import 'package:genshintools/genshindb/good/good.dart';
+import 'package:genshintools/syncer/syncer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'player_state.dart';
+typedef PlayerStates = Map<int, GOOD>;
 
-typedef PlayerStates = Map<int, PlayerState>;
-
-class BlocGameData extends HydratedCubit<PlayerStates> {
+class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
   GSDB db;
 
   BlocGameData(this.db) : super({});
@@ -48,80 +49,63 @@ class BlocGameData extends HydratedCubit<PlayerStates> {
     }
   }
 
-  syncGameInfo(MiHoYoBBSClient client, int uid) async {
+  syncGameInfo(MiHoYoBBSClient client, int uid,
+      [Iterable<PlayerArtifact>? playerArtifacts]) async {
     var data = await client.getUserInfo(uid);
 
     var ids = data.avatars?.map<int>((e) => e.id).toList() ?? [];
 
     if (ids.isNotEmpty) {
-      Map<int, bool> owns = {};
-
       var ret = await client.getAllCharacters(uid, ids);
 
-      var ps = playerState(uid);
-
-      for (var avatar in ret.avatars!) {
-        var cs = _characterStateFrom(uid, ps, avatar);
-
-        if (cs != null) {
-          owns[cs.id] = true;
-          ps = ps.mergeCharacterState(cs);
-        }
-      }
-
-      db.character.characters?.forEach((i, c) {
-        if (!(owns[c.id] ?? false)) {
-          ps = ps.mergeCharacterState(
-            ps.getCharacterOrInitial(db, c).copyWith(
-                  own: false,
-                  todo: false,
-                ),
-          );
-        }
-      });
+      var next = _patchGOODFromMiYoBBS(
+        uid,
+        playerState(uid),
+        ret.avatars ?? [],
+        playerArtifacts,
+      );
 
       emit({
         ...state,
-        uid: ps,
+        uid: next,
       });
 
-      for (var c in ps.characters.values) {
-        if (c.own && c.id.toString()[0] != "9") {
-          syncCharacterSkillLevels(client, uid, c.id);
-        }
+      for (var c in next.characters) {
+        _syncCharacterSkillLevels(client, uid, c.key);
       }
     }
   }
 
-  syncCharacterSkillLevels(MiHoYoBBSClient client, int uid, int cid) async {
-    var character = db.character.find("$cid");
-    var ps = playerState(uid);
-    var c = ps.getCharacterOrInitial(db, character);
+  final Map<String, DateTime> _talentLastSyncAts = {};
 
-    if (c.todo && (c.id.toString()[0] != "9")) {
-      if (c.skillLevelsLastSyncAt
+  _syncCharacterSkillLevels(MiHoYoBBSClient client, int uid, String key) async {
+    var c = db.character.find(key);
+
+    if (!key.contains("Traveler")) {
+      if (_talentLastSyncAts["$key@$uid"]
               ?.add(const Duration(minutes: 10))
               .isBefore(DateTime.now()) ??
           true) {
-        log("[$uid] syncing skill levels of ${character.name.text(Lang.CHS)}");
+        log("[$uid] syncing skill levels of ${c.name.text(Lang.CHS)}");
+
+        _talentLastSyncAts["$key@$uid"] = DateTime.now();
 
         try {
           await Future.delayed(const Duration(milliseconds: 500));
+
           var d = await client.getAvatarDetail(uid, c.id);
-          var skillLevelsLastSyncAt = DateTime.now();
 
           var skillList = d.skillList.where((e) => e.maxLevel == 10).toList();
 
-          var skillLevels = {
-            SkillType.NORMAL_ATTACK: skillList[0].levelCurrent,
-            SkillType.ELEMENTAL_SKILL: skillList[1].levelCurrent,
-            SkillType.ELEMENTAL_BURST: skillList[2].levelCurrent,
+          var talent = {
+            TalentType.auto: skillList[0].levelCurrent,
+            TalentType.skill: skillList[1].levelCurrent,
+            TalentType.burst: skillList[2].levelCurrent,
           };
 
-          updateCharacterState(uid, c.id, (CharacterState state) {
-            return state.copyWith(
-              skillLevelsLastSyncAt: skillLevelsLastSyncAt,
-              skillLevels: skillLevels,
+          updateCharacter(uid, key, (GOODCharacter c) {
+            return c.copyWith(
+              talent: talent,
             );
           });
         } catch (err) {
@@ -131,134 +115,149 @@ class BlocGameData extends HydratedCubit<PlayerStates> {
     }
   }
 
-  updateCharacterState(
-    int uid,
-    int cid,
-    CharacterState Function(CharacterState characterState) updateState,
-  ) {
-    final ps = playerState(uid);
-    final prevState = ps.getCharacterOrInitial(db, db.character.find("$cid"));
-    emit({...state, uid: ps.mergeCharacterState(updateState(prevState))});
+  void equipArtifact(int uid, GOODArtifact artifact, [GOODArtifact? value]) {
+    emit({...state, uid: playerState(uid).equipArtifact(artifact, value)});
   }
 
-  CharacterWithState? findCharacterWithState(int uid, String id) {
+  void removeArtifact(int uid, GOODArtifact artifact) {
+    emit({
+      ...state,
+      uid: playerState(uid).removeArtifact(artifact),
+    });
+  }
+
+  updateCharacter(
+    int uid,
+    String key,
+    GOODCharacter Function(GOODCharacter c) updateState,
+  ) {
+    emit({...state, uid: playerState(uid).updateCharacter(key, updateState)});
+  }
+
+  CharacterWithState findCharacterWithState(int uid, String id) {
+    final ps = playerState(uid);
     final c = db.character.find(id);
+
     return CharacterWithState(
-      c,
-      playerState(uid).getCharacterOrInitial(db, db.character.find(id)),
+      character: c,
+      c: ps.character(c.key),
+      w: ps.weaponOn(c.key, db.weapon.find("${c.initialWeaponId}").key),
+      artifacts: ps.artifactsOn(c.key),
     );
   }
 
   List<CharacterWithState> listCharacterWithState(int uid) {
+    final ps = playerState(uid);
+
     return db.character
         .toList()
         .map((c) => CharacterWithState(
-            c, playerState(uid).getCharacterOrInitial(db, c)))
+              character: c,
+              c: ps.character(c.key),
+              w: ps.weaponOn(
+                c.key,
+                db.weapon.find("${c.initialWeaponId}").key,
+              ),
+              artifacts: ps.artifactsOn(c.key),
+            ))
         .toList()
       ..sort((a, b) => a.weight() > b.weight() ? -1 : 1);
   }
 
-  CharacterState? _characterStateFrom(
-    int uid,
-    PlayerState state,
-    Avatar avatar,
-  ) {
-    var weapon = avatar.weapon;
+  GOOD _patchGOODFromMiYoBBS(int uid, GOOD good, List<Avatar> avatars,
+      [Iterable<PlayerArtifact>? playerArtifacts]) {
+    playerArtifacts?.forEach((pa) {
+      db.character.findOrNull("${pa.usedBy}")?.let((c) {
+        final location = c.key;
 
-    Map<SkillType, int> skillLevels = {};
+        db.artifact.findOrNull(pa.name)?.let((a) {
+          good = good.updateArtifact(
+            SlotKey.values[a.equipType.index],
+            location,
+            (artifact) => artifact.copyWith(
+              setKey: db.artifact.findSet("${a.setId}").key,
+              mainStatKey: GOODArtifact.statKeyFromFightProp(pa.main),
+              substats: [
+                ...pa.appends.keys.map((fp) {
+                  return GOODSubStat(key: GOODArtifact.statKeyFromFightProp(fp))
+                      .withStringValue(pa.appends[fp]!);
+                })
+              ],
+            ),
+          );
+        });
+      });
+    });
 
-    var avatarName = avatar.name;
+    for (var avatar in avatars) {
+      var avatarName = avatar.name;
 
-    if (avatarName == "旅行者") {
-      for (var element in ElementType.values) {
-        if (element.string() == avatar.element) {
-          avatarName = element.label() + avatarName;
+      if (avatarName == "旅行者") {
+        for (var element in ElementType.values) {
+          if (element.string() == avatar.element) {
+            avatarName = element.label() + avatarName;
+          }
         }
       }
+
+      db.character.findOrNull(avatarName)?.let((c) {
+        final location = c.key;
+
+        good = good.updateCharacter(
+            location,
+            (gc) => gc.copyWith(
+                  level: avatar.level,
+                  constellation: avatar.activedConstellationNum,
+                  ascension: GOODCharacter.ascensionByLevel(avatar.level),
+                ));
+
+        avatar.weapon?.let((weapon) {
+          db.weapon.findOrNull(weapon.name)?.let((w) {
+            good = good.updateWeapon(
+              w.key,
+              location,
+              (w) => w.copyWith(
+                level: weapon.level,
+                refinement: weapon.affixLevel,
+                ascension: weapon.promoteLevel,
+              ),
+            );
+          });
+        });
+
+        avatar.reliquaries?.let((rs) {
+          for (var r in rs) {
+            db.artifact.findOrNull(r.name)?.let((a) {
+              good = good.updateArtifact(
+                SlotKey.values[a.equipType.index],
+                location,
+                (artifact) => artifact.copyWith(
+                  setKey: db.artifact.findSet("${a.setId}").key,
+                  level: r.level,
+                  rarity: r.rarity,
+                ),
+              );
+            });
+          }
+        });
+      });
     }
 
-    var c = findCharacterWithState(uid, avatarName);
-
-    if (c == null) {
-      return null;
-    }
-
-    var builds = c.character.characterAllBuilds();
-
-    var artifacts = db.artifact
-        .buildArtifactsBySetPair(
-            builds.artifactSetPairs?[0] ?? ["角斗士的终幕礼"], builds, null)
-        .map(
-      (equipType, pa) {
-        var pos = EquipType.values.indexOf(equipType) + 1;
-
-        var e = avatar.reliquaries?.firstWhereOrNull((e) => e.pos == pos);
-
-        if (e != null) {
-          return MapEntry(
-              equipType,
-              pa.copyWith(
-                name: e.name,
-                rarity: e.rarity,
-                level: e.level,
-              ));
-        }
-        return MapEntry(equipType, pa);
-      },
-    );
-
-    var buildState = CharacterBuildState(
-      weaponID: weapon?.id ?? 0,
-      weaponLevel: weapon?.level ?? 0,
-      weaponAffixLevel: weapon?.affixLevel ?? 1,
-      artifacts: artifacts,
-    );
-
-    return c.state.copyWith(
-      own: true,
-      todo: avatar.reliquaries?.length == 5,
-      id: c.character.id,
-      level: avatar.level,
-      activeConstellationNum: avatar.activedConstellationNum,
-      skillLevels: skillLevels,
-      build: buildState,
-      defaultBuild: buildState,
-    );
+    return good;
   }
 
-  PlayerState playerState(int uid) {
-    return state[uid] ?? PlayerState(characters: {});
+  GOOD playerState(int uid) {
+    return state[uid] ?? GOOD.empty();
   }
 
   @override
   PlayerStates fromJson(Map<String, dynamic> json) {
-    return json.map(
-        (key, value) => MapEntry(int.parse(key), PlayerState.fromJson(value)));
+    return json
+        .map((key, value) => MapEntry(int.parse(key), GOOD.fromJson(value)));
   }
 
   @override
   Map<String, dynamic>? toJson(PlayerStates state) {
     return state.map((key, value) => MapEntry(key.toString(), value.toJson()));
-  }
-}
-
-class CharacterWithState {
-  GSCharacter character;
-  CharacterState state;
-
-  CharacterWithState(
-    this.character,
-    this.state,
-  );
-
-  double weight() {
-    var i = state.level / 90.0 * 100 + character.rarity / 5 * 100;
-    if (!state.own) {
-      return -1000 + i;
-    }
-    if (!state.todo) {
-      return -500 + i;
-    }
-    return i;
   }
 }

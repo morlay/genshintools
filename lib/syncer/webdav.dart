@@ -44,7 +44,7 @@ class WebDAV with _$WebDAV {
 
   writeJson(String file, dynamic json) async {
     final c = client();
-    final data = jsonEncode(json ?? {});
+    final data = getPrettyJSONString(json ?? {});
     final encodedJSON = utf8.encode(data);
     final sum = md5.convert(encodedJSON).toString();
     final sumFile = "$file.sum";
@@ -78,4 +78,9 @@ class WebDAV with _$WebDAV {
     }
     return null;
   }
+}
+
+String getPrettyJSONString(jsonObject) {
+  const encoder = JsonEncoder.withIndent("  ");
+  return encoder.convert(jsonObject);
 }

@@ -24,7 +24,7 @@ class PlayerArtifact with _$PlayerArtifact {
     var name = "";
     var rarity = 5;
     var usedBy = 0;
-    var equipType = EquipType.FLOWER;
+    var equipType = EquipType.BRACER;
 
     valueParts.getOrNull(0)?.split("!").let((list) {
       list.getOrNull(0)?.let((n) {
@@ -85,19 +85,6 @@ class PlayerArtifact with _$PlayerArtifact {
       usedBy: usedBy,
     );
   }
-
-  factory PlayerArtifact.empty() {
-    return PlayerArtifact(
-      equipType: EquipType.FLOWER,
-      name: "",
-      main: FightProp.HP,
-      appends: {},
-      rarity: 5,
-      level: 20,
-      usedBy: 0,
-    );
-  }
-
   static FightProp? resolveFightProp(String s) {
     for (var fp in aliases.keys) {
       var alias = aliases[fp]!.toUpperCase();

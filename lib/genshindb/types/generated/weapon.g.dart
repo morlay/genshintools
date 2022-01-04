@@ -6,7 +6,7 @@ part of '../weapon.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Weapon _$$_WeaponFromJson(Map<String, dynamic> json) => _$_Weapon(
+_$_GSWeapon _$$_GSWeaponFromJson(Map<String, dynamic> json) => _$_GSWeapon(
       id: json['Id'] as int,
       name: I18n.fromJson(json['Name'] as Map<String, dynamic>),
       desc: I18n.fromJson(json['Desc'] as Map<String, dynamic>),
@@ -25,7 +25,8 @@ _$_Weapon _$$_WeaponFromJson(Map<String, dynamic> json) => _$_Weapon(
       ),
     );
 
-Map<String, dynamic> _$$_WeaponToJson(_$_Weapon instance) => <String, dynamic>{
+Map<String, dynamic> _$$_GSWeaponToJson(_$_GSWeapon instance) =>
+    <String, dynamic>{
       'Id': instance.id,
       'Name': instance.name,
       'Desc': instance.desc,
@@ -38,11 +39,11 @@ Map<String, dynamic> _$$_WeaponToJson(_$_Weapon instance) => <String, dynamic>{
     };
 
 const _$WeaponTypeEnumMap = {
-  WeaponType.SWORD_ONE_HAND: 'WEAPON_SWORD_ONE_HAND',
-  WeaponType.WEAPON_CLAYMORE: 'WEAPON_CLAYMORE',
-  WeaponType.WEAPON_POLE: 'WEAPON_POLE',
-  WeaponType.POLE: 'WEAPON_BOW',
-  WeaponType.CATALYST: 'WEAPON_CATALYST',
+  WeaponType.Sword: 'WEAPON_SWORD_ONE_HAND',
+  WeaponType.Claymore: 'WEAPON_CLAYMORE',
+  WeaponType.Polearm: 'WEAPON_POLE',
+  WeaponType.Bow: 'WEAPON_BOW',
+  WeaponType.Catalyst: 'WEAPON_CATALYST',
 };
 
 const _$FightPropEnumMap = {

@@ -1,8 +1,7 @@
-import { addPropSet, cleanText, groupMulti, groupOne, i18n, i18nWithID } from "./common";
+import { addPropSet, cleanText, groupMulti, groupOne, i18n, i18nWithID, pascalCase } from "./common";
 import { Materials } from "./domain_material";
-import { reduce, snakeCase } from "lodash-es";
+import { reduce } from "lodash-es";
 import { Trials } from "./character_trial";
-import { characterBuildRecommended } from "./character_build_recommended";
 
 export const CharacterLevelupExps = (
   await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarLevelExcelConfigData.json")
@@ -22,7 +21,7 @@ export const CharacterPromotes = groupMulti(
         ...(a.ScoinCost
           ? [
               {
-                MaterialNameID: "mora",
+                MaterialNameID: "Mora",
                 Count: a.ScoinCost,
               },
             ]
@@ -75,7 +74,7 @@ const ProudSkills = groupMulti(
       ...(ps.CoinCost
         ? [
             {
-              MaterialNameID: "mora",
+              MaterialNameID: "Mora",
               Count: ps.CoinCost,
             },
           ]
@@ -251,9 +250,8 @@ export const Characters = (
                 Name: {
                   CHS: chsName,
                   EN: enName,
-                  ID: snakeCase(enName),
+                  ID: pascalCase(enName),
                 },
-                CharacterBuild: characterBuildRecommended(snakeCase(enName)),
               },
             };
           },
@@ -265,7 +263,6 @@ export const Characters = (
     const avatar = {
       ...base,
       ...SkillDepots[a.SkillDepotId],
-      CharacterBuild: characterBuildRecommended(base.Name.ID),
       InternalCharacterBuild: Trials[base.Name.CHS],
     };
 

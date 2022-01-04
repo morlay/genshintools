@@ -769,13 +769,15 @@ class _$WeaponTearOff {
       required int level,
       required String name,
       required int rarity,
-      required int affixLevel}) {
+      required int affixLevel,
+      required int promoteLevel}) {
     return _Weapon(
       id: id,
       level: level,
       name: name,
       rarity: rarity,
       affixLevel: affixLevel,
+      promoteLevel: promoteLevel,
     );
   }
 
@@ -794,6 +796,7 @@ mixin _$Weapon {
   String get name => throw _privateConstructorUsedError;
   int get rarity => throw _privateConstructorUsedError;
   int get affixLevel => throw _privateConstructorUsedError;
+  int get promoteLevel => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -804,7 +807,13 @@ mixin _$Weapon {
 abstract class $WeaponCopyWith<$Res> {
   factory $WeaponCopyWith(Weapon value, $Res Function(Weapon) then) =
       _$WeaponCopyWithImpl<$Res>;
-  $Res call({int id, int level, String name, int rarity, int affixLevel});
+  $Res call(
+      {int id,
+      int level,
+      String name,
+      int rarity,
+      int affixLevel,
+      int promoteLevel});
 }
 
 /// @nodoc
@@ -822,6 +831,7 @@ class _$WeaponCopyWithImpl<$Res> implements $WeaponCopyWith<$Res> {
     Object? name = freezed,
     Object? rarity = freezed,
     Object? affixLevel = freezed,
+    Object? promoteLevel = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -844,6 +854,10 @@ class _$WeaponCopyWithImpl<$Res> implements $WeaponCopyWith<$Res> {
           ? _value.affixLevel
           : affixLevel // ignore: cast_nullable_to_non_nullable
               as int,
+      promoteLevel: promoteLevel == freezed
+          ? _value.promoteLevel
+          : promoteLevel // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -853,7 +867,13 @@ abstract class _$WeaponCopyWith<$Res> implements $WeaponCopyWith<$Res> {
   factory _$WeaponCopyWith(_Weapon value, $Res Function(_Weapon) then) =
       __$WeaponCopyWithImpl<$Res>;
   @override
-  $Res call({int id, int level, String name, int rarity, int affixLevel});
+  $Res call(
+      {int id,
+      int level,
+      String name,
+      int rarity,
+      int affixLevel,
+      int promoteLevel});
 }
 
 /// @nodoc
@@ -872,6 +892,7 @@ class __$WeaponCopyWithImpl<$Res> extends _$WeaponCopyWithImpl<$Res>
     Object? name = freezed,
     Object? rarity = freezed,
     Object? affixLevel = freezed,
+    Object? promoteLevel = freezed,
   }) {
     return _then(_Weapon(
       id: id == freezed
@@ -894,6 +915,10 @@ class __$WeaponCopyWithImpl<$Res> extends _$WeaponCopyWithImpl<$Res>
           ? _value.affixLevel
           : affixLevel // ignore: cast_nullable_to_non_nullable
               as int,
+      promoteLevel: promoteLevel == freezed
+          ? _value.promoteLevel
+          : promoteLevel // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -907,7 +932,8 @@ class _$_Weapon implements _Weapon {
       required this.level,
       required this.name,
       required this.rarity,
-      required this.affixLevel});
+      required this.affixLevel,
+      required this.promoteLevel});
 
   factory _$_Weapon.fromJson(Map<String, dynamic> json) =>
       _$$_WeaponFromJson(json);
@@ -922,10 +948,12 @@ class _$_Weapon implements _Weapon {
   final int rarity;
   @override
   final int affixLevel;
+  @override
+  final int promoteLevel;
 
   @override
   String toString() {
-    return 'Weapon(id: $id, level: $level, name: $name, rarity: $rarity, affixLevel: $affixLevel)';
+    return 'Weapon(id: $id, level: $level, name: $name, rarity: $rarity, affixLevel: $affixLevel, promoteLevel: $promoteLevel)';
   }
 
   @override
@@ -938,7 +966,9 @@ class _$_Weapon implements _Weapon {
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.rarity, rarity) &&
             const DeepCollectionEquality()
-                .equals(other.affixLevel, affixLevel));
+                .equals(other.affixLevel, affixLevel) &&
+            const DeepCollectionEquality()
+                .equals(other.promoteLevel, promoteLevel));
   }
 
   @override
@@ -948,7 +978,8 @@ class _$_Weapon implements _Weapon {
       const DeepCollectionEquality().hash(level),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(rarity),
-      const DeepCollectionEquality().hash(affixLevel));
+      const DeepCollectionEquality().hash(affixLevel),
+      const DeepCollectionEquality().hash(promoteLevel));
 
   @JsonKey(ignore: true)
   @override
@@ -967,7 +998,8 @@ abstract class _Weapon implements Weapon {
       required int level,
       required String name,
       required int rarity,
-      required int affixLevel}) = _$_Weapon;
+      required int affixLevel,
+      required int promoteLevel}) = _$_Weapon;
 
   factory _Weapon.fromJson(Map<String, dynamic> json) = _$_Weapon.fromJson;
 
@@ -981,6 +1013,8 @@ abstract class _Weapon implements Weapon {
   int get rarity;
   @override
   int get affixLevel;
+  @override
+  int get promoteLevel;
   @override
   @JsonKey(ignore: true)
   _$WeaponCopyWith<_Weapon> get copyWith => throw _privateConstructorUsedError;

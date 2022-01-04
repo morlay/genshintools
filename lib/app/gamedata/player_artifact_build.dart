@@ -53,18 +53,6 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
         builds: HashMap(),
       );
 
-  Map<EquipType, PlayerArtifact>? artifacts(int cid) {
-    Map<EquipType, PlayerArtifact> as = {};
-
-    for (var pa in builds.keys) {
-      if (builds[pa] == cid) {
-        as[pa.equipType] = pa.copyWith(usedBy: cid);
-      }
-    }
-
-    return as;
-  }
-
   Iterable<PlayerArtifact> allArtifacts() {
     List<PlayerArtifact> list = [];
 
@@ -73,15 +61,6 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
     }
 
     return list;
-  }
-
-  PlayerArtifact? artifact(EquipType et, int cid) {
-    for (var pa in builds.keys) {
-      if (builds[pa] == cid && pa.equipType == et) {
-        return pa.copyWith(usedBy: cid);
-      }
-    }
-    return null;
   }
 
   PlayerArtifactBuild equip(PlayerArtifact newPa, [PlayerArtifact? fromPa]) {
@@ -107,12 +86,6 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
 
     return copyWith(
       builds: builds,
-    );
-  }
-
-  PlayerArtifactBuild remove(PlayerArtifact pa) {
-    return copyWith(
-      builds: builds..removeWhere((p, i) => pa.toString() == p.toString()),
     );
   }
 }

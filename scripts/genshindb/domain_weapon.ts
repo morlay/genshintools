@@ -30,7 +30,7 @@ export const WeaponPromotes = groupMulti(
         ...(a.CoinCost
           ? [
               {
-                MaterialNameID: "mora",
+                MaterialNameID: "Mora",
                 Count: a.CoinCost,
               },
             ]

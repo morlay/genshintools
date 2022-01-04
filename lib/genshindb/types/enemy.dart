@@ -23,5 +23,5 @@ class GSEnemy with _$GSEnemy {
 
   factory GSEnemy.fromJson(Map<String, dynamic> json) => _Enemy.fromJson(json);
 
-  String get nameID => name.text(Lang.ID);
+  String get key => name.text(Lang.ID);
 }

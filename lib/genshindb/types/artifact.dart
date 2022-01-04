@@ -28,7 +28,7 @@ class GSArtifact with _$GSArtifact {
   factory GSArtifact.fromJson(Map<String, dynamic> json) =>
       _Artifact.fromJson(json);
 
-  get nameID => name.text(Lang.ID);
+  get key => name.text(Lang.ID);
 }
 
 @freezed
@@ -50,6 +50,8 @@ class GSArtifactSet with _$GSArtifactSet {
   GSArtifact artifact(EquipType equipType) {
     return artifacts![equipType]!;
   }
+
+  String get key => name.text(Lang.ID);
 }
 
 @freezed

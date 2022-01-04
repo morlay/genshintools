@@ -150,13 +150,11 @@ class ViewFightProps extends HookWidget {
               k.label(),
               textAlign: TextAlign.start,
               style: TextStyle(
-                fontSize: 9,
-                color: Theme.of(context).hintColor,
-                fontWeight: shouldHighlight
-                        ?.let((fn) => fn(k))
-                        .ifTrueOrNull(() => FontWeight.w900) ??
-                    FontWeight.w300,
-              ),
+                  fontSize: 9,
+                  color: Theme.of(context).hintColor,
+                  fontWeight: shouldHighlight
+                      ?.let((fn) => fn(k))
+                      .ifTrueOrNull(() => FontWeight.w900)),
             ),
           ),
           Padding(

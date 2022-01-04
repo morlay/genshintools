@@ -1,8 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:genshintools/app/gamedata/bloc_artifact.dart';
 import 'package:genshintools/app/gamedata/bloc_game_data.dart';
 import 'package:genshintools/app/gameui/gameui.dart';
 import 'package:genshintools/app/page_artifact_add.dart';
@@ -11,6 +9,7 @@ import 'package:genshintools/app/view_account.dart';
 import 'package:genshintools/app/view_fight_props.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
+import 'package:genshintools/genshindb/good/good.dart';
 
 import 'auth/auth.dart';
 
@@ -24,13 +23,13 @@ class PageArtifactList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var uid = BlocAuth.watch(context).state.chosenUid();
-    var blocArtifact = BlocArtifact.watch(context);
+    var blocGameData = BlocGameData.watch(context);
     var equipTypes = EquipType.values;
 
-    var grouped = blocArtifact
-        .playerArtifactBuild(uid)
-        .allArtifacts()
-        .groupListsBy((e) => e.equipType);
+    var grouped = blocGameData
+        .playerState(uid)
+        .artifacts
+        .groupListsBy((e) => e.slotKey.asEquipType());
 
     return AppBarWithAccount.buildScaffold(
       context,
@@ -87,7 +86,8 @@ class PageArtifactList extends HookWidget {
                         const Divider(
                           height: 1,
                         ),
-                        ...l.map((pa) => PlayerArtifactListTile(pa: pa)),
+                        ...l.map((artifact) =>
+                            GOODArtifactListTile(artifact: artifact)),
                       ],
                     );
                   })
@@ -101,39 +101,44 @@ class PageArtifactList extends HookWidget {
   }
 }
 
-class PlayerArtifactListTile extends HookWidget {
-  const PlayerArtifactListTile({
+class GOODArtifactListTile extends HookWidget {
+  const GOODArtifactListTile({
     Key? key,
-    required this.pa,
+    required this.artifact,
     this.onAvatarTap,
   }) : super(key: key);
 
-  final PlayerArtifact pa;
+  final GOODArtifact artifact;
   final void Function()? onAvatarTap;
 
   @override
   Widget build(BuildContext context) {
     var db = BlocGameData.read(context).db;
-    var a = db.artifact.find(pa.name);
-    var builds = db.character.findOrNull("${pa.usedBy}")?.characterAllBuilds();
+    var a = db.artifact
+        .findSet(artifact.setKey)
+        .artifact(artifact.slotKey.asEquipType());
 
-    var appendDepot = db.artifact.artifactAppendDepot(pa.name);
+    var builds =
+        db.character.findOrNull(artifact.location)?.characterAllBuilds();
+
+    var appendDepot = db.artifact.artifactAppendDepot(a.key);
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      onTap: () => PageArtifactAdd.show(context, pa.equipType, pa),
-      onLongPress: () => _remove(context, pa),
+      onTap: () => PageArtifactAdd.show(
+          context, artifact.slotKey.asEquipType(), artifact),
+      onLongPress: () => _remove(context, artifact),
       leading: GestureDetector(
         onTap: onAvatarTap,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             WithLevel(
-              level: pa.level,
+              level: artifact.level,
               child: GSImage(
                 domain: 'artifact',
-                nameID: a.nameID,
-                rarity: pa.rarity,
+                nameID: a.key,
+                rarity: artifact.rarity,
                 size: 48,
               ),
             ),
@@ -142,14 +147,14 @@ class PlayerArtifactListTile extends HookWidget {
               top: -8,
               child: Column(
                 children: [
-                  ...?db.character.findOrNull("${pa.usedBy}")?.let((c) => [
+                  ...?db.character.findOrNull(artifact.location)?.let((c) => [
                         SizedBox(
                           width: 24,
                           height: 24,
                           child: GSImage(
                             domain: "character",
                             rarity: c.rarity,
-                            nameID: c.nameID,
+                            nameID: c.key,
                             rounded: true,
                             borderSize: 2,
                           ),
@@ -168,14 +173,15 @@ class PlayerArtifactListTile extends HookWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(pa.name),
+                Text(a.name.text(Lang.CHS)),
                 ViewFightProps(
                   shouldHighlight: (fp) => true,
                   fightProps: FightProps({
-                    pa.main: db.artifact.mainFightProp(
-                      pa.main,
-                      pa.rarity,
-                      pa.level,
+                    artifact.mainStatKey.asFightProp():
+                        db.artifact.mainFightProp(
+                      artifact.mainStatKey.asFightProp(),
+                      artifact.rarity,
+                      artifact.level,
                     )
                   }),
                 ),
@@ -192,7 +198,7 @@ class PlayerArtifactListTile extends HookWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                ...pa.appends.keys.map((fp) {
+                ...artifact.substats.map((ss) {
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -200,7 +206,10 @@ class PlayerArtifactListTile extends HookWidget {
                         bottom: -4,
                         left: 2,
                         child: AppendValueIndex(
-                          indexes: appendDepot.valueIndexes(fp, pa.appends[fp]),
+                          indexes: appendDepot.valueIndexes(
+                            ss.key.asFightProp(),
+                            ss.stringValue(),
+                          ),
                         ),
                       ),
                       ViewFightProps(
@@ -209,7 +218,10 @@ class PlayerArtifactListTile extends HookWidget {
                               false;
                         },
                         fightProps: FightProps({
-                          fp: appendDepot.valueFor(fp, pa.appends[fp]),
+                          ss.key.asFightProp(): appendDepot.valueFor(
+                            ss.key.asFightProp(),
+                            ss.stringValue(),
+                          ),
                         }),
                       ),
                     ],
@@ -223,20 +235,20 @@ class PlayerArtifactListTile extends HookWidget {
     );
   }
 
-  _remove(BuildContext context, PlayerArtifact pa) {
+  _remove(BuildContext context, GOODArtifact pa) {
     var uid = BlocAuth.read(context).state.chosenUid();
 
     showAlert(
       context,
       content: Text.rich(TextSpan(children: [
-        TextSpan(text: "是否删除 ${pa.name}?"),
+        TextSpan(text: "是否删除 $pa?"),
         const TextSpan(text: "\n"),
         const TextSpan(text: "\n"),
         TextSpan(
             text: "(${pa.toString()})", style: const TextStyle(fontSize: 11)),
       ])),
       onConfirm: () {
-        BlocArtifact.read(context).remove(uid, pa);
+        BlocGameData.read(context).removeArtifact(uid, pa);
       },
     );
   }

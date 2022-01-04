@@ -150,7 +150,7 @@ class ViewSkillValues extends HookWidget {
       var skillVal = SkillVal(skillT, base: base, params: params);
 
       var canPhysicalHurt = skill.skillType == SkillType.NORMAL_ATTACK &&
-          characterWithState.character.weaponType != WeaponType.CATALYST;
+          characterWithState.character.weaponType != WeaponType.Catalyst;
 
       var hurtType = HurtType.NormalAttack;
 
@@ -296,9 +296,9 @@ class ViewSkillValues extends HookWidget {
               .firstWhere((e) => e.skillType == SkillType.ELEMENTAL_SKILL)
               .paramsForLevel(
                 fightProps.fixSkillLevel(
-                    SkillType.ELEMENTAL_SKILL,
-                    characterWithState.state
-                        .skillLevel(SkillType.ELEMENTAL_SKILL)),
+                  SkillType.ELEMENTAL_SKILL,
+                  characterWithState.c.skillLevel(SkillType.ELEMENTAL_SKILL),
+                ),
               );
 
           return fn(
@@ -329,7 +329,7 @@ class ViewSkillValues extends HookWidget {
                             skill.paramsForLevel(
                               fightProps.fixSkillLevel(
                                 st,
-                                characterWithState.state.skillLevel(st),
+                                characterWithState.c.skillLevel(st),
                               ),
                             ),
                           ),

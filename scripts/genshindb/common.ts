@@ -1,4 +1,4 @@
-import { snakeCase, reduce } from "lodash-es";
+import { upperFirst, camelCase, reduce } from "lodash-es";
 import { mkdirSync, writeFileSync } from "fs";
 import { dirname } from "path";
 
@@ -24,11 +24,13 @@ export const i18n = (hash: number, ...textProcesses: Array<(s: string) => string
   EN: process(textProcesses)(enText(hash)),
 });
 
+export const pascalCase = (s: string) => upperFirst(camelCase(s));
+
 export const i18nWithID = (hash: number, ...textProcesses: Array<(s: string) => string>) => {
   const i = i18n(hash, ...textProcesses);
   return {
     ...i,
-    ID: snakeCase(i.EN),
+    ID: pascalCase(i.EN),
   };
 };
 

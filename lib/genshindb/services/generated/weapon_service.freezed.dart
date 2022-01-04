@@ -22,7 +22,7 @@ class _$WeaponServiceTearOff {
   const _$WeaponServiceTearOff();
 
   _WeaponService call(
-      {Map<int, Weapon>? weapons,
+      {Map<int, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues}) {
@@ -44,7 +44,7 @@ const $WeaponService = _$WeaponServiceTearOff();
 
 /// @nodoc
 mixin _$WeaponService {
-  Map<int, Weapon>? get weapons => throw _privateConstructorUsedError;
+  Map<int, GSWeapon>? get weapons => throw _privateConstructorUsedError;
   List<List<int>>? get weaponLevelupExps => throw _privateConstructorUsedError;
   GSPromoteSet? get weaponPromotes => throw _privateConstructorUsedError;
   PropGrowCurveValueSet? get weaponPropGrowCurveValues =>
@@ -62,7 +62,7 @@ abstract class $WeaponServiceCopyWith<$Res> {
           WeaponService value, $Res Function(WeaponService) then) =
       _$WeaponServiceCopyWithImpl<$Res>;
   $Res call(
-      {Map<int, Weapon>? weapons,
+      {Map<int, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues});
@@ -91,7 +91,7 @@ class _$WeaponServiceCopyWithImpl<$Res>
       weapons: weapons == freezed
           ? _value.weapons
           : weapons // ignore: cast_nullable_to_non_nullable
-              as Map<int, Weapon>?,
+              as Map<int, GSWeapon>?,
       weaponLevelupExps: weaponLevelupExps == freezed
           ? _value.weaponLevelupExps
           : weaponLevelupExps // ignore: cast_nullable_to_non_nullable
@@ -139,7 +139,7 @@ abstract class _$WeaponServiceCopyWith<$Res>
       __$WeaponServiceCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Map<int, Weapon>? weapons,
+      {Map<int, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues});
@@ -172,7 +172,7 @@ class __$WeaponServiceCopyWithImpl<$Res>
       weapons: weapons == freezed
           ? _value.weapons
           : weapons // ignore: cast_nullable_to_non_nullable
-              as Map<int, Weapon>?,
+              as Map<int, GSWeapon>?,
       weaponLevelupExps: weaponLevelupExps == freezed
           ? _value.weaponLevelupExps
           : weaponLevelupExps // ignore: cast_nullable_to_non_nullable
@@ -204,7 +204,7 @@ class _$_WeaponService extends _WeaponService {
       _$$_WeaponServiceFromJson(json);
 
   @override
-  final Map<int, Weapon>? weapons;
+  final Map<int, GSWeapon>? weapons;
   @override
   final List<List<int>>? weaponLevelupExps;
   @override
@@ -252,7 +252,7 @@ class _$_WeaponService extends _WeaponService {
 
 abstract class _WeaponService extends WeaponService {
   factory _WeaponService(
-      {Map<int, Weapon>? weapons,
+      {Map<int, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues}) = _$_WeaponService;
@@ -262,7 +262,7 @@ abstract class _WeaponService extends WeaponService {
       _$_WeaponService.fromJson;
 
   @override
-  Map<int, Weapon>? get weapons;
+  Map<int, GSWeapon>? get weapons;
   @override
   List<List<int>>? get weaponLevelupExps;
   @override

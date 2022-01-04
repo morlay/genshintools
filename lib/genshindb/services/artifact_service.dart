@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/constants.dart';
+import 'package:genshintools/genshindb/good/good.dart';
 import 'package:genshintools/genshindb/types.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
@@ -37,7 +38,11 @@ class ArtifactService with _$ArtifactService {
   }
 
   GSArtifact find(String idOrName) {
-    return findOrNull(idOrName)!;
+    var a = findOrNull(idOrName);
+    if (a == null) {
+      throw "artifact $idOrName not found";
+    }
+    return a;
   }
 
   GSArtifact? findOrNull(String idOrName) {
@@ -71,7 +76,7 @@ class ArtifactService with _$ArtifactService {
       artifacts?.forEach((key, value) {
         _setNames[value.setId] = {
           ...?_setNames[value.setId],
-          value.equipType: value.nameID,
+          value.equipType: value.key,
         };
       });
     }
@@ -81,17 +86,9 @@ class ArtifactService with _$ArtifactService {
             ?.map((key, id) => MapEntry(key, find(id))));
   }
 
-  List<GSArtifactSet> resolveArtifactSets(
-    Map<EquipType, PlayerArtifact> artifacts,
-  ) {
-    return EquipType.values
-        .map(
-          (type) =>
-              artifacts[type]?.let(
-                (a) => findOrNull(a.name)?.setId.toString(),
-              ) ??
-              "",
-        )
+  List<GSArtifactSet> resolveArtifactSets(List<GOODArtifact> artifacts) {
+    return artifacts
+        .map((a) => a.setKey)
         .where((v) => v != "")
         .groupListsBy((v) => v)
         .values
@@ -100,47 +97,56 @@ class ArtifactService with _$ArtifactService {
         .toList();
   }
 
-  Map<EquipType, PlayerArtifact> buildArtifactsBySetPair(
+  List<GOODArtifact> buildArtifactsBySetPair(
     List<String> setNames,
     GSCharacterBuild builds,
-    Map<EquipType, PlayerArtifact>? playerArtifacts,
+    [List<GOODArtifact>? playerArtifacts]
   ) {
     var sets = setNames.map((setName) => findSet(setName)).toList();
 
-    Map<EquipType, PlayerArtifact> ret = {};
+    Map<EquipType, GOODArtifact> ret = {};
 
     EquipType.values.forEachIndexed((i, equipType) {
       if (sets.isEmpty) {
         return;
       }
 
-      var a = sets[i < 2
-              ? 0
-              : sets.length == 2
-                  ? 1
-                  : 0]
-          .artifacts![equipType]!;
+      var s = sets[i < 2
+          ? 0
+          : sets.length == 2
+              ? 1
+              : 0];
 
-      var main = playerArtifacts?[equipType]?.main ??
-          builds.defaultMainProp(equipType);
+      var a = s.artifacts![equipType]!;
 
-      ret[equipType] = PlayerArtifact(
-        usedBy: 0,
-        equipType: equipType,
-        name: a.name.text(Lang.CHS),
+      int level = 0;
+      StatKey main =
+          GOODArtifact.statKeyFromFightProp(builds.defaultMainProp(equipType));
+      List<GOODSubStat> substats = [];
+
+      playerArtifacts
+          ?.firstWhereOrNull((pa) => pa.slotKey.asEquipType() == equipType)
+          ?.let((it) {
+        main = it.mainStatKey;
+        level = it.level;
+        substats = it.substats;
+      });
+
+      ret[equipType] = GOODArtifact(
+        location: "",
+        setKey: s.key,
         rarity: a.rarity,
-        level: 0,
-        main: main,
-        appends: playerArtifacts?[equipType]?.appends ?? {},
+        level: level,
+        mainStatKey: main,
+        slotKey: SlotKey.values[equipType.index],
+        substats: substats,
       );
     });
 
-    return ret;
+    return ret.values.toList();
   }
 
-  FightProps fightProps(
-    Map<EquipType, PlayerArtifact> artifacts,
-  ) {
+  FightProps fightProps(List<GOODArtifact> artifacts) {
     var fps = FightProps({});
 
     resolveArtifactSets(artifacts).forEach((artifactSet) {
@@ -151,13 +157,13 @@ class ArtifactService with _$ArtifactService {
       }
     });
 
-    for (var a in artifacts.values) {
+    for (var a in artifacts) {
       fps = fps.add(
-        a.main,
-        mainFightProp(a.main, a.rarity, a.level),
+        a.mainStatKey.asFightProp(),
+        mainFightProp(a.mainStatKey.asFightProp(), a.rarity, a.level),
       );
 
-      fps = fps.merge(appendFightProps(a.rarity, a.appends));
+      fps = fps.merge(appendFightProps(a.rarity, a.substatsAsFightProps()));
     }
 
     return fps;
@@ -167,9 +173,9 @@ class ArtifactService with _$ArtifactService {
     var c = find(idOrName);
 
     switch (c.equipType) {
-      case EquipType.FLOWER:
+      case EquipType.BRACER:
         return [FightProp.HP];
-      case EquipType.FEATHER:
+      case EquipType.NECKLACE:
         return [FightProp.ATTACK];
       default:
         return artifactMainPropDepots?[c.mainPropDepotId]

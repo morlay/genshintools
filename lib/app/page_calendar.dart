@@ -49,7 +49,7 @@ class ViewCalendar extends HookWidget {
 
     if (plan != null) {
       for (var mc in plan.costs) {
-        var mid = mc.nameID;
+        var mid = mc.key;
 
         needs[mid] = ViewMaterialNeeds(
           material: mc,
@@ -79,6 +79,9 @@ class ViewCalendar extends HookWidget {
         return Rx.fromCallable(() => BlocGameData.read(context).syncGameInfo(
               blocAuth.state.authedClient(),
               blocAuth.state.chosenUid(),
+              BlocArtifact.read(context)
+                  .playerArtifactBuild(uid)
+                  .allArtifacts(),
             ));
       }
     }, [uid]);
@@ -88,8 +91,8 @@ class ViewCalendar extends HookWidget {
 
     Map<String, ViewMaterialNeeds> needs = {};
 
-    characters.where((c) => c.state.todo).forEach((c) {
-      var w = gbb.db.weapon.find("${c.state.build.weaponID}");
+    characters.where((c) => c.todo).forEach((c) {
+      var w = gbb.db.weapon.find(c.w.key);
 
       var wNameId = w.name.text(Lang.ID);
 
@@ -102,7 +105,7 @@ class ViewCalendar extends HookWidget {
       addToNeeds(
         needs,
         aw,
-        gbb.db.weaponLevelupPlans(wNameId, c.state.build.weaponLevel),
+        gbb.db.weaponLevelupPlans(wNameId, c.w.level),
       );
 
       var cNameId = c.character.name.text(Lang.ID);
@@ -116,7 +119,7 @@ class ViewCalendar extends HookWidget {
       addToNeeds(
         needs,
         avatar,
-        gbb.db.characterLevelupPlans(cNameId, c.state.level),
+        gbb.db.characterLevelupPlans(cNameId, c.c.level),
       );
 
       var skillTypes =
@@ -132,8 +135,8 @@ class ViewCalendar extends HookWidget {
           gbb.db.characterSkillLevelupPlans(
             cNameId,
             skillType,
-            c.state.skillLevel(skillType),
-            c.state.level,
+            c.c.skillLevel(skillType),
+            c.c.level,
           ),
         );
       }
@@ -265,7 +268,7 @@ class ViewMaterialNeeds extends HookWidget {
                           domain: "material",
                           size: 20,
                           rarity: m.rarity,
-                          nameID: m.nameID,
+                          nameID: m.key,
                           rounded: true,
                         ),
                         Text(

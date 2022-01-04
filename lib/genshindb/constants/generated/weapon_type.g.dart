@@ -17,19 +17,19 @@ class _$WeaponTypeStringConverter implements JsonConverter<WeaponType, String> {
 }
 
 const _$WeaponTypeLabelMap = {
-  WeaponType.SWORD_ONE_HAND: "单手剑",
-  WeaponType.WEAPON_CLAYMORE: "大剑",
-  WeaponType.WEAPON_POLE: "长枪",
-  WeaponType.POLE: "弓箭",
-  WeaponType.CATALYST: "法器"
+  WeaponType.Sword: "单手剑",
+  WeaponType.Claymore: "大剑",
+  WeaponType.Polearm: "长枪",
+  WeaponType.Bow: "弓箭",
+  WeaponType.Catalyst: "法器"
 };
 
 const _$WeaponTypeFormatMap = {
-  WeaponType.SWORD_ONE_HAND: "P",
-  WeaponType.WEAPON_CLAYMORE: "P",
-  WeaponType.WEAPON_POLE: "P",
-  WeaponType.POLE: "P",
-  WeaponType.CATALYST: "P"
+  WeaponType.Sword: "P",
+  WeaponType.Claymore: "P",
+  WeaponType.Polearm: "P",
+  WeaponType.Bow: "P",
+  WeaponType.Catalyst: "P"
 };
 
 extension WeaponTypeMeta on WeaponType {
@@ -51,9 +51,9 @@ extension WeaponTypeMeta on WeaponType {
 // **************************************************************************
 
 const _$WeaponTypeEnumMap = {
-  WeaponType.SWORD_ONE_HAND: 'WEAPON_SWORD_ONE_HAND',
-  WeaponType.WEAPON_CLAYMORE: 'WEAPON_CLAYMORE',
-  WeaponType.WEAPON_POLE: 'WEAPON_POLE',
-  WeaponType.POLE: 'WEAPON_BOW',
-  WeaponType.CATALYST: 'WEAPON_CATALYST',
+  WeaponType.Sword: 'WEAPON_SWORD_ONE_HAND',
+  WeaponType.Claymore: 'WEAPON_CLAYMORE',
+  WeaponType.Polearm: 'WEAPON_POLE',
+  WeaponType.Bow: 'WEAPON_BOW',
+  WeaponType.Catalyst: 'WEAPON_CATALYST',
 };

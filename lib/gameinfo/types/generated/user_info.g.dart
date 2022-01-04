@@ -72,6 +72,7 @@ _$_Weapon _$$_WeaponFromJson(Map<String, dynamic> json) => _$_Weapon(
       name: json['name'] as String,
       rarity: json['rarity'] as int,
       affixLevel: json['affix_level'] as int,
+      promoteLevel: json['promote_level'] as int,
     );
 
 Map<String, dynamic> _$$_WeaponToJson(_$_Weapon instance) => <String, dynamic>{
@@ -80,6 +81,7 @@ Map<String, dynamic> _$$_WeaponToJson(_$_Weapon instance) => <String, dynamic>{
       'name': instance.name,
       'rarity': instance.rarity,
       'affix_level': instance.affixLevel,
+      'promote_level': instance.promoteLevel,
     };
 
 _$_Home _$$_HomeFromJson(Map<String, dynamic> json) => _$_Home(

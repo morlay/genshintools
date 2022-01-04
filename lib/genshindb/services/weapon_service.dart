@@ -4,7 +4,6 @@ import 'package:genshintools/genshindb/types.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
 part 'generated/weapon_service.freezed.dart';
-
 part 'generated/weapon_service.g.dart';
 
 @freezed
@@ -15,17 +14,17 @@ class WeaponService with _$WeaponService {
 
   @JsonSerializable(fieldRename: FieldRename.pascal)
   factory WeaponService({
-    Map<int, Weapon>? weapons,
+    Map<int, GSWeapon>? weapons,
     List<List<int>>? weaponLevelupExps,
     GSPromoteSet? weaponPromotes,
     PropGrowCurveValueSet? weaponPropGrowCurveValues,
   }) = _WeaponService;
 
-  Weapon find(String idOrName) {
+  GSWeapon find(String idOrName) {
     return findOrNull(idOrName)!;
   }
 
-  Weapon? findOrNull(String idOrName) {
+  GSWeapon? findOrNull(String idOrName) {
     if (_indexes.isEmpty) {
       weapons?.forEach((id, w) {
         _indexes["${w.id}"] = w.id;
@@ -81,7 +80,7 @@ class WeaponService with _$WeaponService {
         -1;
   }
 
-  List<Weapon> toList() => weapons?.values.toList() ?? [];
+  List<GSWeapon> toList() => weapons?.values.toList() ?? [];
 
   factory WeaponService.fromJson(Map<String, dynamic> json) =>
       _$WeaponServiceFromJson(json);

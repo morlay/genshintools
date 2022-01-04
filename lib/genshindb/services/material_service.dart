@@ -17,7 +17,11 @@ class MaterialService with _$MaterialService {
   }) = _MaterialService;
 
   GSMaterial find(String idOrName) {
-    return findOrNull(idOrName)!;
+    var f = findOrNull(idOrName);
+    if (f == null) {
+      throw "Material not found `$idOrName`";
+    }
+    return f;
   }
 
   GSMaterial? findOrNull(String idOrName) {

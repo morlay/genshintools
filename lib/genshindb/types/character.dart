@@ -36,7 +36,7 @@ class GSCharacter with _$GSCharacter {
   factory GSCharacter.fromJson(Map<String, dynamic> json) =>
       _GSCharacter.fromJson(json);
 
-  get nameID => name.text(Lang.ID);
+  get key => name.text(Lang.ID);
 
   GSCharacterBuild characterAllBuilds() {
     return characterBuild?.copyWith(
@@ -49,24 +49,24 @@ class GSCharacter with _$GSCharacter {
             ...?internalCharacterBuild?.artifactSetPairs
           ].asMap().map((i, v) => MapEntry(v.join("|"), v)).values.toList(),
           artifactMainPropTypes: {
-            EquipType.FLOWER: [FightProp.HP],
-            EquipType.FEATHER: [FightProp.ATTACK],
-            EquipType.SANDS: [
-              ...?characterBuild?.artifactMainPropTypes?[EquipType.SANDS],
+            EquipType.BRACER: [FightProp.HP],
+            EquipType.NECKLACE: [FightProp.ATTACK],
+            EquipType.SHOES: [
+              ...?characterBuild?.artifactMainPropTypes?[EquipType.SHOES],
             ],
-            EquipType.GOBLET: [
-              ...?characterBuild?.artifactMainPropTypes?[EquipType.GOBLET],
+            EquipType.RING: [
+              ...?characterBuild?.artifactMainPropTypes?[EquipType.RING],
             ],
-            EquipType.CIRCLET: [
-              ...?characterBuild?.artifactMainPropTypes?[EquipType.CIRCLET],
+            EquipType.DRESS: [
+              ...?characterBuild?.artifactMainPropTypes?[EquipType.DRESS],
             ],
           },
         ) ??
         internalCharacterBuild?.copyWith(
           artifactMainPropTypes: {
             ...?internalCharacterBuild?.artifactMainPropTypes,
-            EquipType.FLOWER: [FightProp.HP],
-            EquipType.FEATHER: [FightProp.ATTACK],
+            EquipType.BRACER: [FightProp.HP],
+            EquipType.NECKLACE: [FightProp.ATTACK],
           },
         ) ??
         GSCharacterBuild();
@@ -93,11 +93,11 @@ class GSCharacterBuild with _$GSCharacterBuild {
   FightProp defaultMainProp(EquipType et) {
     return artifactMainPropTypes?[et]?[0] ??
         {
-          EquipType.FLOWER: FightProp.HP,
-          EquipType.FEATHER: FightProp.ATTACK,
-          EquipType.SANDS: FightProp.ATTACK_PERCENT,
-          EquipType.CIRCLET: FightProp.ATTACK_PERCENT,
-          EquipType.GOBLET: FightProp.CRITICAL,
+          EquipType.BRACER: FightProp.HP,
+          EquipType.NECKLACE: FightProp.ATTACK,
+          EquipType.SHOES: FightProp.ATTACK_PERCENT,
+          EquipType.DRESS: FightProp.ATTACK_PERCENT,
+          EquipType.RING: FightProp.CRITICAL,
         }[et]!;
   }
 

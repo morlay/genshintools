@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:genshintools/app/auth/auth.dart';
 import 'package:genshintools/app/gameui/gameui.dart';
 import 'package:genshintools/app/view_fight_props.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
+import 'package:genshintools/genshindb/good/good.dart';
 
 import 'gamedata/gamedata.dart';
 
 class WeaponListTile extends HookWidget {
-  final Weapon weapon;
-  final int affixLevel;
+  final GSWeapon weapon;
+  final int refinement;
   final FightProps fightProps;
   final int level;
   final String? backup;
@@ -20,7 +20,7 @@ class WeaponListTile extends HookWidget {
   const WeaponListTile({
     required this.weapon,
     required this.fightProps,
-    required this.affixLevel,
+    required this.refinement,
     required this.level,
     this.backup,
     this.full,
@@ -31,7 +31,7 @@ class WeaponListTile extends HookWidget {
     return WeaponListTile(
       weapon: weapon,
       fightProps: fightProps,
-      affixLevel: affixLevel,
+      refinement: refinement,
       level: level,
       backup: backup,
       full: true,
@@ -40,8 +40,7 @@ class WeaponListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var gdb = BlocGameData.read(context);
-    var db = gdb.db;
+    var db = BlocGameData.read(context).db;
 
     if (full ?? false) {
       return Padding(
@@ -73,7 +72,7 @@ class WeaponListTile extends HookWidget {
                       flex: 1,
                       child: ViewFightProps(
                         fightProps: fightProps.fightPropsConvert(db.weapon
-                            .fightProps(weapon.nameID, level, affixLevel)),
+                            .fightProps(weapon.key, level, refinement)),
                       ),
                     )
                   ],
@@ -93,12 +92,12 @@ class WeaponListTile extends HookWidget {
       level: level,
       child: WithCount(
         prefix: "R",
-        count: affixLevel,
+        count: refinement,
         child: GSImage(
           size: 52,
           domain: "weapon",
           rarity: weapon.rarity,
-          nameID: weapon.nameID,
+          nameID: weapon.key,
         ),
       ),
     );
@@ -123,7 +122,7 @@ class WeaponListTile extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...weapon.weaponAffixes(affixLevel).map(
+              ...weapon.weaponAffixes(refinement).map(
                     (e) => Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Column(
@@ -157,7 +156,7 @@ class WeaponListTile extends HookWidget {
 
 class ViewBuildArtifactSetPair extends HookWidget {
   final FightProps fightProps;
-  final Map<EquipType, PlayerArtifact> artifacts;
+  final List<GOODArtifact> artifacts;
   final String? backup;
   final bool? full;
 
@@ -231,13 +230,13 @@ class ViewBuildArtifactSetPair extends HookWidget {
       child: Stack(
         children: [
           ...sets.mapIndexed((i, as) {
-            var a = as.artifact(EquipType.FLOWER);
+            var a = as.artifact(EquipType.BRACER);
 
             var img = GSImage(
               size: 52,
               domain: "artifact",
               rarity: a.rarity,
-              nameID: a.nameID,
+              nameID: a.key,
             );
 
             return sets.length == 1
@@ -298,11 +297,13 @@ class ViewBuildArtifactSetPair extends HookWidget {
 
 class ViewBuildArtifacts extends HookWidget {
   final GSCharacterBuild builds;
-  final CharacterState state;
+  final CharacterWithState current;
+  final ValueNotifier<CharacterWithState> state;
 
   const ViewBuildArtifacts({
-    required this.state,
     required this.builds,
+    required this.current,
+    required this.state,
     Key? key,
   }) : super(key: key);
 
@@ -312,12 +313,12 @@ class ViewBuildArtifacts extends HookWidget {
       child: Wrap(
         runSpacing: 4,
         children: [
-          ...EquipType.values.map((et) {
+          ...current.artifacts.map((a) {
             return Wrap(
               runSpacing: 4,
               children: [
-                _buildHeader(context, et),
-                _buildMainProp(context, et),
+                _buildHeader(context, a),
+                _buildMainProp(context, a),
               ],
             );
           })
@@ -326,9 +327,7 @@ class ViewBuildArtifacts extends HookWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, EquipType et) {
-    var a = state.build.artifact(et);
-
+  Widget _buildHeader(BuildContext context, GOODArtifact currentArtifact) {
     return Padding(
       padding: const EdgeInsets.only(top: 2, bottom: 2, right: 8),
       child: Row(
@@ -336,7 +335,7 @@ class ViewBuildArtifacts extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            et.label(),
+            currentArtifact.slotKey.asEquipType().label(),
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
@@ -354,7 +353,7 @@ class ViewBuildArtifacts extends HookWidget {
                   ),
                 ),
                 TextSpan(
-                  text: "${a.level}",
+                  text: "${currentArtifact.level}",
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -368,34 +367,52 @@ class ViewBuildArtifacts extends HookWidget {
     );
   }
 
-  Widget _buildMainProp(BuildContext context, EquipType et) {
-    var a = state.build.artifact(et);
-
+  Widget _buildMainProp(BuildContext context, GOODArtifact currentArtifact) {
     var dataState = BlocGameData.read(context);
     var db = dataState.db;
+    var c = state.value.artifacts
+        .firstWhereOrNull((a) => a.slotKey == currentArtifact.slotKey);
 
     return Wrap(
       runSpacing: 2,
       children: [
         ...{
-          ...?state.defaultBuild?.artifact(et).let((a) => [a.main]),
-          ...?builds.artifactMainPropTypes?[et],
-        }.map((fp) => Opacity(
-              opacity: fp == a.main ? 1 : 0.5,
+          currentArtifact.mainStatKey.asFightProp(),
+          ...?builds
+              .artifactMainPropTypes?[currentArtifact.slotKey.asEquipType()],
+        }.map((fp) => Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      left: BorderSide(
+                width: 1,
+                color: (fp == c?.mainStatKey.asFightProp())
+                    ? Theme.of(context).primaryColor
+                    : Colors.transparent,
+              ))),
+              padding: const EdgeInsets.only(left: 4),
               child: GestureDetector(
                 onTap: () {
-                  dataState.updateCharacterState(
-                    BlocAuth.read(context).state.chosenUid(),
-                    state.id,
-                    (state) => state.withMainProp(builds, et, fp),
+                  state.value = state.value.copyWith(
+                    artifacts: [
+                      ...state.value.artifacts.map((artifact) =>
+                          artifact.slotKey == currentArtifact.slotKey
+                              ? artifact.copyWith(
+                                  mainStatKey:
+                                      GOODArtifact.statKeyFromFightProp(fp),
+                                )
+                              : artifact)
+                    ],
                   );
                 },
                 child: ViewFightProps(
                   shouldHighlight: (fightProp) =>
-                      builds.artifactMainPropTypes?[et]?.contains(fightProp) ??
+                      builds.artifactMainPropTypes?[
+                              currentArtifact.slotKey.asEquipType()]
+                          ?.contains(fightProp) ??
                       false,
                   fightProps: FightProps({
-                    fp: db.artifact.mainFightProp(fp, a.rarity, a.level),
+                    fp: db.artifact.mainFightProp(
+                        fp, currentArtifact.rarity, currentArtifact.level),
                   }),
                 ),
               ),

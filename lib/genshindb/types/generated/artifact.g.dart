@@ -34,11 +34,11 @@ Map<String, dynamic> _$$_ArtifactToJson(_$_Artifact instance) =>
     };
 
 const _$EquipTypeEnumMap = {
-  EquipType.FLOWER: 'EQUIP_BRACER',
-  EquipType.FEATHER: 'EQUIP_NECKLACE',
-  EquipType.SANDS: 'EQUIP_SHOES',
-  EquipType.GOBLET: 'EQUIP_RING',
-  EquipType.CIRCLET: 'EQUIP_DRESS',
+  EquipType.BRACER: 'EQUIP_BRACER',
+  EquipType.NECKLACE: 'EQUIP_NECKLACE',
+  EquipType.SHOES: 'EQUIP_SHOES',
+  EquipType.RING: 'EQUIP_RING',
+  EquipType.DRESS: 'EQUIP_DRESS',
 };
 
 _$_ArtifactSet _$$_ArtifactSetFromJson(Map<String, dynamic> json) =>

@@ -17,19 +17,19 @@ class _$EquipTypeStringConverter implements JsonConverter<EquipType, String> {
 }
 
 const _$EquipTypeLabelMap = {
-  EquipType.FLOWER: "花",
-  EquipType.FEATHER: "羽",
-  EquipType.SANDS: "沙",
-  EquipType.GOBLET: "杯",
-  EquipType.CIRCLET: "头"
+  EquipType.BRACER: "花",
+  EquipType.NECKLACE: "羽",
+  EquipType.SHOES: "沙",
+  EquipType.RING: "杯",
+  EquipType.DRESS: "头"
 };
 
 const _$EquipTypeFormatMap = {
-  EquipType.FLOWER: "P",
-  EquipType.FEATHER: "P",
-  EquipType.SANDS: "P",
-  EquipType.GOBLET: "P",
-  EquipType.CIRCLET: "P"
+  EquipType.BRACER: "P",
+  EquipType.NECKLACE: "P",
+  EquipType.SHOES: "P",
+  EquipType.RING: "P",
+  EquipType.DRESS: "P"
 };
 
 extension EquipTypeMeta on EquipType {
@@ -51,9 +51,9 @@ extension EquipTypeMeta on EquipType {
 // **************************************************************************
 
 const _$EquipTypeEnumMap = {
-  EquipType.FLOWER: 'EQUIP_BRACER',
-  EquipType.FEATHER: 'EQUIP_NECKLACE',
-  EquipType.SANDS: 'EQUIP_SHOES',
-  EquipType.GOBLET: 'EQUIP_RING',
-  EquipType.CIRCLET: 'EQUIP_DRESS',
+  EquipType.BRACER: 'EQUIP_BRACER',
+  EquipType.NECKLACE: 'EQUIP_NECKLACE',
+  EquipType.SHOES: 'EQUIP_SHOES',
+  EquipType.RING: 'EQUIP_RING',
+  EquipType.DRESS: 'EQUIP_DRESS',
 };

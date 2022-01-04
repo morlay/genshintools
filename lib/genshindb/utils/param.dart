@@ -27,17 +27,17 @@ String format(double v, String fnName) {
     case "I":
       return v.toStringAsFixed(0);
     case "F":
-      return v.toStringAsFixed(1);
+      return (v + 1e-1).toStringAsFixed(1);
     case "F1":
-      return v.toStringAsFixed(1);
+      return (v + 1e-2).toStringAsFixed(1);
     case "F2":
-      return v.toStringAsFixed(2);
+      return (v + 1e-3).toStringAsFixed(2);
     case "F1P":
-      return (v * 100).toStringAsFixed(1) + "%";
+      return (v * 100 + 1e-2).toStringAsFixed(1) + "%";
     case "F2P":
-      return (v * 100).toStringAsFixed(2) + "%";
+      return (v * 100 + 1e-3).toStringAsFixed(2) + "%";
     case "P":
-      return (v * 100).toStringAsFixed(1) + "%";
+      return (v * 100 + 1e-2).toStringAsFixed(1) + "%";
   }
   return "";
 }

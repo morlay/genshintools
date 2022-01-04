@@ -10,11 +10,11 @@ part 'generated/weapon.freezed.dart';
 part 'generated/weapon.g.dart';
 
 @freezed
-class Weapon with _$Weapon {
-  Weapon._();
+class GSWeapon with _$GSWeapon {
+  GSWeapon._();
 
   @JsonSerializable(fieldRename: FieldRename.pascal)
-  factory Weapon({
+  factory GSWeapon({
     required int id,
     required I18n name,
     required I18n desc,
@@ -25,11 +25,12 @@ class Weapon with _$Weapon {
     @FightPropStringConverter()
         required Map<FightProp, PropGrowCurveAndInitial>
             propGrowCurveAndInitials,
-  }) = _Weapon;
+  }) = _GSWeapon;
 
-  factory Weapon.fromJson(Map<String, dynamic> json) => _Weapon.fromJson(json);
+  factory GSWeapon.fromJson(Map<String, dynamic> json) =>
+      _GSWeapon.fromJson(json);
 
-  get nameID => name.text(Lang.ID);
+  get key => name.text(Lang.ID);
 
   List<EquipAffix> weaponAffixes(int affixLevel) {
     affixLevel = rangeLimit(affixLevel, 1, 5);
@@ -43,10 +44,10 @@ class Weapon with _$Weapon {
   }
 
   @override
-  int get hashCode => id;
+  int get hashCode => key.hashCode;
 
   @override
   bool operator ==(Object other) {
-    return other is Weapon && other.hashCode == hashCode;
+    return other is GSWeapon && other.hashCode == hashCode;
   }
 }

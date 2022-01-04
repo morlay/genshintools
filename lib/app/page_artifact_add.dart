@@ -3,16 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:genshintools/app/auth/auth.dart';
-import 'package:genshintools/app/gamedata/bloc_artifact.dart';
 import 'package:genshintools/app/gamedata/bloc_game_data.dart';
 import 'package:genshintools/app/gameui/gameui.dart';
 import 'package:genshintools/app/ui/select.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
+import 'package:genshintools/genshindb/good/good.dart';
 
 class PageArtifactAdd extends HookWidget {
   static void show(BuildContext context, EquipType equipType,
-      [PlayerArtifact? value]) {
+      [GOODArtifact? value]) {
     Navigator.of(context).push(
       CupertinoPageRoute(
         fullscreenDialog: false,
@@ -23,19 +23,20 @@ class PageArtifactAdd extends HookWidget {
   }
 
   final EquipType equipType;
-  final PlayerArtifact? value;
+  final GOODArtifact? value;
 
   const PageArtifactAdd({
     Key? key,
-    this.equipType = EquipType.SANDS,
+    this.equipType = EquipType.SHOES,
     this.value,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var uid = BlocAuth.watch(context).state.chosenUid();
-    var as = BlocGameData.read(context).db.artifact;
-    var blocArtifact = BlocArtifact.watch(context);
+    var blocGameData = BlocGameData.read(context);
+    var db = blocGameData.db;
+    var as = blocGameData.db.artifact;
 
     var artifacts = useMemoized(
       () => as.artifacts!.values
@@ -49,32 +50,27 @@ class PageArtifactAdd extends HookWidget {
       [equipType],
     );
 
-    var defaultName = artifacts.toList()[0].name.text(Lang.CHS);
+    var defaultArtifact = artifacts.toList()[0];
 
     var pa = useState(
-      (value ??
-          PlayerArtifact.empty().copyWith(
-            name: defaultName,
-            equipType: equipType,
-            main: as.mainCanFightProps(defaultName)[0],
-          )),
+      (value ?? GOODArtifact.create(SlotKey.values[equipType.index], ""))
+          .copyWith(setKey: as.findSet("${defaultArtifact.setId}").key),
     );
 
+    var a =
+        blocGameData.db.artifact.findSet(pa.value.setKey).artifact(equipType);
+
     var mainProps = useMemoized(
-      () => as.mainCanFightProps(pa.value.name),
-      [pa.value.name],
+      () => as.mainCanFightProps(a.key),
+      [pa.value.setKey],
     );
 
     var artifactAppendDepot = useMemoized(
-      () => as.artifactAppendDepot(pa.value.name),
-      [pa.value.name],
+      () => as.artifactAppendDepot(a.key),
+      [pa.value.setKey],
     );
 
-    var playerArtifact = pa.value.copyWith(
-      equipType: as.find(pa.value.name).equipType,
-      appends: pa.value.appends.map(
-          (fp, value) => MapEntry(fp, artifactAppendDepot.valueFix(fp, value))),
-    );
+    var artifact = pa.value;
 
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +78,7 @@ class PageArtifactAdd extends HookWidget {
         actions: [
           IconButton(
             onPressed: () {
-              blocArtifact.equip(uid, playerArtifact, value);
+              blocGameData.equipArtifact(uid, artifact, value);
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.check),
@@ -92,9 +88,9 @@ class PageArtifactAdd extends HookWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            buildArtifactSelect(artifacts, playerArtifact, pa),
-            buildLevelSelect(playerArtifact, pa),
-            buildMainPropSelect(pa, playerArtifact, mainProps),
+            buildArtifactSelect(artifacts, db, artifact, pa),
+            buildLevelSelect(artifact, pa),
+            buildMainPropSelect(pa, artifact, mainProps),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -105,22 +101,31 @@ class PageArtifactAdd extends HookWidget {
                   child:
                       Text("副词条", style: Theme.of(context).textTheme.subtitle1),
                 ),
-                ...playerArtifact.appends.keys.map(
-                  (fp) => buildAppendPropSelect(
-                      playerArtifact, artifactAppendDepot, fp, pa),
+                ...artifact.substats.map(
+                  (ss) => buildAppendPropSelect(
+                    artifact,
+                    artifactAppendDepot,
+                    ss.key.asFightProp(),
+                    pa,
+                  ),
                 ),
-                ...?(playerArtifact.appends.keys.length < 4)
-                    .ifTrueOrNull(() => [
-                          const Divider(),
-                          ...artifactAppendDepot.keys
-                              .where((fp) =>
-                                  fp != playerArtifact.main &&
-                                  !playerArtifact.appends.keys.contains(fp))
-                              .map(
-                                (fp) => buildAppendPropSelect(playerArtifact,
-                                    artifactAppendDepot, fp, pa),
-                              ),
-                        ])
+                ...?(artifact.substats.length < 4).ifTrueOrNull(() => [
+                      const Divider(),
+                      ...artifactAppendDepot.keys
+                          .where((fp) =>
+                              fp != artifact.mainStatKey.asFightProp() &&
+                              artifact.substats
+                                  .where((ss) => ss.key.asFightProp() == fp)
+                                  .isEmpty)
+                          .map(
+                            (fp) => buildAppendPropSelect(
+                              artifact,
+                              artifactAppendDepot,
+                              fp,
+                              pa,
+                            ),
+                          ),
+                    ])
               ],
             )
           ],
@@ -130,19 +135,20 @@ class PageArtifactAdd extends HookWidget {
   }
 
   Select<String> buildAppendPropSelect(
-      PlayerArtifact playerArtifact,
-      GSArtifactAppendDepot artifactAppendDepot,
-      FightProp fp,
-      ValueNotifier<PlayerArtifact> pa) {
+    GOODArtifact artifact,
+    GSArtifactAppendDepot artifactAppendDepot,
+    FightProp fp,
+    ValueNotifier<GOODArtifact> pa,
+  ) {
     var remainCount =
-        playerArtifact.appends.keys.where((ofp) => ofp != fp).fold<int>(
+        artifact.substats.where((ss) => ss.key.asFightProp() != fp).fold<int>(
               4 + 5,
-              (r, ofp) =>
+              (r, ss) =>
                   r -
-                  (playerArtifact.appends[ofp] == ""
+                  (ss.value == 0
                       ? 1
                       : artifactAppendDepot
-                          .valueIndexes(ofp, playerArtifact.appends[ofp])
+                          .valueIndexes(ss.key.asFightProp(), ss.stringValue())
                           .length),
             );
 
@@ -153,13 +159,16 @@ class PageArtifactAdd extends HookWidget {
 
     return Select<String>(
       options: values,
-      value: playerArtifact.appends[fp] ?? "",
+      value: artifact.substats
+              .firstWhereOrNull((ss) => ss.key.asFightProp() == fp)
+              ?.stringValue() ??
+          "",
       onSelected: (selected) {
-        pa.value = playerArtifact.copyWith(
-          appends: {
-            ...playerArtifact.appends,
-            fp: selected,
-          }..removeWhere((key, value) => value == ""),
+        pa.value = artifact.copyWith(
+          substats: artifact.substats.replaceOrAdd(
+            GOODSubStat(key: GOODArtifact.statKeyFromFightProp(fp))
+                .withStringValue(selected),
+          ),
         );
       },
       builder: (context, children) {
@@ -203,19 +212,21 @@ class PageArtifactAdd extends HookWidget {
               Icons.chevron_right,
             ),
             onTap: () => selected.showOptions(context),
-            leading: playerArtifact.appends[fp]?.let(
-              (v) => IconButton(
-                onPressed: () {
-                  pa.value = playerArtifact.copyWith(
-                    appends: {
-                      ...playerArtifact.appends,
-                      fp: "",
-                    }..removeWhere((fp, value) => value == ""),
-                  );
-                },
-                icon: const Icon(Icons.clear, size: 16),
-              ),
-            ),
+            leading: artifact.substats
+                .firstWhereOrNull((ss) => ss.key.asFightProp() == fp)
+                ?.let(
+                  (v) => IconButton(
+                    onPressed: () {
+                      pa.value = artifact.copyWith(
+                        substats: [
+                          ...artifact.substats
+                              .where((ss) => ss.key.asFightProp() != fp)
+                        ],
+                      );
+                    },
+                    icon: const Icon(Icons.clear, size: 16),
+                  ),
+                ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -260,14 +271,14 @@ class PageArtifactAdd extends HookWidget {
     );
   }
 
-  Select<FightProp> buildMainPropSelect(ValueNotifier<PlayerArtifact> pa,
-      PlayerArtifact playerArtifact, List<FightProp> mainProps) {
+  Select<FightProp> buildMainPropSelect(ValueNotifier<GOODArtifact> pa,
+      GOODArtifact artifact, List<FightProp> mainProps) {
     return Select<FightProp>(
       options: mainProps,
-      value: playerArtifact.main,
+      value: artifact.mainStatKey.asFightProp(),
       onSelected: (selected) {
-        pa.value = playerArtifact.copyWith(
-          main: selected,
+        pa.value = artifact.copyWith(
+          mainStatKey: GOODArtifact.statKeyFromFightProp(selected),
         );
       },
       builder: (context, children) {
@@ -303,14 +314,14 @@ class PageArtifactAdd extends HookWidget {
   }
 
   Select<int> buildLevelSelect(
-    PlayerArtifact playerArtifact,
-    ValueNotifier<PlayerArtifact> pa,
+    GOODArtifact artifact,
+    ValueNotifier<GOODArtifact> pa,
   ) {
     return Select<int>(
       options: const [0, 4, 8, 12, 16, 20],
-      value: playerArtifact.level,
+      value: artifact.level,
       onSelected: (selected) {
-        pa.value = playerArtifact.copyWith(level: selected);
+        pa.value = artifact.copyWith(level: selected);
       },
       builder: (context, children) {
         return Wrap(
@@ -346,15 +357,17 @@ class PageArtifactAdd extends HookWidget {
 
   Select<GSArtifact> buildArtifactSelect(
     List<GSArtifact> artifacts,
-    PlayerArtifact playerArtifact,
-    ValueNotifier<PlayerArtifact> pa,
+    GSDB db,
+    GOODArtifact artifact,
+    ValueNotifier<GOODArtifact> pa,
   ) {
     return Select<GSArtifact>(
       options: artifacts,
       value: artifacts.firstWhereOrNull(
-          (v) => v.name.text(Lang.CHS) == playerArtifact.name),
+          (v) => db.artifact.findSet("${v.setId}").key == artifact.setKey),
       onSelected: (selected) {
-        pa.value = playerArtifact.copyWith(name: selected.name.text(Lang.CHS));
+        pa.value = artifact.copyWith(
+            setKey: db.artifact.findSet("${selected.setId}").key);
       },
       builder: (context, children) {
         return Padding(
@@ -378,7 +391,7 @@ class PageArtifactAdd extends HookWidget {
             rarity: 5,
             rounded: true,
             size: 36,
-            nameID: option.value.nameID,
+            nameID: option.value.key,
           ),
         );
       },
@@ -399,7 +412,7 @@ class PageArtifactAdd extends HookWidget {
               domain: "artifact",
               rarity: 5,
               size: 42,
-              nameID: s.nameID,
+              nameID: s.key,
             ),
           ),
         );
@@ -428,7 +441,6 @@ class AppendValueIndex extends HookWidget {
               height: 5,
               decoration: BoxDecoration(
                 color: linearGradientForRarity(i + 2).colors[0],
-                // borderRadius: BorderRadius.circular(3),
               ),
             ),
           ),

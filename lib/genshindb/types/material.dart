@@ -32,15 +32,15 @@ class GSMaterial with _$GSMaterial {
   factory GSMaterial.fromJson(Map<String, dynamic> json) =>
       _Material.fromJson(json);
 
-  String get nameID => name.text(Lang.ID);
+  String get key => name.text(Lang.ID);
 
   String get dropBy =>
       dungeon?.let((dungeon) => dungeon.displayName.isEmpty
           ? "${dungeon.id}"
           : dungeon.displayName.text(Lang.CHS)) ??
       dropFromTags?.let((dropFromTags) =>
-          dropFromTags.isNotEmpty ? dropFromTags.join("") : nameID) ??
-      nameID;
+          dropFromTags.isNotEmpty ? dropFromTags.join("") : key) ??
+      key;
 }
 
 @freezed

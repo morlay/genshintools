@@ -39,7 +39,7 @@ class EnemyService with _$EnemyService {
   Iterable<GSEnemy> listByDropTags(List<String> dropTags) {
     if (_dropTags.isEmpty) {
       enemies?.forEach((key, value) {
-        _dropTags[value.dropTag] = [...?_dropTags[value.dropTag], value.nameID];
+        _dropTags[value.dropTag] = [...?_dropTags[value.dropTag], value.key];
       });
     }
 

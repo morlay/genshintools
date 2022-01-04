@@ -56,6 +56,7 @@ class Weapon with _$Weapon {
     required String name,
     required int rarity,
     required int affixLevel,
+    required int promoteLevel,
   }) = _Weapon;
 
   factory Weapon.fromJson(Map<String, dynamic> json) => _Weapon.fromJson(json);

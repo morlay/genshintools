@@ -1,4 +1,9 @@
-import { reduce, snakeCase, trim, uniq, uniqBy } from "lodash-es";
+import { reduce, trim, uniq, uniqBy } from "lodash-es";
+import fetch from "node-fetch";
+import { parseString } from "@fast-csv/parse";
+import { writeFile, readFile } from "fs/promises";
+import { existsSync } from "fs";
+import { pascalCase } from "./common";
 import { findWeapon } from "./domain_weapon";
 import { findArtifactSet } from "./domain_artifact";
 
@@ -66,10 +71,10 @@ const formatSkillType = (v: string) => {
   return (
     {
       BURST: "Q",
-      NORMAL_ATTACK: "A",
+      NORMALATTACK: "A",
       SKILL: "E",
     } as any
-  )[snakeCase(trim(v, "*").trim()).toUpperCase()];
+  )[pascalCase(trim(v, "*").trim()).toUpperCase()];
 };
 
 const weaponAliases: { [k: string]: string } = {
@@ -89,7 +94,7 @@ const artifactAliases: { [k: string]: string } = {
   Thundersoothers: "Thundersoother",
 };
 
-export const characterBuild = (name: string, b: any) => {
+const characterBuild = (name: string, b: any) => {
   function completeArtifactAffixPropTypes(list: string[]) {
     return uniq(
       reduce(
@@ -115,7 +120,7 @@ export const characterBuild = (name: string, b: any) => {
     Role: b.role,
     Weapons: b.weapons
       .map((id: string) => {
-        const found = findWeapon(snakeCase(weaponAliases[id] || id));
+        const found = findWeapon(pascalCase(weaponAliases[id] || id));
         if (found) {
           return found.Name.CHS;
         }
@@ -135,14 +140,14 @@ export const characterBuild = (name: string, b: any) => {
       b.artifacts.reduce((ret: string[][], sets: string[]) => {
         const pair = sets
           .map((setName) => {
-            const found = findArtifactSet(snakeCase(artifactAliases[setName] || setName));
+            const found = findArtifactSet(pascalCase(artifactAliases[setName] || setName));
             if (found) {
               return found.Name.CHS;
             }
-            if ("18_atk_set" === snakeCase(artifactAliases[setName] || setName)) {
+            if ("18AtkSet" === pascalCase(artifactAliases[setName] || setName)) {
               return "角斗士的终幕礼";
             }
-            if ("20_er_set" === snakeCase(artifactAliases[setName] || setName)) {
+            if ("20ErSet" === pascalCase(artifactAliases[setName] || setName)) {
               return "绝缘之旗印";
             }
             console.log(`${name} missing artifact set ${setName}`);
@@ -161,3 +166,153 @@ export const characterBuild = (name: string, b: any) => {
     SkillPriority: b.talent.map((v: string) => v.split("/").map(formatSkillType)),
   };
 };
+
+const sheet = "https://docs.google.com/spreadsheets/d/1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI";
+const exportURL = `${sheet}/export?format=csv&id=1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI`;
+
+enum Grid {
+  Dendro,
+  Anemo = 653464458,
+  Geo = 1780570478,
+  Electro = 408609723,
+  Cryo = 1169063456,
+  Hydro = 1354385732,
+  Pyro = 954718212,
+}
+
+const loadOrSync = async (g: Grid) => {
+  const file = `./vendordata/${Grid[g]}-${g}.csv`;
+  if (existsSync(file)) {
+    return String(await readFile(file));
+  }
+  const csv = await fetch(`${exportURL}&gid=${g}`).then((res) => res.text());
+  await writeFile(file, csv);
+  return csv;
+};
+
+const fromCSV = async (csv: string, grid: Grid) => {
+  const ret: any = {};
+  const pickList = (cell: string, splitter = /[~=)*]/) => {
+    return cell
+      .split("\n")
+      .map((v) => v.trim())
+      .filter((v: string) => v && !(v.startsWith("*") || v.startsWith("(") || v.endsWith(".")))
+      .map((w: string) =>
+        w
+          .split(splitter)
+          .filter((v) => v)
+          .map((v) => v.replace(/([0-9]+\. ?)?([^(]+)(.+)?/, "$2").trim())
+          .filter((v) => v && !(v.startsWith("(") || v.startsWith("[") || v === "S1")),
+      );
+  };
+
+  const pickMainStats = (cell: string) => {
+    return cell
+      .split("\n")
+      .map((v) => v.trim())
+      .filter((v: string) => v && !(v.startsWith("*") || v.startsWith("(") || v.endsWith(".")))
+      .reduce((ret, v: string) => {
+        const parts = v.split("-");
+
+        if (parts.length !== 2) {
+          return ret;
+        }
+
+        return {
+          ...ret,
+          [parts[0].trim().toLowerCase()]: parts[1].trim(),
+        };
+      }, {});
+  };
+
+  return new Promise<{ [k: string]: any }>((resolve) => {
+    let scope = "";
+    let partIdx = 0;
+
+    parseString(csv)
+      .on("end", () => {
+        resolve(ret);
+      })
+      .on("data", (row) => {
+        if (row.indexOf("EQUIPMENT") > -1 || row.indexOf("EQUIPMENTS") > -1) {
+          scope = row[1];
+
+          switch (scope.toUpperCase()) {
+            case "CHILDE":
+              scope = "tartaglia";
+              break;
+            case "KOKOMI":
+              scope = "sangonomiya_kokomi";
+              break;
+            case "TRAVELER":
+              scope = `${scope} ${Grid[grid]}`;
+              break;
+          }
+
+          partIdx = 0;
+        }
+
+        if (scope != "" && partIdx >= 2) {
+          if (row[1] !== "") {
+            // scope done
+            scope = "";
+            return;
+          }
+
+          const role = row[2].replace("⭐", "").split("\n")[0].trim();
+          const recommended = row[2].indexOf("⭐") > -1;
+
+          if (!(role && recommended)) {
+            return;
+          }
+
+          ret[pascalCase(scope)] = characterBuild(scope, {
+            recommended: recommended,
+            name: scope,
+            role: role,
+            weapons: pickList(row[3]).flat(),
+            artifacts: pickList(row[4], /[~=)*/]/),
+            mainStats: pickMainStats(row[5]),
+            subStats: pickList(row[6]).flat(),
+            talent: pickList(row[7]).flat(),
+          });
+        }
+
+        partIdx++;
+      });
+  });
+};
+
+export let Builds: any = {
+  YunJin: {
+    Role: "SUPPORT",
+    Weapons: [],
+    ArtifactMainPropTypes: {
+      EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
+      EQUIP_RING: ["FIGHT_PROP_DEFENSE_PERCENT"],
+      EQUIP_DRESS: ["FIGHT_PROP_DEFENSE_PERCENT"],
+    },
+    ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_DEFENSE_PERCENT", "FIGHT_PROP_DEFENSE"],
+    ArtifactSetPairs: [["华馆梦醒形骸记"]],
+    SkillPriority: [["Q"], ["E"]],
+  },
+  Shenhe: {
+    Role: "SUPPORT",
+    Weapons: [],
+    ArtifactMainPropTypes: {
+      EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
+      EQUIP_RING: ["FIGHT_PROP_ATTACK_PERCENT"],
+      EQUIP_DRESS: ["FIGHT_PROP_ATTACK_PERCENT"],
+    },
+    ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_ATTACK_PERCENT", "FIGHT_PROP_ATTACK"],
+    ArtifactSetPairs: [],
+    SkillPriority: [["Q"], ["E"]],
+  },
+};
+
+for (const p of [Grid.Pyro, Grid.Anemo, Grid.Electro, Grid.Cryo, Grid.Hydro, Grid.Geo]) {
+  Builds = {
+    ...Builds,
+    ...(await fromCSV(await loadOrSync(p), p)),
+  };
+}

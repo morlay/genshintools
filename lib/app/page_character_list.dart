@@ -6,6 +6,7 @@ import 'package:genshintools/app/gamedata/gamedata.dart';
 import 'package:genshintools/app/gameui/gameui.dart';
 import 'package:genshintools/app/view_account.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
+import 'package:genshintools/genshindb/good/good.dart';
 import 'package:genshintools/hook/hook.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -27,6 +28,9 @@ class PageCharacterList extends HookWidget {
         return Rx.fromCallable(() => BlocGameData.read(context).syncGameInfo(
               blocAuth.state.authedClient(),
               blocAuth.state.chosenUid(),
+              BlocArtifact.read(context)
+                  .playerArtifactBuild(uid)
+                  .allArtifacts(),
             ));
       }
     }, [uid]);
@@ -102,21 +106,21 @@ class CharacterListTile extends HookWidget {
     var db = BlocGameData.read(context).db;
 
     return Opacity(
-      opacity: c.state.own ? 1.0 : 0.6,
+      opacity: c.c.own ? 1.0 : 0.6,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: SizedBox(
           child: WithLevel(
-            level: c.state.level,
+            level: c.c.level,
             child: WithCount(
               prefix: "C",
-              count: c.state.activeConstellationNum,
+              count: c.c.constellation,
               child: WithElement(
                 element: c.character.element,
                 child: GSImage(
                   domain: "character",
                   rarity: c.character.rarity,
-                  nameID: c.character.nameID,
+                  nameID: c.character.key,
                 ),
               ),
             ),
@@ -140,18 +144,18 @@ class CharacterListTile extends HookWidget {
                     Wrap(
                       spacing: 8,
                       children: [
-                        ...c.state.skillLevels.keys.map(
+                        ...c.c.talent.keys.map(
                           (key) => Text.rich(TextSpan(
                             children: [
                               TextSpan(
-                                text: "${key.string()}.",
+                                text: "${key.asSkillType().string()}.",
                                 style: TextStyle(
                                   color: Theme.of(context).hintColor,
                                   fontSize: 12,
                                 ),
                               ),
                               TextSpan(
-                                text: "${c.state.skillLevels[key]}",
+                                text: "${c.c.talent[key]}",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
@@ -176,26 +180,22 @@ class CharacterListTile extends HookWidget {
               alignment: WrapAlignment.end,
               children: [
                 WithLevel(
-                  level: c.state.build.weaponLevel,
+                  level: c.w.level,
                   size: 9,
                   child: WithCount(
                     prefix: "R",
-                    count: c.state.build.weaponAffixLevel,
+                    count: c.w.refinement,
                     size: 10,
                     child: GSImage(
                       size: 32,
                       domain: "weapon",
-                      rarity: db.weapon
-                          .find(c.state.build.weaponID.toString())
-                          .rarity,
-                      nameID: db.weapon
-                          .find(c.state.build.weaponID.toString())
-                          .nameID,
+                      rarity: db.weapon.find(c.w.key).rarity,
+                      nameID: db.weapon.find(c.w.key).key,
                     ),
                   ),
                 ),
-                ...(c.state.todo
-                    ? c.state.build.artifacts.values.map(
+                ...(c.todo
+                    ? c.artifacts.map(
                         (a) => WithLevel(
                           level: a.level,
                           size: 9,
@@ -203,7 +203,10 @@ class CharacterListTile extends HookWidget {
                             size: 32,
                             domain: "artifact",
                             rarity: a.rarity,
-                            nameID: db.artifact.find(a.name).nameID,
+                            nameID: db.artifact
+                                .findSet(a.setKey)
+                                .artifact(a.slotKey.asEquipType())
+                                .key,
                           ),
                         ),
                       )

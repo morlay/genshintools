@@ -86,11 +86,11 @@ const _$ElementTypeEnumMap = {
 };
 
 const _$WeaponTypeEnumMap = {
-  WeaponType.SWORD_ONE_HAND: 'WEAPON_SWORD_ONE_HAND',
-  WeaponType.WEAPON_CLAYMORE: 'WEAPON_CLAYMORE',
-  WeaponType.WEAPON_POLE: 'WEAPON_POLE',
-  WeaponType.POLE: 'WEAPON_BOW',
-  WeaponType.CATALYST: 'WEAPON_CATALYST',
+  WeaponType.Sword: 'WEAPON_SWORD_ONE_HAND',
+  WeaponType.Claymore: 'WEAPON_CLAYMORE',
+  WeaponType.Polearm: 'WEAPON_POLE',
+  WeaponType.Bow: 'WEAPON_BOW',
+  WeaponType.Catalyst: 'WEAPON_CATALYST',
 };
 
 const _$FightPropEnumMap = {
@@ -209,11 +209,11 @@ Map<String, dynamic> _$$_GSCharacterBuildToJson(_$_GSCharacterBuild instance) =>
     };
 
 const _$EquipTypeEnumMap = {
-  EquipType.FLOWER: 'EQUIP_BRACER',
-  EquipType.FEATHER: 'EQUIP_NECKLACE',
-  EquipType.SANDS: 'EQUIP_SHOES',
-  EquipType.GOBLET: 'EQUIP_RING',
-  EquipType.CIRCLET: 'EQUIP_DRESS',
+  EquipType.BRACER: 'EQUIP_BRACER',
+  EquipType.NECKLACE: 'EQUIP_NECKLACE',
+  EquipType.SHOES: 'EQUIP_SHOES',
+  EquipType.RING: 'EQUIP_RING',
+  EquipType.DRESS: 'EQUIP_DRESS',
 };
 
 const _$SkillTypeEnumMap = {

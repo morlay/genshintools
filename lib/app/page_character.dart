@@ -10,6 +10,7 @@ import 'package:genshintools/app/page_artifact_list.dart';
 import 'package:genshintools/app/ui/select.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
+import 'package:genshintools/genshindb/good/good.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'auth/auth.dart';
@@ -38,72 +39,53 @@ class PageCharacter extends HookWidget {
   Widget build(BuildContext context) {
     var uid = BlocAuth.watch(context).state.chosenUid();
     var blocGameData = BlocGameData.watch(context);
-    var blocArtifact = BlocArtifact.watch(context);
     var db = blocGameData.db;
 
-    var c = blocGameData.findCharacterWithState(uid, "$id");
+    var current = blocGameData.findCharacterWithState(uid, "$id");
+    var builds = current.character.characterAllBuilds();
 
-    if (c == null) {
-      return const Center(
-        child: Text("NotFound"),
-      );
-    }
+    current = current.copyWith(
+      artifacts: current.artifacts.length == 5
+          ? current.artifacts
+          : db.artifact
+              .buildArtifactsBySetPair(
+                builds.artifactSetPairs?[0] ?? ["角斗士的终幕礼"],
+                builds,
+              )
+              .map((a) =>
+                  current.artifacts
+                      .firstWhereOrNull((e) => e.slotKey == a.slotKey) ??
+                  a)
+              .toList(),
+    );
 
-    var builds = c.character.characterAllBuilds();
-
-    var playerArtifacts =
-        blocArtifact.playerArtifactBuild(uid).artifacts(c.character.id);
+    var characterValueNotifier = useState(current.copyWith(
+      c: current.c.copyWith(
+        level: current.c.level > 0 ? current.c.level : 1,
+      ),
+    ));
 
     useEffect(() {
-      playerArtifacts?.let((playerArtifacts) {
-        Map<EquipType, PlayerArtifact> artifacts = {};
+      characterValueNotifier.value = characterValueNotifier.value.copyWith(
+        artifacts: current.artifacts,
+      );
+    }, [current.artifacts.map((e) => e.toString()).join("|")]);
 
-        for (var et in EquipType.values) {
-          if (playerArtifacts[et] != null) {
-            artifacts[et] = playerArtifacts[et]!;
-            continue;
-          }
-          var artifactCreateFor = c.state.build.artifact(et).copyWith(
-                usedBy: c.character.id,
-              );
-
-          artifacts[et] = artifactCreateFor;
-
-          if (c.state.todo) {
-            blocArtifact.equip(uid, artifactCreateFor);
-          }
-        }
-
-        blocGameData.updateCharacterState(
-          uid,
-          c.character.id,
-          (characterState) {
-            var nextBuild =
-                (characterState.defaultBuild ?? characterState.build).copyWith(
-              artifacts: artifacts,
-            );
-            return characterState.copyWith(
-              build: nextBuild,
-              defaultBuild: nextBuild,
-            );
-          },
-        );
-      });
-    }, [playerArtifacts?.values.map((e) => e.toString()).join("|")]);
+    var c = characterValueNotifier.value;
 
     var fightProps = db.character
         .fightProps(
           id.toString(),
-          c.state.level,
-          c.state.activeConstellationNum,
+          c.c.level,
+          c.c.constellation,
         )
         .merge(db.weapon.fightProps(
-          c.state.build.weaponID.toString(),
-          c.state.build.weaponLevel,
-          c.state.build.weaponAffixLevel,
+          c.w.key,
+          c.w.level,
+          c.w.refinement,
         ))
         .merge(db.artifact.fightProps(
-          c.state.build.artifacts,
+          c.artifacts,
         ))
         .compute();
 
@@ -126,8 +108,14 @@ class PageCharacter extends HookWidget {
                           children: [
                             SizedBox(
                               width: 90,
-                              child:
-                                  _buildBuild(context, c, fightProps, builds),
+                              child: _buildBuild(
+                                context,
+                                db,
+                                current,
+                                characterValueNotifier,
+                                fightProps,
+                                builds,
+                              ),
                             ),
                             Expanded(
                               child: SingleChildScrollView(
@@ -196,7 +184,7 @@ class PageCharacter extends HookWidget {
                           child: Center(child: Text("等级修改")),
                         ),
                       ),
-                      _buildSettings(context, c.state),
+                      _buildSettings(context, characterValueNotifier),
                     ],
                   ),
                 ),
@@ -226,146 +214,127 @@ class PageCharacter extends HookWidget {
     );
   }
 
-  Widget _buildSettings(BuildContext context, CharacterState state) {
-    var gbBloc = BlocGameData.read(context);
-    var uid = BlocAuth.read(context).state.chosenUid();
+  Widget _buildSettings(
+    BuildContext context,
+    ValueNotifier<CharacterWithState> cvn,
+  ) {
+    var s = cvn.value;
 
     Map<String, Slider> sliders = {
       "角色等级": Slider(
-        value: state.level.toDouble(),
+        value: s.c.level.toDouble(),
         min: 1,
         max: 90,
         divisions: 90 ~/ 5,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
+          cvn.value = s.copyWith(
+            c: s.c.copyWith(
               level: value.toInt(),
             ),
           );
         },
       ),
       "角色命座": Slider(
-        value: state.activeConstellationNum.toDouble(),
+        value: s.c.constellation.toDouble(),
         min: 0,
         max: 6,
         divisions: 6,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              activeConstellationNum: value.toInt(),
+          cvn.value = s.copyWith(
+            c: s.c.copyWith(
+              constellation: value.toInt(),
             ),
           );
         },
       ),
       "${SkillType.NORMAL_ATTACK.label()}等级": Slider(
-        value: state.skillLevel(SkillType.NORMAL_ATTACK).toDouble(),
+        value: s.c.skillLevel(SkillType.NORMAL_ATTACK).toDouble(),
         min: 1,
         max: 10,
         divisions: 10,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              skillLevels: {
-                ...state.skillLevels,
-                SkillType.NORMAL_ATTACK: value.toInt(),
+          cvn.value = s.copyWith(
+            c: s.c.copyWith(
+              talent: {
+                ...s.c.talent,
+                TalentType.auto: value.toInt(),
               },
             ),
           );
         },
       ),
       "${SkillType.ELEMENTAL_SKILL.label()}等级": Slider(
-        value: state.skillLevel(SkillType.ELEMENTAL_SKILL).toDouble(),
+        value: s.c.skillLevel(SkillType.ELEMENTAL_SKILL).toDouble(),
         min: 1,
         max: 10,
         divisions: 10,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              skillLevels: {
-                ...state.skillLevels,
-                SkillType.ELEMENTAL_SKILL: value.toInt(),
+          cvn.value = s.copyWith(
+            c: s.c.copyWith(
+              talent: {
+                ...s.c.talent,
+                TalentType.skill: value.toInt(),
               },
             ),
           );
         },
       ),
       "${SkillType.ELEMENTAL_BURST.label()}等级": Slider(
-        value: state.skillLevel(SkillType.ELEMENTAL_BURST).toDouble(),
+        value: s.c.skillLevel(SkillType.ELEMENTAL_BURST).toDouble(),
         min: 1,
         max: 10,
         divisions: 10,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              skillLevels: {
-                ...state.skillLevels,
-                SkillType.ELEMENTAL_BURST: value.toInt(),
+          cvn.value = s.copyWith(
+            c: s.c.copyWith(
+              talent: {
+                ...s.c.talent,
+                TalentType.burst: value.toInt(),
               },
             ),
           );
         },
       ),
       "武器等级": Slider(
-        value: state.build.weaponLevel.toDouble(),
+        value: s.w.level.toDouble(),
         min: 1,
         max: 90,
         divisions: 90 ~/ 5,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              build: state.build.copyWith(weaponLevel: value.toInt()),
+          cvn.value = s.copyWith(
+            w: s.w.copyWith(
+              level: value.toInt(),
             ),
           );
         },
       ),
       "武器精炼": Slider(
-        value: state.build.weaponAffixLevel.toDouble(),
+        value: s.w.refinement.toDouble(),
         min: 1,
         max: 5,
         divisions: 5,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              build: state.build.copyWith(weaponAffixLevel: value.toInt()),
+          cvn.value = s.copyWith(
+            w: s.w.copyWith(
+              refinement: value.toInt(),
             ),
           );
         },
       ),
       "圣遗物等级": Slider(
-        value: state.build.artifact(EquipType.FLOWER).level.toDouble(),
+        value: s.artifacts.getOrNull(0)?.level.toDouble() ?? 0,
         min: 0,
         max: 20,
         divisions: 20 ~/ 4,
         onChanged: (double value) {
-          gbBloc.updateCharacterState(
-            uid,
-            state.id,
-            (state) => state.copyWith(
-              build: state.build.copyWith(
-                artifacts: state.build.artifacts.map(
-                  (key, artifact) => MapEntry(
-                    key,
-                    artifact.copyWith(
-                      level: value.toInt(),
-                    ),
-                  ),
+          cvn.value = s.copyWith(
+            artifacts: [
+              ...s.artifacts.map(
+                (artifact) => artifact.copyWith(
+                  level: value.toInt(),
                 ),
               ),
-            ),
+            ],
           );
         },
       ),
@@ -407,34 +376,31 @@ class PageCharacter extends HookWidget {
 
   Widget _buildBuild(
     BuildContext context,
-    CharacterWithState c,
+    GSDB db,
+    CharacterWithState current,
+    ValueNotifier<CharacterWithState> state,
     FightProps fightProps,
     GSCharacterBuild builds,
   ) {
-    var uid = BlocAuth.read(context).state.chosenUid();
-    var gbBloc = BlocGameData.read(context);
-    var db = gbBloc.db;
+    var c = state.value;
 
     List<WeaponListTile> weapons = [
-      ...?c.state.defaultBuild?.let((it) => [
-            WeaponListTile(
-              fightProps: fightProps,
-              weapon: db.weapon.find(it.weaponID.toString()),
-              level: c.state.build.weaponLevel,
-              affixLevel: c.state.build.weaponAffixLevel,
-              backup: "当装配装",
-            )
-          ]),
+      WeaponListTile(
+        fightProps: fightProps,
+        weapon: db.weapon.find(current.w.key),
+        level: c.w.level,
+        refinement: c.w.refinement,
+      ),
       ...?builds.weapons?.map((e) => WeaponListTile(
             fightProps: fightProps,
             weapon: db.weapon.find(e),
-            level: c.state.build.weaponLevel,
-            affixLevel: 1,
+            level: c.w.level,
+            refinement: 1,
           )),
     ];
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -442,15 +408,12 @@ class PageCharacter extends HookWidget {
             runSpacing: 8,
             children: [
               Select<WeaponListTile>(
-                value: weapons.firstWhereOrNull(
-                  (w) => w.weapon.id == c.state.build.weaponID,
-                ),
+                value: weapons.firstWhereOrNull((w) => w.weapon.key == c.w.key),
                 onSelected: (w) {
-                  gbBloc.updateCharacterState(
-                    uid,
-                    c.state.id,
-                    (state) => c.state.withWeaponId(w.weapon.id),
-                  );
+                  state.value = c.copyWith(
+                      w: c.w.copyWith(
+                    key: w.weapon.key,
+                  ));
                 },
                 options: weapons,
                 optionBuilder: (context, item, selected) {
@@ -470,14 +433,19 @@ class PageCharacter extends HookWidget {
                   );
                 },
               ),
-              ViewArtifactBuilder(uid: uid, c: c, fightProps: fightProps),
+              ViewArtifactBuilder(
+                current: current,
+                state: state,
+                fightProps: fightProps,
+              ),
             ],
           ),
           const SizedBox(height: 8),
           Expanded(
             child: ViewBuildArtifacts(
+              current: current,
               builds: builds,
-              state: c.state,
+              state: state,
             ),
           )
         ],
@@ -516,7 +484,7 @@ class PageCharacter extends HookWidget {
                   child: Text(
                     [
                       skill.skillType.string() != ""
-                          ? "${skill.skillType.string()}.${fightProps.fixSkillLevel(skill.skillType, c.state.skillLevel(skill.skillType))}"
+                          ? "${skill.skillType.string()}.${fightProps.fixSkillLevel(skill.skillType, c.c.skillLevel(skill.skillType))}"
                               .toString()
                           : "",
                       skill.name.text(Lang.CHS),
@@ -553,10 +521,10 @@ class PageCharacter extends HookWidget {
                         skill: skill,
                         level: fightProps.fixSkillLevel(
                           skill.skillType,
-                          c.state.skillLevel(skill.skillType),
+                          c.c.skillLevel(skill.skillType),
                         ),
                         fightProps: fightProps.merge(FightProps({
-                          FightProp.ENEMY_LEVEL: c.state.level.toDouble(),
+                          FightProp.ENEMY_LEVEL: c.c.level.toDouble(),
                           FightProp.ENEMY_RESISTANCE: 0.1,
                         })),
                       ),
@@ -609,7 +577,7 @@ class PageCharacter extends HookWidget {
                 height: 160,
                 image: GSImageProvider(
                   domain: "character",
-                  nameID: c.character.nameID,
+                  nameID: c.character.key,
                 ),
               ),
             ),
@@ -729,7 +697,7 @@ class PageCharacter extends HookWidget {
                               children: [
                                 ...c.character.constellations.map(
                                   (e) => Opacity(
-                                    opacity: (c.state.activeConstellationNum >=
+                                    opacity: (c.c.constellation >=
                                             c.character.constellations
                                                     .indexOf(e) +
                                                 1)
@@ -758,54 +726,56 @@ class PageCharacter extends HookWidget {
 class ViewArtifactBuilder extends HookWidget {
   const ViewArtifactBuilder({
     Key? key,
-    required this.uid,
-    required this.c,
+    required this.current,
+    required this.state,
     required this.fightProps,
   }) : super(key: key);
 
-  final int uid;
+  final CharacterWithState current;
+  final ValueNotifier<CharacterWithState> state;
   final FightProps fightProps;
-  final CharacterWithState c;
 
   @override
   Widget build(BuildContext context) {
+    var uid = BlocAuth.read(context).state.chosenUid();
+    var c = state.value;
+
     return GestureDetector(
       onTap: () {
-        _showModal(context, uid, c.character.id);
+        _showModal(context, uid, state);
       },
       child: ViewBuildArtifactSetPair(
         fightProps: fightProps,
-        artifacts: c.state.build.artifacts,
+        artifacts: c.artifacts,
       ),
     );
   }
 
-  void _showModal(BuildContext context, int uid, int cid) {
-    var blocGameData = BlocGameData.read(context);
-    var db = blocGameData.db;
-    var builds = c.character.characterAllBuilds();
+  void _showModal(
+    BuildContext context,
+    int uid,
+    ValueNotifier<CharacterWithState> state,
+  ) {
+    var db = BlocGameData.read(context).db;
+    var builds = current.character.characterAllBuilds();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         List<ViewBuildArtifactSetPair> artifactSets = [
-          ...?c.state.defaultBuild?.let((build) {
-            return [
-              ViewBuildArtifactSetPair(
-                fightProps: fightProps,
-                artifacts: build.artifacts,
-                backup: "当前配装",
-              ),
-            ];
-          }),
+          ViewBuildArtifactSetPair(
+            fightProps: fightProps,
+            artifacts: current.artifacts,
+            backup: "当前配装",
+          ),
           ...?builds.artifactSetPairs?.map(
             (artifactSetPair) => ViewBuildArtifactSetPair(
               fightProps: fightProps,
               artifacts: db.artifact.buildArtifactsBySetPair(
                 artifactSetPair,
                 builds,
-                c.state.defaultBuild?.artifacts,
+                current.artifacts,
               ),
             ),
           ),
@@ -828,22 +798,16 @@ class ViewArtifactBuilder extends HookWidget {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      CurrentArtifact(uid: uid, c: c),
+                      CurrentArtifact(uid: uid, c: current),
                       SingleChildScrollView(
                         child: Column(
                           children: [
                             ...artifactSets.map(
                               (artifactSet) => ListTile(
-                                selected: isArtifactsEqual(
-                                  artifactSet.artifacts,
-                                  c.state.build.artifacts,
-                                ),
+                                selected: false,
                                 onTap: () {
-                                  blocGameData.updateCharacterState(
-                                    uid,
-                                    c.state.id,
-                                    (state) => c.state
-                                        .withArtifacts(artifactSet.artifacts),
+                                  state.value = state.value.copyWith(
+                                    artifacts: artifactSet.artifacts,
                                   );
                                   Navigator.of(context).pop();
                                 },
@@ -886,46 +850,51 @@ class CurrentArtifact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var blocArtifact = BlocArtifact.watch(context);
-    var playerArtifactBuild = blocArtifact.playerArtifactBuild(uid);
+    var blocGameData = BlocGameData.watch(context);
+    var state = blocGameData.playerState(uid);
+    var current = state.artifactsOn(c.character.key);
 
     return SingleChildScrollView(
       child: Column(
         children: [
           ...EquipType.values.map((et) {
-            var list = playerArtifactBuild
-                .allArtifacts()
-                .where((a) => a.equipType == et)
+            var list = state.artifacts
+                .where((a) => a.slotKey.asEquipType() == et)
                 .toList();
 
-            var v = playerArtifactBuild.artifact(
-              et,
-              c.character.id,
-            );
+            var currentArtifact =
+                current.firstWhereOrNull((a) => a.slotKey.asEquipType() == et);
 
-            return Select<PlayerArtifact>(
+            return Select<GOODArtifact>(
               options: list,
-              value: v,
+              value: currentArtifact,
               onSelected: (selected) {
-                blocArtifact.equip(
-                  uid,
-                  selected.copyWith(
-                    usedBy: c.character.id,
-                  ),
-                  v,
-                );
+                if (currentArtifact == null) {
+                  blocGameData.equipArtifact(
+                    uid,
+                    selected.copyWith(
+                      location: c.character.key,
+                    ),
+                  );
+                } else {
+                  blocGameData.equipArtifact(
+                    uid,
+                    selected,
+                    currentArtifact,
+                  );
+                }
               },
               optionBuilder: (context, option, selected) {
-                return PlayerArtifactListTile(
-                  pa: option.value,
+                return GOODArtifactListTile(
+                  artifact: option.value,
                   onAvatarTap: () {
                     option.select();
                   },
                 );
               },
               tileBuilder: (context, selected) {
-                return selected.value?.let((pa) => PlayerArtifactListTile(
-                        pa: pa,
+                return selected.value?.let((pa) => GOODArtifactListTile(
+                        artifact: pa,
                         onAvatarTap: () {
                           selected.showOptions(context);
                         })) ??
@@ -944,8 +913,10 @@ class CurrentArtifact extends StatelessWidget {
   }
 }
 
-isArtifactsEqual(Map<EquipType, PlayerArtifact> artifacts,
-    Map<EquipType, PlayerArtifact> artifacts2) {
+isArtifactsEqual(
+  Map<EquipType, PlayerArtifact> artifacts,
+  Map<EquipType, PlayerArtifact> artifacts2,
+) {
   return artifacts.values.map((e) => e.toString()).join("/") ==
       artifacts.values.map((e) => e.toString()).join("/");
 }

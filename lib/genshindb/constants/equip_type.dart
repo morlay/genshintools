@@ -11,21 +11,21 @@ class EquipTypeStringConverter extends _$EquipTypeStringConverter {
 enum EquipType {
   @EnumMeta(label: "花")
   @JsonValue("EQUIP_BRACER")
-  FLOWER,
+  BRACER,
 
   @EnumMeta(label: "羽")
   @JsonValue("EQUIP_NECKLACE")
-  FEATHER,
+  NECKLACE,
 
   @EnumMeta(label: "沙")
   @JsonValue("EQUIP_SHOES")
-  SANDS,
+  SHOES,
 
   @EnumMeta(label: "杯")
   @JsonValue("EQUIP_RING")
-  GOBLET,
+  RING,
 
   @EnumMeta(label: "头")
   @JsonValue("EQUIP_DRESS")
-  CIRCLET,
+  DRESS,
 }

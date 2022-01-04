@@ -36,7 +36,7 @@ class ViewMaterial extends HookWidget {
 
     var a = GSImage(
       domain: "material",
-      nameID: material.nameID,
+      nameID: material.key,
       rarity: material.rarity,
       borderSize: 3,
       size: 72,
@@ -115,7 +115,7 @@ class ViewMaterial extends HookWidget {
                                       (e) => Chip(
                                         avatar: GSImage(
                                           domain: "enemy",
-                                          nameID: e.nameID,
+                                          nameID: e.key,
                                           rounded: true,
                                         ),
                                         label: Text(
@@ -156,7 +156,7 @@ class MaterialWithCount extends HookWidget {
         domain: "material",
         size: 36,
         rarity: material.rarity,
-        nameID: material.nameID,
+        nameID: material.key,
         rounded: true,
       ),
       label: Text("× ${count > 1e4 ? "${count ~/ 1e4}w" : count}",

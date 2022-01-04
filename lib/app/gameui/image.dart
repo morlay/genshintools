@@ -109,7 +109,7 @@ class WithElement extends HookWidget {
                   height: size,
                   image: GSImageProvider(
                     domain: "element",
-                    nameID: element.name.toLowerCase(),
+                    nameID: element.name,
                   ),
                 ))),
       ],
@@ -297,7 +297,7 @@ class GSImageElement extends HookWidget {
       child: Image(
         image: GSImageProvider(
           domain: 'element',
-          nameID: element.string().toLowerCase(),
+          nameID: element.string(),
         ),
       ),
     );
@@ -325,14 +325,13 @@ class GSImageWeaponType extends HookWidget {
       colorBlendMode: BlendMode.srcIn,
       image: GSImageProvider(
         domain: "weapon_type",
-        nameID: weaponType.string().replaceAll("WEAPON_", "").toLowerCase(),
+        nameID: weaponType.toString().split(".").last,
       ),
     );
   }
 }
 
-const imageBaseURL =
-    "https://gitee.com/morlay/genshinimages/raw/gh-pages/images";
+const imageBaseURL = "https://gitee.com/morlay/genshinimages/raw/good/images";
 
 class GSImageProvider extends CachedNetworkImageProvider {
   GSImageProvider({

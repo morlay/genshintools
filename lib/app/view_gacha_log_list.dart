@@ -126,7 +126,7 @@ class ViewGachaLogList extends HookWidget {
           count: c.rarity == 4 ? e.countSinceLastPurple : e.countSinceLastGold,
           child: GSImage(
             domain: "character",
-            nameID: c.nameID,
+            nameID: c.key,
             rarity: c.rarity,
           ),
         );
@@ -139,7 +139,7 @@ class ViewGachaLogList extends HookWidget {
         count: w.rarity == 4 ? e.countSinceLastPurple : e.countSinceLastGold,
         child: GSImage(
           domain: "weapon",
-          nameID: w.nameID,
+          nameID: w.key,
           rarity: w.rarity,
         ),
       );

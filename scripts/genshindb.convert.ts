@@ -1,3 +1,5 @@
+import { mapValues } from "lodash-es";
+
 import {
   writeJSONSync,
   Enemies,
@@ -18,11 +20,14 @@ import {
   CharacterPromotes,
   CharacterPropGrowCurveValues,
   CharacterLevelupExps,
+  Builds,
 } from "./genshindb";
-import { Trials } from "./genshindb/character_trial";
 
 writeJSONSync("./assets/genshindb/characters.json", {
-  Characters,
+  Characters: mapValues(Characters, (c: any) => ({
+    ...c,
+    CharacterBuild: Builds[c.Name.ID],
+  })),
   CharacterPromotes,
   CharacterPropGrowCurveValues,
   CharacterLevelupExps,
@@ -52,8 +57,4 @@ writeJSONSync("./assets/genshindb/artifacts.json", {
 writeJSONSync("./assets/genshindb/materials.json", {
   Materials: Materials,
   Dungeons: Dungeons,
-});
-
-writeJSONSync("./assets/trials.json", {
-  Trials: Trials,
 });

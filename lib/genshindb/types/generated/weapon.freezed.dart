@@ -13,15 +13,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Weapon _$WeaponFromJson(Map<String, dynamic> json) {
-  return _Weapon.fromJson(json);
+GSWeapon _$GSWeaponFromJson(Map<String, dynamic> json) {
+  return _GSWeapon.fromJson(json);
 }
 
 /// @nodoc
-class _$WeaponTearOff {
-  const _$WeaponTearOff();
+class _$GSWeaponTearOff {
+  const _$GSWeaponTearOff();
 
-  _Weapon call(
+  _GSWeapon call(
       {required int id,
       required I18n name,
       required I18n desc,
@@ -33,7 +33,7 @@ class _$WeaponTearOff {
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
               propGrowCurveAndInitials}) {
-    return _Weapon(
+    return _GSWeapon(
       id: id,
       name: name,
       desc: desc,
@@ -45,16 +45,16 @@ class _$WeaponTearOff {
     );
   }
 
-  Weapon fromJson(Map<String, Object?> json) {
-    return Weapon.fromJson(json);
+  GSWeapon fromJson(Map<String, Object?> json) {
+    return GSWeapon.fromJson(json);
   }
 }
 
 /// @nodoc
-const $Weapon = _$WeaponTearOff();
+const $GSWeapon = _$GSWeaponTearOff();
 
 /// @nodoc
-mixin _$Weapon {
+mixin _$GSWeapon {
   int get id => throw _privateConstructorUsedError;
   I18n get name => throw _privateConstructorUsedError;
   I18n get desc => throw _privateConstructorUsedError;
@@ -69,13 +69,14 @@ mixin _$Weapon {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $WeaponCopyWith<Weapon> get copyWith => throw _privateConstructorUsedError;
+  $GSWeaponCopyWith<GSWeapon> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WeaponCopyWith<$Res> {
-  factory $WeaponCopyWith(Weapon value, $Res Function(Weapon) then) =
-      _$WeaponCopyWithImpl<$Res>;
+abstract class $GSWeaponCopyWith<$Res> {
+  factory $GSWeaponCopyWith(GSWeapon value, $Res Function(GSWeapon) then) =
+      _$GSWeaponCopyWithImpl<$Res>;
   $Res call(
       {int id,
       I18n name,
@@ -93,12 +94,12 @@ abstract class $WeaponCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$WeaponCopyWithImpl<$Res> implements $WeaponCopyWith<$Res> {
-  _$WeaponCopyWithImpl(this._value, this._then);
+class _$GSWeaponCopyWithImpl<$Res> implements $GSWeaponCopyWith<$Res> {
+  _$GSWeaponCopyWithImpl(this._value, this._then);
 
-  final Weapon _value;
+  final GSWeapon _value;
   // ignore: unused_field
-  final $Res Function(Weapon) _then;
+  final $Res Function(GSWeapon) _then;
 
   @override
   $Res call({
@@ -163,9 +164,9 @@ class _$WeaponCopyWithImpl<$Res> implements $WeaponCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$WeaponCopyWith<$Res> implements $WeaponCopyWith<$Res> {
-  factory _$WeaponCopyWith(_Weapon value, $Res Function(_Weapon) then) =
-      __$WeaponCopyWithImpl<$Res>;
+abstract class _$GSWeaponCopyWith<$Res> implements $GSWeaponCopyWith<$Res> {
+  factory _$GSWeaponCopyWith(_GSWeapon value, $Res Function(_GSWeapon) then) =
+      __$GSWeaponCopyWithImpl<$Res>;
   @override
   $Res call(
       {int id,
@@ -186,13 +187,13 @@ abstract class _$WeaponCopyWith<$Res> implements $WeaponCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$WeaponCopyWithImpl<$Res> extends _$WeaponCopyWithImpl<$Res>
-    implements _$WeaponCopyWith<$Res> {
-  __$WeaponCopyWithImpl(_Weapon _value, $Res Function(_Weapon) _then)
-      : super(_value, (v) => _then(v as _Weapon));
+class __$GSWeaponCopyWithImpl<$Res> extends _$GSWeaponCopyWithImpl<$Res>
+    implements _$GSWeaponCopyWith<$Res> {
+  __$GSWeaponCopyWithImpl(_GSWeapon _value, $Res Function(_GSWeapon) _then)
+      : super(_value, (v) => _then(v as _GSWeapon));
 
   @override
-  _Weapon get _value => super._value as _Weapon;
+  _GSWeapon get _value => super._value as _GSWeapon;
 
   @override
   $Res call({
@@ -205,7 +206,7 @@ class __$WeaponCopyWithImpl<$Res> extends _$WeaponCopyWithImpl<$Res>
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
   }) {
-    return _then(_Weapon(
+    return _then(_GSWeapon(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -245,8 +246,8 @@ class __$WeaponCopyWithImpl<$Res> extends _$WeaponCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.pascal)
-class _$_Weapon extends _Weapon {
-  _$_Weapon(
+class _$_GSWeapon extends _GSWeapon {
+  _$_GSWeapon(
       {required this.id,
       required this.name,
       required this.desc,
@@ -257,8 +258,8 @@ class _$_Weapon extends _Weapon {
       @FightPropStringConverter() required this.propGrowCurveAndInitials})
       : super._();
 
-  factory _$_Weapon.fromJson(Map<String, dynamic> json) =>
-      _$$_WeaponFromJson(json);
+  factory _$_GSWeapon.fromJson(Map<String, dynamic> json) =>
+      _$$_GSWeaponFromJson(json);
 
   @override
   final int id;
@@ -281,22 +282,22 @@ class _$_Weapon extends _Weapon {
 
   @override
   String toString() {
-    return 'Weapon(id: $id, name: $name, desc: $desc, rarity: $rarity, weaponType: $weaponType, affixes: $affixes, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials)';
+    return 'GSWeapon(id: $id, name: $name, desc: $desc, rarity: $rarity, weaponType: $weaponType, affixes: $affixes, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials)';
   }
 
   @JsonKey(ignore: true)
   @override
-  _$WeaponCopyWith<_Weapon> get copyWith =>
-      __$WeaponCopyWithImpl<_Weapon>(this, _$identity);
+  _$GSWeaponCopyWith<_GSWeapon> get copyWith =>
+      __$GSWeaponCopyWithImpl<_GSWeapon>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WeaponToJson(this);
+    return _$$_GSWeaponToJson(this);
   }
 }
 
-abstract class _Weapon extends Weapon {
-  factory _Weapon(
+abstract class _GSWeapon extends GSWeapon {
+  factory _GSWeapon(
       {required int id,
       required I18n name,
       required I18n desc,
@@ -307,10 +308,10 @@ abstract class _Weapon extends Weapon {
       required int promoteId,
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
-              propGrowCurveAndInitials}) = _$_Weapon;
-  _Weapon._() : super._();
+              propGrowCurveAndInitials}) = _$_GSWeapon;
+  _GSWeapon._() : super._();
 
-  factory _Weapon.fromJson(Map<String, dynamic> json) = _$_Weapon.fromJson;
+  factory _GSWeapon.fromJson(Map<String, dynamic> json) = _$_GSWeapon.fromJson;
 
   @override
   int get id;
@@ -332,5 +333,6 @@ abstract class _Weapon extends Weapon {
   Map<FightProp, PropGrowCurveAndInitial> get propGrowCurveAndInitials;
   @override
   @JsonKey(ignore: true)
-  _$WeaponCopyWith<_Weapon> get copyWith => throw _privateConstructorUsedError;
+  _$GSWeaponCopyWith<_GSWeapon> get copyWith =>
+      throw _privateConstructorUsedError;
 }

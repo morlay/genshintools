@@ -11,6 +11,26 @@ extension StdKt<T> on T {
 
 extension ListExtensions<E> on List<E> {
   E? getOrNull(int i) => (i >= 0 && i < length) ? this[i] : null;
+
+  List<E> replaceOrAdd(E replacer) {
+    List<E> list = [];
+
+    var replaced = false;
+
+    for (E item in this) {
+      if (replacer == item) {
+        replaced = true;
+        list.add(replacer);
+        continue;
+      }
+      list.add(item);
+    }
+
+    if (!replaced) {
+      list.add(replacer);
+    }
+    return list.toList();
+  }
 }
 
 extension KtBool on bool {
