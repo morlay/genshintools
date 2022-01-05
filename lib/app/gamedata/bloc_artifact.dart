@@ -7,7 +7,7 @@ import 'player_artifact_build.dart';
 
 typedef PlayerArtifactBuilds = Map<int, PlayerArtifactBuild>;
 
-@deprecated
+@Deprecated("removed when next version")
 class BlocArtifact extends HydratedCubit<PlayerArtifactBuilds>
     with WebDAVSyncMixin {
   BlocArtifact() : super({});

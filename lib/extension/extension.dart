@@ -12,24 +12,14 @@ extension StdKt<T> on T {
 extension ListExtensions<E> on List<E> {
   E? getOrNull(int i) => (i >= 0 && i < length) ? this[i] : null;
 
-  List<E> replaceOrAdd(E replacer) {
-    List<E> list = [];
-
-    var replaced = false;
-
-    for (E item in this) {
-      if (replacer == item) {
-        replaced = true;
-        list.add(replacer);
-        continue;
-      }
-      list.add(item);
-    }
-
-    if (!replaced) {
-      list.add(replacer);
-    }
-    return list.toList();
+  List<E> uniqBy<T>(T Function(E e) iteratee) {
+    return fold<Map<T, E>>(
+      {},
+      (previousValue, e) => {
+        ...previousValue,
+        iteratee(e): e,
+      },
+    ).values.toList();
   }
 }
 

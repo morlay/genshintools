@@ -491,6 +491,28 @@ class _$_GOODCharacter extends _GOODCharacter {
     return 'GOODCharacter(key: $key, level: $level, constellation: $constellation, ascension: $ascension, talent: $talent)';
   }
 
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GOODCharacter &&
+            const DeepCollectionEquality().equals(other.key, key) &&
+            const DeepCollectionEquality().equals(other.level, level) &&
+            const DeepCollectionEquality()
+                .equals(other.constellation, constellation) &&
+            const DeepCollectionEquality().equals(other.ascension, ascension) &&
+            const DeepCollectionEquality().equals(other.talent, talent));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(key),
+      const DeepCollectionEquality().hash(level),
+      const DeepCollectionEquality().hash(constellation),
+      const DeepCollectionEquality().hash(ascension),
+      const DeepCollectionEquality().hash(talent));
+
   @JsonKey(ignore: true)
   @override
   _$GOODCharacterCopyWith<_GOODCharacter> get copyWith =>
@@ -649,6 +671,21 @@ class _$_GOODSubStat extends _GOODSubStat {
   @JsonKey()
   @override
   final double value;
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GOODSubStat &&
+            const DeepCollectionEquality().equals(other.key, key) &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(key),
+      const DeepCollectionEquality().hash(value));
 
   @JsonKey(ignore: true)
   @override
@@ -920,6 +957,34 @@ class _$_GOODArtifact extends _GOODArtifact {
     return 'GOODArtifact(setKey: $setKey, slotKey: $slotKey, level: $level, rarity: $rarity, mainStatKey: $mainStatKey, location: $location, substats: $substats, lock: $lock)';
   }
 
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GOODArtifact &&
+            const DeepCollectionEquality().equals(other.setKey, setKey) &&
+            const DeepCollectionEquality().equals(other.slotKey, slotKey) &&
+            const DeepCollectionEquality().equals(other.level, level) &&
+            const DeepCollectionEquality().equals(other.rarity, rarity) &&
+            const DeepCollectionEquality()
+                .equals(other.mainStatKey, mainStatKey) &&
+            const DeepCollectionEquality().equals(other.location, location) &&
+            const DeepCollectionEquality().equals(other.substats, substats) &&
+            const DeepCollectionEquality().equals(other.lock, lock));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(setKey),
+      const DeepCollectionEquality().hash(slotKey),
+      const DeepCollectionEquality().hash(level),
+      const DeepCollectionEquality().hash(rarity),
+      const DeepCollectionEquality().hash(mainStatKey),
+      const DeepCollectionEquality().hash(location),
+      const DeepCollectionEquality().hash(substats),
+      const DeepCollectionEquality().hash(lock));
+
   @JsonKey(ignore: true)
   @override
   _$GOODArtifactCopyWith<_GOODArtifact> get copyWith =>
@@ -1172,6 +1237,30 @@ class _$_GOODWeapon extends _GOODWeapon {
   String toString() {
     return 'GOODWeapon(key: $key, level: $level, ascension: $ascension, refinement: $refinement, location: $location, lock: $lock)';
   }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _GOODWeapon &&
+            const DeepCollectionEquality().equals(other.key, key) &&
+            const DeepCollectionEquality().equals(other.level, level) &&
+            const DeepCollectionEquality().equals(other.ascension, ascension) &&
+            const DeepCollectionEquality()
+                .equals(other.refinement, refinement) &&
+            const DeepCollectionEquality().equals(other.location, location) &&
+            const DeepCollectionEquality().equals(other.lock, lock));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(key),
+      const DeepCollectionEquality().hash(level),
+      const DeepCollectionEquality().hash(ascension),
+      const DeepCollectionEquality().hash(refinement),
+      const DeepCollectionEquality().hash(location),
+      const DeepCollectionEquality().hash(lock));
 
   @JsonKey(ignore: true)
   @override

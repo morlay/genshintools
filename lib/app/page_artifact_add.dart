@@ -164,11 +164,17 @@ class PageArtifactAdd extends HookWidget {
               ?.stringValue() ??
           "",
       onSelected: (selected) {
+        var next = GOODSubStat(key: GOODArtifact.statKeyFromFightProp(fp))
+            .withStringValue(selected);
+
         pa.value = artifact.copyWith(
-          substats: artifact.substats.replaceOrAdd(
-            GOODSubStat(key: GOODArtifact.statKeyFromFightProp(fp))
-                .withStringValue(selected),
-          ),
+          substats: [
+            ...artifact.substats.map((ss) => ss.key == next.key ? next : ss),
+            ...?artifact.substats
+                .where((ss) => ss.key == next.key)
+                .isEmpty
+                .ifTrueOrNull(() => [next])
+          ],
         );
       },
       builder: (context, children) {

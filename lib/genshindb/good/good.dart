@@ -56,7 +56,10 @@ class GOOD with _$GOOD {
 
     return copyWith(
       version: 1,
-      characters: characters.replaceOrAdd(updated),
+      characters: [
+        ...characters,
+        updated,
+      ].uniqBy((e) => e.key),
     );
   }
 
@@ -69,16 +72,18 @@ class GOOD with _$GOOD {
 
     if (found != null) {
       return copyWith(
-        weapons: {
-          ...weapons.map((a) => a == found ? update(found) : a),
-        }.toList(),
+        weapons: weapons
+            .map((a) => a.location == found.location ? update(found) : a)
+            .toList()
+            .uniqBy((e) => e.location),
       );
     }
 
     return copyWith(
-      weapons: {
-        ...(weapons..add(update(GOODWeapon.create(defaultKey, location)))),
-      }.toList(),
+      weapons: [
+        ...weapons,
+        update(GOODWeapon.create(defaultKey, location)),
+      ].uniqBy((e) => e.location),
     );
   }
 
@@ -92,8 +97,10 @@ class GOOD with _$GOOD {
 
     if (found != null) {
       return copyWith(
-        artifacts:
-            artifacts.map((a) => a == found ? update(found) : a).toList(),
+        artifacts: artifacts
+            .map((a) => a == found ? update(found) : a)
+            .toList()
+            .uniqBy((e) => e.hashCode),
       );
     }
 
@@ -112,26 +119,33 @@ class GOOD with _$GOOD {
     if (from != null) {
       if (from.location == artifact.location) {
         return copyWith(
-            artifacts: artifacts.map((a) => from == a ? artifact : a).toList());
+            artifacts: [
+          ...artifacts.map((a) => from == a ? artifact : a),
+        ].uniqBy((e) => e.hashCode));
       } else {
         return copyWith(
-            artifacts: artifacts.map((a) {
-          if (from == a) {
-            return from.copyWith(
-              location: artifact.location,
-            );
-          }
-          if (artifact == a) {
-            return artifact.copyWith(
-              location: from.location,
-            );
-          }
-          return a;
-        }).toList());
+            artifacts: [
+          ...artifacts.map((a) {
+            if (from == a) {
+              return from.copyWith(
+                location: artifact.location,
+              );
+            }
+            if (artifact == a) {
+              return artifact.copyWith(
+                location: from.location,
+              );
+            }
+            return a;
+          })
+        ].uniqBy((e) => e.hashCode));
       }
     }
     return copyWith(
-      artifacts: artifacts.replaceOrAdd(artifact),
+      artifacts: [
+        ...artifacts,
+        artifact,
+      ].uniqBy((e) => e.hashCode),
     );
   }
 
@@ -193,14 +207,6 @@ class GOODCharacter with _$GOODCharacter {
   int skillLevel(SkillType skill) {
     return talent[TalentType.values[skill.index]]!;
   }
-
-  @override
-  int get hashCode => key.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    return other is GOODCharacter && other.hashCode == hashCode;
-  }
 }
 
 @freezed
@@ -228,14 +234,6 @@ class GOODSubStat with _$GOODSubStat {
         ? GSArtifactAppendDepot.format(value / 100)
         : GSArtifactAppendDepot.format(value);
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is GOODSubStat && other.hashCode == hashCode;
-  }
-
-  @override
-  int get hashCode => key.name.hashCode;
 
   @override
   String toString() {
@@ -297,23 +295,6 @@ class GOODArtifact with _$GOODArtifact {
       };
     });
   }
-
-  @override
-  int get hashCode {
-    return [
-      setKey,
-      location,
-      slotKey.name,
-      mainStatKey.name,
-      level,
-      ...substats,
-    ].join("|").hashCode;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is GOODArtifact && other.hashCode == hashCode;
-  }
 }
 
 @freezed
@@ -339,14 +320,6 @@ class GOODWeapon with _$GOODWeapon {
 
   factory GOODWeapon.fromJson(Map<String, dynamic> json) =>
       _GOODWeapon.fromJson(json);
-
-  @override
-  int get hashCode => location.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    return other is GOODWeapon && other.hashCode == hashCode;
-  }
 }
 
 @JsonEnum()
