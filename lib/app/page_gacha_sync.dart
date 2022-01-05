@@ -26,7 +26,7 @@ class PageGachaSync extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("上传抽卡记录"),
+        title: const Text("同步抽卡记录"),
       ),
       body: FormGachaSync(),
     );
@@ -68,7 +68,7 @@ class FormGachaSync extends HookWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(40),
               ),
-              child: const Text('上传抽卡记录'),
+              child: const Text('同步抽卡记录'),
               onPressed: () {
                 if (_formKey.currentState?.validate() ?? false) {
                   _startSync(context, logURL.text.trim(), info);
@@ -86,7 +86,10 @@ class FormGachaSync extends HookWidget {
   }
 
   _startSync(
-      BuildContext context, String gachaLogURL, ValueNotifier info) async {
+    BuildContext context,
+    String gachaLogURL,
+    ValueNotifier info,
+  ) async {
     var client = GachaClient(
       dio: Dio(),
       gachaLogURL: gachaLogURL,
@@ -104,9 +107,10 @@ class FormGachaSync extends HookWidget {
       List<GachaLog> logs = [...?state.logs[gachaType.name]];
 
       var untilId = logs.isNotEmpty ? logs.last.id : "0";
-      var endId = "0";
-      var forceDone = false;
+      var noNextPage = false;
       var page = 0;
+
+      var endId = "0";
 
       while (true) {
         page++;
@@ -122,21 +126,17 @@ class FormGachaSync extends HookWidget {
           endId = list.isNotEmpty ? list.last.id : "0";
 
           for (var item in list.reversed) {
-            if (untilId != "0" && untilId == item.id) {
-              forceDone = true;
+            if (item.uid != "$uid") {
+              noNextPage = true;
               break;
             }
-            if (item.uid != "$uid") {
-              break;
+            if (untilId != "0" && untilId == item.id) {
+              noNextPage = true;
             }
             logs.add(item);
           }
 
-          if (forceDone) {
-            break;
-          }
-
-          if (list.isEmpty) {
+          if (list.isEmpty || noNextPage) {
             break;
           }
         } catch (e) {

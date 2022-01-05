@@ -61,19 +61,24 @@ class GOOD with _$GOOD {
   }
 
   updateWeapon(
-    String key,
     String location,
     GOODWeapon Function(GOODWeapon c) update,
+    String defaultKey,
   ) {
-    var updated = update(
-      weapons.firstWhereOrNull(
-            (e) => e.key == key && e.location == location,
-          ) ??
-          GOODWeapon.create(key, location),
-    );
+    var found = weapons.firstWhereOrNull((e) => e.location == location);
+
+    if (found != null) {
+      return copyWith(
+        weapons: {
+          ...weapons.map((a) => a == found ? update(found) : a),
+        }.toList(),
+      );
+    }
 
     return copyWith(
-      weapons: weapons.replaceOrAdd(updated),
+      weapons: {
+        ...(weapons..add(update(GOODWeapon.create(defaultKey, location)))),
+      }.toList(),
     );
   }
 
@@ -336,7 +341,7 @@ class GOODWeapon with _$GOODWeapon {
       _GOODWeapon.fromJson(json);
 
   @override
-  int get hashCode => "$key@$location".hashCode;
+  int get hashCode => location.hashCode;
 
   @override
   bool operator ==(Object other) {

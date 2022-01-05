@@ -214,13 +214,14 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         avatar.weapon?.let((weapon) {
           db.weapon.findOrNull(weapon.name)?.let((w) {
             good = good.updateWeapon(
-              w.key,
               location,
-              (w) => w.copyWith(
+              (gw) => gw.copyWith(
+                key: w.key,
                 level: weapon.level,
                 refinement: weapon.affixLevel,
                 ascension: weapon.promoteLevel,
               ),
+              w.key,
             );
           });
         });
