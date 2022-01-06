@@ -8,11 +8,20 @@ part 'generated/i18n.g.dart';
 class I18n with _$I18n {
   const I18n._();
 
-  @LangStringConverter()
-  factory I18n(Map<Lang, String> values) = _I18n;
+  @JsonSerializable()
+  factory I18n(
+    @LangStringConverter() Map<Lang, String> values,
+  ) = _I18n;
 
   factory I18n.fromJson(Map<String, dynamic> json) =>
-      _$I18nFromJson({"values": json});
+      _I18n.fromJson({"values": json});
+
+  @override
+  Map<String, dynamic> toJson() {
+    return values.map(
+      (key, value) => MapEntry(const LangStringConverter().toJson(key), value),
+    );
+  }
 
   String text(Lang lang) {
     if (values.containsKey(lang)) {
@@ -24,5 +33,6 @@ class I18n with _$I18n {
   Iterable<Lang> get keys => values.keys;
 
   bool get isEmpty => values.keys.isEmpty;
+
   bool get isNotEmpty => values.keys.isNotEmpty;
 }

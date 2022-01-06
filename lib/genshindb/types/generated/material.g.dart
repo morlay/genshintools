@@ -92,13 +92,13 @@ const _$GSMonsterRarityEnumMap = {
 
 _$_MaterialCost _$$_MaterialCostFromJson(Map<String, dynamic> json) =>
     _$_MaterialCost(
-      materialNameID: json['MaterialNameID'] as String,
+      materialKey: json['MaterialKey'] as String,
       count: json['Count'] as int,
     );
 
 Map<String, dynamic> _$$_MaterialCostToJson(_$_MaterialCost instance) =>
     <String, dynamic>{
-      'MaterialNameID': instance.materialNameID,
+      'MaterialKey': instance.materialKey,
       'Count': instance.count,
     };
 

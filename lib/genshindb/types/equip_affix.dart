@@ -140,6 +140,9 @@ class EquipAffix with _$EquipAffix {
             fp = fp.add(FightProp.ELEMENTAL_SKILL_ADD_HURT, params[0]);
             fp = fp.add(FightProp.ELEMENTAL_BURST_ADD_HURT, params[0]);
             break;
+          case "传承":
+            fp = fp.add(FightProp.ATTACK_PERCENT, params[0]);
+            break;
           case "船歌":
             fp = fp.add(FightProp.ELEMENTAL_BURST_ADD_HURT, params[0]);
             fp = fp.add(FightProp.ELEMENTAL_BURST_ADD_CRITICAL, params[1]);

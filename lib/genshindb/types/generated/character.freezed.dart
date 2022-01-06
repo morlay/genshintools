@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../character.dart';
@@ -30,7 +31,7 @@ class _$GSCharacterTearOff {
       required int rarity,
       @WeaponTypeStringConverter()
           required WeaponType weaponType,
-      required int initialWeaponId,
+      required String initialWeaponKey,
       required double critical,
       required double criticalHurt,
       required double staminaRecoverSpeed,
@@ -43,8 +44,7 @@ class _$GSCharacterTearOff {
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
               propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild,
-      GSCharacterBuild? internalCharacterBuild}) {
+      GSCharacterBuild? characterBuild}) {
     return _GSCharacter(
       id: id,
       name: name,
@@ -52,7 +52,7 @@ class _$GSCharacterTearOff {
       element: element,
       rarity: rarity,
       weaponType: weaponType,
-      initialWeaponId: initialWeaponId,
+      initialWeaponKey: initialWeaponKey,
       critical: critical,
       criticalHurt: criticalHurt,
       staminaRecoverSpeed: staminaRecoverSpeed,
@@ -64,7 +64,6 @@ class _$GSCharacterTearOff {
       promoteId: promoteId,
       propGrowCurveAndInitials: propGrowCurveAndInitials,
       characterBuild: characterBuild,
-      internalCharacterBuild: internalCharacterBuild,
     );
   }
 
@@ -86,7 +85,7 @@ mixin _$GSCharacter {
   int get rarity => throw _privateConstructorUsedError;
   @WeaponTypeStringConverter()
   WeaponType get weaponType => throw _privateConstructorUsedError;
-  int get initialWeaponId => throw _privateConstructorUsedError;
+  String get initialWeaponKey => throw _privateConstructorUsedError;
   double get critical => throw _privateConstructorUsedError;
   double get criticalHurt => throw _privateConstructorUsedError;
   double get staminaRecoverSpeed => throw _privateConstructorUsedError;
@@ -102,8 +101,6 @@ mixin _$GSCharacter {
   Map<FightProp, PropGrowCurveAndInitial> get propGrowCurveAndInitials =>
       throw _privateConstructorUsedError;
   GSCharacterBuild? get characterBuild => throw _privateConstructorUsedError;
-  GSCharacterBuild? get internalCharacterBuild =>
-      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -125,7 +122,7 @@ abstract class $GSCharacterCopyWith<$Res> {
       int rarity,
       @WeaponTypeStringConverter()
           WeaponType weaponType,
-      int initialWeaponId,
+      String initialWeaponKey,
       double critical,
       double criticalHurt,
       double staminaRecoverSpeed,
@@ -137,13 +134,11 @@ abstract class $GSCharacterCopyWith<$Res> {
       int promoteId,
       @FightPropStringConverter()
           Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild,
-      GSCharacterBuild? internalCharacterBuild});
+      GSCharacterBuild? characterBuild});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res> get desc;
   $GSCharacterBuildCopyWith<$Res>? get characterBuild;
-  $GSCharacterBuildCopyWith<$Res>? get internalCharacterBuild;
 }
 
 /// @nodoc
@@ -162,7 +157,7 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
     Object? element = freezed,
     Object? rarity = freezed,
     Object? weaponType = freezed,
-    Object? initialWeaponId = freezed,
+    Object? initialWeaponKey = freezed,
     Object? critical = freezed,
     Object? criticalHurt = freezed,
     Object? staminaRecoverSpeed = freezed,
@@ -174,7 +169,6 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
     Object? characterBuild = freezed,
-    Object? internalCharacterBuild = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -201,10 +195,10 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
           ? _value.weaponType
           : weaponType // ignore: cast_nullable_to_non_nullable
               as WeaponType,
-      initialWeaponId: initialWeaponId == freezed
-          ? _value.initialWeaponId
-          : initialWeaponId // ignore: cast_nullable_to_non_nullable
-              as int,
+      initialWeaponKey: initialWeaponKey == freezed
+          ? _value.initialWeaponKey
+          : initialWeaponKey // ignore: cast_nullable_to_non_nullable
+              as String,
       critical: critical == freezed
           ? _value.critical
           : critical // ignore: cast_nullable_to_non_nullable
@@ -248,10 +242,6 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
       characterBuild: characterBuild == freezed
           ? _value.characterBuild
           : characterBuild // ignore: cast_nullable_to_non_nullable
-              as GSCharacterBuild?,
-      internalCharacterBuild: internalCharacterBuild == freezed
-          ? _value.internalCharacterBuild
-          : internalCharacterBuild // ignore: cast_nullable_to_non_nullable
               as GSCharacterBuild?,
     ));
   }
@@ -280,18 +270,6 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
       return _then(_value.copyWith(characterBuild: value));
     });
   }
-
-  @override
-  $GSCharacterBuildCopyWith<$Res>? get internalCharacterBuild {
-    if (_value.internalCharacterBuild == null) {
-      return null;
-    }
-
-    return $GSCharacterBuildCopyWith<$Res>(_value.internalCharacterBuild!,
-        (value) {
-      return _then(_value.copyWith(internalCharacterBuild: value));
-    });
-  }
 }
 
 /// @nodoc
@@ -310,7 +288,7 @@ abstract class _$GSCharacterCopyWith<$Res>
       int rarity,
       @WeaponTypeStringConverter()
           WeaponType weaponType,
-      int initialWeaponId,
+      String initialWeaponKey,
       double critical,
       double criticalHurt,
       double staminaRecoverSpeed,
@@ -322,8 +300,7 @@ abstract class _$GSCharacterCopyWith<$Res>
       int promoteId,
       @FightPropStringConverter()
           Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild,
-      GSCharacterBuild? internalCharacterBuild});
+      GSCharacterBuild? characterBuild});
 
   @override
   $I18nCopyWith<$Res> get name;
@@ -331,8 +308,6 @@ abstract class _$GSCharacterCopyWith<$Res>
   $I18nCopyWith<$Res> get desc;
   @override
   $GSCharacterBuildCopyWith<$Res>? get characterBuild;
-  @override
-  $GSCharacterBuildCopyWith<$Res>? get internalCharacterBuild;
 }
 
 /// @nodoc
@@ -353,7 +328,7 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
     Object? element = freezed,
     Object? rarity = freezed,
     Object? weaponType = freezed,
-    Object? initialWeaponId = freezed,
+    Object? initialWeaponKey = freezed,
     Object? critical = freezed,
     Object? criticalHurt = freezed,
     Object? staminaRecoverSpeed = freezed,
@@ -365,7 +340,6 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
     Object? characterBuild = freezed,
-    Object? internalCharacterBuild = freezed,
   }) {
     return _then(_GSCharacter(
       id: id == freezed
@@ -392,10 +366,10 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
           ? _value.weaponType
           : weaponType // ignore: cast_nullable_to_non_nullable
               as WeaponType,
-      initialWeaponId: initialWeaponId == freezed
-          ? _value.initialWeaponId
-          : initialWeaponId // ignore: cast_nullable_to_non_nullable
-              as int,
+      initialWeaponKey: initialWeaponKey == freezed
+          ? _value.initialWeaponKey
+          : initialWeaponKey // ignore: cast_nullable_to_non_nullable
+              as String,
       critical: critical == freezed
           ? _value.critical
           : critical // ignore: cast_nullable_to_non_nullable
@@ -440,10 +414,6 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
           ? _value.characterBuild
           : characterBuild // ignore: cast_nullable_to_non_nullable
               as GSCharacterBuild?,
-      internalCharacterBuild: internalCharacterBuild == freezed
-          ? _value.internalCharacterBuild
-          : internalCharacterBuild // ignore: cast_nullable_to_non_nullable
-              as GSCharacterBuild?,
     ));
   }
 }
@@ -459,7 +429,7 @@ class _$_GSCharacter extends _GSCharacter {
       @ElementTypeStringConverter() required this.element,
       required this.rarity,
       @WeaponTypeStringConverter() required this.weaponType,
-      required this.initialWeaponId,
+      required this.initialWeaponKey,
       required this.critical,
       required this.criticalHurt,
       required this.staminaRecoverSpeed,
@@ -470,8 +440,7 @@ class _$_GSCharacter extends _GSCharacter {
       required this.skillLevelupMaterialCosts,
       required this.promoteId,
       @FightPropStringConverter() required this.propGrowCurveAndInitials,
-      this.characterBuild,
-      this.internalCharacterBuild})
+      this.characterBuild})
       : super._();
 
   factory _$_GSCharacter.fromJson(Map<String, dynamic> json) =>
@@ -492,7 +461,7 @@ class _$_GSCharacter extends _GSCharacter {
   @WeaponTypeStringConverter()
   final WeaponType weaponType;
   @override
-  final int initialWeaponId;
+  final String initialWeaponKey;
   @override
   final double critical;
   @override
@@ -516,12 +485,10 @@ class _$_GSCharacter extends _GSCharacter {
   final Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials;
   @override
   final GSCharacterBuild? characterBuild;
-  @override
-  final GSCharacterBuild? internalCharacterBuild;
 
   @override
   String toString() {
-    return 'GSCharacter(id: $id, name: $name, desc: $desc, element: $element, rarity: $rarity, weaponType: $weaponType, initialWeaponId: $initialWeaponId, critical: $critical, criticalHurt: $criticalHurt, staminaRecoverSpeed: $staminaRecoverSpeed, chargeEfficiency: $chargeEfficiency, constellations: $constellations, inherentSkills: $inherentSkills, skills: $skills, skillLevelupMaterialCosts: $skillLevelupMaterialCosts, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials, characterBuild: $characterBuild, internalCharacterBuild: $internalCharacterBuild)';
+    return 'GSCharacter(id: $id, name: $name, desc: $desc, element: $element, rarity: $rarity, weaponType: $weaponType, initialWeaponKey: $initialWeaponKey, critical: $critical, criticalHurt: $criticalHurt, staminaRecoverSpeed: $staminaRecoverSpeed, chargeEfficiency: $chargeEfficiency, constellations: $constellations, inherentSkills: $inherentSkills, skills: $skills, skillLevelupMaterialCosts: $skillLevelupMaterialCosts, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials, characterBuild: $characterBuild)';
   }
 
   @override
@@ -537,7 +504,7 @@ class _$_GSCharacter extends _GSCharacter {
             const DeepCollectionEquality()
                 .equals(other.weaponType, weaponType) &&
             const DeepCollectionEquality()
-                .equals(other.initialWeaponId, initialWeaponId) &&
+                .equals(other.initialWeaponKey, initialWeaponKey) &&
             const DeepCollectionEquality().equals(other.critical, critical) &&
             const DeepCollectionEquality()
                 .equals(other.criticalHurt, criticalHurt) &&
@@ -556,34 +523,30 @@ class _$_GSCharacter extends _GSCharacter {
             const DeepCollectionEquality().equals(
                 other.propGrowCurveAndInitials, propGrowCurveAndInitials) &&
             const DeepCollectionEquality()
-                .equals(other.characterBuild, characterBuild) &&
-            const DeepCollectionEquality()
-                .equals(other.internalCharacterBuild, internalCharacterBuild));
+                .equals(other.characterBuild, characterBuild));
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        runtimeType,
-        const DeepCollectionEquality().hash(id),
-        const DeepCollectionEquality().hash(name),
-        const DeepCollectionEquality().hash(desc),
-        const DeepCollectionEquality().hash(element),
-        const DeepCollectionEquality().hash(rarity),
-        const DeepCollectionEquality().hash(weaponType),
-        const DeepCollectionEquality().hash(initialWeaponId),
-        const DeepCollectionEquality().hash(critical),
-        const DeepCollectionEquality().hash(criticalHurt),
-        const DeepCollectionEquality().hash(staminaRecoverSpeed),
-        const DeepCollectionEquality().hash(chargeEfficiency),
-        const DeepCollectionEquality().hash(constellations),
-        const DeepCollectionEquality().hash(inherentSkills),
-        const DeepCollectionEquality().hash(skills),
-        const DeepCollectionEquality().hash(skillLevelupMaterialCosts),
-        const DeepCollectionEquality().hash(promoteId),
-        const DeepCollectionEquality().hash(propGrowCurveAndInitials),
-        const DeepCollectionEquality().hash(characterBuild),
-        const DeepCollectionEquality().hash(internalCharacterBuild)
-      ]);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(desc),
+      const DeepCollectionEquality().hash(element),
+      const DeepCollectionEquality().hash(rarity),
+      const DeepCollectionEquality().hash(weaponType),
+      const DeepCollectionEquality().hash(initialWeaponKey),
+      const DeepCollectionEquality().hash(critical),
+      const DeepCollectionEquality().hash(criticalHurt),
+      const DeepCollectionEquality().hash(staminaRecoverSpeed),
+      const DeepCollectionEquality().hash(chargeEfficiency),
+      const DeepCollectionEquality().hash(constellations),
+      const DeepCollectionEquality().hash(inherentSkills),
+      const DeepCollectionEquality().hash(skills),
+      const DeepCollectionEquality().hash(skillLevelupMaterialCosts),
+      const DeepCollectionEquality().hash(promoteId),
+      const DeepCollectionEquality().hash(propGrowCurveAndInitials),
+      const DeepCollectionEquality().hash(characterBuild));
 
   @JsonKey(ignore: true)
   @override
@@ -606,7 +569,7 @@ abstract class _GSCharacter extends GSCharacter {
       required int rarity,
       @WeaponTypeStringConverter()
           required WeaponType weaponType,
-      required int initialWeaponId,
+      required String initialWeaponKey,
       required double critical,
       required double criticalHurt,
       required double staminaRecoverSpeed,
@@ -619,8 +582,7 @@ abstract class _GSCharacter extends GSCharacter {
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
               propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild,
-      GSCharacterBuild? internalCharacterBuild}) = _$_GSCharacter;
+      GSCharacterBuild? characterBuild}) = _$_GSCharacter;
   _GSCharacter._() : super._();
 
   factory _GSCharacter.fromJson(Map<String, dynamic> json) =
@@ -641,7 +603,7 @@ abstract class _GSCharacter extends GSCharacter {
   @WeaponTypeStringConverter()
   WeaponType get weaponType;
   @override
-  int get initialWeaponId;
+  String get initialWeaponKey;
   @override
   double get critical;
   @override
@@ -665,8 +627,6 @@ abstract class _GSCharacter extends GSCharacter {
   Map<FightProp, PropGrowCurveAndInitial> get propGrowCurveAndInitials;
   @override
   GSCharacterBuild? get characterBuild;
-  @override
-  GSCharacterBuild? get internalCharacterBuild;
   @override
   @JsonKey(ignore: true)
   _$GSCharacterCopyWith<_GSCharacter> get copyWith =>

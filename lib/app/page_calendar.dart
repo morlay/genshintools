@@ -94,7 +94,7 @@ class ViewCalendar extends HookWidget {
     characters.where((c) => c.todo).forEach((c) {
       var w = gbb.db.weapon.find(c.w.key);
 
-      var wNameId = w.name.text(Lang.ID);
+      var wNameId = w.name.text(Lang.KEY);
 
       var aw = GSImage(
         domain: "weapon",
@@ -108,7 +108,7 @@ class ViewCalendar extends HookWidget {
         gbb.db.weaponLevelupPlans(wNameId, c.w.level),
       );
 
-      var cNameId = c.character.name.text(Lang.ID);
+      var cNameId = c.character.name.text(Lang.KEY);
 
       var avatar = GSImage(
         domain: "character",

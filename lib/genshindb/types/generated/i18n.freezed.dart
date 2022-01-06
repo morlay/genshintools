@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../i18n.dart';
@@ -21,7 +22,7 @@ I18n _$I18nFromJson(Map<String, dynamic> json) {
 class _$I18nTearOff {
   const _$I18nTearOff();
 
-  _I18n call(Map<Lang, String> values) {
+  _I18n call(@LangStringConverter() Map<Lang, String> values) {
     return _I18n(
       values,
     );
@@ -37,6 +38,7 @@ const $I18n = _$I18nTearOff();
 
 /// @nodoc
 mixin _$I18n {
+  @LangStringConverter()
   Map<Lang, String> get values => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,7 +50,7 @@ mixin _$I18n {
 abstract class $I18nCopyWith<$Res> {
   factory $I18nCopyWith(I18n value, $Res Function(I18n) then) =
       _$I18nCopyWithImpl<$Res>;
-  $Res call({Map<Lang, String> values});
+  $Res call({@LangStringConverter() Map<Lang, String> values});
 }
 
 /// @nodoc
@@ -77,7 +79,7 @@ abstract class _$I18nCopyWith<$Res> implements $I18nCopyWith<$Res> {
   factory _$I18nCopyWith(_I18n value, $Res Function(_I18n) then) =
       __$I18nCopyWithImpl<$Res>;
   @override
-  $Res call({Map<Lang, String> values});
+  $Res call({@LangStringConverter() Map<Lang, String> values});
 }
 
 /// @nodoc
@@ -103,14 +105,15 @@ class __$I18nCopyWithImpl<$Res> extends _$I18nCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
 @JsonSerializable()
-@LangStringConverter()
 class _$_I18n extends _I18n {
-  _$_I18n(this.values) : super._();
+  _$_I18n(@LangStringConverter() this.values) : super._();
 
   factory _$_I18n.fromJson(Map<String, dynamic> json) => _$$_I18nFromJson(json);
 
   @override
+  @LangStringConverter()
   final Map<Lang, String> values;
 
   @override
@@ -142,12 +145,13 @@ class _$_I18n extends _I18n {
 }
 
 abstract class _I18n extends I18n {
-  factory _I18n(Map<Lang, String> values) = _$_I18n;
+  factory _I18n(@LangStringConverter() Map<Lang, String> values) = _$_I18n;
   _I18n._() : super._();
 
   factory _I18n.fromJson(Map<String, dynamic> json) = _$_I18n.fromJson;
 
   @override
+  @LangStringConverter()
   Map<Lang, String> get values;
   @override
   @JsonKey(ignore: true)

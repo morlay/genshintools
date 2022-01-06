@@ -18,7 +18,7 @@ class GSArtifact with _$GSArtifact {
     required I18n desc,
     required int rarity,
     @EquipTypeStringConverter() required EquipType equipType,
-    required int setId,
+    required String setKey,
     required int appendPropDepotId,
     required int mainPropDepotId,
     int? maxLevel,
@@ -28,7 +28,7 @@ class GSArtifact with _$GSArtifact {
   factory GSArtifact.fromJson(Map<String, dynamic> json) =>
       _Artifact.fromJson(json);
 
-  get key => name.text(Lang.ID);
+  get key => name.text(Lang.KEY);
 }
 
 @freezed
@@ -51,7 +51,7 @@ class GSArtifactSet with _$GSArtifactSet {
     return artifacts![equipType]!;
   }
 
-  String get key => name.text(Lang.ID);
+  String get key => name.text(Lang.KEY);
 }
 
 @freezed

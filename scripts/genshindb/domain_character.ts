@@ -1,7 +1,8 @@
-import { addPropSet, cleanText, groupMulti, groupOne, i18n, i18nWithID, pascalCase } from "./common";
+import { addPropSet, cleanText, groupMulti, groupOne, i18n, i18nWithKey, pascalCase } from "./common";
 import { Materials } from "./domain_material";
 import { reduce } from "lodash-es";
 import { Trials } from "./character_trial";
+import { Weapons } from "./domain_weapon";
 
 export const CharacterLevelupExps = (
   await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarLevelExcelConfigData.json")
@@ -15,13 +16,13 @@ export const CharacterPromotes = groupMulti(
       AddProps: addPropSet(a.AddProps),
       MaterialCosts: [
         ...a.CostItems.filter((item: any) => item.Id).map((item: any) => ({
-          MaterialNameID: Materials[item.Id].Name.ID,
+          MaterialKey: Materials[item.Id].Name.KEY,
           Count: item.Count,
         })),
         ...(a.ScoinCost
           ? [
               {
-                MaterialNameID: "Mora",
+                MaterialKey: "Mora",
                 Count: a.ScoinCost,
               },
             ]
@@ -50,7 +51,7 @@ const Constellations = groupOne(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarTalentExcelConfigData.json")).default,
 
   (talent) => ({
-    Name: i18nWithID(talent.NameTextMapHash),
+    Name: i18nWithKey(talent.NameTextMapHash),
     Desc: i18n(talent.DescTextMapHash, cleanText),
     AddProps: addPropSet(talent.AddProps),
     Params: talent.ParamList,
@@ -62,19 +63,19 @@ const ProudSkills = groupMulti(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/ProudSkillExcelConfigData.json")).default,
   (ps) => ({
     ProudSkillGroupId: ps.ProudSkillGroupId,
-    Name: i18nWithID(ps.NameTextMapHash),
+    Name: i18nWithKey(ps.NameTextMapHash),
     Desc: i18n(ps.DescTextMapHash, cleanText),
     ParamNames: ps.ParamDescList.map((n) => i18n(n, cleanText)).filter((c) => c.CHS),
     Params: ps.ParamList,
     MaterialCosts: [
       ...ps.CostItems.filter((item: any) => item.Id).map((item: any) => ({
-        MaterialNameID: Materials[item.Id].Name.ID,
+        MaterialKey: Materials[item.Id].Name.KEY,
         Count: item.Count,
       })),
       ...(ps.CoinCost
         ? [
             {
-              MaterialNameID: "Mora",
+              MaterialKey: "Mora",
               Count: ps.CoinCost,
             },
           ]
@@ -101,7 +102,7 @@ const Skills = groupOne(
     }
 
     return {
-      Name: i18nWithID(skill.NameTextMapHash),
+      Name: i18nWithKey(skill.NameTextMapHash),
       Desc: i18n(skill.DescTextMapHash, cleanText),
       SkillType: skillType,
       MaterialCosts: proudSkills.map((item) => item.MaterialCosts),
@@ -199,11 +200,11 @@ export const Characters = (
   .reduce((ret, a) => {
     const base = {
       Id: a.Id,
-      Name: i18nWithID(a.NameTextMapHash),
+      Name: i18nWithKey(a.NameTextMapHash),
       Desc: i18n(a.DescTextMapHash),
       Rarity: a.QualityType === "QUALITY_ORANGE" ? 5 : 4,
       WeaponType: a.WeaponType,
-      InitialWeaponId: a.InitialWeapon,
+      InitialWeaponKey: Weapons[a.InitialWeapon].Name.KEY,
       StaminaRecoverSpeed: a.StaminaRecoverSpeed,
       ChargeEfficiency: a.ChargeEfficiency,
       Critical: a.Critical,
@@ -233,24 +234,24 @@ export const Characters = (
           a.CandSkillDepotIds,
           (ret, skillDepotID) => {
             const skillDepot = SkillDepots[skillDepotID];
+
             if (skillDepot.ElementType == "") {
               return ret;
             }
 
-            const id = 90000000 + Object.keys(ElementTypes).indexOf(skillDepot.ElementType);
             const chsName = `${skillDepot.ElementType}${base.Name.CHS}`;
             const enName = `${base.Name.EN} ${(ElementTypes as any)[skillDepot.ElementType]}`;
+            const key = pascalCase(enName);
 
             return {
               ...ret,
-              [id]: {
+              [key]: {
                 ...base,
                 ...skillDepot,
-                Id: id,
                 Name: {
                   CHS: chsName,
                   EN: enName,
-                  ID: pascalCase(enName),
+                  KEY: key,
                 },
               },
             };
@@ -263,11 +264,10 @@ export const Characters = (
     const avatar = {
       ...base,
       ...SkillDepots[a.SkillDepotId],
-      InternalCharacterBuild: Trials[base.Name.CHS],
     };
 
     return {
       ...ret,
-      [avatar.Id]: avatar,
+      [avatar.Name.KEY]: avatar,
     };
   }, {});

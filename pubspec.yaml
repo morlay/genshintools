@@ -35,14 +35,13 @@ dependencies:
   firebase_crashlytics: ^2.4.4
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^1.0.0
   build_runner: ^2.1.5
-  test: ^1.17.10
+  test: ^1.20.1
+  analyzer: ^3.0.0
   pretty_dio_logger: ^1.2.0-beta-1
   json_serializable: ^6.0.1
-  freezed: ^1.1.0
+  freezed: ^1.1.1
 
 flutter:
   uses-material-design: true

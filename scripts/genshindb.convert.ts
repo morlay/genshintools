@@ -1,4 +1,4 @@
-import { mapValues } from "lodash-es";
+import { mapValues, findLast } from "lodash-es";
 
 import {
   writeJSONSync,
@@ -8,9 +8,7 @@ import {
   EnemyDropTags,
   WeaponPropGrowCurveValues,
   WeaponPromotes,
-  Weapons,
   WeaponLevelupExps,
-  ArtifactSets,
   ArtifactLevelupMainPropValues,
   ArtifactLevelupExps,
   ArtifactAppendPropDepots,
@@ -21,12 +19,15 @@ import {
   CharacterPropGrowCurveValues,
   CharacterLevelupExps,
   Builds,
+  ArtifactSetsByKey,
+  WeaponsByKey,
 } from "./genshindb";
+import { Trials } from "./genshindb/character_trial";
 
 writeJSONSync("./assets/genshindb/characters.json", {
   Characters: mapValues(Characters, (c: any) => ({
     ...c,
-    CharacterBuild: Builds[c.Name.ID],
+    CharacterBuild: findLast(Builds[c.Name.KEY], (b) => b.Recommended),
   })),
   CharacterPromotes,
   CharacterPropGrowCurveValues,
@@ -39,7 +40,7 @@ writeJSONSync("./assets/genshindb/enemies.json", {
 });
 
 writeJSONSync("./assets/genshindb/weapons.json", {
-  Weapons,
+  Weapons: WeaponsByKey,
   WeaponPromotes,
   WeaponPropGrowCurveValues,
   WeaponLevelupExps,
@@ -47,7 +48,7 @@ writeJSONSync("./assets/genshindb/weapons.json", {
 
 writeJSONSync("./assets/genshindb/artifacts.json", {
   Artifacts,
-  ArtifactSets,
+  ArtifactSets: ArtifactSetsByKey,
   ArtifactLevelupExps,
   ArtifactMainPropDepots,
   ArtifactAppendPropDepots,
@@ -57,4 +58,12 @@ writeJSONSync("./assets/genshindb/artifacts.json", {
 writeJSONSync("./assets/genshindb/materials.json", {
   Materials: Materials,
   Dungeons: Dungeons,
+});
+
+writeJSONSync("./assets/trials.json", {
+  Trials: Trials,
+});
+
+writeJSONSync("./assets/builds.json", {
+  Builds: Builds,
 });

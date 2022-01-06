@@ -117,6 +117,7 @@ const characterBuild = (name: string, b: any) => {
   }
 
   return {
+    Recommended: b.recommended,
     Role: b.role,
     Weapons: b.weapons
       .map((id: string) => {
@@ -262,20 +263,23 @@ const fromCSV = async (csv: string, grid: Grid) => {
           const role = row[2].replace("⭐", "").split("\n")[0].trim();
           const recommended = row[2].indexOf("⭐") > -1;
 
-          if (!(role && recommended)) {
+          if (!role) {
             return;
           }
 
-          ret[pascalCase(scope)] = characterBuild(scope, {
-            recommended: recommended,
-            name: scope,
-            role: role,
-            weapons: pickList(row[3]).flat(),
-            artifacts: pickList(row[4], /[~=)*/]/),
-            mainStats: pickMainStats(row[5]),
-            subStats: pickList(row[6]).flat(),
-            talent: pickList(row[7]).flat(),
-          });
+          ret[pascalCase(scope)] = [
+            ...(ret[pascalCase(scope)] || []),
+            characterBuild(scope, {
+              recommended: recommended,
+              name: scope,
+              role: role,
+              weapons: pickList(row[3]).flat(),
+              artifacts: pickList(row[4], /[~=)*/]/),
+              mainStats: pickMainStats(row[5]),
+              subStats: pickList(row[6]).flat(),
+              talent: pickList(row[7]).flat(),
+            }),
+          ];
         }
 
         partIdx++;
@@ -283,31 +287,37 @@ const fromCSV = async (csv: string, grid: Grid) => {
   });
 };
 
-export let Builds: any = {
-  YunJin: {
-    Role: "SUPPORT",
-    Weapons: [],
-    ArtifactMainPropTypes: {
-      EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
-      EQUIP_RING: ["FIGHT_PROP_DEFENSE_PERCENT"],
-      EQUIP_DRESS: ["FIGHT_PROP_DEFENSE_PERCENT"],
+export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } = {
+  YunJin: [
+    {
+      Recommended: true,
+      Role: "SUPPORT",
+      Weapons: ["试作星镰"],
+      ArtifactMainPropTypes: {
+        EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_DEFENSE_PERCENT"],
+        EQUIP_RING: ["FIGHT_PROP_DEFENSE_PERCENT"],
+        EQUIP_DRESS: ["FIGHT_PROP_DEFENSE_PERCENT"],
+      },
+      ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_DEFENSE_PERCENT", "FIGHT_PROP_DEFENSE"],
+      ArtifactSetPairs: [["华馆梦醒形骸记"]],
+      SkillPriority: [["Q"], ["E"]],
     },
-    ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_DEFENSE_PERCENT", "FIGHT_PROP_DEFENSE"],
-    ArtifactSetPairs: [["华馆梦醒形骸记"]],
-    SkillPriority: [["Q"], ["E"]],
-  },
-  Shenhe: {
-    Role: "SUPPORT",
-    Weapons: [],
-    ArtifactMainPropTypes: {
-      EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
-      EQUIP_RING: ["FIGHT_PROP_ATTACK_PERCENT"],
-      EQUIP_DRESS: ["FIGHT_PROP_ATTACK_PERCENT"],
+  ],
+  Shenhe: [
+    {
+      Recommended: true,
+      Role: "SUPPORT",
+      Weapons: ["息灾"],
+      ArtifactMainPropTypes: {
+        EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
+        EQUIP_RING: ["FIGHT_PROP_ATTACK_PERCENT"],
+        EQUIP_DRESS: ["FIGHT_PROP_ATTACK_PERCENT"],
+      },
+      ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_ATTACK_PERCENT", "FIGHT_PROP_ATTACK"],
+      ArtifactSetPairs: [["绝缘之旗印"]],
+      SkillPriority: [["Q"], ["E"]],
     },
-    ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_ATTACK_PERCENT", "FIGHT_PROP_ATTACK"],
-    ArtifactSetPairs: [],
-    SkillPriority: [["Q"], ["E"]],
-  },
+  ],
 };
 
 for (const p of [Grid.Pyro, Grid.Anemo, Grid.Electro, Grid.Cryo, Grid.Hydro, Grid.Geo]) {

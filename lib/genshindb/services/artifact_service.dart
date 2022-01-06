@@ -16,7 +16,7 @@ class ArtifactService with _$ArtifactService {
   @FightPropStringConverter()
   factory ArtifactService({
     Map<int, GSArtifact>? artifacts,
-    Map<int, GSArtifactSet>? artifactSets,
+    Map<String, GSArtifactSet>? artifactSets,
     Map<int, List<FightProp>>? artifactMainPropDepots,
     Map<int, GSArtifactAppendDepot>? artifactAppendPropDepots,
     List<List<int>>? artifactLevelupExps,
@@ -26,26 +26,23 @@ class ArtifactService with _$ArtifactService {
   factory ArtifactService.fromJson(Map<String, dynamic> json) =>
       _ArtifactService.fromJson(json);
 
-  final Map<String, int> _indexes = {};
-
-  final Map<String, int> _setIndexes = {};
-  final Map<int, Map<EquipType, String>> _setNames = {};
-
   int levelUpCost(int rarity, int current, int to) {
     return artifactLevelupExps?.let((artifactLevelupExps) => levelUpCostFor(
             artifactLevelupExps[rangeLimit(rarity, 1, 5) - 1], current, to)) ??
         -1;
   }
 
-  GSArtifact find(String idOrName) {
-    var a = findOrNull(idOrName);
+  GSArtifact find(String keyOrName) {
+    var a = findOrNull(keyOrName);
     if (a == null) {
-      throw "artifact $idOrName not found";
+      throw "artifact $keyOrName not found";
     }
     return a;
   }
 
-  GSArtifact? findOrNull(String idOrName) {
+  final Map<String, int> _indexes = {};
+
+  GSArtifact? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       artifacts?.forEach((key, value) {
         _indexes["${value.id}"] = value.id;
@@ -55,34 +52,37 @@ class ArtifactService with _$ArtifactService {
       });
     }
 
-    return artifacts?[_indexes[idOrName]];
+    return artifacts?[_indexes[keyOrName]];
   }
 
-  GSArtifactSet findSet(String idOrName) {
-    return findSetOrNull(idOrName)!;
+  final Map<String, String> _setIndexes = {};
+  final Map<String, Map<EquipType, String>> _setNames = {};
+
+  GSArtifactSet findSet(String keyOrName) {
+    return findSetOrNull(keyOrName)!;
   }
 
-  GSArtifactSet? findSetOrNull(String idOrName) {
+  GSArtifactSet? findSetOrNull(String keyOrName) {
     if (_setIndexes.isEmpty) {
       artifactSets?.forEach((key, value) {
-        _setIndexes["${value.id}"] = value.id;
+        _setIndexes["${value.id}"] = value.key;
         for (var lang in value.name.keys) {
-          _setIndexes[value.name.text(lang)] = value.id;
+          _setIndexes[value.name.text(lang)] = value.key;
         }
       });
     }
 
     if (_setNames.isEmpty) {
       artifacts?.forEach((key, value) {
-        _setNames[value.setId] = {
-          ...?_setNames[value.setId],
+        _setNames[value.setKey] = {
+          ...?_setNames[value.setKey],
           value.equipType: value.key,
         };
       });
     }
 
-    return artifactSets?[_setIndexes[idOrName]]?.copyWith(
-        artifacts: _setNames[_setIndexes[idOrName]]
+    return artifactSets?[_setIndexes[keyOrName]]?.copyWith(
+        artifacts: _setNames[_setIndexes[keyOrName]]
             ?.map((key, id) => MapEntry(key, find(id))));
   }
 
@@ -98,10 +98,8 @@ class ArtifactService with _$ArtifactService {
   }
 
   List<GOODArtifact> buildArtifactsBySetPair(
-    List<String> setNames,
-    GSCharacterBuild builds,
-    [List<GOODArtifact>? playerArtifacts]
-  ) {
+      List<String> setNames, GSCharacterBuild builds,
+      [List<GOODArtifact>? playerArtifacts]) {
     var sets = setNames.map((setName) => findSet(setName)).toList();
 
     Map<EquipType, GOODArtifact> ret = {};
@@ -169,8 +167,8 @@ class ArtifactService with _$ArtifactService {
     return fps;
   }
 
-  List<FightProp> mainCanFightProps(String idOrName) {
-    var c = find(idOrName);
+  List<FightProp> mainCanFightProps(String keyOrName) {
+    var c = find(keyOrName);
 
     switch (c.equipType) {
       case EquipType.BRACER:
@@ -188,8 +186,8 @@ class ArtifactService with _$ArtifactService {
     }
   }
 
-  GSArtifactAppendDepot artifactAppendDepot(String idOrName) {
-    return artifactAppendPropDepots![find(idOrName).appendPropDepotId]!;
+  GSArtifactAppendDepot artifactAppendDepot(String keyOrName) {
+    return artifactAppendPropDepots![find(keyOrName).appendPropDepotId]!;
   }
 
   double mainFightProp(

@@ -18,7 +18,7 @@ class EnemyService with _$EnemyService {
 
   final Map<String, int> _indexes = {};
 
-  GSEnemy? find(String idOrName) {
+  GSEnemy? find(String keyOrName) {
     if (_indexes.isEmpty) {
       enemies?.forEach((key, value) {
         value.name.keys.forEach((lang) {
@@ -27,7 +27,7 @@ class EnemyService with _$EnemyService {
       });
     }
 
-    var m = enemies?[_indexes[idOrName]];
+    var m = enemies?[_indexes[keyOrName]];
 
     if (m != null) {
       return m;

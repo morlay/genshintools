@@ -32,7 +32,7 @@ class GSMaterial with _$GSMaterial {
   factory GSMaterial.fromJson(Map<String, dynamic> json) =>
       _Material.fromJson(json);
 
-  String get key => name.text(Lang.ID);
+  String get key => name.text(Lang.KEY);
 
   String get dropBy =>
       dungeon?.let((dungeon) => dungeon.displayName.isEmpty
@@ -47,7 +47,7 @@ class GSMaterial with _$GSMaterial {
 class GSMaterialCost with _$GSMaterialCost {
   @JsonSerializable(fieldRename: FieldRename.pascal)
   factory GSMaterialCost({
-    required String materialNameID,
+    required String materialKey,
     required int count,
   }) = _MaterialCost;
 

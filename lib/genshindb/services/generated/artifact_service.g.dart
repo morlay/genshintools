@@ -13,8 +13,8 @@ _$_ArtifactService _$$_ArtifactServiceFromJson(Map<String, dynamic> json) =>
             int.parse(k), GSArtifact.fromJson(e as Map<String, dynamic>)),
       ),
       artifactSets: (json['ArtifactSets'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(
-            int.parse(k), GSArtifactSet.fromJson(e as Map<String, dynamic>)),
+        (k, e) =>
+            MapEntry(k, GSArtifactSet.fromJson(e as Map<String, dynamic>)),
       ),
       artifactMainPropDepots:
           (json['ArtifactMainPropDepots'] as Map<String, dynamic>?)?.map(
@@ -46,8 +46,7 @@ _$_ArtifactService _$$_ArtifactServiceFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_ArtifactServiceToJson(_$_ArtifactService instance) =>
     <String, dynamic>{
       'Artifacts': instance.artifacts?.map((k, e) => MapEntry(k.toString(), e)),
-      'ArtifactSets':
-          instance.artifactSets?.map((k, e) => MapEntry(k.toString(), e)),
+      'ArtifactSets': instance.artifactSets,
       'ArtifactMainPropDepots': instance.artifactMainPropDepots?.map((k, e) =>
           MapEntry(k.toString(), e.map((e) => _$FightPropEnumMap[e]).toList())),
       'ArtifactAppendPropDepots': instance.artifactAppendPropDepots

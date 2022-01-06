@@ -14,7 +14,7 @@ _$_GSCharacter _$$_GSCharacterFromJson(Map<String, dynamic> json) =>
       element: $enumDecode(_$ElementTypeEnumMap, json['Element']),
       rarity: json['Rarity'] as int,
       weaponType: $enumDecode(_$WeaponTypeEnumMap, json['WeaponType']),
-      initialWeaponId: json['InitialWeaponId'] as int,
+      initialWeaponKey: json['InitialWeaponKey'] as String,
       critical: (json['Critical'] as num).toDouble(),
       criticalHurt: (json['CriticalHurt'] as num).toDouble(),
       staminaRecoverSpeed: (json['StaminaRecoverSpeed'] as num).toDouble(),
@@ -44,10 +44,6 @@ _$_GSCharacter _$$_GSCharacterFromJson(Map<String, dynamic> json) =>
           ? null
           : GSCharacterBuild.fromJson(
               json['CharacterBuild'] as Map<String, dynamic>),
-      internalCharacterBuild: json['InternalCharacterBuild'] == null
-          ? null
-          : GSCharacterBuild.fromJson(
-              json['InternalCharacterBuild'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_GSCharacterToJson(_$_GSCharacter instance) =>
@@ -58,7 +54,7 @@ Map<String, dynamic> _$$_GSCharacterToJson(_$_GSCharacter instance) =>
       'Element': _$ElementTypeEnumMap[instance.element],
       'Rarity': instance.rarity,
       'WeaponType': _$WeaponTypeEnumMap[instance.weaponType],
-      'InitialWeaponId': instance.initialWeaponId,
+      'InitialWeaponKey': instance.initialWeaponKey,
       'Critical': instance.critical,
       'CriticalHurt': instance.criticalHurt,
       'StaminaRecoverSpeed': instance.staminaRecoverSpeed,
@@ -71,7 +67,6 @@ Map<String, dynamic> _$$_GSCharacterToJson(_$_GSCharacter instance) =>
       'PropGrowCurveAndInitials': instance.propGrowCurveAndInitials
           .map((k, e) => MapEntry(_$FightPropEnumMap[k], e)),
       'CharacterBuild': instance.characterBuild,
-      'InternalCharacterBuild': instance.internalCharacterBuild,
     };
 
 const _$ElementTypeEnumMap = {

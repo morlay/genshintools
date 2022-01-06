@@ -17,6 +17,7 @@ class AppBarWithAccount extends AppBar {
     List<Widget>? actions,
   }) {
     return Scaffold(
+      bottomNavigationBar: context.read<BottomNavigationBar>(),
       drawer: const Drawer(
         child: CommonDrawer(),
       ),

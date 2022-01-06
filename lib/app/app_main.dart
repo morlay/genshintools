@@ -7,6 +7,7 @@ import 'package:genshintools/app/page_gacha.dart';
 import 'package:genshintools/hook/hook.dart';
 import 'package:genshintools/syncer/syncer.dart';
 import 'package:genshintools/upgrader/upgrader.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AppMain extends HookWidget {
@@ -49,8 +50,8 @@ class AppMain extends HookWidget {
       });
     }, []);
 
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
+    return Provider<BottomNavigationBar>.value(
+      value: BottomNavigationBar(
         currentIndex: _selectedIndex.value,
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Theme.of(context).unselectedWidgetColor,
@@ -65,9 +66,7 @@ class AppMain extends HookWidget {
           ),
         ],
       ),
-      body: Center(
-        child: _topics.elementAt(_selectedIndex.value).widget,
-      ),
+      child: _topics.elementAt(_selectedIndex.value).widget,
     );
   }
 }

@@ -10,39 +10,43 @@ part 'generated/weapon_service.g.dart';
 class WeaponService with _$WeaponService {
   WeaponService._();
 
-  final Map<String, int> _indexes = {};
-
   @JsonSerializable(fieldRename: FieldRename.pascal)
   factory WeaponService({
-    Map<int, GSWeapon>? weapons,
+    Map<String, GSWeapon>? weapons,
     List<List<int>>? weaponLevelupExps,
     GSPromoteSet? weaponPromotes,
     PropGrowCurveValueSet? weaponPropGrowCurveValues,
   }) = _WeaponService;
 
-  GSWeapon find(String idOrName) {
-    return findOrNull(idOrName)!;
+  GSWeapon find(String keyOrName) {
+    final f = findOrNull(keyOrName);
+    if (f == null) {
+      throw "weapon $keyOrName not found";
+    }
+    return f;
   }
 
-  GSWeapon? findOrNull(String idOrName) {
+  final Map<String, String> _indexes = {};
+
+  GSWeapon? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       weapons?.forEach((id, w) {
-        _indexes["${w.id}"] = w.id;
+        _indexes["${w.id}"] = w.key;
         for (var lang in w.name.keys) {
-          _indexes[w.name.text(lang)] = w.id;
+          _indexes[w.name.text(lang)] = w.key;
         }
       });
     }
 
-    return weapons?[_indexes[idOrName]];
+    return weapons?[_indexes[keyOrName]];
   }
 
   FightProps fightProps(
-    String idOrName,
+    String keyOrName,
     int level,
     int affixLevel,
   ) {
-    var w = find(idOrName);
+    var w = find(keyOrName);
 
     var fightProps = FightProps({});
 

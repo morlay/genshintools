@@ -1,4 +1,4 @@
-import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithID } from "./common";
+import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey } from "./common";
 import { EquipAffixes } from "./domain_equip_affix";
 import { groupBy, mapKeys, mapValues, reduce } from "lodash-es";
 
@@ -22,6 +22,8 @@ export const ArtifactSets = groupOne(
   },
   "SetId",
 );
+
+export const ArtifactSetsByKey = mapKeys(ArtifactSets, (s) => s.Name.KEY);
 
 export const ArtifactAppendPropDepots = mapValues(
   groupBy(
@@ -77,7 +79,7 @@ export const Artifacts = mapKeys(
         }
 
         if (a.RankLevel === 5) {
-          if (i18nWithID(a.NameTextMapHash).CHS.startsWith("祭")) {
+          if (i18nWithKey(a.NameTextMapHash).CHS.startsWith("祭")) {
             return null;
           }
           if (`${a.SetId}`[1] == "0") {
@@ -85,7 +87,7 @@ export const Artifacts = mapKeys(
           }
         }
 
-        const name = i18nWithID(a.NameTextMapHash);
+        const name = i18nWithKey(a.NameTextMapHash);
         const desc = i18n(a.DescTextMapHash);
 
         if (name.CHS.startsWith("测试") || desc.CHS == "") {
@@ -103,7 +105,7 @@ export const Artifacts = mapKeys(
           Name: name,
           Desc: desc,
           MaxLevel: a.MaxLevel,
-          SetId: a.SetId,
+          SetKey: ArtifactSets[a.SetId].Name.KEY,
           AppendPropNum: a.AppendPropNum,
           MainPropDepotId: a.MainPropDepotId,
           AppendPropDepotId: a.AppendPropDepotId,
@@ -111,7 +113,7 @@ export const Artifacts = mapKeys(
       },
       "Id",
     ),
-    (a) => `${a.Name.ID}/${a.Rarity}`,
+    (a) => `${a.Name.KEY}/${a.Rarity}`,
   ),
   (a) => a.Id,
 );

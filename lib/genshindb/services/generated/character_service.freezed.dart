@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../character_service.dart';
@@ -22,7 +23,7 @@ class _$CharacterServiceTearOff {
   const _$CharacterServiceTearOff();
 
   _CharacterService call(
-      {Map<int, GSCharacter>? characters,
+      {Map<String, GSCharacter>? characters,
       List<int>? characterLevelupExps,
       GSPromoteSet? characterPromotes,
       PropGrowCurveValueSet? characterPropGrowCurveValues}) {
@@ -44,7 +45,8 @@ const $CharacterService = _$CharacterServiceTearOff();
 
 /// @nodoc
 mixin _$CharacterService {
-  Map<int, GSCharacter>? get characters => throw _privateConstructorUsedError;
+  Map<String, GSCharacter>? get characters =>
+      throw _privateConstructorUsedError;
   List<int>? get characterLevelupExps => throw _privateConstructorUsedError;
   GSPromoteSet? get characterPromotes => throw _privateConstructorUsedError;
   PropGrowCurveValueSet? get characterPropGrowCurveValues =>
@@ -62,7 +64,7 @@ abstract class $CharacterServiceCopyWith<$Res> {
           CharacterService value, $Res Function(CharacterService) then) =
       _$CharacterServiceCopyWithImpl<$Res>;
   $Res call(
-      {Map<int, GSCharacter>? characters,
+      {Map<String, GSCharacter>? characters,
       List<int>? characterLevelupExps,
       GSPromoteSet? characterPromotes,
       PropGrowCurveValueSet? characterPropGrowCurveValues});
@@ -91,7 +93,7 @@ class _$CharacterServiceCopyWithImpl<$Res>
       characters: characters == freezed
           ? _value.characters
           : characters // ignore: cast_nullable_to_non_nullable
-              as Map<int, GSCharacter>?,
+              as Map<String, GSCharacter>?,
       characterLevelupExps: characterLevelupExps == freezed
           ? _value.characterLevelupExps
           : characterLevelupExps // ignore: cast_nullable_to_non_nullable
@@ -139,7 +141,7 @@ abstract class _$CharacterServiceCopyWith<$Res>
       __$CharacterServiceCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Map<int, GSCharacter>? characters,
+      {Map<String, GSCharacter>? characters,
       List<int>? characterLevelupExps,
       GSPromoteSet? characterPromotes,
       PropGrowCurveValueSet? characterPropGrowCurveValues});
@@ -172,7 +174,7 @@ class __$CharacterServiceCopyWithImpl<$Res>
       characters: characters == freezed
           ? _value.characters
           : characters // ignore: cast_nullable_to_non_nullable
-              as Map<int, GSCharacter>?,
+              as Map<String, GSCharacter>?,
       characterLevelupExps: characterLevelupExps == freezed
           ? _value.characterLevelupExps
           : characterLevelupExps // ignore: cast_nullable_to_non_nullable
@@ -204,7 +206,7 @@ class _$_CharacterService extends _CharacterService {
       _$$_CharacterServiceFromJson(json);
 
   @override
-  final Map<int, GSCharacter>? characters;
+  final Map<String, GSCharacter>? characters;
   @override
   final List<int>? characterLevelupExps;
   @override
@@ -254,7 +256,7 @@ class _$_CharacterService extends _CharacterService {
 
 abstract class _CharacterService extends CharacterService {
   factory _CharacterService(
-          {Map<int, GSCharacter>? characters,
+          {Map<String, GSCharacter>? characters,
           List<int>? characterLevelupExps,
           GSPromoteSet? characterPromotes,
           PropGrowCurveValueSet? characterPropGrowCurveValues}) =
@@ -265,7 +267,7 @@ abstract class _CharacterService extends CharacterService {
       _$_CharacterService.fromJson;
 
   @override
-  Map<int, GSCharacter>? get characters;
+  Map<String, GSCharacter>? get characters;
   @override
   List<int>? get characterLevelupExps;
   @override

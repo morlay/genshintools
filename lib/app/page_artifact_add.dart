@@ -55,7 +55,7 @@ class PageArtifactAdd extends HookWidget {
     var pa = useState(
       value ??
           (GOODArtifact.create(SlotKey.values[equipType.index], "")
-              .copyWith(setKey: as.findSet("${defaultArtifact.setId}").key)),
+              .copyWith(setKey: defaultArtifact.setKey)),
     );
 
     var a =
@@ -96,11 +96,11 @@ class PageArtifactAdd extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Divider(height: 1),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child:
-                      Text("副词条", style: Theme.of(context).textTheme.subtitle1),
+                const ListTile(
+                  title: Text(
+                    "副词条",
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ),
                 ...artifact.substats.map(
                   (ss) => buildAppendPropSelect(
@@ -156,9 +156,11 @@ class PageArtifactAdd extends HookWidget {
     var valueIndexes = artifactAppendDepot.canValues(fp);
     var values = valueIndexes.keys
         .where((k) => valueIndexes[k]!.length <= remainCount)
-        .toList();
+        .toList()
+      ..sort((a, b) => a.compareTo(b));
 
     return Select<String>(
+      title: Text(fp.label()),
       options: values,
       value: artifact.substats
               .firstWhereOrNull((ss) => ss.key.asFightProp() == fp)
@@ -179,37 +181,34 @@ class PageArtifactAdd extends HookWidget {
         );
       },
       builder: (context, children) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 16,
-              ),
-              child: Text(fp.label(),
-                  style: Theme.of(context).textTheme.subtitle1),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: ListView(
-                children: children,
-              ),
-            )
-          ],
+        return GridView(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 100,
+            childAspectRatio: 1.6,
+          ),
+          children: children,
         );
       },
       optionBuilder: (context, option, selected) {
-        return ListTile(
-          onTap: () {
-            option.select();
-          },
-          selected: option.value == selected.value,
-          selectedTileColor: Theme.of(context).focusColor,
-          title: Row(
-            children: [
-              buildAppendValue(artifactAppendDepot, fp, option.value),
-            ],
+        return Card(
+          color: (option.value.split("?").first == selected.value)
+              .ifTrueOrNull(() => Theme.of(context).focusColor),
+          child: InkWell(
+            onTap: () {
+              option.select();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: DefaultTextStyle.merge(
+                  style: Theme.of(context).textTheme.subtitle1,
+                  child:
+                      buildAppendValue(artifactAppendDepot, fp, option.value),
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -236,8 +235,9 @@ class PageArtifactAdd extends HookWidget {
                 ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(fp.label()),
+                selected.title,
                 ...?selected.value?.let(
                   (v) => (v != "").ifTrueOrNull(() => [
                         buildAppendValue(artifactAppendDepot, fp, v),
@@ -265,6 +265,7 @@ class PageArtifactAdd extends HookWidget {
               ),
               true,
             ),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         Positioned(
@@ -281,6 +282,7 @@ class PageArtifactAdd extends HookWidget {
   Select<FightProp> buildMainPropSelect(ValueNotifier<GOODArtifact> pa,
       GOODArtifact artifact, List<FightProp> mainProps) {
     return Select<FightProp>(
+      title: const Text("主词条"),
       options: mainProps,
       value: artifact.mainStatKey.asFightProp(),
       onSelected: (selected) {
@@ -289,8 +291,10 @@ class PageArtifactAdd extends HookWidget {
         );
       },
       builder: (context, children) {
-        return Wrap(
-          children: children,
+        return SingleChildScrollView(
+          child: Wrap(
+            children: children,
+          ),
         );
       },
       optionBuilder: (context, option, selected) {
@@ -314,7 +318,7 @@ class PageArtifactAdd extends HookWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   )) ??
               const Text("请选择"),
-          title: const Text("主词条"),
+          title: selected.title,
         );
       },
     );
@@ -325,14 +329,17 @@ class PageArtifactAdd extends HookWidget {
     ValueNotifier<GOODArtifact> pa,
   ) {
     return Select<int>(
+      title: const Text("等级"),
       options: const [0, 4, 8, 12, 16, 20],
       value: artifact.level,
       onSelected: (selected) {
         pa.value = artifact.copyWith(level: selected);
       },
       builder: (context, children) {
-        return Wrap(
-          children: children,
+        return SingleChildScrollView(
+          child: Wrap(
+            children: children,
+          ),
         );
       },
       optionBuilder: (context, option, selected) {
@@ -356,7 +363,7 @@ class PageArtifactAdd extends HookWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   )) ??
               const Text("请选择"),
-          title: const Text("等级"),
+          title: selected.title,
         );
       },
     );
@@ -369,36 +376,44 @@ class PageArtifactAdd extends HookWidget {
     ValueNotifier<GOODArtifact> pa,
   ) {
     return Select<GSArtifact>(
+      title: const Text("圣遗物"),
       options: artifacts,
-      value: artifacts.firstWhereOrNull(
-          (v) => db.artifact.findSet("${v.setId}").key == artifact.setKey),
+      value: artifacts.firstWhereOrNull((v) => v.setKey == artifact.setKey),
       onSelected: (selected) {
-        pa.value = artifact.copyWith(
-            setKey: db.artifact.findSet("${selected.setId}").key);
+        pa.value = artifact.copyWith(setKey: selected.setKey);
       },
       builder: (context, children) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          child: Wrap(
-            spacing: 12,
-            runSpacing: 2,
-            children: children,
+        return GridView(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 110,
+            childAspectRatio: 0.8,
           ),
+          children: children,
         );
       },
       optionBuilder: (context, option, selected) {
-        return ChoiceChip(
-          onSelected: (b) {
-            option.select();
-          },
-          selected: option.value == selected.value,
-          label: Text(option.value.name.text(Lang.CHS)),
-          avatar: GSImage(
-            domain: "artifact",
-            rarity: 5,
-            rounded: true,
-            size: 36,
-            nameID: option.value.key,
+        return Center(
+          child: Card(
+            color: (option.value == selected.value)
+                .ifTrueOrNull(() => Theme.of(context).focusColor),
+            child: InkWell(
+              onTap: () {
+                option.select();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: WithLabel(
+                  label: Text(option.value.name.text(Lang.CHS)),
+                  child: GSImage(
+                    domain: "artifact",
+                    rarity: 5,
+                    size: 64,
+                    nameID: option.value.key,
+                  ),
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -413,7 +428,7 @@ class PageArtifactAdd extends HookWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   )) ??
               const Text("请选择"),
-          title: const Text("圣遗物"),
+          title: selected.title,
           leading: selected.value?.let(
             (s) => GSImage(
               domain: "artifact",

@@ -141,7 +141,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
     return CharacterWithState(
       character: c,
       c: ps.character(c.key),
-      w: ps.weaponOn(c.key, db.weapon.find("${c.initialWeaponId}").key),
+      w: ps.weaponOn(c.key, c.initialWeaponKey),
       artifacts: ps.artifactsOn(c.key),
     );
   }
@@ -156,7 +156,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
               c: ps.character(c.key),
               w: ps.weaponOn(
                 c.key,
-                db.weapon.find("${c.initialWeaponId}").key,
+                c.initialWeaponKey,
               ),
               artifacts: ps.artifactsOn(c.key),
             ))
@@ -175,7 +175,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
             SlotKey.values[a.equipType.index],
             location,
             (artifact) => artifact.copyWith(
-              setKey: db.artifact.findSet("${a.setId}").key,
+              setKey: a.setKey,
               mainStatKey: GOODArtifact.statKeyFromFightProp(pa.main),
               substats: [
                 ...pa.appends.keys.map((fp) {
@@ -233,7 +233,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
                 SlotKey.values[a.equipType.index],
                 location,
                 (artifact) => artifact.copyWith(
-                  setKey: db.artifact.findSet("${a.setId}").key,
+                  setKey: a.setKey,
                   level: r.level,
                   rarity: r.rarity,
                 ),

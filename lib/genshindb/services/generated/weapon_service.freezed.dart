@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../weapon_service.dart';
@@ -22,7 +23,7 @@ class _$WeaponServiceTearOff {
   const _$WeaponServiceTearOff();
 
   _WeaponService call(
-      {Map<int, GSWeapon>? weapons,
+      {Map<String, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues}) {
@@ -44,7 +45,7 @@ const $WeaponService = _$WeaponServiceTearOff();
 
 /// @nodoc
 mixin _$WeaponService {
-  Map<int, GSWeapon>? get weapons => throw _privateConstructorUsedError;
+  Map<String, GSWeapon>? get weapons => throw _privateConstructorUsedError;
   List<List<int>>? get weaponLevelupExps => throw _privateConstructorUsedError;
   GSPromoteSet? get weaponPromotes => throw _privateConstructorUsedError;
   PropGrowCurveValueSet? get weaponPropGrowCurveValues =>
@@ -62,7 +63,7 @@ abstract class $WeaponServiceCopyWith<$Res> {
           WeaponService value, $Res Function(WeaponService) then) =
       _$WeaponServiceCopyWithImpl<$Res>;
   $Res call(
-      {Map<int, GSWeapon>? weapons,
+      {Map<String, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues});
@@ -91,7 +92,7 @@ class _$WeaponServiceCopyWithImpl<$Res>
       weapons: weapons == freezed
           ? _value.weapons
           : weapons // ignore: cast_nullable_to_non_nullable
-              as Map<int, GSWeapon>?,
+              as Map<String, GSWeapon>?,
       weaponLevelupExps: weaponLevelupExps == freezed
           ? _value.weaponLevelupExps
           : weaponLevelupExps // ignore: cast_nullable_to_non_nullable
@@ -139,7 +140,7 @@ abstract class _$WeaponServiceCopyWith<$Res>
       __$WeaponServiceCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Map<int, GSWeapon>? weapons,
+      {Map<String, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues});
@@ -172,7 +173,7 @@ class __$WeaponServiceCopyWithImpl<$Res>
       weapons: weapons == freezed
           ? _value.weapons
           : weapons // ignore: cast_nullable_to_non_nullable
-              as Map<int, GSWeapon>?,
+              as Map<String, GSWeapon>?,
       weaponLevelupExps: weaponLevelupExps == freezed
           ? _value.weaponLevelupExps
           : weaponLevelupExps // ignore: cast_nullable_to_non_nullable
@@ -204,7 +205,7 @@ class _$_WeaponService extends _WeaponService {
       _$$_WeaponServiceFromJson(json);
 
   @override
-  final Map<int, GSWeapon>? weapons;
+  final Map<String, GSWeapon>? weapons;
   @override
   final List<List<int>>? weaponLevelupExps;
   @override
@@ -252,7 +253,7 @@ class _$_WeaponService extends _WeaponService {
 
 abstract class _WeaponService extends WeaponService {
   factory _WeaponService(
-      {Map<int, GSWeapon>? weapons,
+      {Map<String, GSWeapon>? weapons,
       List<List<int>>? weaponLevelupExps,
       GSPromoteSet? weaponPromotes,
       PropGrowCurveValueSet? weaponPropGrowCurveValues}) = _$_WeaponService;
@@ -262,7 +263,7 @@ abstract class _WeaponService extends WeaponService {
       _$_WeaponService.fromJson;
 
   @override
-  Map<int, GSWeapon>? get weapons;
+  Map<String, GSWeapon>? get weapons;
   @override
   List<List<int>>? get weaponLevelupExps;
   @override

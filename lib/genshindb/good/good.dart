@@ -57,7 +57,7 @@ class GOOD with _$GOOD {
     return copyWith(
       version: 1,
       characters: [
-        ...characters,
+        ...characters.where((e) => e.key != ""),
         updated,
       ].uniqBy((e) => e.key),
     );

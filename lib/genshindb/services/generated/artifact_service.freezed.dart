@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../artifact_service.dart';
@@ -23,7 +24,7 @@ class _$ArtifactServiceTearOff {
 
   _ArtifactService call(
       {Map<int, GSArtifact>? artifacts,
-      Map<int, GSArtifactSet>? artifactSets,
+      Map<String, GSArtifactSet>? artifactSets,
       Map<int, List<FightProp>>? artifactMainPropDepots,
       Map<int, GSArtifactAppendDepot>? artifactAppendPropDepots,
       List<List<int>>? artifactLevelupExps,
@@ -49,7 +50,7 @@ const $ArtifactService = _$ArtifactServiceTearOff();
 /// @nodoc
 mixin _$ArtifactService {
   Map<int, GSArtifact>? get artifacts => throw _privateConstructorUsedError;
-  Map<int, GSArtifactSet>? get artifactSets =>
+  Map<String, GSArtifactSet>? get artifactSets =>
       throw _privateConstructorUsedError;
   Map<int, List<FightProp>>? get artifactMainPropDepots =>
       throw _privateConstructorUsedError;
@@ -73,7 +74,7 @@ abstract class $ArtifactServiceCopyWith<$Res> {
       _$ArtifactServiceCopyWithImpl<$Res>;
   $Res call(
       {Map<int, GSArtifact>? artifacts,
-      Map<int, GSArtifactSet>? artifactSets,
+      Map<String, GSArtifactSet>? artifactSets,
       Map<int, List<FightProp>>? artifactMainPropDepots,
       Map<int, GSArtifactAppendDepot>? artifactAppendPropDepots,
       List<List<int>>? artifactLevelupExps,
@@ -106,7 +107,7 @@ class _$ArtifactServiceCopyWithImpl<$Res>
       artifactSets: artifactSets == freezed
           ? _value.artifactSets
           : artifactSets // ignore: cast_nullable_to_non_nullable
-              as Map<int, GSArtifactSet>?,
+              as Map<String, GSArtifactSet>?,
       artifactMainPropDepots: artifactMainPropDepots == freezed
           ? _value.artifactMainPropDepots
           : artifactMainPropDepots // ignore: cast_nullable_to_non_nullable
@@ -136,7 +137,7 @@ abstract class _$ArtifactServiceCopyWith<$Res>
   @override
   $Res call(
       {Map<int, GSArtifact>? artifacts,
-      Map<int, GSArtifactSet>? artifactSets,
+      Map<String, GSArtifactSet>? artifactSets,
       Map<int, List<FightProp>>? artifactMainPropDepots,
       Map<int, GSArtifactAppendDepot>? artifactAppendPropDepots,
       List<List<int>>? artifactLevelupExps,
@@ -171,7 +172,7 @@ class __$ArtifactServiceCopyWithImpl<$Res>
       artifactSets: artifactSets == freezed
           ? _value.artifactSets
           : artifactSets // ignore: cast_nullable_to_non_nullable
-              as Map<int, GSArtifactSet>?,
+              as Map<String, GSArtifactSet>?,
       artifactMainPropDepots: artifactMainPropDepots == freezed
           ? _value.artifactMainPropDepots
           : artifactMainPropDepots // ignore: cast_nullable_to_non_nullable
@@ -212,7 +213,7 @@ class _$_ArtifactService extends _ArtifactService {
   @override
   final Map<int, GSArtifact>? artifacts;
   @override
-  final Map<int, GSArtifactSet>? artifactSets;
+  final Map<String, GSArtifactSet>? artifactSets;
   @override
   final Map<int, List<FightProp>>? artifactMainPropDepots;
   @override
@@ -270,7 +271,7 @@ class _$_ArtifactService extends _ArtifactService {
 abstract class _ArtifactService extends ArtifactService {
   factory _ArtifactService(
           {Map<int, GSArtifact>? artifacts,
-          Map<int, GSArtifactSet>? artifactSets,
+          Map<String, GSArtifactSet>? artifactSets,
           Map<int, List<FightProp>>? artifactMainPropDepots,
           Map<int, GSArtifactAppendDepot>? artifactAppendPropDepots,
           List<List<int>>? artifactLevelupExps,
@@ -284,7 +285,7 @@ abstract class _ArtifactService extends ArtifactService {
   @override
   Map<int, GSArtifact>? get artifacts;
   @override
-  Map<int, GSArtifactSet>? get artifactSets;
+  Map<String, GSArtifactSet>? get artifactSets;
   @override
   Map<int, List<FightProp>>? get artifactMainPropDepots;
   @override

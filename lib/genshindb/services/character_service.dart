@@ -10,11 +10,9 @@ part 'generated/character_service.g.dart';
 class CharacterService with _$CharacterService {
   CharacterService._();
 
-  final Map<String, int> _indexes = {};
-
   @JsonSerializable(fieldRename: FieldRename.pascal)
   factory CharacterService({
-    Map<int, GSCharacter>? characters,
+    Map<String, GSCharacter>? characters,
     List<int>? characterLevelupExps,
     GSPromoteSet? characterPromotes,
     PropGrowCurveValueSet? characterPropGrowCurveValues,
@@ -23,32 +21,35 @@ class CharacterService with _$CharacterService {
   factory CharacterService.fromJson(Map<String, dynamic> json) =>
       _CharacterService.fromJson(json);
 
-  GSCharacter find(String idOrName) {
-    return findOrNull(idOrName)!;
+  GSCharacter find(String keyOrName) {
+    var f = findOrNull(keyOrName);
+    if (f == null) {
+      throw "character not found $keyOrName";
+    }
+    return f;
   }
 
-  GSCharacter? findOrNull(String idOrName) {
+  final Map<String, String> _indexes = {};
+
+  GSCharacter? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       characters?.forEach((key, value) {
-        _indexes["${value.id}"] = value.id;
+        _indexes["${value.id}"] = value.key;
         for (var lang in value.name.keys) {
-          _indexes[value.name.text(lang)] = value.id;
+          _indexes[value.name.text(lang)] = value.key;
         }
       });
     }
 
-    return characters?[_indexes[idOrName]];
+    return characters?[_indexes[keyOrName]];
   }
 
   FightProps fightProps(
-    String idOrName,
+    String keyOrName,
     int level,
     int activeTalent,
   ) {
-    var c = find(idOrName);
-    if (c == null) {
-      return FightProps({});
-    }
+    var c = find(keyOrName);
 
     var fightProps = FightProps({
       FightProp.LEVEL: level.toDouble(),

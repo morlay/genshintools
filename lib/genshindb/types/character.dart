@@ -16,7 +16,7 @@ class GSCharacter with _$GSCharacter {
     @ElementTypeStringConverter() required ElementType element,
     required int rarity,
     @WeaponTypeStringConverter() required WeaponType weaponType,
-    required int initialWeaponId,
+    required String initialWeaponKey,
     required double critical,
     required double criticalHurt,
     required double staminaRecoverSpeed,
@@ -30,43 +30,19 @@ class GSCharacter with _$GSCharacter {
         required Map<FightProp, PropGrowCurveAndInitial>
             propGrowCurveAndInitials,
     GSCharacterBuild? characterBuild,
-    GSCharacterBuild? internalCharacterBuild,
   }) = _GSCharacter;
 
   factory GSCharacter.fromJson(Map<String, dynamic> json) =>
       _GSCharacter.fromJson(json);
 
-  get key => name.text(Lang.ID);
+  get key => name.text(Lang.KEY);
 
   GSCharacterBuild characterAllBuilds() {
     return characterBuild?.copyWith(
-          weapons: <String>{
-            ...?characterBuild?.weapons,
-            ...?internalCharacterBuild?.weapons
-          }.toList(),
-          artifactSetPairs: [
-            ...?characterBuild?.artifactSetPairs,
-            ...?internalCharacterBuild?.artifactSetPairs
-          ].asMap().map((i, v) => MapEntry(v.join("|"), v)).values.toList(),
           artifactMainPropTypes: {
             EquipType.BRACER: [FightProp.HP],
             EquipType.NECKLACE: [FightProp.ATTACK],
-            EquipType.SHOES: [
-              ...?characterBuild?.artifactMainPropTypes?[EquipType.SHOES],
-            ],
-            EquipType.RING: [
-              ...?characterBuild?.artifactMainPropTypes?[EquipType.RING],
-            ],
-            EquipType.DRESS: [
-              ...?characterBuild?.artifactMainPropTypes?[EquipType.DRESS],
-            ],
-          },
-        ) ??
-        internalCharacterBuild?.copyWith(
-          artifactMainPropTypes: {
-            ...?internalCharacterBuild?.artifactMainPropTypes,
-            EquipType.BRACER: [FightProp.HP],
-            EquipType.NECKLACE: [FightProp.ATTACK],
+            ...?characterBuild?.artifactMainPropTypes,
           },
         ) ??
         GSCharacterBuild();

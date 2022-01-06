@@ -1,5 +1,5 @@
 import { has, keys, last, uniq } from "lodash-es";
-import { groupOne, i18n, i18nWithID } from "./common";
+import { groupOne, i18n, i18nWithKey } from "./common";
 import { EnemyDropTagAliases } from "./domain_enemy";
 
 const weekdays: any = {
@@ -30,8 +30,8 @@ export const Dungeons = groupOne(
   (t) => {
     const v = {
       Id: t.Id,
-      Name: i18nWithID(t.NameTextMapHash),
-      DisplayName: i18nWithID(t.DisplayNameTextMapHash),
+      Name: i18nWithKey(t.NameTextMapHash),
+      DisplayName: i18nWithKey(t.DisplayNameTextMapHash),
       Type: t.Type,
       OpenWeekdays: DungeonOpenWeekdays[t.Id],
     };
@@ -89,7 +89,7 @@ export const MaterialSources = groupOne(
 export const Materials = groupOne(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/MaterialExcelConfigData.json")).default,
   (m) => {
-    const n = i18nWithID(m.NameTextMapHash);
+    const n = i18nWithKey(m.NameTextMapHash);
 
     if (n.CHS.includes("test")) {
       return null;
@@ -116,10 +116,6 @@ export const Materials = groupOne(
         ...s,
         DropFromTags: ["水族"],
       };
-    }
-
-    if (n.CHS === "北风之环") {
-      console.log(s, n.CHS);
     }
 
     return {

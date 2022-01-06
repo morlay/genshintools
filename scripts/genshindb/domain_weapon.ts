@@ -1,6 +1,7 @@
-import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithID } from "./common";
+import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey } from "./common";
 import { Materials } from "./domain_material";
 import { EquipAffixes } from "./domain_equip_affix";
+import { mapKeys, mapValues } from "lodash-es";
 
 export const WeaponPropGrowCurveValues = (
   await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponCurveExcelConfigData.json")
@@ -24,13 +25,13 @@ export const WeaponPromotes = groupMulti(
       AddProps: addPropSet(a.AddProps),
       MaterialCosts: [
         ...a.CostItems.filter((item: any) => item.Id).map((item: any) => ({
-          MaterialNameID: Materials[item.Id].Name.ID,
+          MaterialKey: Materials[item.Id].Name.KEY,
           Count: item.Count,
         })),
         ...(a.CoinCost
           ? [
               {
-                MaterialNameID: "Mora",
+                MaterialKey: "Mora",
                 Count: a.CoinCost,
               },
             ]
@@ -52,7 +53,7 @@ export const WeaponLevelupExps = new Array(5).fill(0).map((_, i) => {
 export const Weapons = groupOne(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponExcelConfigData.json")).default,
   (a) => {
-    const name = i18nWithID(a.NameTextMapHash);
+    const name = i18nWithKey(a.NameTextMapHash);
 
     if (name.CHS == "" || name.CHS.indexOf("test") > -1) {
       return null;
@@ -80,6 +81,8 @@ export const Weapons = groupOne(
   },
   "Id",
 );
+
+export const WeaponsByKey = mapKeys(Weapons, (v) => v.Name.KEY);
 
 const weaponIndexes = createIndexes(Weapons);
 

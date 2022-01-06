@@ -37,6 +37,7 @@ Widget _defaultBuilder(BuildContext context, List<Widget> children) {
 }
 
 class Select<T> extends HookWidget {
+  final Widget title;
   final List<T> options;
   final T? value;
   final Widget Function(BuildContext context, Selected<T> selected) tileBuilder;
@@ -49,6 +50,7 @@ class Select<T> extends HookWidget {
   final Function(T item)? onSelected;
 
   const Select({
+    required this.title,
     required this.options,
     required this.tileBuilder,
     required this.optionBuilder,
@@ -60,13 +62,13 @@ class Select<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: tileBuilder(
-          context,
-          Selected(
-            value: value,
-            showOptions: showOptions,
-          )),
+    return tileBuilder(
+      context,
+      Selected(
+        value: value,
+        title: title,
+        showOptions: showOptions,
+      ),
     );
   }
 
@@ -75,24 +77,38 @@ class Select<T> extends HookWidget {
       context: context,
       builder: (context) {
         return SafeArea(
-          child: builder(context, [
-            ...options.map(
-              (e) => optionBuilder(
-                context,
-                SelectOption(
-                  value: e,
-                  select: () {
-                    onSelected?.let((fn) => fn(e));
-                    Navigator.of(context).pop();
-                  },
-                ),
-                Selected(
-                  value: value,
-                  showOptions: showOptions,
+          child: Column(
+            children: [
+              ListTile(
+                title: DefaultTextStyle.merge(
+                  child: title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-            )
-          ]),
+              const Divider(height: 1),
+              Expanded(
+                child: builder(context, [
+                  ...options.map(
+                    (e) => optionBuilder(
+                      context,
+                      SelectOption(
+                        value: e,
+                        select: () {
+                          onSelected?.let((fn) => fn(e));
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      Selected(
+                        value: value,
+                        title: title,
+                        showOptions: showOptions,
+                      ),
+                    ),
+                  )
+                ]),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -111,10 +127,12 @@ class SelectOption<T> {
 
 class Selected<T> {
   final T? value;
+  final Widget title;
   final Function(BuildContext context) showOptions;
 
   Selected({
     required this.value,
+    required this.title,
     required this.showOptions,
   });
 }

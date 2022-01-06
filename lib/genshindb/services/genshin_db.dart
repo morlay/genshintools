@@ -42,8 +42,8 @@ class GSDB {
     );
   }
 
-  List<LevelupPlan> characterLevelupPlans(String idOrName, int current) {
-    var c = character.find(idOrName);
+  List<LevelupPlan> characterLevelupPlans(String keyOrName, int current) {
+    var c = character.find(keyOrName);
 
     if (c == null) {
       return [];
@@ -72,7 +72,7 @@ class GSDB {
                   .map(
                     (e) => material
                         .find(
-                          e.materialNameID,
+                          e.materialKey,
                         )
                         .copyWith(
                           count: e.count,
@@ -89,12 +89,12 @@ class GSDB {
   }
 
   List<LevelupPlan> characterSkillLevelupPlans(
-    String idOrName,
+    String keyOrName,
     SkillType skillType,
     int current,
     int characterLevel,
   ) {
-    var c = character.find(idOrName);
+    var c = character.find(keyOrName);
 
     if (c == null) {
       return [];
@@ -130,7 +130,7 @@ class GSDB {
               action: "$skillTypeStr.$from → $skillTypeStr.$to",
               costs: costs
                   .map((e) =>
-                      material.find(e.materialNameID).copyWith(count: e.count))
+                      material.find(e.materialKey).copyWith(count: e.count))
                   .toList()),
         );
         from = to;
@@ -140,12 +140,8 @@ class GSDB {
     return list;
   }
 
-  List<LevelupPlan> weaponLevelupPlans(String idOrName, int current) {
-    var w = weapon.find(idOrName);
-
-    if (w == null) {
-      return [];
-    }
+  List<LevelupPlan> weaponLevelupPlans(String keyOrName, int current) {
+    var w = weapon.find(keyOrName);
 
     List<LevelupPlan> list = [];
 
@@ -167,11 +163,7 @@ class GSDB {
                   to,
                 )
                 .map(
-                  (e) => material
-                      .find(
-                        e.materialNameID,
-                      )
-                      .copyWith(
+                  (e) => material.find(e.materialKey).copyWith(
                         count: e.count,
                       ),
                 ),

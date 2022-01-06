@@ -36,6 +36,9 @@ fmt:
 pnpm.i:
 	pnpm i
 
+convert:
+	$(TS_NODE) ./scripts/genshindb.convert.ts
+
 define git_fetch
     if [[ -d $(2) ]]; then \
 		echo "pulling...";  \
@@ -47,10 +50,4 @@ endef
 
 ensure.genshin-data:
 	$(call git_fetch,https://github.com/Dimbreath/GenshinData.git,./vendordata/GenshinData)
-
-convert.builds:
-	$(TS_NODE) ./scripts/sync.builds.ts
-
-convert:
-	$(TS_NODE) ./scripts/genshindb.convert.ts
 

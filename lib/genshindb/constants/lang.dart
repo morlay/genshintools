@@ -8,7 +8,7 @@ class LangStringConverter extends _$LangStringConverter {
 
 @JsonEnum(alwaysCreate: true)
 enum Lang {
-  ID,
+  KEY,
   CHS,
   EN,
 }

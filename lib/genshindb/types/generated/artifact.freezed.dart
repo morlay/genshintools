@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../artifact.dart';
@@ -27,7 +28,7 @@ class _$GSArtifactTearOff {
       required I18n desc,
       required int rarity,
       @EquipTypeStringConverter() required EquipType equipType,
-      required int setId,
+      required String setKey,
       required int appendPropDepotId,
       required int mainPropDepotId,
       int? maxLevel,
@@ -38,7 +39,7 @@ class _$GSArtifactTearOff {
       desc: desc,
       rarity: rarity,
       equipType: equipType,
-      setId: setId,
+      setKey: setKey,
       appendPropDepotId: appendPropDepotId,
       mainPropDepotId: mainPropDepotId,
       maxLevel: maxLevel,
@@ -62,7 +63,7 @@ mixin _$GSArtifact {
   int get rarity => throw _privateConstructorUsedError;
   @EquipTypeStringConverter()
   EquipType get equipType => throw _privateConstructorUsedError;
-  int get setId => throw _privateConstructorUsedError;
+  String get setKey => throw _privateConstructorUsedError;
   int get appendPropDepotId => throw _privateConstructorUsedError;
   int get mainPropDepotId => throw _privateConstructorUsedError;
   int? get maxLevel => throw _privateConstructorUsedError;
@@ -85,7 +86,7 @@ abstract class $GSArtifactCopyWith<$Res> {
       I18n desc,
       int rarity,
       @EquipTypeStringConverter() EquipType equipType,
-      int setId,
+      String setKey,
       int appendPropDepotId,
       int mainPropDepotId,
       int? maxLevel,
@@ -110,7 +111,7 @@ class _$GSArtifactCopyWithImpl<$Res> implements $GSArtifactCopyWith<$Res> {
     Object? desc = freezed,
     Object? rarity = freezed,
     Object? equipType = freezed,
-    Object? setId = freezed,
+    Object? setKey = freezed,
     Object? appendPropDepotId = freezed,
     Object? mainPropDepotId = freezed,
     Object? maxLevel = freezed,
@@ -137,10 +138,10 @@ class _$GSArtifactCopyWithImpl<$Res> implements $GSArtifactCopyWith<$Res> {
           ? _value.equipType
           : equipType // ignore: cast_nullable_to_non_nullable
               as EquipType,
-      setId: setId == freezed
-          ? _value.setId
-          : setId // ignore: cast_nullable_to_non_nullable
-              as int,
+      setKey: setKey == freezed
+          ? _value.setKey
+          : setKey // ignore: cast_nullable_to_non_nullable
+              as String,
       appendPropDepotId: appendPropDepotId == freezed
           ? _value.appendPropDepotId
           : appendPropDepotId // ignore: cast_nullable_to_non_nullable
@@ -186,7 +187,7 @@ abstract class _$ArtifactCopyWith<$Res> implements $GSArtifactCopyWith<$Res> {
       I18n desc,
       int rarity,
       @EquipTypeStringConverter() EquipType equipType,
-      int setId,
+      String setKey,
       int appendPropDepotId,
       int mainPropDepotId,
       int? maxLevel,
@@ -214,7 +215,7 @@ class __$ArtifactCopyWithImpl<$Res> extends _$GSArtifactCopyWithImpl<$Res>
     Object? desc = freezed,
     Object? rarity = freezed,
     Object? equipType = freezed,
-    Object? setId = freezed,
+    Object? setKey = freezed,
     Object? appendPropDepotId = freezed,
     Object? mainPropDepotId = freezed,
     Object? maxLevel = freezed,
@@ -241,10 +242,10 @@ class __$ArtifactCopyWithImpl<$Res> extends _$GSArtifactCopyWithImpl<$Res>
           ? _value.equipType
           : equipType // ignore: cast_nullable_to_non_nullable
               as EquipType,
-      setId: setId == freezed
-          ? _value.setId
-          : setId // ignore: cast_nullable_to_non_nullable
-              as int,
+      setKey: setKey == freezed
+          ? _value.setKey
+          : setKey // ignore: cast_nullable_to_non_nullable
+              as String,
       appendPropDepotId: appendPropDepotId == freezed
           ? _value.appendPropDepotId
           : appendPropDepotId // ignore: cast_nullable_to_non_nullable
@@ -275,7 +276,7 @@ class _$_Artifact extends _Artifact {
       required this.desc,
       required this.rarity,
       @EquipTypeStringConverter() required this.equipType,
-      required this.setId,
+      required this.setKey,
       required this.appendPropDepotId,
       required this.mainPropDepotId,
       this.maxLevel,
@@ -297,7 +298,7 @@ class _$_Artifact extends _Artifact {
   @EquipTypeStringConverter()
   final EquipType equipType;
   @override
-  final int setId;
+  final String setKey;
   @override
   final int appendPropDepotId;
   @override
@@ -309,7 +310,7 @@ class _$_Artifact extends _Artifact {
 
   @override
   String toString() {
-    return 'GSArtifact(id: $id, name: $name, desc: $desc, rarity: $rarity, equipType: $equipType, setId: $setId, appendPropDepotId: $appendPropDepotId, mainPropDepotId: $mainPropDepotId, maxLevel: $maxLevel, appendPropNum: $appendPropNum)';
+    return 'GSArtifact(id: $id, name: $name, desc: $desc, rarity: $rarity, equipType: $equipType, setKey: $setKey, appendPropDepotId: $appendPropDepotId, mainPropDepotId: $mainPropDepotId, maxLevel: $maxLevel, appendPropNum: $appendPropNum)';
   }
 
   @override
@@ -322,7 +323,7 @@ class _$_Artifact extends _Artifact {
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality().equals(other.rarity, rarity) &&
             const DeepCollectionEquality().equals(other.equipType, equipType) &&
-            const DeepCollectionEquality().equals(other.setId, setId) &&
+            const DeepCollectionEquality().equals(other.setKey, setKey) &&
             const DeepCollectionEquality()
                 .equals(other.appendPropDepotId, appendPropDepotId) &&
             const DeepCollectionEquality()
@@ -340,7 +341,7 @@ class _$_Artifact extends _Artifact {
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(rarity),
       const DeepCollectionEquality().hash(equipType),
-      const DeepCollectionEquality().hash(setId),
+      const DeepCollectionEquality().hash(setKey),
       const DeepCollectionEquality().hash(appendPropDepotId),
       const DeepCollectionEquality().hash(mainPropDepotId),
       const DeepCollectionEquality().hash(maxLevel),
@@ -364,7 +365,7 @@ abstract class _Artifact extends GSArtifact {
       required I18n desc,
       required int rarity,
       @EquipTypeStringConverter() required EquipType equipType,
-      required int setId,
+      required String setKey,
       required int appendPropDepotId,
       required int mainPropDepotId,
       int? maxLevel,
@@ -385,7 +386,7 @@ abstract class _Artifact extends GSArtifact {
   @EquipTypeStringConverter()
   EquipType get equipType;
   @override
-  int get setId;
+  String get setKey;
   @override
   int get appendPropDepotId;
   @override

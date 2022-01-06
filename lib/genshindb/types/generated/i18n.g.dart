@@ -17,7 +17,7 @@ Map<String, dynamic> _$$_I18nToJson(_$_I18n instance) => <String, dynamic>{
     };
 
 const _$LangEnumMap = {
-  Lang.ID: 'ID',
+  Lang.KEY: 'KEY',
   Lang.CHS: 'CHS',
   Lang.EN: 'EN',
 };

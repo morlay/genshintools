@@ -1,4 +1,4 @@
-import { groupOne, i18nWithID, i18n, createIndexes } from "./common";
+import { groupOne, i18nWithKey, createIndexes } from "./common";
 import { mapKeys, mapValues, reduce, uniq, values } from "lodash-es";
 
 export const MonsterRelationships = groupOne(
@@ -12,13 +12,13 @@ export const MonsterRelationships = groupOne(
 
 export const MonsterTitles = groupOne(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterTitleExcelConfigData.json")).default,
-  (t) => i18nWithID(t.TitleNameTextMapHash),
+  (t) => i18nWithKey(t.TitleNameTextMapHash),
   "TitleID",
 );
 
 export const MonsterSpecialNames = groupOne(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterSpecialNameExcelConfigData.json")).default,
-  (t) => i18nWithID(t.SpecialNameTextMapHash),
+  (t) => i18nWithKey(t.SpecialNameTextMapHash),
   "SpecialNameLabID",
 );
 
@@ -30,7 +30,7 @@ export const MonsterDescribes = groupOne(
       MonsterRarity: MonsterRelationships[t.Id]?.MonsterRarity,
       SpecialName: MonsterSpecialNames[t.SpecialNameLabID],
       Title: MonsterTitles[t.TitleID],
-      Name: i18nWithID(t.NameTextMapHash),
+      Name: i18nWithKey(t.NameTextMapHash),
     };
   },
   "Id",
@@ -51,7 +51,7 @@ export const Enemies = mapKeys(
 
       const b = {
         ...MonsterDescribes[t.DescribeId],
-        Name: MonsterDescribes[t.DescribeId].Name || i18nWithID(t.NameTextMapHash),
+        Name: MonsterDescribes[t.DescribeId].Name || i18nWithKey(t.NameTextMapHash),
         Type: t.Type,
         SecurityLevel: t.SecurityLevel,
         Id: t.Id,
@@ -63,14 +63,14 @@ export const Enemies = mapKeys(
           treasure_hoarders_liuliu: true,
           treasure_hoarders_boss: true,
           treasure_hoarders_carmen: true,
-        }[b.Name.ID]
+        }[b.Name.KEY]
       ) {
         return ret;
       }
 
       return {
         ...ret,
-        [b.Name.ID]: b,
+        [b.Name.KEY]: b,
       };
     },
     {} as any,
@@ -117,6 +117,8 @@ export const EnemyDropTagAliases: { [k: string]: { Tags: string[]; MonsterRarity
       大体格丘丘人: ["丘丘暴徒", "丘丘岩盔王"],
       兽境之狼: ["兽境幼兽", "兽境猎犬"],
       遗迹机兵: ["遗迹守卫", "遗迹重机", "拟生机关"],
+      龙蜥: ["岩龙蜥"],
+      深海龙蜥: ["岩龙蜥"],
       雷萤术士: ["雷萤"],
       "愚人众·萤术士": ["召唤师"],
       盗宝团成员: ["盗宝团"],
@@ -133,5 +135,3 @@ export const EnemyDropTagAliases: { [k: string]: { Tags: string[]; MonsterRarity
     },
   ),
 );
-
-console.log(MonsterRarities);

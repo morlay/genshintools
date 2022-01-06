@@ -9,8 +9,7 @@ part of '../weapon_service.dart';
 _$_WeaponService _$$_WeaponServiceFromJson(Map<String, dynamic> json) =>
     _$_WeaponService(
       weapons: (json['Weapons'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(
-            int.parse(k), GSWeapon.fromJson(e as Map<String, dynamic>)),
+        (k, e) => MapEntry(k, GSWeapon.fromJson(e as Map<String, dynamic>)),
       ),
       weaponLevelupExps: (json['WeaponLevelupExps'] as List<dynamic>?)
           ?.map((e) => (e as List<dynamic>).map((e) => e as int).toList())
@@ -27,7 +26,7 @@ _$_WeaponService _$$_WeaponServiceFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_WeaponServiceToJson(_$_WeaponService instance) =>
     <String, dynamic>{
-      'Weapons': instance.weapons?.map((k, e) => MapEntry(k.toString(), e)),
+      'Weapons': instance.weapons,
       'WeaponLevelupExps': instance.weaponLevelupExps,
       'WeaponPromotes': instance.weaponPromotes,
       'WeaponPropGrowCurveValues': instance.weaponPropGrowCurveValues,

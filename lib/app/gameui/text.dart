@@ -15,9 +15,7 @@ class GSDesc extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return MarkdownBody(
-      styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-        p: Theme.of(context).textTheme.bodyText2,
-      ),
+      styleSheetTheme: MarkdownStyleSheetBaseTheme.material,
       data: desc.text(Lang.CHS).replaceAll("\\n", "\n\n"),
     );
   }

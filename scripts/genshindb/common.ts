@@ -26,11 +26,11 @@ export const i18n = (hash: number, ...textProcesses: Array<(s: string) => string
 
 export const pascalCase = (s: string) => upperFirst(camelCase(s));
 
-export const i18nWithID = (hash: number, ...textProcesses: Array<(s: string) => string>) => {
+export const i18nWithKey = (hash: number, ...textProcesses: Array<(s: string) => string>) => {
   const i = i18n(hash, ...textProcesses);
   return {
     ...i,
-    ID: pascalCase(i.EN),
+    KEY: pascalCase(i.EN),
   };
 };
 
@@ -74,7 +74,7 @@ export const writeJSONSync = (filename: string, o: any) => {
 };
 
 export const createIndexes = (sets: {
-  [k: string]: { Name: { EN: string; CHS: string; ID: string }; Id: number };
+  [k: string]: { Name: { EN: string; CHS: string; KEY: string }; Id: number };
 }): { [k: string]: number } => {
   return reduce(
     sets,
@@ -85,7 +85,7 @@ export const createIndexes = (sets: {
             [s.Id]: s.Id,
             [s.Name.EN]: s.Id,
             [s.Name.CHS]: s.Id,
-            [s.Name.ID]: s.Id,
+            [s.Name.KEY]: s.Id,
           }
         : indexes,
     {},

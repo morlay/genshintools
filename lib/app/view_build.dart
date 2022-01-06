@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:genshintools/app/gameui/gameui.dart';
@@ -123,26 +124,27 @@ class WeaponListTile extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...weapon.weaponAffixes(refinement).map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: SelectableText(
-                                e.name.text(Lang.CHS),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 11,
-                                  color: Theme.of(context).hintColor,
-                                ),
-                                textAlign: TextAlign.left,
-                              )),
-                          GSDesc(
-                            desc: e.desc,
-                          ),
-                        ],
+                    (e) => ExpandablePanel(
+                      theme: const ExpandableThemeData(
+                        headerAlignment: ExpandablePanelHeaderAlignment.center,
+                        iconPadding: EdgeInsets.zero,
+                      ),
+                      header: SelectableText(
+                        e.name.text(Lang.CHS),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).hintColor,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      collapsed: Text(
+                        e.desc.text(Lang.CHS),
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      expanded: GSDesc(
+                        desc: e.desc,
                       ),
                     ),
                   ),
@@ -198,12 +200,12 @@ class ViewBuildArtifactSetPair extends HookWidget {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: _buildInfo(sets),
+                    child: _buildInfo(context, sets),
                   ),
                   const SizedBox(
                     height: 80,
                     child: VerticalDivider(
-                      width: 16,
+                      width: 32,
                     ),
                   ),
                   Expanded(
@@ -253,41 +255,54 @@ class ViewBuildArtifactSetPair extends HookWidget {
     );
   }
 
-  Widget _buildInfo(List<GSArtifactSet> sets) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget _buildInfo(BuildContext context, List<GSArtifactSet> sets) {
+    return DefaultTextStyle.merge(
+      style: Theme.of(context).textTheme.bodyText2,
+      child: Wrap(
+        runSpacing: 4,
         children: [
-          Text(
-            "${sets.map((s) => s.name.text(Lang.CHS)).join(" / ")}${backup?.let((it) => " [$it]") ?? ""}",
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Wrap(
-              children: [
-                ...sets.expand(
-                  (s) => s.equipAffixes
-                      .where(
-                        (ea) => (s.activeNum ?? 0) >= (ea.activeWhenNum ?? 0),
-                      )
-                      .map(
-                        (e) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            GSDesc(
-                              desc: e.desc,
-                            ),
-                          ],
+          ...?backup?.let((it) => [
+                Text("[$it]",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ))
+              ]),
+          Wrap(
+            children: [
+              ...sets.expand(
+                (s) => s.equipAffixes
+                    .where(
+                      (ea) => (s.activeNum ?? 0) >= (ea.activeWhenNum ?? 0),
+                    )
+                    .map(
+                      (e) => ExpandablePanel(
+                        theme: const ExpandableThemeData(
+                          headerAlignment:
+                              ExpandablePanelHeaderAlignment.center,
+                          iconPadding: EdgeInsets.zero,
+                        ),
+                        header: Text(
+                          "${e.name.text(Lang.CHS)} * ${e.activeWhenNum}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            color: Theme.of(context).hintColor,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        collapsed: Text(
+                          e.desc.text(Lang.CHS),
+                          softWrap: true,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        expanded: GSDesc(
+                          desc: e.desc,
                         ),
                       ),
-                ),
-              ],
-            ),
+                    ),
+              ),
+            ],
           ),
         ],
       ),

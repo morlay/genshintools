@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of '../material.dart';
@@ -468,9 +469,9 @@ GSMaterialCost _$GSMaterialCostFromJson(Map<String, dynamic> json) {
 class _$GSMaterialCostTearOff {
   const _$GSMaterialCostTearOff();
 
-  _MaterialCost call({required String materialNameID, required int count}) {
+  _MaterialCost call({required String materialKey, required int count}) {
     return _MaterialCost(
-      materialNameID: materialNameID,
+      materialKey: materialKey,
       count: count,
     );
   }
@@ -485,7 +486,7 @@ const $GSMaterialCost = _$GSMaterialCostTearOff();
 
 /// @nodoc
 mixin _$GSMaterialCost {
-  String get materialNameID => throw _privateConstructorUsedError;
+  String get materialKey => throw _privateConstructorUsedError;
   int get count => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -499,7 +500,7 @@ abstract class $GSMaterialCostCopyWith<$Res> {
   factory $GSMaterialCostCopyWith(
           GSMaterialCost value, $Res Function(GSMaterialCost) then) =
       _$GSMaterialCostCopyWithImpl<$Res>;
-  $Res call({String materialNameID, int count});
+  $Res call({String materialKey, int count});
 }
 
 /// @nodoc
@@ -513,13 +514,13 @@ class _$GSMaterialCostCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? materialNameID = freezed,
+    Object? materialKey = freezed,
     Object? count = freezed,
   }) {
     return _then(_value.copyWith(
-      materialNameID: materialNameID == freezed
-          ? _value.materialNameID
-          : materialNameID // ignore: cast_nullable_to_non_nullable
+      materialKey: materialKey == freezed
+          ? _value.materialKey
+          : materialKey // ignore: cast_nullable_to_non_nullable
               as String,
       count: count == freezed
           ? _value.count
@@ -536,7 +537,7 @@ abstract class _$MaterialCostCopyWith<$Res>
           _MaterialCost value, $Res Function(_MaterialCost) then) =
       __$MaterialCostCopyWithImpl<$Res>;
   @override
-  $Res call({String materialNameID, int count});
+  $Res call({String materialKey, int count});
 }
 
 /// @nodoc
@@ -552,13 +553,13 @@ class __$MaterialCostCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? materialNameID = freezed,
+    Object? materialKey = freezed,
     Object? count = freezed,
   }) {
     return _then(_MaterialCost(
-      materialNameID: materialNameID == freezed
-          ? _value.materialNameID
-          : materialNameID // ignore: cast_nullable_to_non_nullable
+      materialKey: materialKey == freezed
+          ? _value.materialKey
+          : materialKey // ignore: cast_nullable_to_non_nullable
               as String,
       count: count == freezed
           ? _value.count
@@ -572,19 +573,19 @@ class __$MaterialCostCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.pascal)
 class _$_MaterialCost implements _MaterialCost {
-  _$_MaterialCost({required this.materialNameID, required this.count});
+  _$_MaterialCost({required this.materialKey, required this.count});
 
   factory _$_MaterialCost.fromJson(Map<String, dynamic> json) =>
       _$$_MaterialCostFromJson(json);
 
   @override
-  final String materialNameID;
+  final String materialKey;
   @override
   final int count;
 
   @override
   String toString() {
-    return 'GSMaterialCost(materialNameID: $materialNameID, count: $count)';
+    return 'GSMaterialCost(materialKey: $materialKey, count: $count)';
   }
 
   @override
@@ -593,14 +594,14 @@ class _$_MaterialCost implements _MaterialCost {
         (other.runtimeType == runtimeType &&
             other is _MaterialCost &&
             const DeepCollectionEquality()
-                .equals(other.materialNameID, materialNameID) &&
+                .equals(other.materialKey, materialKey) &&
             const DeepCollectionEquality().equals(other.count, count));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(materialNameID),
+      const DeepCollectionEquality().hash(materialKey),
       const DeepCollectionEquality().hash(count));
 
   @JsonKey(ignore: true)
@@ -615,14 +616,14 @@ class _$_MaterialCost implements _MaterialCost {
 }
 
 abstract class _MaterialCost implements GSMaterialCost {
-  factory _MaterialCost({required String materialNameID, required int count}) =
+  factory _MaterialCost({required String materialKey, required int count}) =
       _$_MaterialCost;
 
   factory _MaterialCost.fromJson(Map<String, dynamic> json) =
       _$_MaterialCost.fromJson;
 
   @override
-  String get materialNameID;
+  String get materialKey;
   @override
   int get count;
   @override

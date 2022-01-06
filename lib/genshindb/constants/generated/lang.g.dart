@@ -21,7 +21,7 @@ class _$LangStringConverter implements JsonConverter<Lang, String> {
 // **************************************************************************
 
 const _$LangEnumMap = {
-  Lang.ID: 'ID',
+  Lang.KEY: 'KEY',
   Lang.CHS: 'CHS',
   Lang.EN: 'EN',
 };
