@@ -225,7 +225,7 @@ class PageCharacter extends HookWidget {
         value: s.c.level.toDouble(),
         min: 1,
         max: 90,
-        divisions: 90 ~/ 5,
+        divisions: 9,
         onChanged: (double value) {
           cvn.value = s.copyWith(
             c: s.c.copyWith(
@@ -299,7 +299,7 @@ class PageCharacter extends HookWidget {
         value: s.w.level.toDouble(),
         min: 1,
         max: 90,
-        divisions: 90 ~/ 5,
+        divisions: 9,
         onChanged: (double value) {
           cvn.value = s.copyWith(
             w: s.w.copyWith(
@@ -325,7 +325,7 @@ class PageCharacter extends HookWidget {
         value: s.artifacts.getOrNull(0)?.level.toDouble() ?? 0,
         min: 0,
         max: 20,
-        divisions: 20 ~/ 4,
+        divisions: 5,
         onChanged: (double value) {
           cvn.value = s.copyWith(
             artifacts: [
@@ -411,9 +411,10 @@ class PageCharacter extends HookWidget {
                 value: weapons.firstWhereOrNull((w) => w.weapon.key == c.w.key),
                 onSelected: (w) {
                   state.value = c.copyWith(
-                      w: c.w.copyWith(
-                    key: w.weapon.key,
-                  ));
+                    w: c.w.copyWith(
+                      key: w.weapon.key,
+                    ),
+                  );
                 },
                 options: weapons,
                 optionBuilder: (context, item, selected) {

@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:genshintools/app/gacha/gacha.dart';
 import 'package:genshintools/app/gamedata/gamedata.dart';
 import 'package:genshintools/app/gameui/gameui.dart';
+import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/gameinfo/gameinfo.dart';
 
 class ViewGachaLogList extends HookWidget {
@@ -47,6 +48,7 @@ class ViewGachaLogList extends HookWidget {
 
               return SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     ListTile(
                       title: const Text("总抽卡数"),
@@ -60,10 +62,10 @@ class ViewGachaLogList extends HookWidget {
                         ),
                       ),
                     ),
-                    ExpansionTile(
+                    const Divider(height: 1),
+                    ListTile(
                       title: const Text("五星保底"),
                       subtitle: Text("保底上限 ${type.contains("武器") ? 80 : 90}"),
-                      childrenPadding: const EdgeInsets.all(8),
                       trailing: Text(
                         "${gachaLogs.last.rankType == "5" ? 0 : gachaLogs.last.countSinceLastGold}",
                         style: TextStyle(
@@ -72,19 +74,28 @@ class ViewGachaLogList extends HookWidget {
                           color: linearGradientForRarity(5).colors[0],
                         ),
                       ),
-                      children: [
-                        Wrap(
-                          spacing: 4,
-                          runSpacing: 4,
-                          children: _renderLog(context,
-                              gachaLogs.where((e) => e.rankType == "5")),
-                        )
-                      ],
                     ),
-                    ExpansionTile(
+                    ...?gachaLogs.where((e) => e.rankType == "5").let((logs) {
+                      return logs.isNotEmpty.ifTrueOrNull(() => [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16,
+                                right: 16,
+                                bottom: 16,
+                              ),
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: _renderLog(context, logs),
+                              ),
+                            )
+                          ]);
+                    }),
+                    const Divider(height: 1),
+                    ListTile(
                       title: const Text("四星保底"),
                       subtitle: const Text("保底上限 10"),
-                      childrenPadding: const EdgeInsets.all(8),
                       trailing: Text(
                         "${gachaLogs.last.rankType == "4" ? 0 : gachaLogs.last.countSinceLastPurple}",
                         style: TextStyle(
@@ -93,17 +104,24 @@ class ViewGachaLogList extends HookWidget {
                           color: linearGradientForRarity(4).colors[0],
                         ),
                       ),
-                      children: [
-                        Wrap(
-                          spacing: 4,
-                          runSpacing: 4,
-                          children: _renderLog(
-                            context,
-                            gachaLogs.where((e) => e.rankType == "4"),
-                          ),
-                        )
-                      ],
                     ),
+                    ...?gachaLogs.where((e) => e.rankType == "4").let((logs) {
+                      return logs.isNotEmpty.ifTrueOrNull(() => [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16,
+                                right: 16,
+                                bottom: 16,
+                              ),
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: _renderLog(context, logs),
+                              ),
+                            )
+                          ]);
+                    }),
                   ],
                 ),
               );

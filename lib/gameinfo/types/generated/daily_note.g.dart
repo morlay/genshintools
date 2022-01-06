@@ -19,6 +19,9 @@ _$_DailyNote _$$_DailyNoteFromJson(Map<String, dynamic> json) => _$_DailyNote(
       expeditions: (json['expeditions'] as List<dynamic>)
           .map((e) => DailyNoteExpedition.fromJson(e as Map<String, dynamic>))
           .toList(),
+      currentHomeCoin: json['current_home_coin'] as int,
+      maxHomeCoin: json['max_home_coin'] as int,
+      homeCoinRecoveryTime: json['home_coin_recovery_time'] as String,
     );
 
 Map<String, dynamic> _$$_DailyNoteToJson(_$_DailyNote instance) =>
@@ -33,6 +36,9 @@ Map<String, dynamic> _$$_DailyNoteToJson(_$_DailyNote instance) =>
       'current_expedition_num': instance.currentExpeditionNum,
       'max_expedition_num': instance.maxExpeditionNum,
       'expeditions': instance.expeditions,
+      'current_home_coin': instance.currentHomeCoin,
+      'max_home_coin': instance.maxHomeCoin,
+      'home_coin_recovery_time': instance.homeCoinRecoveryTime,
     };
 
 _$_DailyNoteExpedition _$$_DailyNoteExpeditionFromJson(

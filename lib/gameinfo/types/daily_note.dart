@@ -17,6 +17,9 @@ class DailyNote with _$DailyNote {
     required int currentExpeditionNum,
     required int maxExpeditionNum,
     required List<DailyNoteExpedition> expeditions,
+    required int currentHomeCoin,
+    required int maxHomeCoin,
+    required String homeCoinRecoveryTime,
   }) = _DailyNote;
 
   factory DailyNote.fromJson(Map<String, dynamic> json) =>

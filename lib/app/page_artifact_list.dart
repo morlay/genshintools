@@ -190,6 +190,7 @@ class GOODArtifactListTile extends HookWidget {
           ),
           const SizedBox(
             height: 56,
+            width: 32,
             child: VerticalDivider(),
           ),
           Expanded(

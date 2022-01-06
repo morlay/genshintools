@@ -35,6 +35,9 @@ class BlocDailyNote extends HydratedCubit<DailyNotes> {
           resinDiscountNumLimit: 3,
           currentExpeditionNum: 3,
           maxExpeditionNum: 5,
+          currentHomeCoin: 0,
+          maxHomeCoin: 2400,
+          homeCoinRecoveryTime: "",
           expeditions: [],
         );
   }

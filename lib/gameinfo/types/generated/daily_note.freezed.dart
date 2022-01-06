@@ -31,7 +31,10 @@ class _$DailyNoteTearOff {
       required int resinDiscountNumLimit,
       required int currentExpeditionNum,
       required int maxExpeditionNum,
-      required List<DailyNoteExpedition> expeditions}) {
+      required List<DailyNoteExpedition> expeditions,
+      required int currentHomeCoin,
+      required int maxHomeCoin,
+      required String homeCoinRecoveryTime}) {
     return _DailyNote(
       currentResin: currentResin,
       maxResin: maxResin,
@@ -43,6 +46,9 @@ class _$DailyNoteTearOff {
       currentExpeditionNum: currentExpeditionNum,
       maxExpeditionNum: maxExpeditionNum,
       expeditions: expeditions,
+      currentHomeCoin: currentHomeCoin,
+      maxHomeCoin: maxHomeCoin,
+      homeCoinRecoveryTime: homeCoinRecoveryTime,
     );
   }
 
@@ -67,6 +73,9 @@ mixin _$DailyNote {
   int get maxExpeditionNum => throw _privateConstructorUsedError;
   List<DailyNoteExpedition> get expeditions =>
       throw _privateConstructorUsedError;
+  int get currentHomeCoin => throw _privateConstructorUsedError;
+  int get maxHomeCoin => throw _privateConstructorUsedError;
+  String get homeCoinRecoveryTime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -88,7 +97,10 @@ abstract class $DailyNoteCopyWith<$Res> {
       int resinDiscountNumLimit,
       int currentExpeditionNum,
       int maxExpeditionNum,
-      List<DailyNoteExpedition> expeditions});
+      List<DailyNoteExpedition> expeditions,
+      int currentHomeCoin,
+      int maxHomeCoin,
+      String homeCoinRecoveryTime});
 }
 
 /// @nodoc
@@ -111,6 +123,9 @@ class _$DailyNoteCopyWithImpl<$Res> implements $DailyNoteCopyWith<$Res> {
     Object? currentExpeditionNum = freezed,
     Object? maxExpeditionNum = freezed,
     Object? expeditions = freezed,
+    Object? currentHomeCoin = freezed,
+    Object? maxHomeCoin = freezed,
+    Object? homeCoinRecoveryTime = freezed,
   }) {
     return _then(_value.copyWith(
       currentResin: currentResin == freezed
@@ -153,6 +168,18 @@ class _$DailyNoteCopyWithImpl<$Res> implements $DailyNoteCopyWith<$Res> {
           ? _value.expeditions
           : expeditions // ignore: cast_nullable_to_non_nullable
               as List<DailyNoteExpedition>,
+      currentHomeCoin: currentHomeCoin == freezed
+          ? _value.currentHomeCoin
+          : currentHomeCoin // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxHomeCoin: maxHomeCoin == freezed
+          ? _value.maxHomeCoin
+          : maxHomeCoin // ignore: cast_nullable_to_non_nullable
+              as int,
+      homeCoinRecoveryTime: homeCoinRecoveryTime == freezed
+          ? _value.homeCoinRecoveryTime
+          : homeCoinRecoveryTime // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -173,7 +200,10 @@ abstract class _$DailyNoteCopyWith<$Res> implements $DailyNoteCopyWith<$Res> {
       int resinDiscountNumLimit,
       int currentExpeditionNum,
       int maxExpeditionNum,
-      List<DailyNoteExpedition> expeditions});
+      List<DailyNoteExpedition> expeditions,
+      int currentHomeCoin,
+      int maxHomeCoin,
+      String homeCoinRecoveryTime});
 }
 
 /// @nodoc
@@ -197,6 +227,9 @@ class __$DailyNoteCopyWithImpl<$Res> extends _$DailyNoteCopyWithImpl<$Res>
     Object? currentExpeditionNum = freezed,
     Object? maxExpeditionNum = freezed,
     Object? expeditions = freezed,
+    Object? currentHomeCoin = freezed,
+    Object? maxHomeCoin = freezed,
+    Object? homeCoinRecoveryTime = freezed,
   }) {
     return _then(_DailyNote(
       currentResin: currentResin == freezed
@@ -239,6 +272,18 @@ class __$DailyNoteCopyWithImpl<$Res> extends _$DailyNoteCopyWithImpl<$Res>
           ? _value.expeditions
           : expeditions // ignore: cast_nullable_to_non_nullable
               as List<DailyNoteExpedition>,
+      currentHomeCoin: currentHomeCoin == freezed
+          ? _value.currentHomeCoin
+          : currentHomeCoin // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxHomeCoin: maxHomeCoin == freezed
+          ? _value.maxHomeCoin
+          : maxHomeCoin // ignore: cast_nullable_to_non_nullable
+              as int,
+      homeCoinRecoveryTime: homeCoinRecoveryTime == freezed
+          ? _value.homeCoinRecoveryTime
+          : homeCoinRecoveryTime // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -257,7 +302,10 @@ class _$_DailyNote implements _DailyNote {
       required this.resinDiscountNumLimit,
       required this.currentExpeditionNum,
       required this.maxExpeditionNum,
-      required this.expeditions});
+      required this.expeditions,
+      required this.currentHomeCoin,
+      required this.maxHomeCoin,
+      required this.homeCoinRecoveryTime});
 
   factory _$_DailyNote.fromJson(Map<String, dynamic> json) =>
       _$$_DailyNoteFromJson(json);
@@ -282,10 +330,16 @@ class _$_DailyNote implements _DailyNote {
   final int maxExpeditionNum;
   @override
   final List<DailyNoteExpedition> expeditions;
+  @override
+  final int currentHomeCoin;
+  @override
+  final int maxHomeCoin;
+  @override
+  final String homeCoinRecoveryTime;
 
   @override
   String toString() {
-    return 'DailyNote(currentResin: $currentResin, maxResin: $maxResin, resinRecoveryTime: $resinRecoveryTime, finishedTaskNum: $finishedTaskNum, totalTaskNum: $totalTaskNum, remainResinDiscountNum: $remainResinDiscountNum, resinDiscountNumLimit: $resinDiscountNumLimit, currentExpeditionNum: $currentExpeditionNum, maxExpeditionNum: $maxExpeditionNum, expeditions: $expeditions)';
+    return 'DailyNote(currentResin: $currentResin, maxResin: $maxResin, resinRecoveryTime: $resinRecoveryTime, finishedTaskNum: $finishedTaskNum, totalTaskNum: $totalTaskNum, remainResinDiscountNum: $remainResinDiscountNum, resinDiscountNumLimit: $resinDiscountNumLimit, currentExpeditionNum: $currentExpeditionNum, maxExpeditionNum: $maxExpeditionNum, expeditions: $expeditions, currentHomeCoin: $currentHomeCoin, maxHomeCoin: $maxHomeCoin, homeCoinRecoveryTime: $homeCoinRecoveryTime)';
   }
 
   @override
@@ -311,7 +365,13 @@ class _$_DailyNote implements _DailyNote {
             const DeepCollectionEquality()
                 .equals(other.maxExpeditionNum, maxExpeditionNum) &&
             const DeepCollectionEquality()
-                .equals(other.expeditions, expeditions));
+                .equals(other.expeditions, expeditions) &&
+            const DeepCollectionEquality()
+                .equals(other.currentHomeCoin, currentHomeCoin) &&
+            const DeepCollectionEquality()
+                .equals(other.maxHomeCoin, maxHomeCoin) &&
+            const DeepCollectionEquality()
+                .equals(other.homeCoinRecoveryTime, homeCoinRecoveryTime));
   }
 
   @override
@@ -326,7 +386,10 @@ class _$_DailyNote implements _DailyNote {
       const DeepCollectionEquality().hash(resinDiscountNumLimit),
       const DeepCollectionEquality().hash(currentExpeditionNum),
       const DeepCollectionEquality().hash(maxExpeditionNum),
-      const DeepCollectionEquality().hash(expeditions));
+      const DeepCollectionEquality().hash(expeditions),
+      const DeepCollectionEquality().hash(currentHomeCoin),
+      const DeepCollectionEquality().hash(maxHomeCoin),
+      const DeepCollectionEquality().hash(homeCoinRecoveryTime));
 
   @JsonKey(ignore: true)
   @override
@@ -350,7 +413,10 @@ abstract class _DailyNote implements DailyNote {
       required int resinDiscountNumLimit,
       required int currentExpeditionNum,
       required int maxExpeditionNum,
-      required List<DailyNoteExpedition> expeditions}) = _$_DailyNote;
+      required List<DailyNoteExpedition> expeditions,
+      required int currentHomeCoin,
+      required int maxHomeCoin,
+      required String homeCoinRecoveryTime}) = _$_DailyNote;
 
   factory _DailyNote.fromJson(Map<String, dynamic> json) =
       _$_DailyNote.fromJson;
@@ -375,6 +441,12 @@ abstract class _DailyNote implements DailyNote {
   int get maxExpeditionNum;
   @override
   List<DailyNoteExpedition> get expeditions;
+  @override
+  int get currentHomeCoin;
+  @override
+  int get maxHomeCoin;
+  @override
+  String get homeCoinRecoveryTime;
   @override
   @JsonKey(ignore: true)
   _$DailyNoteCopyWith<_DailyNote> get copyWith =>

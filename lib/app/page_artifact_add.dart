@@ -53,8 +53,9 @@ class PageArtifactAdd extends HookWidget {
     var defaultArtifact = artifacts.toList()[0];
 
     var pa = useState(
-      (value ?? GOODArtifact.create(SlotKey.values[equipType.index], ""))
-          .copyWith(setKey: as.findSet("${defaultArtifact.setId}").key),
+      value ??
+          (GOODArtifact.create(SlotKey.values[equipType.index], "")
+              .copyWith(setKey: as.findSet("${defaultArtifact.setId}").key)),
     );
 
     var a =

@@ -317,7 +317,10 @@ class ViewBuildArtifacts extends HookWidget {
             return Wrap(
               runSpacing: 4,
               children: [
-                _buildHeader(context, a),
+                _buildHeader(
+                    context,
+                    state.value.artifacts
+                        .firstWhere((e) => e.slotKey == a.slotKey)),
                 _buildMainProp(context, a),
               ],
             );

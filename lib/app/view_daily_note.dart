@@ -38,9 +38,15 @@ class ViewDailyNote extends HookWidget {
         ),
       ),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        runSpacing: 8,
         children: [
+          Processing(
+            label: const Text("洞天宝钱"),
+            current: dailyNote.currentHomeCoin,
+            max: dailyNote.maxHomeCoin,
+          ),
           Processing(
             label: const Text("原萃树脂"),
             current: dailyNote.currentResin,
@@ -59,7 +65,7 @@ class ViewDailyNote extends HookWidget {
                     .length,
             max: dailyNote.maxExpeditionNum,
           ),
-        ].map((e) => Expanded(child: e, flex: 1)).toList(),
+        ],
       ),
     );
   }
