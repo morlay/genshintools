@@ -56,10 +56,10 @@ class GOOD with _$GOOD {
 
     return copyWith(
       version: 1,
-      characters: [
+      characters: _cleanupCharacters([
         ...characters.where((e) => e.key != ""),
         updated,
-      ].uniqBy((e) => e.key),
+      ]),
     );
   }
 
@@ -72,18 +72,17 @@ class GOOD with _$GOOD {
 
     if (found != null) {
       return copyWith(
-        weapons: weapons
+        weapons: _cleanupWeapons(weapons
             .map((a) => a.location == found.location ? update(found) : a)
-            .toList()
-            .uniqBy((e) => e.location),
+            .toList()),
       );
     }
 
     return copyWith(
-      weapons: [
+      weapons: _cleanupWeapons([
         ...weapons,
         update(GOODWeapon.create(defaultKey, location)),
-      ].uniqBy((e) => e.location),
+      ]),
     );
   }
 
@@ -97,16 +96,30 @@ class GOOD with _$GOOD {
 
     if (found != null) {
       return copyWith(
-        artifacts: artifacts
-            .map((a) => a == found ? update(found) : a)
-            .toList()
-            .uniqBy((e) => e.hashCode),
+        artifacts: _cleanupArtifacts(
+            artifacts.map((a) => a == found ? update(found) : a).toList()),
       );
     }
 
     return copyWith(
-      artifacts: artifacts..add(update(GOODArtifact.create(sk, location))),
+      artifacts: _cleanupArtifacts(
+          artifacts..add(update(GOODArtifact.create(sk, location)))),
     );
+  }
+
+  List<GOODCharacter> _cleanupCharacters(List<GOODCharacter> characters) {
+    return characters.where((w) => w.key != "").toList().uniqBy((e) => e.key);
+  }
+
+  List<GOODWeapon> _cleanupWeapons(List<GOODWeapon> weapons) {
+    return weapons.where((w) => w.key != "").toList().uniqBy((e) => e.location);
+  }
+
+  List<GOODArtifact> _cleanupArtifacts(List<GOODArtifact> artifacts) {
+    return artifacts
+        .where((a) => a.setKey != "")
+        .toList()
+        .uniqBy((e) => e.hashCode);
   }
 
   GOOD removeArtifact(GOODArtifact artifact) {
@@ -205,7 +218,7 @@ class GOODCharacter with _$GOODCharacter {
   get own => level > 0;
 
   int skillLevel(SkillType skill) {
-    return talent[TalentType.values[skill.index]]!;
+    return talent[TalentType.values[skill.index]] ?? 1;
   }
 }
 
@@ -341,6 +354,7 @@ enum TalentType {
   auto,
   skill,
   burst,
+  other,
 }
 
 extension TalentTypeAsSkillType on TalentType {

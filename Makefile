@@ -3,15 +3,6 @@ TS_NODE=node --experimental-specifier-resolution=node --loader=ts-node/esm
 gen:
 	flutter pub run build_runner watch --delete-conflicting-outputs
 
-dep:
-	pnpm up --latest
-	flutter pub upgrade
-
-BASE_HREF=/
-
-build.web:
-	flutter build web --release --base-href=$(BASE_HREF)
-
 distribute.android:
 	CHANNEL=stable $(TS_NODE) ./scripts/distribute.ts
 
@@ -19,10 +10,21 @@ distribute.android.beta:
 	CHANNEL=beta $(TS_NODE) ./scripts/distribute.ts
 
 build.android:
-	flutter build apk --release --build-number=$(shell date +%y%m%d%H)
+	flutter build apk --release \
+		--target-platform android-arm64 \
+		--split-per-abi \
+		--build-number=$(shell date +%y%m%d%H)
 
 build.ios:
-	flutter build ios --no-codesign --release --build-number=$(shell date +%y%m%d%H)
+	flutter build ios --flavor Release \
+		--build-number=$(shell date +%y%m%d%H)
+
+build.ipa:
+	flutter build ipa --flavor Release \
+		--build-number=$(shell date +%y%m%d%H)
+	xcodebuild -exportArchive -exportPath ./build/ios \
+		-archivePath ./build/ios/archive/Runner.xcarchive \
+		-exportOptionsPlist ./build/ios/archive/Runner.xcarchive/info.plist
 
 clean:
 	flutter clean
@@ -33,8 +35,20 @@ fmt:
 	dart format .
 	pnpx prettier -w ./scripts/{,**/}*.ts
 
-pnpm.i:
+dep: dep.npm dep.flutter
+install: install.npm install.flutter
+
+dep.npm:
+	pnpm up --latest
+
+dep.flutter:
+	flutter pub upgrade
+
+install.npm:
 	pnpm i
+
+install.flutter:
+	flutter pub get
 
 convert:
 	$(TS_NODE) ./scripts/genshindb.convert.ts

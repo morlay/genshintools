@@ -154,10 +154,13 @@ class PageArtifactAdd extends HookWidget {
             );
 
     var valueIndexes = artifactAppendDepot.canValues(fp);
+
     var values = valueIndexes.keys
         .where((k) => valueIndexes[k]!.length <= remainCount)
         .toList()
-      ..sort((a, b) => a.compareTo(b));
+      ..sort((a, b) => artifactAppendDepot
+          .calc(fp, valueIndexes[a])
+          .compareTo(artifactAppendDepot.calc(fp, valueIndexes[b])));
 
     return Select<String>(
       title: Text(fp.label()),

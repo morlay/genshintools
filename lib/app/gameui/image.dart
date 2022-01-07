@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -331,7 +332,9 @@ class GSImageWeaponType extends HookWidget {
   }
 }
 
-const imageBaseURL = "https://gitee.com/morlay/genshinimages/raw/good/images";
+const imageBaseURL = kIsWeb
+    ? "https://raw.githubusercontent.com/morlay/genshinimages/good/images"
+    : "https://gitee.com/morlay/genshinimages/raw/good/images";
 
 class GSImageProvider extends CachedNetworkImageProvider {
   GSImageProvider({

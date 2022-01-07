@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:genshintools/app/auth/auth.dart';
@@ -16,6 +17,10 @@ var gitRawBase = "https://gitee.com/morlay/genshintools-release/raw";
 
 class Upgrader {
   static checkVersion(BuildContext context) async {
+    if (kIsWeb) {
+      return;
+    }
+
     var channel = BlocAuth.read(context).state.currentChannel;
 
     var pi = await PackageInfo.fromPlatform();

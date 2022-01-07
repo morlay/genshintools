@@ -6,9 +6,6 @@ part 'generated/i18n.g.dart';
 
 @freezed
 class I18n with _$I18n {
-  const I18n._();
-
-  @JsonSerializable()
   factory I18n(
     @LangStringConverter() Map<Lang, String> values,
   ) = _I18n;
@@ -22,6 +19,8 @@ class I18n with _$I18n {
       (key, value) => MapEntry(const LangStringConverter().toJson(key), value),
     );
   }
+
+  const I18n._();
 
   String text(Lang lang) {
     if (values.containsKey(lang)) {

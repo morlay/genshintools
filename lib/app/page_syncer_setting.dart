@@ -102,7 +102,7 @@ class FormSyncSetting extends HookWidget {
                       "password": password.value.text,
                     });
                     try {
-                      await wd.client().ping();
+                      await wd.ping();
                       blocSyncer.bind(wd.copyWith(valid: true));
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("连接成功"),

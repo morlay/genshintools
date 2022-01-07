@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import "package:webdav_client/webdav_client.dart";
 
 part "generated/webdav.freezed.dart";
 part "generated/webdav.g.dart";
@@ -29,21 +30,73 @@ class WebDAV with _$WebDAV {
     return (valid ?? false) && syncAt != null;
   }
 
-  Client client() {
-    final c = newClient(
-      "$address${address.endsWith("/") ? "" : "/"}genshintools",
-      user: username,
-      password: password,
-      debug: false,
-    );
-
-    c.setHeaders({'accept-charset': 'utf-8'});
-
-    return c;
+  Dio client() {
+    return Dio(BaseOptions(
+      baseUrl: "$address${address.endsWith("/") ? "" : "/"}genshintools",
+      headers: {
+        "accept-charset": "utf-8",
+        "Authorization":
+            "Basic ${base64Encode(utf8.encode("$username:$password"))}"
+      },
+    ));
   }
 
-  writeJson(String file, dynamic json) async {
-    final c = client();
+  _dioError(Response resp) {
+    return DioError(
+        response: resp,
+        requestOptions: resp.requestOptions,
+        type: DioErrorType.response,
+        error: resp.statusMessage);
+  }
+
+  String _fixPath(String path) {
+    if (path.startsWith("/")) {
+      return path;
+    }
+    return "/" + path;
+  }
+
+  Future<void> ping() async {
+    var resp = await client().request('/',
+        options: Options(
+          method: "OPTIONS",
+        ));
+
+    if (resp.statusCode != 200) {
+      throw _dioError(resp);
+    }
+  }
+
+  Future<Uint8List> read(String path) async {
+    var resp = await client().get(
+      _fixPath(path),
+      options: Options(
+        responseType: ResponseType.bytes,
+      ),
+    );
+
+    if (resp.statusCode! >= HttpStatus.badRequest) {
+      throw _dioError(resp);
+    }
+
+    return resp.data;
+  }
+
+  Future<Response<void>> write(String path, Uint8List data) async {
+    var resp = await client().put(
+      _fixPath(path),
+      data: Stream.fromIterable([data]),
+      options: Options(headers: {
+        "content-length": data.length,
+      }),
+    );
+    if (resp.statusCode! >= HttpStatus.badRequest) {
+      throw _dioError(resp);
+    }
+    return resp;
+  }
+
+  writeJsonIfChanged(String file, dynamic json) async {
     final data = getPrettyJSONString(json ?? {});
     final encodedJSON = utf8.encode(data);
     final sum = md5.convert(encodedJSON).toString();
@@ -51,30 +104,33 @@ class WebDAV with _$WebDAV {
 
     var preSum = "";
     try {
-      preSum = utf8.decode(await c.read(sumFile));
+      preSum = utf8.decode(await read(sumFile));
     } catch (e) {
-      log("W $file $e");
+      log("$file not found.");
     }
 
     if (sum != preSum) {
-      await c.write(
+      await write(
         file,
         Uint8List.fromList(encodedJSON),
       );
-      await c.write(
+      await write(
         sumFile,
         Uint8List.fromList(utf8.encode(sum)),
       );
+      log("$file synced to WebDAV.");
+      return;
     }
+    log("$file not changed.");
   }
 
   dynamic readJson(String file) async {
-    final c = client();
     try {
-      var data = utf8.decode(await c.read(file));
+      var data = utf8.decode(await read(file));
+      log("$file found.");
       return jsonDecode(data);
     } catch (e) {
-      log("R $file $e");
+      log("$file read failed: $e");
     }
     return null;
   }

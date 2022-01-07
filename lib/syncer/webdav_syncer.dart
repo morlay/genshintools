@@ -48,7 +48,7 @@ class WebDAVSyncer implements BlocObserver {
       }
 
       for (var b in blocs) {
-        await c.writeJson(
+        await c.writeJsonIfChanged(
           "${b.runtimeType}.json",
           b.toJson(b.state),
         );

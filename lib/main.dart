@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_services_binding/flutter_services_binding.dart';
 import 'package:genshintools/app/gamedata/gamedata.dart';
+import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/syncer/syncer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,10 +26,12 @@ void main() async {
   FlutterServicesBinding.ensureInitialized();
 
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    if (!kIsWeb) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    }
 
     var d = kIsWeb
         ? HydratedStorage.webStorageDirectory
@@ -51,9 +54,8 @@ void main() async {
 class AppRoot extends HookWidget {
   const AppRoot({Key? key}) : super(key: key);
 
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalyticsObserver? observer = kIsWeb.ifFalseOrNull(
+      () => FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance));
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +97,9 @@ class AppRoot extends HookWidget {
           child: MaterialApp(
             title: '原神工具箱',
             theme: theme,
-            navigatorObservers: <NavigatorObserver>[observer],
+            navigatorObservers: <NavigatorObserver>[
+              ...?observer?.let((o) => [o])
+            ],
             home: AppMain(),
           ),
         );

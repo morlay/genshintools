@@ -105,7 +105,6 @@ class __$I18nCopyWithImpl<$Res> extends _$I18nCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
 @JsonSerializable()
 class _$_I18n extends _I18n {
   _$_I18n(@LangStringConverter() this.values) : super._();

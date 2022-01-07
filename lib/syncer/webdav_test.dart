@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:test/test.dart';
 
@@ -11,9 +13,18 @@ void main() {
     password: Platform.environment["WEBDAV_PASSWORD"]!,
   );
 
-  var c = wd.client();
-
   test("client", () async {
-    await c.writeFromFile("/tmp/123", "webdav.dart");
+    var now = DateTime.now().toString();
+
+    await wd.write(
+      "/tmp.txt",
+      Uint8List.fromList(utf8.encode(now)),
+    );
+
+    var data = utf8.decode(await wd.read("/tmp.txt"));
+
+    print(data);
+
+    expect(data, now);
   });
 }
