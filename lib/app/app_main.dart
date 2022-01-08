@@ -46,7 +46,7 @@ class AppMain extends HookWidget {
 
     useObservableEffect(() {
       return Stream.periodic(const Duration(minutes: 5)).doOnData((v) {
-        BlocSyncer.read(context).sync();
+        WebDAVSyncer.read(context).sync();
       });
     }, []);
 

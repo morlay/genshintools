@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'bloc_syncer.dart';
-import 'webdav.dart';
 
 mixin WebDAVSyncMixin {
   bool webDAVSyncEnabled() {
@@ -10,8 +11,16 @@ mixin WebDAVSyncMixin {
 }
 
 class WebDAVSyncer implements BlocObserver {
+  static WebDAVSyncer read(BuildContext context) {
+    return context.read<WebDAVSyncer>();
+  }
+
   BlocSyncer? blocSyncer;
   List<HydratedMixin> blocs = [];
+
+  Provider provide(Widget child) {
+    return Provider<WebDAVSyncer>.value(value: this, child: child);
+  }
 
   @override
   void onCreate(BlocBase bloc) {
@@ -25,17 +34,12 @@ class WebDAVSyncer implements BlocObserver {
   }
 
   @override
-  void onChange(BlocBase bloc, Change change) {
-    if (bloc is BlocSyncer &&
-        change.nextState != null &&
-        change.nextState is WebDAV) {
-      _sync(change.nextState);
-    }
-  }
+  void onChange(BlocBase bloc, Change change) {}
 
-  _sync(WebDAV c) async {
+  sync({bool? fromServer}) async {
+    var c = blocSyncer!.state;
     if (c.shouldSync()) {
-      if (c.fromServer == true) {
+      if (fromServer == true) {
         for (var b in blocs) {
           var json = await c.readJson(
             "${b.runtimeType}.json",

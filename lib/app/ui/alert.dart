@@ -31,3 +31,12 @@ void showAlert(
     },
   );
 }
+
+void showSnackBar(
+  BuildContext context, {
+  required Widget content,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: content,
+  ));
+}

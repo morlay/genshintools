@@ -83,6 +83,7 @@ const _$TalentTypeEnumMap = {
   TalentType.auto: 'auto',
   TalentType.skill: 'skill',
   TalentType.burst: 'burst',
+  TalentType.other: 'other',
 };
 
 _$_GOODSubStat _$$_GOODSubStatFromJson(Map<String, dynamic> json) =>

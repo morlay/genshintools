@@ -26,15 +26,11 @@ class _$WebDAVTearOff {
       {required String address,
       required String username,
       required String password,
-      DateTime? syncAt,
-      bool? fromServer,
       bool? valid}) {
     return _WebDAV(
       address: address,
       username: username,
       password: password,
-      syncAt: syncAt,
-      fromServer: fromServer,
       valid: valid,
     );
   }
@@ -52,8 +48,6 @@ mixin _$WebDAV {
   String get address => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
-  DateTime? get syncAt => throw _privateConstructorUsedError;
-  bool? get fromServer => throw _privateConstructorUsedError;
   bool? get valid => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -65,13 +59,7 @@ mixin _$WebDAV {
 abstract class $WebDAVCopyWith<$Res> {
   factory $WebDAVCopyWith(WebDAV value, $Res Function(WebDAV) then) =
       _$WebDAVCopyWithImpl<$Res>;
-  $Res call(
-      {String address,
-      String username,
-      String password,
-      DateTime? syncAt,
-      bool? fromServer,
-      bool? valid});
+  $Res call({String address, String username, String password, bool? valid});
 }
 
 /// @nodoc
@@ -87,8 +75,6 @@ class _$WebDAVCopyWithImpl<$Res> implements $WebDAVCopyWith<$Res> {
     Object? address = freezed,
     Object? username = freezed,
     Object? password = freezed,
-    Object? syncAt = freezed,
-    Object? fromServer = freezed,
     Object? valid = freezed,
   }) {
     return _then(_value.copyWith(
@@ -104,14 +90,6 @@ class _$WebDAVCopyWithImpl<$Res> implements $WebDAVCopyWith<$Res> {
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      syncAt: syncAt == freezed
-          ? _value.syncAt
-          : syncAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      fromServer: fromServer == freezed
-          ? _value.fromServer
-          : fromServer // ignore: cast_nullable_to_non_nullable
-              as bool?,
       valid: valid == freezed
           ? _value.valid
           : valid // ignore: cast_nullable_to_non_nullable
@@ -125,13 +103,7 @@ abstract class _$WebDAVCopyWith<$Res> implements $WebDAVCopyWith<$Res> {
   factory _$WebDAVCopyWith(_WebDAV value, $Res Function(_WebDAV) then) =
       __$WebDAVCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String address,
-      String username,
-      String password,
-      DateTime? syncAt,
-      bool? fromServer,
-      bool? valid});
+  $Res call({String address, String username, String password, bool? valid});
 }
 
 /// @nodoc
@@ -148,8 +120,6 @@ class __$WebDAVCopyWithImpl<$Res> extends _$WebDAVCopyWithImpl<$Res>
     Object? address = freezed,
     Object? username = freezed,
     Object? password = freezed,
-    Object? syncAt = freezed,
-    Object? fromServer = freezed,
     Object? valid = freezed,
   }) {
     return _then(_WebDAV(
@@ -165,14 +135,6 @@ class __$WebDAVCopyWithImpl<$Res> extends _$WebDAVCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
-      syncAt: syncAt == freezed
-          ? _value.syncAt
-          : syncAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      fromServer: fromServer == freezed
-          ? _value.fromServer
-          : fromServer // ignore: cast_nullable_to_non_nullable
-              as bool?,
       valid: valid == freezed
           ? _value.valid
           : valid // ignore: cast_nullable_to_non_nullable
@@ -189,8 +151,6 @@ class _$_WebDAV extends _WebDAV {
       {required this.address,
       required this.username,
       required this.password,
-      this.syncAt,
-      this.fromServer,
       this.valid})
       : super._();
 
@@ -204,15 +164,11 @@ class _$_WebDAV extends _WebDAV {
   @override
   final String password;
   @override
-  final DateTime? syncAt;
-  @override
-  final bool? fromServer;
-  @override
   final bool? valid;
 
   @override
   String toString() {
-    return 'WebDAV(address: $address, username: $username, password: $password, syncAt: $syncAt, fromServer: $fromServer, valid: $valid)';
+    return 'WebDAV(address: $address, username: $username, password: $password, valid: $valid)';
   }
 
   @override
@@ -223,9 +179,6 @@ class _$_WebDAV extends _WebDAV {
             const DeepCollectionEquality().equals(other.address, address) &&
             const DeepCollectionEquality().equals(other.username, username) &&
             const DeepCollectionEquality().equals(other.password, password) &&
-            const DeepCollectionEquality().equals(other.syncAt, syncAt) &&
-            const DeepCollectionEquality()
-                .equals(other.fromServer, fromServer) &&
             const DeepCollectionEquality().equals(other.valid, valid));
   }
 
@@ -235,8 +188,6 @@ class _$_WebDAV extends _WebDAV {
       const DeepCollectionEquality().hash(address),
       const DeepCollectionEquality().hash(username),
       const DeepCollectionEquality().hash(password),
-      const DeepCollectionEquality().hash(syncAt),
-      const DeepCollectionEquality().hash(fromServer),
       const DeepCollectionEquality().hash(valid));
 
   @JsonKey(ignore: true)
@@ -255,8 +206,6 @@ abstract class _WebDAV extends WebDAV {
       {required String address,
       required String username,
       required String password,
-      DateTime? syncAt,
-      bool? fromServer,
       bool? valid}) = _$_WebDAV;
   _WebDAV._() : super._();
 
@@ -268,10 +217,6 @@ abstract class _WebDAV extends WebDAV {
   String get username;
   @override
   String get password;
-  @override
-  DateTime? get syncAt;
-  @override
-  bool? get fromServer;
   @override
   bool? get valid;
   @override

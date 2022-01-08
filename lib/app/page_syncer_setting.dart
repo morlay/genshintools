@@ -45,13 +45,13 @@ class FormSyncSetting extends HookWidget {
     final blocSyncer = BlocSyncer.watch(context);
 
     final address = useTextEditingController(
-      text: blocSyncer.state?.address ?? "https://dav.jianguoyun.com/dav/",
+      text: blocSyncer.state.address,
     );
     final username = useTextEditingController(
-      text: blocSyncer.state?.username ?? "",
+      text: blocSyncer.state.username,
     );
     final password = useTextEditingController(
-      text: blocSyncer.state?.password ?? "",
+      text: blocSyncer.state.password,
     );
 
     final showPassword = useState(false);
@@ -104,17 +104,19 @@ class FormSyncSetting extends HookWidget {
                     try {
                       await wd.ping();
                       blocSyncer.bind(wd.copyWith(valid: true));
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("连接成功"),
-                      ));
+                      showSnackBar(
+                        context,
+                        content: const Text("连接成功"),
+                      );
                     } on DioError catch (err) {
                       blocSyncer.bind(wd.copyWith(
                         valid:
                             err.response?.statusCode != HttpStatus.unauthorized,
                       ));
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      showSnackBar(
+                        context,
                         content: Text("连接错误 ${err.type} ${err.response}"),
-                      ));
+                      );
                     }
                   });
                 },
@@ -132,11 +134,27 @@ class FormSyncSetting extends HookWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: ElevatedButton(
-                onPressed: blocSyncer.state?.let((it) {
+                onPressed: blocSyncer.state.let((it) {
                   if (it.valid == true) {
-                    return () => showAlert(context,
-                        content: const Text("本次操作将覆盖本地数据，是否确认？"),
-                        onConfirm: () => blocSyncer.syncFromServer());
+                    return () => showAlert(
+                          context,
+                          content: const Text("本次操作将覆盖本地数据，是否确认？"),
+                          onConfirm: () async {
+                            try {
+                              await WebDAVSyncer.read(context)
+                                  .sync(fromServer: true);
+                              showSnackBar(
+                                context,
+                                content: const Text("同步成功"),
+                              );
+                            } catch (e) {
+                              showSnackBar(
+                                context,
+                                content: Text("同步失败: $e"),
+                              );
+                            }
+                          },
+                        );
                   }
                 }),
                 style: ElevatedButton.styleFrom(
@@ -148,11 +166,26 @@ class FormSyncSetting extends HookWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: ElevatedButton(
-                onPressed: blocSyncer.state?.let((it) {
+                onPressed: blocSyncer.state.let((it) {
                   if (it.valid == true) {
-                    return () => showAlert(context,
-                        content: const Text("本次操作将覆盖 WebDAV 数据，是否确认？"),
-                        onConfirm: () => blocSyncer.sync());
+                    return () => showAlert(
+                          context,
+                          content: const Text("本次操作将覆盖 WebDAV 数据，是否确认？"),
+                          onConfirm: () async {
+                            try {
+                              await WebDAVSyncer.read(context).sync();
+                              showSnackBar(
+                                context,
+                                content: const Text("同步成功"),
+                              );
+                            } catch (e) {
+                              showSnackBar(
+                                context,
+                                content: Text("同步失败: $e"),
+                              );
+                            }
+                          },
+                        );
                   }
                 }),
                 style: ElevatedButton.styleFrom(

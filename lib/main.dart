@@ -41,10 +41,16 @@ void main() async {
       storageDirectory: d,
     );
 
+    var syncer = WebDAVSyncer();
+
     HydratedBlocOverrides.runZoned(
-      () => runApp(const AppRoot()),
+      () => runApp(
+        AppRoot(
+          syncer: syncer,
+        ),
+      ),
       storage: s,
-      blocObserver: WebDAVSyncer(),
+      blocObserver: syncer,
     );
   } catch (e) {
     log("$e");
@@ -52,7 +58,12 @@ void main() async {
 }
 
 class AppRoot extends HookWidget {
-  const AppRoot({Key? key}) : super(key: key);
+  final WebDAVSyncer syncer;
+
+  const AppRoot({
+    required this.syncer,
+    Key? key,
+  }) : super(key: key);
 
   static FirebaseAnalyticsObserver? observer = kIsWeb.ifFalseOrNull(
       () => FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance));
@@ -94,14 +105,14 @@ class AppRoot extends HookWidget {
                 lazy: false,
                 create: (_) => BlocGameData(blocGameData.requireData)),
           ],
-          child: MaterialApp(
+          child: syncer.provide(MaterialApp(
             title: '原神工具箱',
             theme: theme,
             navigatorObservers: <NavigatorObserver>[
               ...?observer?.let((o) => [o])
             ],
             home: AppMain(),
-          ),
+          )),
         );
       },
     );

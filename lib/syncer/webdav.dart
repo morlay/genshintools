@@ -19,15 +19,13 @@ class WebDAV with _$WebDAV {
     required String address,
     required String username,
     required String password,
-    DateTime? syncAt,
-    bool? fromServer,
     bool? valid,
   }) = _WebDAV;
 
   factory WebDAV.fromJson(Map<String, dynamic> json) => _WebDAV.fromJson(json);
 
   bool shouldSync() {
-    return (valid ?? false) && syncAt != null;
+    return (valid ?? false);
   }
 
   Dio client() {

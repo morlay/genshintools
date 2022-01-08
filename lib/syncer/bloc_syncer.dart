@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:genshintools/extension/extension.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'webdav.dart';
 
-class BlocSyncer extends HydratedCubit<WebDAV?> {
+class BlocSyncer extends HydratedCubit<WebDAV> {
   static BlocSyncer read(BuildContext buildContext) {
     return buildContext.read<BlocSyncer>();
   }
@@ -14,32 +13,15 @@ class BlocSyncer extends HydratedCubit<WebDAV?> {
     return buildContext.watch<BlocSyncer>();
   }
 
-  BlocSyncer() : super(null);
+  BlocSyncer()
+      : super(WebDAV(
+          address: "https://dav.jianguoyun.com/dav/",
+          username: "",
+          password: "",
+        ));
 
   bind(WebDAV webdav) {
     emit(webdav);
-  }
-
-  sync() {
-    state?.let(
-      (state) => emit(
-        state.copyWith(
-          syncAt: DateTime.now(),
-          fromServer: false,
-        ),
-      ),
-    );
-  }
-
-  syncFromServer() {
-    state?.let(
-      (state) => emit(
-        state.copyWith(
-          syncAt: DateTime.now(),
-          fromServer: true,
-        ),
-      ),
-    );
   }
 
   @override
