@@ -14,7 +14,7 @@ import {
   ArtifactAppendPropDepots,
   ArtifactMainPropDepots,
   Artifacts,
-  Characters,
+  CharactersByKey,
   CharacterPromotes,
   CharacterPropGrowCurveValues,
   CharacterLevelupExps,
@@ -25,7 +25,7 @@ import {
 import { Trials } from "./genshindb/character_trial";
 
 writeJSONSync("./assets/genshindb/characters.json", {
-  Characters: mapValues(Characters, (c: any) => ({
+  Characters: mapValues(CharactersByKey, (c: any) => ({
     ...c,
     CharacterBuild: findLast(Builds[c.Name.KEY], (b) => b.Recommended),
   })),
@@ -67,3 +67,4 @@ writeJSONSync("./assets/trials.json", {
 writeJSONSync("./assets/builds.json", {
   Builds: Builds,
 });
+

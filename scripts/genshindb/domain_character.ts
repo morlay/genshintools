@@ -1,6 +1,6 @@
 import { addPropSet, cleanText, groupMulti, groupOne, i18n, i18nWithKey, pascalCase } from "./common";
 import { Materials } from "./domain_material";
-import { reduce } from "lodash-es";
+import { mapKeys, reduce } from "lodash-es";
 import { Trials } from "./character_trial";
 import { Weapons } from "./domain_weapon";
 
@@ -21,11 +21,11 @@ export const CharacterPromotes = groupMulti(
         })),
         ...(a.ScoinCost
           ? [
-              {
-                MaterialKey: "Mora",
-                Count: a.ScoinCost,
-              },
-            ]
+            {
+              MaterialKey: "Mora",
+              Count: a.ScoinCost,
+            },
+          ]
           : []),
       ],
     };
@@ -74,11 +74,11 @@ const ProudSkills = groupMulti(
       })),
       ...(ps.CoinCost
         ? [
-            {
-              MaterialKey: "Mora",
-              Count: ps.CoinCost,
-            },
-          ]
+          {
+            MaterialKey: "Mora",
+            Count: ps.CoinCost,
+          },
+        ]
         : []),
     ],
   }),
@@ -108,9 +108,9 @@ const Skills = groupOne(
       MaterialCosts: proudSkills.map((item) => item.MaterialCosts),
       ...(paramNames.length > 0
         ? {
-            ParamNames: paramNames,
-            Params: proudSkills.map((item) => item.Params),
-          }
+          ParamNames: paramNames,
+          Params: proudSkills.map((item) => item.Params),
+        }
         : {}),
     };
   },
@@ -193,9 +193,7 @@ const SkillDepots = groupOne(
   "Id",
 );
 
-export const Characters = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarExcelConfigData.json")
-).default
+export const Characters = (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarExcelConfigData.json")).default
   .filter((a) => a.UseType && i18n(a.DescTextMapHash).CHS)
   .reduce((ret, a) => {
     const base = {
@@ -239,15 +237,17 @@ export const Characters = (
               return ret;
             }
 
+            const id = 90000000 + skillDepotID;
             const chsName = `${skillDepot.ElementType}${base.Name.CHS}`;
             const enName = `${base.Name.EN} ${(ElementTypes as any)[skillDepot.ElementType]}`;
             const key = pascalCase(enName);
 
             return {
               ...ret,
-              [key]: {
+              [id]: {
                 ...base,
                 ...skillDepot,
+                Id: id,
                 Name: {
                   CHS: chsName,
                   EN: enName,
@@ -268,6 +268,10 @@ export const Characters = (
 
     return {
       ...ret,
-      [avatar.Name.KEY]: avatar,
+      [avatar.Id]: avatar,
     };
   }, {});
+
+export const CharactersByKey = mapKeys(Characters, (c: any) => {
+  return c.Name.KEY;
+});

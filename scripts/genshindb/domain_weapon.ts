@@ -1,7 +1,7 @@
 import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey } from "./common";
 import { Materials } from "./domain_material";
 import { EquipAffixes } from "./domain_equip_affix";
-import { mapKeys, mapValues } from "lodash-es";
+import { mapKeys } from "lodash-es";
 
 export const WeaponPropGrowCurveValues = (
   await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponCurveExcelConfigData.json")

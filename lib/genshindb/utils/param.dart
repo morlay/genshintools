@@ -1,3 +1,5 @@
+import 'dart:math';
+
 var reParams = RegExp("({([^}]+)})");
 
 String exec(String t, List<double> params, ExecFormat fmt) {
@@ -22,22 +24,29 @@ String parseParamName(String template, List<double> params) {
 
 typedef ExecFormat = String Function(double v, String fnName);
 
+extension DoubleFixed on double {
+  toStringAsValueFixed(int fractionDigits) {
+    return (this + pow(10, -(fractionDigits + 2)))
+        .toStringAsFixed(fractionDigits);
+  }
+}
+
 String format(double v, String fnName) {
   switch (fnName) {
     case "I":
-      return v.toStringAsFixed(0);
+      return v.toStringAsValueFixed(0);
     case "F":
-      return (v + 1e-1).toStringAsFixed(1);
+      return v.toStringAsValueFixed(1);
     case "F1":
-      return (v + 1e-2).toStringAsFixed(1);
+      return v.toStringAsValueFixed(1);
     case "F2":
-      return (v + 1e-3).toStringAsFixed(2);
+      return v.toStringAsValueFixed(2);
     case "F1P":
-      return (v * 100 + 1e-2).toStringAsFixed(1) + "%";
+      return (v * 100).toStringAsValueFixed(1) + "%";
     case "F2P":
-      return (v * 100 + 1e-3).toStringAsFixed(2) + "%";
+      return (v * 100).toStringAsValueFixed(2) + "%";
     case "P":
-      return (v * 100 + 1e-2).toStringAsFixed(1) + "%";
+      return (v * 100).toStringAsValueFixed(1) + "%";
   }
   return "";
 }

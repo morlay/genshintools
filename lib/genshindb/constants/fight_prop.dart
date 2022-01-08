@@ -77,11 +77,11 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_CHARGE_EFFICIENCY")
   CHARGE_EFFICIENCY,
 
-  @EnumMeta(label: "治疗加效", format: "P")
+  @EnumMeta(label: "治疗加成", format: "P")
   @JsonValue("FIGHT_PROP_HEAL_ADD")
   HEAL_ADD,
 
-  @EnumMeta(label: "被治疗加效", format: "P")
+  @EnumMeta(label: "被治疗加成", format: "P")
   @JsonValue("FIGHT_PROP_HEALED_ADD")
   HEALED_ADD,
 

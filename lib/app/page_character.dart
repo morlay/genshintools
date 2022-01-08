@@ -97,8 +97,8 @@ class PageCharacter extends HookWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 150,
+                Expanded(
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -106,8 +106,8 @@ class PageCharacter extends HookWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: 90,
+                            Expanded(
+                              flex: 5,
                               child: _buildBuild(
                                 context,
                                 db,
@@ -118,6 +118,7 @@ class PageCharacter extends HookWidget {
                               ),
                             ),
                             Expanded(
+                              flex: 4,
                               child: SingleChildScrollView(
                                 child: _buildDashboard(
                                     context, fightProps, builds),
@@ -152,6 +153,7 @@ class PageCharacter extends HookWidget {
                   ),
                 ),
                 Expanded(
+                  flex: 3,
                   child: _buildSkills(context, c, fightProps),
                 ),
               ],
@@ -403,10 +405,12 @@ class PageCharacter extends HookWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Wrap(
             runSpacing: 8,
+            spacing: 8,
+            alignment: WrapAlignment.center,
             children: [
               Select<WeaponListTile>(
                 title: const Text("武器"),
