@@ -12,6 +12,7 @@ import 'package:genshintools/hook/hook.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'page_character.dart';
+import 'view_material.dart';
 
 class PageCharacterList extends HookWidget {
   static String routeName = "/characters";
@@ -111,38 +112,43 @@ class CharacterListTile extends HookWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAvatar(context),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(c.character.name.text(Lang.CHS)),
-                        const Expanded(child: Text("")),
-                        _buildTalentLevels(context)
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: _buildMaterialCosts(context, db),
-                    )
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildAvatar(context),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(c.character.name.text(Lang.CHS)),
+                              _buildTalentLevels(context),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: _buildAllMaterialCosts(context, db),
+                  ),
+                ],
               ),
             ),
             Container(
               constraints: const BoxConstraints(
-                maxWidth: 120,
+                maxWidth: 100,
               ),
               child: _buildBuild(context, db),
-            )
+            ),
           ],
         ),
         onTap: () {
@@ -152,45 +158,94 @@ class CharacterListTile extends HookWidget {
     );
   }
 
+  Widget _buildAllMaterialCosts(BuildContext context, GSDB db) {
+    return Wrap(
+      runSpacing: 2,
+      spacing: 2,
+      children: [
+        _buildMaterialCosts(
+          context,
+          Text("人物等级 Lv.${c.c.level} → Lv.90"),
+          db.characterLevelupPlans(
+            c.character.key,
+            c.c.level,
+          ),
+        ),
+        _buildMaterialCosts(
+          context,
+          const Text("有效技能等级 → Lv.9"),
+          [
+            ...[
+              SkillType.NORMAL_ATTACK,
+              SkillType.ELEMENTAL_SKILL,
+              SkillType.ELEMENTAL_BURST,
+            ].expand(
+                (st) => c.character.characterAllBuilds().shouldSkillLevelup(st)
+                    ? db.characterSkillLevelupPlans(
+                        c.character.key,
+                        st,
+                        c.c.skillLevel(st),
+                        c.c.level,
+                      )
+                    : [])
+          ],
+        ),
+        ...?db.weapon
+            .findOrNull(c.w.key)
+            ?.rarity
+            .let((rarity) => (rarity >= 3).ifTrueOrNull(() => [
+                  _buildMaterialCosts(
+                    context,
+                    Text("武器等级 Lv.${c.w.level} → Lv.90"),
+                    db.weaponLevelupPlans(
+                      c.w.key,
+                      c.w.level,
+                    ),
+                  )
+                ])),
+        _buildMaterialCosts(
+          context,
+          const Text("圣遗物等级 → Lv.20"),
+          [
+            ...c.artifacts.expand(
+              (a) => db.artifactLevelupPlans(
+                a.rarity,
+                a.level,
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildAvatar(BuildContext context) {
-    return SizedBox(
-      child: WithLevel(
-        level: c.c.level,
-        child: WithCount(
-          prefix: "C",
-          count: c.c.constellation,
-          child: WithElement(
-            element: c.character.element,
-            child: GSImage(
-              domain: "character",
-              size: 64,
-              rarity: c.character.rarity,
-              nameID: c.character.key,
-            ),
+    return WithLevel(
+      level: c.c.level,
+      child: WithCount(
+        prefix: "C",
+        count: c.c.constellation,
+        child: WithElement(
+          element: c.character.element,
+          child: GSImage(
+            domain: "character",
+            size: 48,
+            rarity: c.character.rarity,
+            nameID: c.character.key,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildMaterialCosts(BuildContext context, GSDB db) {
+  Widget _buildMaterialCosts(
+    BuildContext context,
+    Widget label,
+    List<LevelupPlan> levelPlans,
+  ) {
     Map<String, GSMaterial> materials = {};
 
-    for (var p in [
-      ...db.characterLevelupPlans(c.character.key, c.c.level),
-      ...[
-        SkillType.NORMAL_ATTACK,
-        SkillType.ELEMENTAL_SKILL,
-        SkillType.ELEMENTAL_BURST,
-      ].expand((st) => c.character.characterAllBuilds().shouldSkillLevelup(st)
-          ? db.characterSkillLevelupPlans(
-              c.character.key,
-              st,
-              c.c.skillLevel(st),
-              c.c.level,
-            )
-          : []),
-    ]) {
+    for (var p in levelPlans) {
       for (var c in p.costs) {
         materials[c.key] = materials[c.key]?.let((cc) => cc.copyWith(
                 count: ((cc.count ?? 1) + (c.count ?? 1)).toInt())) ??
@@ -207,40 +262,52 @@ class CharacterListTile extends HookWidget {
         showModalBottomSheet(
           context: context,
           builder: (context) {
-            return SingleChildScrollView(
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    children: [
-                      ...groupedMaterials.expand(
-                        (list) => list.map(
-                          (m) => ListTile(
-                            leading: GSImage(
-                              size: 42,
-                              domain: "material",
-                              rarity: m.rarity,
-                              nameID: m.key,
-                            ),
-                            title: Text(m.name.text(Lang.CHS)),
-                            trailing: Text("${m.count ?? 1}",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                )),
-                          ),
+            return Column(
+              children: [
+                ListTile(
+                  title: label,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Column(
+                          children: [
+                            ...groupedMaterials.expand(
+                              (list) => list.map(
+                                (m) => ListTile(
+                                  onTap: () {
+                                    ViewMaterial.showModal(context, m);
+                                  },
+                                  leading: GSImage(
+                                    size: 42,
+                                    domain: "material",
+                                    rarity: m.rarity,
+                                    nameID: m.key,
+                                  ),
+                                  title: Text(m.name.text(Lang.CHS)),
+                                  trailing: Text("${m.count ?? 1}",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      )),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             );
           },
         );
       },
       child: Opacity(
-        opacity: 0.4,
+        opacity: 0.7,
         child: Wrap(
           runSpacing: 2,
           spacing: 2,
@@ -249,9 +316,10 @@ class CharacterListTile extends HookWidget {
               (list) => list.map(
                 (m) => WithCount(
                   count: m.count ?? 1,
-                  size: 12,
+                  alignment: Alignment.bottomRight,
+                  size: 6,
                   child: GSImage(
-                    size: 28,
+                    size: 24,
                     domain: "material",
                     rarity: m.rarity,
                     nameID: m.key,
@@ -267,19 +335,19 @@ class CharacterListTile extends HookWidget {
 
   Widget _buildBuild(BuildContext context, GSDB db) {
     return Wrap(
-      spacing: 4,
-      runSpacing: 4,
       alignment: WrapAlignment.end,
+      spacing: 2,
+      runSpacing: 2,
       children: [
         WithLevel(
           level: c.w.level,
-          size: 9,
+          size: 8,
           child: WithCount(
             prefix: "R",
             count: c.w.refinement,
-            size: 10,
+            size: 7,
             child: GSImage(
-              size: 32,
+              size: 28,
               domain: "weapon",
               rarity: db.weapon.find(c.w.key).rarity,
               nameID: db.weapon.find(c.w.key).key,
@@ -290,9 +358,9 @@ class CharacterListTile extends HookWidget {
             ? c.artifacts.map(
                 (a) => WithLevel(
                   level: a.level,
-                  size: 9,
+                  size: 8,
                   child: GSImage(
-                    size: 32,
+                    size: 28,
                     domain: "artifact",
                     rarity: a.rarity,
                     nameID: db.artifact
@@ -310,40 +378,34 @@ class CharacterListTile extends HookWidget {
   Widget _buildTalentLevels(BuildContext context) {
     var builds = c.character.characterAllBuilds();
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
+    return Wrap(
+      spacing: 4,
       children: [
-        Wrap(
-          spacing: 4,
-          children: [
-            ...c.c.talent.keys.map(
-              (key) => Opacity(
-                opacity: builds
-                        .shouldSkillLevelup(key.asSkillType())
-                        .ifFalseOrNull(() => 0.3) ??
-                    1,
-                child: Text.rich(TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "${key.asSkillType().string()}.",
-                      style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                        fontSize: 10,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "${c.c.talent[key]}",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11,
-                      ),
-                    )
-                  ],
-                )),
-              ),
-            )
-          ],
+        ...c.c.talent.keys.map(
+          (key) => Opacity(
+            opacity: builds
+                    .shouldSkillLevelup(key.asSkillType())
+                    .ifFalseOrNull(() => 0.3) ??
+                1,
+            child: Text.rich(TextSpan(
+              children: [
+                TextSpan(
+                  text: "${key.asSkillType().string()}.",
+                  style: TextStyle(
+                    color: Theme.of(context).hintColor,
+                    fontSize: 10,
+                  ),
+                ),
+                TextSpan(
+                  text: "${c.c.talent[key]}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
+                )
+              ],
+            )),
+          ),
         )
       ],
     );

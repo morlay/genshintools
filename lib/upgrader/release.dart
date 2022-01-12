@@ -26,6 +26,10 @@ class Release with _$Release {
     if (v > cv) {
       return true;
     }
-    return buildNumber.compareTo(currentBuildNumber) > 0;
+    try {
+      return int.parse(buildNumber) > int.parse(currentBuildNumber);
+    } catch (e) {
+      return true;
+    }
   }
 }

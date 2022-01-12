@@ -85,6 +85,32 @@ class GSDB {
     return list;
   }
 
+  List<LevelupPlan> artifactLevelupPlans(int rarity, int current) {
+    List<LevelupPlan> list = [];
+
+    var from = rangeLimit(current, 1, rarity == 5 ? 20 : 16);
+
+    for (var to in [8, 12, 16, 20]) {
+      if (from < to) {
+        var exp = artifact.levelUpCost(rarity, from, to);
+
+        list.add(
+          LevelupPlan(
+            action: "Lv.$from → Lv.$to",
+            costs: [
+              material.find("祝圣精华").copyWith(count: exp ~/ 10000),
+              material.find("Mora").copyWith(count: exp),
+            ],
+          ),
+        );
+
+        from = to;
+      }
+    }
+
+    return list;
+  }
+
   List<LevelupPlan> characterSkillLevelupPlans(
     String keyOrName,
     SkillType skillType,
@@ -113,9 +139,11 @@ class GSDB {
 
     var from = current;
 
+    var materialCosts = c.materialCosts(skillType);
+
     for (var to in List<int>.generate(9, (i) => i + 1)) {
       if (from < to) {
-        var costs = c.skillLevelupMaterialCosts[from];
+        var costs = materialCosts[from];
 
         var maxCharacterLevel = maxCharacterLevels[to - 1];
 

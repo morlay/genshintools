@@ -643,79 +643,59 @@ class PageCharacter extends HookWidget {
                       const SizedBox(height: 16),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(
-                            CupertinoPageRoute(
-                              fullscreenDialog: false,
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(
-                                  backgroundColor: bgs[c.character.rarity - 1]
-                                      [1],
-                                ),
-                                body: ListView.builder(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                      horizontal: 24,
-                                    ),
-                                    itemCount:
-                                        c.character.constellations.length,
-                                    itemBuilder: (context, i) {
-                                      var e = c.character.constellations[i];
-
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 16,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                GSImageConstellation(
-                                                  color: Theme.of(context)
-                                                          .textTheme
-                                                          .headline1
-                                                          ?.color ??
-                                                      Colors.black,
-                                                  nameID: e.nameID,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  e.name.text(Lang.CHS),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline6,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          GSDesc(desc: e.desc)
-                                        ],
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => (SingleChildScrollView(
+                              child: SafeArea(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Column(children: [
+                                    ...c.character.constellations.map((e) {
+                                      return ListTile(
+                                        leading: GSImageConstellation(
+                                          color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline1
+                                                  ?.color ??
+                                              Colors.black,
+                                          nameID: e.nameID,
+                                          size: 36,
+                                        ),
+                                        title: Text(e.name.text(Lang.CHS)),
+                                        subtitle: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: GSDesc(desc: e.desc),
+                                        ),
                                       );
-                                    }),
+                                    })
+                                  ]),
+                                ),
                               ),
-                            ),
+                            )),
                           );
                         },
                         child: SizedBox(
                           width: double.infinity,
                           child: Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              children: [
-                                ...c.character.constellations.map(
-                                  (e) => Opacity(
-                                    opacity: (c.c.constellation >=
-                                            c.character.constellations
-                                                    .indexOf(e) +
-                                                1)
-                                        ? 1
-                                        : 0.3,
-                                    child: GSImageConstellation(
-                                      nameID: e.nameID,
-                                    ),
+                            spacing: 8,
+                            children: [
+                              ...c.character.constellations.map(
+                                (e) => Opacity(
+                                  opacity: (c.c.constellation >=
+                                          c.character.constellations
+                                                  .indexOf(e) +
+                                              1)
+                                      ? 1
+                                      : 0.3,
+                                  child: GSImageConstellation(
+                                    nameID: e.nameID,
                                   ),
                                 ),
-                              ]),
+                              ),
+                            ],
+                          ),
                         ),
                       )
                     ],

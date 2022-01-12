@@ -16,12 +16,9 @@ class ViewLevelupPlans extends HookWidget {
       context: context,
       clipBehavior: Clip.none,
       builder: (BuildContext context) {
-        return FractionallySizedBox(
-          heightFactor: 0.5,
-          child: ViewLevelupPlans(
-            avatar: m,
-            allPlans: allPlans,
-          ),
+        return ViewLevelupPlans(
+          avatar: m,
+          allPlans: allPlans,
         );
       },
     );
@@ -46,53 +43,53 @@ class ViewLevelupPlans extends HookWidget {
       size: 72,
     );
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            top: -a.size / 3,
-            left: 16,
-            child: a,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: a.size / 5 * 4),
-            child: SingleChildScrollView(
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          top: -a.size / 4,
+          left: 16 - 3,
+          child: a,
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: a.size / 4 * 3),
+          child: SingleChildScrollView(
+            child: SafeArea(
               child: Column(
                 children: [
                   ...allPlans.map((e) => ListTile(
-                        title: Padding(
-                          padding: const EdgeInsets.only(bottom: 4),
-                          child: Text(e.action,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFeatures: [FontFeature.tabularFigures()],
-                              )),
+                        leading: Text(
+                          "→ ${e.action.split("→").last.trim()}",
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
                         ),
-                        subtitle: Stack(
-                          children: [
-                            Wrap(
-                                spacing: 4,
-                                runSpacing: -8,
-                                alignment: WrapAlignment.start,
-                                children: [
-                                  ...e.costs
-                                      .map((material) => MaterialWithCount(
-                                            material: material,
-                                            count: material.count!,
-                                          ))
-                                ])
-                          ],
-                        ),
+                        title: Wrap(
+                            spacing: 4,
+                            runSpacing: 4,
+                            alignment: WrapAlignment.start,
+                            children: [
+                              ...e.costs.map(
+                                (material) => GestureDetector(
+                                  onTap: () {
+                                    ViewMaterial.showModal(context, material);
+                                  },
+                                  child: MaterialWithCount(
+                                    material: material,
+                                    count: material.count!,
+                                  ),
+                                ),
+                              )
+                            ]),
                       ))
                 ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

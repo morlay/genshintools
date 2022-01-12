@@ -28,12 +28,6 @@ _$_GSCharacter _$$_GSCharacterFromJson(Map<String, dynamic> json) =>
       skills: (json['Skills'] as List<dynamic>)
           .map((e) => Skill.fromJson(e as Map<String, dynamic>))
           .toList(),
-      skillLevelupMaterialCosts: (json['SkillLevelupMaterialCosts']
-              as List<dynamic>)
-          .map((e) => (e as List<dynamic>)
-              .map((e) => GSMaterialCost.fromJson(e as Map<String, dynamic>))
-              .toList())
-          .toList(),
       promoteId: json['PromoteId'] as int,
       propGrowCurveAndInitials:
           (json['PropGrowCurveAndInitials'] as Map<String, dynamic>).map(
@@ -62,7 +56,6 @@ Map<String, dynamic> _$$_GSCharacterToJson(_$_GSCharacter instance) =>
       'Constellations': instance.constellations,
       'InherentSkills': instance.inherentSkills,
       'Skills': instance.skills,
-      'SkillLevelupMaterialCosts': instance.skillLevelupMaterialCosts,
       'PromoteId': instance.promoteId,
       'PropGrowCurveAndInitials': instance.propGrowCurveAndInitials
           .map((k, e) => MapEntry(_$FightPropEnumMap[k], e)),

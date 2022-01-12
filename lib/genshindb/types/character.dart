@@ -24,7 +24,6 @@ class GSCharacter with _$GSCharacter {
     required List<GSConstellation> constellations,
     required List<InherentSkill> inherentSkills,
     required List<Skill> skills,
-    required List<List<GSMaterialCost>> skillLevelupMaterialCosts,
     required int promoteId,
     @FightPropStringConverter()
         required Map<FightProp, PropGrowCurveAndInitial>
@@ -36,6 +35,10 @@ class GSCharacter with _$GSCharacter {
       _GSCharacter.fromJson(json);
 
   get key => name.text(Lang.KEY);
+
+  List<List<GSMaterialCost>> materialCosts(SkillType st) {
+    return skills.firstWhere((s) => s.skillType == st).materialCosts!;
+  }
 
   GSCharacterBuild characterAllBuilds() {
     return characterBuild?.copyWith(

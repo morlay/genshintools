@@ -170,11 +170,7 @@ const SkillDepots = groupOne(
 
         return c;
       }),
-      Skills: skills.map((s) => ({
-        ...s,
-        MaterialCosts: undefined,
-      })),
-      SkillLevelupMaterialCosts: skills[0]?.MaterialCosts,
+      Skills: skills,
       InherentSkills: skillDepot.InherentProudSkillOpens.filter((s: any) => s.ProudSkillGroupId)
         .map((s: any) => ProudSkills[s.ProudSkillGroupId])
         .flat(),
@@ -241,6 +237,9 @@ export const Characters = (await import("../../vendordata/GenshinData/ExcelBinOu
             const chsName = `${skillDepot.ElementType}${base.Name.CHS}`;
             const enName = `${base.Name.EN} ${(ElementTypes as any)[skillDepot.ElementType]}`;
             const key = pascalCase(enName);
+
+            console.log(enName);
+            console.log(JSON.stringify(skillDepot, null, 2));
 
             return {
               ...ret,

@@ -13,11 +13,8 @@ class ViewMaterial extends HookWidget {
       context: context,
       clipBehavior: Clip.none,
       builder: (BuildContext context) {
-        return FractionallySizedBox(
-          heightFactor: 0.5,
-          child: ViewMaterial(
-            material: m,
-          ),
+        return ViewMaterial(
+          material: m,
         );
       },
     );
@@ -42,32 +39,31 @@ class ViewMaterial extends HookWidget {
       size: 72,
     );
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            top: -a.size / 3,
-            left: 16,
-            child: a,
-          ),
-          Positioned(
-            top: 0,
-            right: 16,
-            left: 16 * 2 + a.size.toDouble(),
-            height: a.size - a.size / 3 + 8,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                material.name.text(Lang.CHS),
-                style: Theme.of(context).textTheme.headline6,
-              ),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          top: -a.size / 4,
+          left: 16,
+          child: a,
+        ),
+        Positioned(
+          top: 0,
+          right: 16,
+          left: 16 * 2 + a.size.toDouble(),
+          height: a.size - a.size / 4 + 4,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              material.name.text(Lang.CHS),
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: a.size / 3 * 2),
-            child: SingleChildScrollView(
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: a.size / 4 * 3),
+          child: SingleChildScrollView(
+            child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Wrap(
@@ -79,13 +75,13 @@ class ViewMaterial extends HookWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Wrap(
-                            spacing: 4,
-                            runSpacing: -8,
+                            spacing: 8,
+                            runSpacing: 8,
                             children: [
                               ...?material.dungeon?.let((d) => [
                                     Chip(
                                       label: Text(
-                                        d.name.text(Lang.CHS),
+                                        d.displayName.text(Lang.CHS),
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     )
@@ -106,8 +102,8 @@ class ViewMaterial extends HookWidget {
                             widthFactor: double.infinity,
                             alignment: Alignment.topLeft,
                             child: Wrap(
-                              spacing: 4,
-                              runSpacing: -8,
+                              spacing: 8,
+                              runSpacing: 8,
                               children: [
                                 ...db.enemy
                                     .listByDropTags(material.dropFromTags ?? [])
@@ -133,8 +129,8 @@ class ViewMaterial extends HookWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -151,19 +147,16 @@ class MaterialWithCount extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      avatar: GSImage(
+    return WithCount(
+      alignment: Alignment.bottomRight,
+      count: count,
+      size: 10,
+      child: GSImage(
         domain: "material",
         size: 36,
         rarity: material.rarity,
         nameID: material.key,
-        rounded: true,
       ),
-      label: Text("× ${count > 1e4 ? "${count ~/ 1e4}w" : count}",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFeatures: [FontFeature.tabularFigures()],
-          )),
     );
   }
 }

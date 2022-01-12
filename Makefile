@@ -9,19 +9,26 @@ distribute.android:
 distribute.android.beta:
 	CHANNEL=beta $(TS_NODE) ./scripts/distribute.ts
 
+#  max build number 2147483647
+# time build number  22011218n
+#                     y m d H n=M/6
+# each 6 minute could only one build
+BUILD_NUMBER=$(shell date +%y%m%d%H)
+# todo enabled when 2.5 $(shell echo `expr $$(date +%M) / 6`);
+
 build.android:
 	flutter build apk --release \
 		--target-platform android-arm64 \
 		--split-per-abi \
-		--build-number=$(shell date +%y%m%d%H)
+		--build-number=$(BUILD_NUMBER)
 
 build.ios:
 	flutter build ios --flavor Release \
-		--build-number=$(shell date +%y%m%d%H)
+		--build-number=$(BUILD_NUMBER)
 
 build.ipa:
 	flutter build ipa --flavor Release \
-		--build-number=$(shell date +%y%m%d%H)
+		--build-number=$(BUILD_NUMBER)
 	xcodebuild -exportArchive -exportPath ./build/ios \
 		-archivePath ./build/ios/archive/Runner.xcarchive \
 		-exportOptionsPlist ./build/ios/archive/Runner.xcarchive/info.plist

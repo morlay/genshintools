@@ -27,13 +27,15 @@ class _$SkillTearOff {
       required I18n desc,
       @SkillTypeStringConverter() required SkillType skillType,
       List<I18n>? paramNames,
-      List<List<double>>? params}) {
+      List<List<double>>? params,
+      List<List<GSMaterialCost>>? materialCosts}) {
     return _Skill(
       name: name,
       desc: desc,
       skillType: skillType,
       paramNames: paramNames,
       params: params,
+      materialCosts: materialCosts,
     );
   }
 
@@ -53,6 +55,8 @@ mixin _$Skill {
   SkillType get skillType => throw _privateConstructorUsedError;
   List<I18n>? get paramNames => throw _privateConstructorUsedError;
   List<List<double>>? get params => throw _privateConstructorUsedError;
+  List<List<GSMaterialCost>>? get materialCosts =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -68,7 +72,8 @@ abstract class $SkillCopyWith<$Res> {
       I18n desc,
       @SkillTypeStringConverter() SkillType skillType,
       List<I18n>? paramNames,
-      List<List<double>>? params});
+      List<List<double>>? params,
+      List<List<GSMaterialCost>>? materialCosts});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res> get desc;
@@ -89,6 +94,7 @@ class _$SkillCopyWithImpl<$Res> implements $SkillCopyWith<$Res> {
     Object? skillType = freezed,
     Object? paramNames = freezed,
     Object? params = freezed,
+    Object? materialCosts = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -111,6 +117,10 @@ class _$SkillCopyWithImpl<$Res> implements $SkillCopyWith<$Res> {
           ? _value.params
           : params // ignore: cast_nullable_to_non_nullable
               as List<List<double>>?,
+      materialCosts: materialCosts == freezed
+          ? _value.materialCosts
+          : materialCosts // ignore: cast_nullable_to_non_nullable
+              as List<List<GSMaterialCost>>?,
     ));
   }
 
@@ -139,7 +149,8 @@ abstract class _$SkillCopyWith<$Res> implements $SkillCopyWith<$Res> {
       I18n desc,
       @SkillTypeStringConverter() SkillType skillType,
       List<I18n>? paramNames,
-      List<List<double>>? params});
+      List<List<double>>? params,
+      List<List<GSMaterialCost>>? materialCosts});
 
   @override
   $I18nCopyWith<$Res> get name;
@@ -163,6 +174,7 @@ class __$SkillCopyWithImpl<$Res> extends _$SkillCopyWithImpl<$Res>
     Object? skillType = freezed,
     Object? paramNames = freezed,
     Object? params = freezed,
+    Object? materialCosts = freezed,
   }) {
     return _then(_Skill(
       name: name == freezed
@@ -185,6 +197,10 @@ class __$SkillCopyWithImpl<$Res> extends _$SkillCopyWithImpl<$Res>
           ? _value.params
           : params // ignore: cast_nullable_to_non_nullable
               as List<List<double>>?,
+      materialCosts: materialCosts == freezed
+          ? _value.materialCosts
+          : materialCosts // ignore: cast_nullable_to_non_nullable
+              as List<List<GSMaterialCost>>?,
     ));
   }
 }
@@ -198,7 +214,8 @@ class _$_Skill extends _Skill {
       required this.desc,
       @SkillTypeStringConverter() required this.skillType,
       this.paramNames,
-      this.params})
+      this.params,
+      this.materialCosts})
       : super._();
 
   factory _$_Skill.fromJson(Map<String, dynamic> json) =>
@@ -215,10 +232,12 @@ class _$_Skill extends _Skill {
   final List<I18n>? paramNames;
   @override
   final List<List<double>>? params;
+  @override
+  final List<List<GSMaterialCost>>? materialCosts;
 
   @override
   String toString() {
-    return 'Skill(name: $name, desc: $desc, skillType: $skillType, paramNames: $paramNames, params: $params)';
+    return 'Skill(name: $name, desc: $desc, skillType: $skillType, paramNames: $paramNames, params: $params, materialCosts: $materialCosts)';
   }
 
   @override
@@ -231,7 +250,9 @@ class _$_Skill extends _Skill {
             const DeepCollectionEquality().equals(other.skillType, skillType) &&
             const DeepCollectionEquality()
                 .equals(other.paramNames, paramNames) &&
-            const DeepCollectionEquality().equals(other.params, params));
+            const DeepCollectionEquality().equals(other.params, params) &&
+            const DeepCollectionEquality()
+                .equals(other.materialCosts, materialCosts));
   }
 
   @override
@@ -241,7 +262,8 @@ class _$_Skill extends _Skill {
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(skillType),
       const DeepCollectionEquality().hash(paramNames),
-      const DeepCollectionEquality().hash(params));
+      const DeepCollectionEquality().hash(params),
+      const DeepCollectionEquality().hash(materialCosts));
 
   @JsonKey(ignore: true)
   @override
@@ -260,7 +282,8 @@ abstract class _Skill extends Skill {
       required I18n desc,
       @SkillTypeStringConverter() required SkillType skillType,
       List<I18n>? paramNames,
-      List<List<double>>? params}) = _$_Skill;
+      List<List<double>>? params,
+      List<List<GSMaterialCost>>? materialCosts}) = _$_Skill;
   _Skill._() : super._();
 
   factory _Skill.fromJson(Map<String, dynamic> json) = _$_Skill.fromJson;
@@ -276,6 +299,8 @@ abstract class _Skill extends Skill {
   List<I18n>? get paramNames;
   @override
   List<List<double>>? get params;
+  @override
+  List<List<GSMaterialCost>>? get materialCosts;
   @override
   @JsonKey(ignore: true)
   _$SkillCopyWith<_Skill> get copyWith => throw _privateConstructorUsedError;

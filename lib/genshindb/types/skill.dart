@@ -3,6 +3,7 @@ import 'package:genshintools/genshindb/constants.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
 import 'i18n.dart';
+import 'material.dart';
 
 part 'generated/skill.freezed.dart';
 part 'generated/skill.g.dart';
@@ -18,6 +19,7 @@ class Skill with _$Skill {
     @SkillTypeStringConverter() required SkillType skillType,
     List<I18n>? paramNames,
     List<List<double>>? params,
+    List<List<GSMaterialCost>>? materialCosts,
   }) = _Skill;
 
   factory Skill.fromJson(Map<String, dynamic> json) => _$SkillFromJson(json);

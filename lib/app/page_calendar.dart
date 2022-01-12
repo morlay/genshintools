@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:genshintools/app/auth/auth.dart';
 import 'package:genshintools/app/gamedata/gamedata.dart';
@@ -164,18 +165,17 @@ class ViewCalendar extends HookWidget {
                 var l =
                     list.groupListsBy((e) => e.material.dropBy).values.toList();
 
-                return ListView.builder(
+                return ListView(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: l.length,
-                  itemBuilder: (context, i) {
-                    var item = l[i];
-
-                    return ViewMaterialNeeds(
-                      material: item[0].material,
-                      materials: item.map((e) => e.material).toList(),
-                      needs: item.expand((e) => e.needs).toList(),
-                    );
-                  },
+                  children: [
+                    ...ListTile.divideTiles(context: context, tiles: [
+                      ...l.map((item) => ViewMaterialNeeds(
+                            material: item[0].material,
+                            materials: item.map((e) => e.material).toList(),
+                            needs: item.expand((e) => e.needs).toList(),
+                          ))
+                    ])
+                  ],
                 );
               }).toList(),
             ),
@@ -241,64 +241,66 @@ class ViewMaterialNeeds extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    var list = needs
+        .groupListsBy((e) => e.avatar.nameID)
+        .values
+        .expand(
+          (groupedNeeds) => groupedNeeds,
+        )
+        .toList();
+
     return Opacity(
       opacity: !(material.dungeon?.isTodayOpen() ?? true)
           ? !(material.dungeon?.isTomorrowOpen() ?? true)
               ? 0.4
               : 0.7
           : 1,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        title: SizedBox(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Wrap(
-              spacing: 12,
-              runSpacing: 4,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Wrap(
+              spacing: 8,
+              runSpacing: 16,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                ...(materials.isEmpty ? [material] : materials).map(
-                  (m) => GestureDetector(
-                    onTap: () {
-                      ViewMaterial.showModal(context, m);
-                    },
-                    child: Wrap(
-                      spacing: 4,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        GSImage(
-                          domain: "material",
-                          size: 20,
-                          rarity: m.rarity,
-                          nameID: m.key,
-                          rounded: true,
-                        ),
-                        Text(
-                          m.name.text(Lang.CHS),
-                          style: const TextStyle(fontSize: 12),
-                        ),
+                ...(materials.isEmpty ? [material] : materials)
+                    .mapIndexed(
+                      (i, m) => [
+                        ...?(i > 0).ifTrueOrNull(() => [
+                              const SizedBox(
+                                height: 10,
+                                child: VerticalDivider(
+                                  width: 1,
+                                ),
+                              )
+                            ]),
+                        GestureDetector(
+                          onTap: () {
+                            ViewMaterial.showModal(context, m);
+                          },
+                          child: Text(
+                            m.name.text(Lang.CHS),
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        )
                       ],
-                    ),
-                  ),
-                )
+                    )
+                    .expand((e) => e)
               ],
             ),
-          ),
-        ),
-        subtitle: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...needs.groupListsBy((e) => e.avatar.nameID).values.map(
-                    (groupedNeeds) => Wrap(runSpacing: 8, children: [
-                      ...groupedNeeds.map((e) => FractionallySizedBox(
-                            widthFactor: 0.5,
-                            child: e,
-                          ))
-                    ]),
-                  )
-            ],
-          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: list,
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -323,42 +325,66 @@ class ViewMaterialNeed extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    var from = action.split("→").first;
+    var to = action.split("→").last;
+
     return GestureDetector(
       onTap: () {
         ViewLevelupPlans.showModal(context, avatar, allPlans);
       },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GSImage(
-            domain: avatar.domain,
-            nameID: avatar.nameID,
-            rarity: avatar.rarity,
-            size: 32,
-            rounded: true,
-          ),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 4),
-                child: Text(
-                  action,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    fontFeatures: [FontFeature.tabularFigures()],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12, top: 12),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            MaterialWithCount(
+              material: material,
+              count: count,
+            ),
+            Positioned(
+              left: -9,
+              top: -9,
+              child: GSImage(
+                domain: avatar.domain,
+                nameID: avatar.nameID,
+                rarity: avatar.rarity,
+                size: 18,
+                borderSize: 2,
+                rounded: true,
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: -11,
+              child: Text(
+                to,
+                style: const TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                  fontFeatures: [FontFeature.tabularFigures()],
+                ),
+              ),
+            ),
+            Positioned(
+              left: -11,
+              bottom: 0,
+              child: Opacity(
+                opacity: 0.6,
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Text(
+                    from,
+                    style: const TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
                   ),
                 ),
               ),
-              MaterialWithCount(
-                material: material,
-                count: count,
-              )
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

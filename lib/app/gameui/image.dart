@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
 part 'generated/image.freezed.dart';
@@ -196,12 +197,14 @@ class WithCount extends HookWidget {
   final Widget child;
   final String prefix;
   final String suffix;
+  final Alignment alignment;
 
   const WithCount({
     Key? key,
     required this.count,
     required this.child,
-    this.size = 14,
+    this.alignment = Alignment.topRight,
+    this.size = 8,
     this.prefix = "",
     this.suffix = "",
   }) : super(key: key);
@@ -214,20 +217,24 @@ class WithCount extends HookWidget {
             children: [
               child,
               Positioned(
-                right: 0,
-                top: 0,
+                right: (alignment == Alignment.topRight ||
+                        alignment == Alignment.bottomRight)
+                    .ifTrueOrNull(() => 0),
+                top: (alignment == Alignment.topRight).ifTrueOrNull(() => 0),
+                bottom:
+                    (alignment == Alignment.bottomRight).ifTrueOrNull(() => 0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black.withAlpha(80),
                     borderRadius: BorderRadius.circular(2),
                   ),
                   clipBehavior: Clip.hardEdge,
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
                   child: Center(
                     child: Text(
                       "$prefix${count > 1e4 ? "${(count / 1e4).toStringAsFixed(0)}w" : count}$suffix",
                       style: TextStyle(
-                        fontSize: 0.6 * size,
+                        fontSize: size,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).backgroundColor,
                         fontFeatures: const [FontFeature.tabularFigures()],

@@ -17,6 +17,11 @@ _$_Skill _$$_SkillFromJson(Map<String, dynamic> json) => _$_Skill(
           ?.map((e) =>
               (e as List<dynamic>).map((e) => (e as num).toDouble()).toList())
           .toList(),
+      materialCosts: (json['MaterialCosts'] as List<dynamic>?)
+          ?.map((e) => (e as List<dynamic>)
+              .map((e) => GSMaterialCost.fromJson(e as Map<String, dynamic>))
+              .toList())
+          .toList(),
     );
 
 Map<String, dynamic> _$$_SkillToJson(_$_Skill instance) => <String, dynamic>{
@@ -25,6 +30,7 @@ Map<String, dynamic> _$$_SkillToJson(_$_Skill instance) => <String, dynamic>{
       'SkillType': _$SkillTypeEnumMap[instance.skillType],
       'ParamNames': instance.paramNames,
       'Params': instance.params,
+      'MaterialCosts': instance.materialCosts,
     };
 
 const _$SkillTypeEnumMap = {

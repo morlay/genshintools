@@ -39,7 +39,6 @@ class _$GSCharacterTearOff {
       required List<GSConstellation> constellations,
       required List<InherentSkill> inherentSkills,
       required List<Skill> skills,
-      required List<List<GSMaterialCost>> skillLevelupMaterialCosts,
       required int promoteId,
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
@@ -60,7 +59,6 @@ class _$GSCharacterTearOff {
       constellations: constellations,
       inherentSkills: inherentSkills,
       skills: skills,
-      skillLevelupMaterialCosts: skillLevelupMaterialCosts,
       promoteId: promoteId,
       propGrowCurveAndInitials: propGrowCurveAndInitials,
       characterBuild: characterBuild,
@@ -94,8 +92,6 @@ mixin _$GSCharacter {
       throw _privateConstructorUsedError;
   List<InherentSkill> get inherentSkills => throw _privateConstructorUsedError;
   List<Skill> get skills => throw _privateConstructorUsedError;
-  List<List<GSMaterialCost>> get skillLevelupMaterialCosts =>
-      throw _privateConstructorUsedError;
   int get promoteId => throw _privateConstructorUsedError;
   @FightPropStringConverter()
   Map<FightProp, PropGrowCurveAndInitial> get propGrowCurveAndInitials =>
@@ -130,7 +126,6 @@ abstract class $GSCharacterCopyWith<$Res> {
       List<GSConstellation> constellations,
       List<InherentSkill> inherentSkills,
       List<Skill> skills,
-      List<List<GSMaterialCost>> skillLevelupMaterialCosts,
       int promoteId,
       @FightPropStringConverter()
           Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials,
@@ -165,7 +160,6 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
     Object? constellations = freezed,
     Object? inherentSkills = freezed,
     Object? skills = freezed,
-    Object? skillLevelupMaterialCosts = freezed,
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
     Object? characterBuild = freezed,
@@ -227,10 +221,6 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
           ? _value.skills
           : skills // ignore: cast_nullable_to_non_nullable
               as List<Skill>,
-      skillLevelupMaterialCosts: skillLevelupMaterialCosts == freezed
-          ? _value.skillLevelupMaterialCosts
-          : skillLevelupMaterialCosts // ignore: cast_nullable_to_non_nullable
-              as List<List<GSMaterialCost>>,
       promoteId: promoteId == freezed
           ? _value.promoteId
           : promoteId // ignore: cast_nullable_to_non_nullable
@@ -296,7 +286,6 @@ abstract class _$GSCharacterCopyWith<$Res>
       List<GSConstellation> constellations,
       List<InherentSkill> inherentSkills,
       List<Skill> skills,
-      List<List<GSMaterialCost>> skillLevelupMaterialCosts,
       int promoteId,
       @FightPropStringConverter()
           Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials,
@@ -336,7 +325,6 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
     Object? constellations = freezed,
     Object? inherentSkills = freezed,
     Object? skills = freezed,
-    Object? skillLevelupMaterialCosts = freezed,
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
     Object? characterBuild = freezed,
@@ -398,10 +386,6 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
           ? _value.skills
           : skills // ignore: cast_nullable_to_non_nullable
               as List<Skill>,
-      skillLevelupMaterialCosts: skillLevelupMaterialCosts == freezed
-          ? _value.skillLevelupMaterialCosts
-          : skillLevelupMaterialCosts // ignore: cast_nullable_to_non_nullable
-              as List<List<GSMaterialCost>>,
       promoteId: promoteId == freezed
           ? _value.promoteId
           : promoteId // ignore: cast_nullable_to_non_nullable
@@ -437,7 +421,6 @@ class _$_GSCharacter extends _GSCharacter {
       required this.constellations,
       required this.inherentSkills,
       required this.skills,
-      required this.skillLevelupMaterialCosts,
       required this.promoteId,
       @FightPropStringConverter() required this.propGrowCurveAndInitials,
       this.characterBuild})
@@ -477,8 +460,6 @@ class _$_GSCharacter extends _GSCharacter {
   @override
   final List<Skill> skills;
   @override
-  final List<List<GSMaterialCost>> skillLevelupMaterialCosts;
-  @override
   final int promoteId;
   @override
   @FightPropStringConverter()
@@ -488,7 +469,7 @@ class _$_GSCharacter extends _GSCharacter {
 
   @override
   String toString() {
-    return 'GSCharacter(id: $id, name: $name, desc: $desc, element: $element, rarity: $rarity, weaponType: $weaponType, initialWeaponKey: $initialWeaponKey, critical: $critical, criticalHurt: $criticalHurt, staminaRecoverSpeed: $staminaRecoverSpeed, chargeEfficiency: $chargeEfficiency, constellations: $constellations, inherentSkills: $inherentSkills, skills: $skills, skillLevelupMaterialCosts: $skillLevelupMaterialCosts, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials, characterBuild: $characterBuild)';
+    return 'GSCharacter(id: $id, name: $name, desc: $desc, element: $element, rarity: $rarity, weaponType: $weaponType, initialWeaponKey: $initialWeaponKey, critical: $critical, criticalHurt: $criticalHurt, staminaRecoverSpeed: $staminaRecoverSpeed, chargeEfficiency: $chargeEfficiency, constellations: $constellations, inherentSkills: $inherentSkills, skills: $skills, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials, characterBuild: $characterBuild)';
   }
 
   @override
@@ -517,8 +498,6 @@ class _$_GSCharacter extends _GSCharacter {
             const DeepCollectionEquality()
                 .equals(other.inherentSkills, inherentSkills) &&
             const DeepCollectionEquality().equals(other.skills, skills) &&
-            const DeepCollectionEquality().equals(
-                other.skillLevelupMaterialCosts, skillLevelupMaterialCosts) &&
             const DeepCollectionEquality().equals(other.promoteId, promoteId) &&
             const DeepCollectionEquality().equals(
                 other.propGrowCurveAndInitials, propGrowCurveAndInitials) &&
@@ -543,7 +522,6 @@ class _$_GSCharacter extends _GSCharacter {
       const DeepCollectionEquality().hash(constellations),
       const DeepCollectionEquality().hash(inherentSkills),
       const DeepCollectionEquality().hash(skills),
-      const DeepCollectionEquality().hash(skillLevelupMaterialCosts),
       const DeepCollectionEquality().hash(promoteId),
       const DeepCollectionEquality().hash(propGrowCurveAndInitials),
       const DeepCollectionEquality().hash(characterBuild));
@@ -577,7 +555,6 @@ abstract class _GSCharacter extends GSCharacter {
       required List<GSConstellation> constellations,
       required List<InherentSkill> inherentSkills,
       required List<Skill> skills,
-      required List<List<GSMaterialCost>> skillLevelupMaterialCosts,
       required int promoteId,
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
@@ -618,8 +595,6 @@ abstract class _GSCharacter extends GSCharacter {
   List<InherentSkill> get inherentSkills;
   @override
   List<Skill> get skills;
-  @override
-  List<List<GSMaterialCost>> get skillLevelupMaterialCosts;
   @override
   int get promoteId;
   @override
