@@ -214,8 +214,8 @@ class WithCount extends HookWidget {
             children: [
               child,
               Positioned(
-                right: size / 8,
-                top: size / 8,
+                right: 0,
+                top: 0,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black.withAlpha(80),
@@ -225,7 +225,7 @@ class WithCount extends HookWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: Center(
                     child: Text(
-                      "$prefix$count$suffix",
+                      "$prefix${count > 1e4 ? "${(count / 1e4).toStringAsFixed(0)}w" : count}$suffix",
                       style: TextStyle(
                         fontSize: 0.6 * size,
                         fontWeight: FontWeight.bold,

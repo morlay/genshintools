@@ -80,4 +80,8 @@ class GSCharacterBuild with _$GSCharacterBuild {
   Iterable<FightProp> artifactAppendProps(FightProp mainProp) {
     return artifactAffixPropTypes?.where((fp) => fp != mainProp) ?? [];
   }
+
+  bool shouldSkillLevelup(SkillType st) {
+    return skillPriority?.expand((e) => e).contains(st) ?? false;
+  }
 }

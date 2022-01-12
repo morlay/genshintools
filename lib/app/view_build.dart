@@ -388,7 +388,7 @@ class ViewBuildArtifacts extends HookWidget {
   Widget _buildMainProp(BuildContext context, GOODArtifact currentArtifact) {
     var dataState = BlocGameData.read(context);
     var db = dataState.db;
-    var c = state.value.artifacts
+    var artifact = state.value.artifacts
         .firstWhereOrNull((a) => a.slotKey == currentArtifact.slotKey);
 
     return Wrap(
@@ -403,7 +403,7 @@ class ViewBuildArtifacts extends HookWidget {
                   border: Border(
                       left: BorderSide(
                 width: 1,
-                color: (fp == c?.mainStatKey.asFightProp())
+                color: (fp == artifact?.mainStatKey.asFightProp())
                     ? Theme.of(context).primaryColor
                     : Colors.transparent,
               ))),
@@ -430,7 +430,10 @@ class ViewBuildArtifacts extends HookWidget {
                       false,
                   fightProps: FightProps({
                     fp: db.artifact.mainFightProp(
-                        fp, currentArtifact.rarity, currentArtifact.level),
+                      fp,
+                      currentArtifact.rarity,
+                      artifact?.level ?? currentArtifact.level,
+                    ),
                   }),
                 ),
               ),

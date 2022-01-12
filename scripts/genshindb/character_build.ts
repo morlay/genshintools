@@ -168,7 +168,7 @@ const characterBuild = (name: string, b: any) => {
   };
 };
 
-const sheet = "https://docs.google.com/spreadsheets/d/1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI";
+const sheet = "https://now-proxy-3.vercel.app/https:/docs.google.com/spreadsheets/d/1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI";
 const exportURL = `${sheet}/export?format=csv&id=1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI`;
 
 enum Grid {
@@ -260,8 +260,8 @@ const fromCSV = async (csv: string, grid: Grid) => {
             return;
           }
 
-          const role = row[2].replace("⭐", "").split("\n")[0].trim();
-          const recommended = row[2].indexOf("⭐") > -1;
+          const role = row[2].replace("✩", "").split("\n")[0].trim();
+          const recommended = row[2].indexOf("✩") > -1;
 
           if (!role) {
             return;

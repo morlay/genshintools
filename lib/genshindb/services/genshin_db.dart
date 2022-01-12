@@ -1,5 +1,6 @@
 import 'package:genshintools/genshindb/constants.dart';
 import 'package:genshintools/genshindb/types.dart';
+import 'package:genshintools/genshindb/utils.dart';
 
 import 'artifact_service.dart';
 import 'character_service.dart';
@@ -45,13 +46,9 @@ class GSDB {
   List<LevelupPlan> characterLevelupPlans(String keyOrName, int current) {
     var c = character.find(keyOrName);
 
-    if (c == null) {
-      return [];
-    }
-
     List<LevelupPlan> list = [];
 
-    var from = current;
+    var from = rangeLimit(current, 1, 90);
 
     for (var to in [21, 41, 51, 61, 71, 81, 86, 90]) {
       if (from < to) {
@@ -96,9 +93,7 @@ class GSDB {
   ) {
     var c = character.find(keyOrName);
 
-    if (c == null) {
-      return [];
-    }
+    characterLevel = rangeLimit(characterLevel, 1, 90);
 
     var skillTypeStr = const SkillTypeStringConverter().toJson(skillType);
 

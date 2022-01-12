@@ -254,6 +254,7 @@ class ViewMaterialNeeds extends HookWidget {
             padding: const EdgeInsets.only(bottom: 16),
             child: Wrap(
               spacing: 12,
+              runSpacing: 4,
               children: [
                 ...(materials.isEmpty ? [material] : materials).map(
                   (m) => GestureDetector(
