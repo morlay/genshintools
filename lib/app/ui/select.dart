@@ -78,6 +78,7 @@ class Select<T> extends HookWidget {
       builder: (context) {
         return SafeArea(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 title: DefaultTextStyle.merge(
@@ -86,7 +87,7 @@ class Select<T> extends HookWidget {
                 ),
               ),
               const Divider(height: 1),
-              Expanded(
+              Flexible(
                 child: builder(context, [
                   ...options.map(
                     (e) => optionBuilder(

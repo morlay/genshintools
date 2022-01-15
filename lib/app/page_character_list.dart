@@ -263,40 +263,40 @@ class CharacterListTile extends HookWidget {
           context: context,
           builder: (context) {
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
                   title: label,
                 ),
-                Expanded(
+                Flexible(
                   child: SingleChildScrollView(
                     child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Column(
-                          children: [
-                            ...groupedMaterials.expand(
-                              (list) => list.map(
-                                (m) => ListTile(
-                                  onTap: () {
-                                    ViewMaterial.showModal(context, m);
-                                  },
-                                  leading: GSImage(
-                                    size: 42,
-                                    domain: "material",
-                                    rarity: m.rarity,
-                                    nameID: m.key,
+                      child: Column(
+                        children: [
+                          ...groupedMaterials.expand(
+                            (list) => list.map(
+                              (m) => ListTile(
+                                onTap: () {
+                                  ViewMaterial.showModal(context, m);
+                                },
+                                leading: GSImage(
+                                  size: 42,
+                                  domain: "material",
+                                  rarity: m.rarity,
+                                  nameID: m.key,
+                                ),
+                                title: Text(m.name.text(Lang.CHS)),
+                                trailing: Text(
+                                  "${m.count ?? 1}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  title: Text(m.name.text(Lang.CHS)),
-                                  trailing: Text("${m.count ?? 1}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      )),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),

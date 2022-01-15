@@ -1,3 +1,4 @@
+import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/constants.dart';
 import 'package:genshintools/genshindb/types.dart';
 import 'package:genshintools/genshindb/utils.dart';
@@ -58,8 +59,12 @@ class GSDB {
           LevelupPlan(
             action: "Lv.$from → Lv.$to",
             costs: [
-              material.find("大英雄的经验").copyWith(count: exp ~/ 10000),
-              material.find("摩拉").copyWith(count: exp ~/ 5),
+              material.find("大英雄的经验").copyWith(
+                    count: exp.let((v) => v / 2e4).round().toInt(),
+                  ),
+              material.find("摩拉").copyWith(
+                    count: exp.let((v) => v / 5).round().toInt(),
+                  ),
               ...character
                   .promoteCosts(
                     c.promoteId,
@@ -98,7 +103,9 @@ class GSDB {
           LevelupPlan(
             action: "Lv.$from → Lv.$to",
             costs: [
-              material.find("祝圣精华").copyWith(count: exp ~/ 10000),
+              material.find("祝圣精华").copyWith(
+                    count: exp.let((v) => v / 1e4).round().toInt(),
+                  ),
               material.find("Mora").copyWith(count: exp),
             ],
           ),
@@ -177,8 +184,12 @@ class GSDB {
         list.add(LevelupPlan(
           action: "Lv.$from → Lv.$to",
           costs: [
-            material.find("精锻用魔矿").copyWith(count: exp ~/ 10000),
-            material.find("摩拉").copyWith(count: exp),
+            material.find("精锻用魔矿").copyWith(
+                  count: exp.let((v) => v / 1e4).round().toInt(),
+                ),
+            material.find("摩拉").copyWith(
+                  count: exp.let((v) => v / 10).round().toInt(),
+                ),
             ...weapon
                 .promoteCosts(
                   w.promoteId,

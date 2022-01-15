@@ -24,7 +24,7 @@ class WebDAVSyncer implements BlocObserver {
 
   @override
   void onCreate(BlocBase bloc) {
-    if (bloc is BlocSyncer && bloc.state != null) {
+    if (bloc is BlocSyncer) {
       blocSyncer = bloc;
     }
 
