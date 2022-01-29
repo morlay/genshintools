@@ -83,8 +83,11 @@ class EquipAffix with _$EquipAffix {
             fp = fp.add(FightProp.NORMAL_ATTACK_ADD_HURT, params[0]);
             break;
           case "绝缘之旗印":
-            fp = fp.add(FightProp.ELEMENTAL_BURST_ADD_HURT_ON_CHARGE_EFFICIENCY,
-                params[0]);
+            fp = fp.add(
+              FightProp
+                  .ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75,
+              params[0],
+            );
             break;
           case "行者之心":
             fp = fp.add(FightProp.CHARGED_ATTACK_ADD_CRITICAL, params[0]);
@@ -119,7 +122,7 @@ class EquipAffix with _$EquipAffix {
         switch (name.text(Lang.CHS)) {
           case "护国的无垢之心":
             fp = fp.add(FightProp.HP_PERCENT, params[0]);
-            fp = fp.add(FightProp.ATTACK_PERCENT_ON_HP, params[1]);
+            fp = fp.add(FightProp.ATTACK_PERCENT__ON__HP, params[1]);
             break;
           case "飞雷御执":
             fp = fp.add(FightProp.NORMAL_ATTACK_ADD_HURT, params[3]);
@@ -183,7 +186,9 @@ class EquipAffix with _$EquipAffix {
             break;
           case "非时之梦·常世灶食":
             fp = fp.add(
-                FightProp.ATTACK_PERCENT_ON_CHARGE_EFFICIENCY, params[0]);
+                FightProp
+                    .ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80,
+                params[0]);
         }
     }
     return fp;

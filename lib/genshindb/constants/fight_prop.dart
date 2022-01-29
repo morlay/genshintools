@@ -165,6 +165,10 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_NORMAL_ATTACK_ADD_HURT")
   NORMAL_ATTACK_ADD_HURT,
 
+  @EnumMeta(label: "普攻附伤", format: "I")
+  @JsonValue("FIGHT_PROP_NORMAL_ATTACK_EXTRA_HURT")
+  NORMAL_ATTACK_EXTRA_HURT,
+
   @EnumMeta(label: "普攻加暴")
   @JsonValue("FIGHT_PROP_NORMAL_ATTACK_ADD_CRITICAL")
   NORMAL_ATTACK_ADD_CRITICAL,
@@ -172,6 +176,10 @@ enum FightProp {
   @EnumMeta(label: "重击加伤")
   @JsonValue("FIGHT_PROP_CHARGED_ATTACK_ADD_HURT")
   CHARGED_ATTACK_ADD_HURT,
+
+  @EnumMeta(label: "重击附伤", format: "I")
+  @JsonValue("FIGHT_PROP_CHARGED_ATTACK_EXTRA_HURT")
+  CHARGED_ATTACK_EXTRA_HURT,
 
   @EnumMeta(label: "重击加暴")
   @JsonValue("FIGHT_PROP_CHARGED_ATTACK_ADD_CRITICAL")
@@ -181,6 +189,10 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_PLUNGING_ATTACK_ADD_HURT")
   PLUNGING_ATTACK_ADD_HURT,
 
+  @EnumMeta(label: "下落攻击附伤", format: "I")
+  @JsonValue("FIGHT_PROP_PLUNGING_ATTACK_EXTRA_HURT")
+  PLUNGING_ATTACK_EXTRA_HURT,
+
   @EnumMeta(label: "下落攻击加暴")
   @JsonValue("FIGHT_PROP_PLUNGING_ATTACK_ADD_CRITICAL")
   PLUNGING_ATTACK_ADD_CRITICAL,
@@ -189,6 +201,10 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_ELEMENTAL_SKILL_ADD_HURT")
   ELEMENTAL_SKILL_ADD_HURT,
 
+  @EnumMeta(label: "元素战技附伤", format: "I")
+  @JsonValue("FIGHT_PROP_ELEMENTAL_SKILL_EXTRA_HURT")
+  ELEMENTAL_SKILL_EXTRA_HURT,
+
   @EnumMeta(label: "元素战技加暴")
   @JsonValue("FIGHT_PROP_ELEMENTAL_SKILL_ADD_CRITICAL")
   ELEMENTAL_SKILL_ADD_CRITICAL,
@@ -196,6 +212,10 @@ enum FightProp {
   @EnumMeta(label: "元素爆发加伤")
   @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_ADD_HURT")
   ELEMENTAL_BURST_ADD_HURT,
+
+  @EnumMeta(label: "元素爆发附伤", format: "I")
+  @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_EXTRA_HURT")
+  ELEMENTAL_BURST_EXTRA_HURT,
 
   @EnumMeta(label: "元素爆发加暴")
   @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_ADD_CRITICAL")
@@ -259,15 +279,30 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_ATTACK_ADD_RADIO")
   ATTACK_ADD_RADIO,
 
+  /// 衍生数值
+  /// <TO_FIGHT_PROP>__ON__<FROM_FIGHT_PROP>[__OVER$<N>][__MAX$<N>]
+  /// ——75 == .75
   @EnumMeta(label: "元素爆发加伤（基于元素充能效率）")
-  @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_ADD_HURT_ON_CHARGE_EFFICIENCY")
-  ELEMENTAL_BURST_ADD_HURT_ON_CHARGE_EFFICIENCY,
+  ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75,
 
   @EnumMeta(label: "攻击力加成（基于元素充能效率超出部分）")
-  @JsonValue("FIGHT_PROP_ATTACK_PERCENT_ON_CHARGE_EFFICIENCY")
-  ATTACK_PERCENT_ON_CHARGE_EFFICIENCY,
+  ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80,
 
   @EnumMeta(label: "攻击力加成（基于最大生命值）")
-  @JsonValue("FIGHT_PROP_ATTACK_PERCENT_ON_HP")
-  ATTACK_PERCENT_ON_HP,
+  ATTACK_PERCENT__ON__HP,
+
+  @EnumMeta(label: "普攻附伤(基于最大生命值)")
+  NORMAL_ATTACK_EXTRA_HURT__ON__HP,
+
+  @EnumMeta(label: "重击附伤(基于最大生命值)")
+  CHARGED_ATTACK_EXTRA_HURT__ON__HP,
+
+  @EnumMeta(label: "下落攻击附伤(基于最大生命值)")
+  PLUNGING_ATTACK_EXTRA_HURT__ON__HP,
+
+  @EnumMeta(label: "元素战技附伤(基于最大生命值)")
+  ELEMENTAL_SKILL_EXTRA_HURT__ON__HP,
+
+  @EnumMeta(label: "元素爆发附伤(基于最大生命值)")
+  ELEMENTAL_BURST_EXTRA_HURT__ON__HP
 }

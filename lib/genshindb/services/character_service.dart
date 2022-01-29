@@ -71,6 +71,13 @@ class CharacterService with _$CharacterService {
       }
     });
 
+    c.inherentSkills.forEachIndexed((index, skill) {
+      if (level > minLevelFromBreakLevel(skill.breakLevel ?? 1)) {
+        fightProps = fightProps.merge(skill.patchedFightProps());
+      }
+      // skill.
+    });
+
     fightProps = fightProps.merge(
         characterPromotes?.promotedFightProps(c.promoteId, level) ??
             FightProps({}));

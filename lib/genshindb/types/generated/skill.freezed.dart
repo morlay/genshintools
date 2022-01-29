@@ -318,12 +318,14 @@ class _$InherentSkillTearOff {
       {required I18n name,
       required I18n desc,
       List<I18n>? paramNames,
-      List<double>? params}) {
+      List<double>? params,
+      int? breakLevel}) {
     return _InherentSkilll(
       name: name,
       desc: desc,
       paramNames: paramNames,
       params: params,
+      breakLevel: breakLevel,
     );
   }
 
@@ -341,6 +343,7 @@ mixin _$InherentSkill {
   I18n get desc => throw _privateConstructorUsedError;
   List<I18n>? get paramNames => throw _privateConstructorUsedError;
   List<double>? get params => throw _privateConstructorUsedError;
+  int? get breakLevel => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -354,7 +357,11 @@ abstract class $InherentSkillCopyWith<$Res> {
           InherentSkill value, $Res Function(InherentSkill) then) =
       _$InherentSkillCopyWithImpl<$Res>;
   $Res call(
-      {I18n name, I18n desc, List<I18n>? paramNames, List<double>? params});
+      {I18n name,
+      I18n desc,
+      List<I18n>? paramNames,
+      List<double>? params,
+      int? breakLevel});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res> get desc;
@@ -375,6 +382,7 @@ class _$InherentSkillCopyWithImpl<$Res>
     Object? desc = freezed,
     Object? paramNames = freezed,
     Object? params = freezed,
+    Object? breakLevel = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -393,6 +401,10 @@ class _$InherentSkillCopyWithImpl<$Res>
           ? _value.params
           : params // ignore: cast_nullable_to_non_nullable
               as List<double>?,
+      breakLevel: breakLevel == freezed
+          ? _value.breakLevel
+          : breakLevel // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 
@@ -419,7 +431,11 @@ abstract class _$InherentSkilllCopyWith<$Res>
       __$InherentSkilllCopyWithImpl<$Res>;
   @override
   $Res call(
-      {I18n name, I18n desc, List<I18n>? paramNames, List<double>? params});
+      {I18n name,
+      I18n desc,
+      List<I18n>? paramNames,
+      List<double>? params,
+      int? breakLevel});
 
   @override
   $I18nCopyWith<$Res> get name;
@@ -444,6 +460,7 @@ class __$InherentSkilllCopyWithImpl<$Res>
     Object? desc = freezed,
     Object? paramNames = freezed,
     Object? params = freezed,
+    Object? breakLevel = freezed,
   }) {
     return _then(_InherentSkilll(
       name: name == freezed
@@ -462,6 +479,10 @@ class __$InherentSkilllCopyWithImpl<$Res>
           ? _value.params
           : params // ignore: cast_nullable_to_non_nullable
               as List<double>?,
+      breakLevel: breakLevel == freezed
+          ? _value.breakLevel
+          : breakLevel // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -471,7 +492,11 @@ class __$InherentSkilllCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.pascal)
 class _$_InherentSkilll extends _InherentSkilll {
   _$_InherentSkilll(
-      {required this.name, required this.desc, this.paramNames, this.params})
+      {required this.name,
+      required this.desc,
+      this.paramNames,
+      this.params,
+      this.breakLevel})
       : super._();
 
   factory _$_InherentSkilll.fromJson(Map<String, dynamic> json) =>
@@ -485,10 +510,12 @@ class _$_InherentSkilll extends _InherentSkilll {
   final List<I18n>? paramNames;
   @override
   final List<double>? params;
+  @override
+  final int? breakLevel;
 
   @override
   String toString() {
-    return 'InherentSkill(name: $name, desc: $desc, paramNames: $paramNames, params: $params)';
+    return 'InherentSkill(name: $name, desc: $desc, paramNames: $paramNames, params: $params, breakLevel: $breakLevel)';
   }
 
   @override
@@ -500,7 +527,9 @@ class _$_InherentSkilll extends _InherentSkilll {
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality()
                 .equals(other.paramNames, paramNames) &&
-            const DeepCollectionEquality().equals(other.params, params));
+            const DeepCollectionEquality().equals(other.params, params) &&
+            const DeepCollectionEquality()
+                .equals(other.breakLevel, breakLevel));
   }
 
   @override
@@ -509,7 +538,8 @@ class _$_InherentSkilll extends _InherentSkilll {
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(paramNames),
-      const DeepCollectionEquality().hash(params));
+      const DeepCollectionEquality().hash(params),
+      const DeepCollectionEquality().hash(breakLevel));
 
   @JsonKey(ignore: true)
   @override
@@ -527,7 +557,8 @@ abstract class _InherentSkilll extends InherentSkill {
       {required I18n name,
       required I18n desc,
       List<I18n>? paramNames,
-      List<double>? params}) = _$_InherentSkilll;
+      List<double>? params,
+      int? breakLevel}) = _$_InherentSkilll;
   _InherentSkilll._() : super._();
 
   factory _InherentSkilll.fromJson(Map<String, dynamic> json) =
@@ -541,6 +572,8 @@ abstract class _InherentSkilll extends InherentSkill {
   List<I18n>? get paramNames;
   @override
   List<double>? get params;
+  @override
+  int? get breakLevel;
   @override
   @JsonKey(ignore: true)
   _$InherentSkilllCopyWith<_InherentSkilll> get copyWith =>

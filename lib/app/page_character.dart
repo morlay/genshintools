@@ -227,7 +227,7 @@ class PageCharacter extends HookWidget {
         value: s.c.level.toDouble(),
         min: 1,
         max: 90,
-        divisions: 9,
+        divisions: 18,
         onChanged: (double value) {
           cvn.value = s.copyWith(
             c: s.c.copyWith(

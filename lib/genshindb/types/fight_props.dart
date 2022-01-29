@@ -174,36 +174,59 @@ class FightProps with _$FightProps {
   }
 
   FightProps fightPropConvert(FightProp k, double v) {
-    switch (k) {
-      case FightProp.ELEMENTAL_BURST_ADD_HURT_ON_CHARGE_EFFICIENCY:
-        var add = v * (fightProps[FightProp.CHARGE_EFFICIENCY] ?? 0);
-        if (add > 0.75) {
-          add = 0.75;
-        }
-        return FightProps({
-          FightProp.ELEMENTAL_BURST_ADD_HURT: add,
-        });
-      case FightProp.ATTACK_PERCENT_ON_CHARGE_EFFICIENCY:
-        var add = (fightProps[FightProp.CHARGE_EFFICIENCY] ?? 0 - 1);
-        return FightProps({
-          FightProp.ATTACK_PERCENT: add,
-        });
-      case FightProp.ATTACK_PERCENT_ON_HP:
-        var add = v * (fightProps[FightProp.HP_PERCENT] ?? 0 - 1);
-        return FightProps({
-          FightProp.ATTACK_PERCENT: add,
-        });
-      default:
-        return FightProps({k: v});
+    if (k.name.contains("__ON__")) {
+      var parts = k.name.split("__ON__");
+      var parts2 = parts.last.split("__");
+
+      var toFp = FightProp.values.firstWhere((fp) => fp.name == parts.first);
+      var fromFp = FightProp.values.firstWhere((fp) => fp.name == parts2.first);
+      var props =
+          parts2.slice(1).fold<Map<String, double>>({}, (props, element) {
+        var parts = element.split("\$");
+        var prop = parts.first.toUpperCase();
+        var value = double.parse(parts.last.replaceAll("_", "."));
+
+        return {
+          ...props,
+          prop: value,
+        };
+      });
+      var ret = v * (get(fromFp) - (props["OVER"] ?? 0));
+      if (props["MAX"] != null && ret > props["MAX"]!) {
+        ret = props["MAX"]!;
+      }
+      return FightProps({toFp: ret});
     }
+    return FightProps({k: v});
   }
 
-  double attackHurt(List<FightProp> hurtAddFightTypes,
+  double attackHurt(double r, List<FightProp> hurtAddFightTypes,
       [base = FightProp.ATTACK]) {
-    var hurt = get(base);
+    var hurt = get(base) * r;
 
     for (var hurtAddType in hurtAddFightTypes) {
-      hurt = hurt * (1 + get(hurtAddType));
+      var extra = 0.0;
+
+      switch (hurtAddType) {
+        case FightProp.NORMAL_ATTACK_ADD_HURT:
+          extra = get(FightProp.NORMAL_ATTACK_EXTRA_HURT);
+          break;
+        case FightProp.PLUNGING_ATTACK_ADD_HURT:
+          extra = get(FightProp.PLUNGING_ATTACK_EXTRA_HURT);
+          break;
+        case FightProp.CHARGED_ATTACK_ADD_HURT:
+          extra = get(FightProp.CHARGED_ATTACK_EXTRA_HURT);
+          break;
+        case FightProp.ELEMENTAL_SKILL_ADD_HURT:
+          extra = get(FightProp.ELEMENTAL_SKILL_EXTRA_HURT);
+          break;
+        case FightProp.ELEMENTAL_BURST_ADD_HURT:
+          extra = get(FightProp.ELEMENTAL_BURST_EXTRA_HURT);
+          break;
+        default:
+      }
+
+      hurt = (hurt + extra) * (1 + get(hurtAddType));
     }
 
     return hurt * defensiveRatio() * resistanceRatio();

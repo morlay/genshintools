@@ -67,6 +67,7 @@ const ProudSkills = groupMulti(
     Desc: i18n(ps.DescTextMapHash, cleanText),
     ParamNames: ps.ParamDescList.map((n) => i18n(n, cleanText)).filter((c) => c.CHS),
     Params: ps.ParamList,
+    BreakLevel: ps.BreakLevel,
     MaterialCosts: [
       ...ps.CostItems.filter((item: any) => item.Id).map((item: any) => ({
         MaterialKey: Materials[item.Id].Name.KEY,

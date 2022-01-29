@@ -227,9 +227,16 @@ class ViewSkillValues extends HookWidget {
               ElementType.Physical,
               fightProps,
               [
-                FightProp.CHARGED_ATTACK_ADD_HURT,
+                FightProp.PLUNGING_ATTACK_ADD_HURT,
               ],
             ),
+            ...skillVal.elementAttackAndCriticalHurtValues(
+              characterWithState.character.element,
+              fightProps,
+              [
+                FightProp.PLUNGING_ATTACK_ADD_HURT,
+              ],
+            )
           ];
         case HurtType.ElementalSkill:
           return [
@@ -449,12 +456,11 @@ class SkillVal {
         elementColor(elementType),
         _attackAndCriticalHurtValueWith(
           fightProps,
-          (r) =>
-              r *
-              fightProps.attackHurt(
-                [elementFightProps[elementType]!, ...hurtAddFightTypes],
-                base,
-              ),
+          (r) => fightProps.attackHurt(
+            r,
+            [elementFightProps[elementType]!, ...hurtAddFightTypes],
+            base,
+          ),
         ),
         to: elementType,
       ),
@@ -559,11 +565,11 @@ class SkillVal {
           _attackAndCriticalHurtValueWith(
             fightProps,
             (r) => fightProps.vaporizeHurt(
-                r *
-                    fightProps.attackHurt(
-                      [elementFightProps[from]!, ...hurtAddFightTypes],
-                      base,
-                    ),
+                fightProps.attackHurt(
+                  r,
+                  [elementFightProps[from]!, ...hurtAddFightTypes],
+                  base,
+                ),
                 from),
           ),
           from: from,
@@ -577,11 +583,11 @@ class SkillVal {
           _attackAndCriticalHurtValueWith(
             fightProps,
             (r) => fightProps.meltHurt(
-                r *
-                    fightProps.attackHurt(
-                      [elementFightProps[from]!, ...hurtAddFightTypes],
-                      base,
-                    ),
+                fightProps.attackHurt(
+                  r,
+                  [elementFightProps[from]!, ...hurtAddFightTypes],
+                  base,
+                ),
                 from),
           ),
           from: from,

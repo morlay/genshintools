@@ -50,6 +50,7 @@ _$_InherentSkilll _$$_InherentSkilllFromJson(Map<String, dynamic> json) =>
       params: (json['Params'] as List<dynamic>?)
           ?.map((e) => (e as num).toDouble())
           .toList(),
+      breakLevel: json['BreakLevel'] as int?,
     );
 
 Map<String, dynamic> _$$_InherentSkilllToJson(_$_InherentSkilll instance) =>
@@ -58,4 +59,5 @@ Map<String, dynamic> _$$_InherentSkilllToJson(_$_InherentSkilll instance) =>
       'Desc': instance.desc,
       'ParamNames': instance.paramNames,
       'Params': instance.params,
+      'BreakLevel': instance.breakLevel,
     };
