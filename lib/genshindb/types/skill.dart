@@ -62,7 +62,7 @@ class InherentSkill with _$InherentSkill {
     switch (name.text(Lang.CHS)) {
       case "储之千日，用之一刻":
         return FightProps({
-          FightProp.ROCK_ADD_HURT: params![1],
+          FightProp.ROCK_ADD_HURT: params![0],
         });
       case "炊金馔玉":
         return FightProps({

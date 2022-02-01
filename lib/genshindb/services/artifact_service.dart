@@ -196,7 +196,7 @@ class ArtifactService with _$ArtifactService {
     int level,
   ) {
     rarity = rangeLimit(rarity, 1, 5);
-    level = rangeLimit(level, 1, rarity * 4);
+    level = rangeLimit(level, 0, rarity * 4);
 
     return artifactLevelupMainPropValues?[rarity - 1][level][mainFightProp] ??
         0;
