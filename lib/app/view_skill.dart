@@ -114,7 +114,7 @@ class ViewSkillValues extends HookWidget {
       ];
     }
 
-    if (label.endsWith("攻击力提高")) {
+    if (label.endsWith("攻击力提高") || label.endsWith("伤害值提升")) {
       return [
         Text(
           fightProps.calc(t, params).toStringAsFixed(0),
@@ -122,7 +122,7 @@ class ViewSkillValues extends HookWidget {
       ];
     }
 
-    if (label.endsWith("吸收量")) {
+    if (label.endsWith("吸收量") || label.endsWith("吸收量上限")) {
       return [
         Text((fightProps.calc(t, params) *
                 (1 + fightProps.get(FightProp.SHIELD_COST_MINUS_RATIO)))
@@ -138,7 +138,7 @@ class ViewSkillValues extends HookWidget {
       ];
     }
 
-    if (label.contains("伤害") || label.contains("射击")) {
+    if (label.endsWith("伤害") || label.contains("射击")) {
       var base = FightProp.ATTACK;
       var skillT = t;
 
