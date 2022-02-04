@@ -34,10 +34,10 @@ _$_GSCharacter _$$_GSCharacterFromJson(Map<String, dynamic> json) =>
         (k, e) => MapEntry($enumDecode(_$FightPropEnumMap, k),
             PropGrowCurveAndInitial.fromJson(e as Map<String, dynamic>)),
       ),
-      characterBuild: json['CharacterBuild'] == null
-          ? null
-          : GSCharacterBuild.fromJson(
-              json['CharacterBuild'] as Map<String, dynamic>),
+      characterBuilds: (json['CharacterBuilds'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, GSCharacterBuild.fromJson(e as Map<String, dynamic>)),
+      ),
     );
 
 Map<String, dynamic> _$$_GSCharacterToJson(_$_GSCharacter instance) =>
@@ -59,7 +59,7 @@ Map<String, dynamic> _$$_GSCharacterToJson(_$_GSCharacter instance) =>
       'PromoteId': instance.promoteId,
       'PropGrowCurveAndInitials': instance.propGrowCurveAndInitials
           .map((k, e) => MapEntry(_$FightPropEnumMap[k], e)),
-      'CharacterBuild': instance.characterBuild,
+      'CharacterBuilds': instance.characterBuilds,
     };
 
 const _$ElementTypeEnumMap = {
@@ -173,6 +173,8 @@ const _$FightPropEnumMap = {
 
 _$_GSCharacterBuild _$$_GSCharacterBuildFromJson(Map<String, dynamic> json) =>
     _$_GSCharacterBuild(
+      recommended: json['Recommended'] as bool?,
+      role: json['Role'] as String?,
       weapons:
           (json['Weapons'] as List<dynamic>?)?.map((e) => e as String).toList(),
       artifactSetPairs: (json['ArtifactSetPairs'] as List<dynamic>?)
@@ -198,6 +200,8 @@ _$_GSCharacterBuild _$$_GSCharacterBuildFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_GSCharacterBuildToJson(_$_GSCharacterBuild instance) =>
     <String, dynamic>{
+      'Recommended': instance.recommended,
+      'Role': instance.role,
       'Weapons': instance.weapons,
       'ArtifactSetPairs': instance.artifactSetPairs,
       'ArtifactMainPropTypes': instance.artifactMainPropTypes?.map((k, e) =>

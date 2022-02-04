@@ -1,4 +1,4 @@
-import { mapValues, findLast } from "lodash-es";
+import { mapValues, findLast, omit } from "lodash-es";
 
 import {
   writeJSONSync,
@@ -27,7 +27,12 @@ import { Trials } from "./genshindb/character_trial";
 writeJSONSync("./assets/genshindb/characters.json", {
   Characters: mapValues(CharactersByKey, (c: any) => ({
     ...c,
-    CharacterBuild: findLast(Builds[c.Name.KEY], (b) => b.Recommended),
+    CharacterBuilds: Builds[c.Name.KEY].reduce((ret, b) => {
+      return ({
+        ...ret,
+        [b.Role]: omit(b, "Role"),
+      });
+    },{}),
   })),
   CharacterPromotes,
   CharacterPropGrowCurveValues,

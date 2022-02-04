@@ -42,7 +42,7 @@ class PageCharacter extends HookWidget {
     var db = blocGameData.db;
 
     var current = blocGameData.findCharacterWithState(uid, "$id");
-    var builds = current.character.characterAllBuilds();
+    var builds = current.character.characterBuildFor(current.c.role);
 
     current = current.copyWith(
       artifacts: current.artifacts.length == 5
@@ -70,6 +70,13 @@ class PageCharacter extends HookWidget {
         artifacts: current.artifacts,
       );
     }, [current.artifacts.map((e) => e.toString()).join("|")]);
+
+    useEffect(() {
+      characterValueNotifier.value = characterValueNotifier.value.copyWith(
+          c: characterValueNotifier.value.c.copyWith(
+        role: current.c.role,
+      ));
+    }, [current.c.role]);
 
     var c = characterValueNotifier.value;
 
@@ -111,6 +118,7 @@ class PageCharacter extends HookWidget {
                               child: _buildBuild(
                                 context,
                                 db,
+                                uid,
                                 current,
                                 characterValueNotifier,
                                 fightProps,
@@ -379,12 +387,14 @@ class PageCharacter extends HookWidget {
   Widget _buildBuild(
     BuildContext context,
     GSDB db,
+    int uid,
     CharacterWithState current,
     ValueNotifier<CharacterWithState> state,
     FightProps fightProps,
     GSCharacterBuild builds,
   ) {
     var c = state.value;
+    var roles = c.character.characterBuilds?.keys.toList() ?? [];
 
     List<WeaponListTile> weapons = [
       WeaponListTile(
@@ -412,6 +422,57 @@ class PageCharacter extends HookWidget {
             spacing: 8,
             alignment: WrapAlignment.center,
             children: [
+              Select<String>(
+                title: const Text("角色定位切换"),
+                options: c.character.characterBuilds?.keys.toList() ?? [],
+                value: c.c.role,
+                onSelected: (role) {
+                  BlocGameData.read(context).updateCharacter(
+                    uid,
+                    c.c.key,
+                    (c) => c.copyWith(
+                      role: role,
+                    ),
+                  );
+                },
+                tileBuilder: (ctx, s) {
+                  return GestureDetector(
+                    onTap: () {
+                      if (roles.length > 1) {
+                        s.showOptions(ctx);
+                      }
+                    },
+                    child: Text(
+                      builds.role ?? "",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  );
+                },
+                optionBuilder: (
+                  BuildContext context,
+                  SelectOption<dynamic> item,
+                  Selected<dynamic> selected,
+                ) {
+                  return ListTile(
+                    title: Text(item.value),
+                    selected: c.c.role == item.value,
+                    trailing: c
+                        .character.characterBuilds?[item.value]?.recommended
+                        ?.ifTrueOrNull(() => const Text("推荐")),
+                    onTap: () {
+                      item.select();
+                    },
+                  );
+                },
+                builder: (context, children) {
+                  return SingleChildScrollView(
+                    child: Wrap(
+                      children: children,
+                    ),
+                  );
+                },
+              ),
               Select<WeaponListTile>(
                 title: const Text("武器"),
                 value: weapons.firstWhereOrNull((w) => w.weapon.key == c.w.key),
@@ -466,7 +527,8 @@ class PageCharacter extends HookWidget {
     FightProps fightProps,
   ) {
     var len = c.character.skills.length + c.character.inherentSkills.length;
-    var skillPriority = c.character.characterBuild?.skillPriority ?? [];
+    var skillPriority =
+        c.character.characterBuildFor(c.c.role).skillPriority ?? [];
 
     var skills = c.character.skills
       ..sort(

@@ -67,6 +67,7 @@ _$_GOODCharacter _$$_GOODCharacterFromJson(Map<String, dynamic> json) =>
       talent: (json['talent'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$TalentTypeEnumMap, k), e as int),
       ),
+      role: json['role'] as String?,
     );
 
 Map<String, dynamic> _$$_GOODCharacterToJson(_$_GOODCharacter instance) =>
@@ -77,6 +78,7 @@ Map<String, dynamic> _$$_GOODCharacterToJson(_$_GOODCharacter instance) =>
       'ascension': instance.ascension,
       'talent':
           instance.talent.map((k, e) => MapEntry(_$TalentTypeEnumMap[k], e)),
+      'role': instance.role,
     };
 
 const _$TalentTypeEnumMap = {

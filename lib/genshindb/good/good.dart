@@ -199,6 +199,7 @@ class GOODCharacter with _$GOODCharacter {
     required int constellation,
     required int ascension,
     required Map<TalentType, int> talent,
+    String? role,
   }) = _GOODCharacter;
 
   factory GOODCharacter.create(String key) => GOODCharacter(

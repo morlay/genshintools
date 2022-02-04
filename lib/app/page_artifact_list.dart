@@ -113,13 +113,17 @@ class GOODArtifactListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    var uid = BlocAuth.watch(context).state.chosenUid();
+    var bloc = BlocGameData.read(context);
     var db = BlocGameData.read(context).db;
     var a = db.artifact
         .findSet(artifact.setKey)
         .artifact(artifact.slotKey.asEquipType());
 
-    var builds =
-        db.character.findOrNull(artifact.location)?.characterAllBuilds();
+    var builds = db.character.findOrNull(artifact.location)?.let(
+          (c) => c.characterBuildFor(
+              bloc.playerState(uid).character(artifact.location).role),
+        );
 
     var appendDepot = db.artifact.artifactAppendDepot(a.key);
 

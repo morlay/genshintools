@@ -43,7 +43,7 @@ class _$GSCharacterTearOff {
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
               propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild}) {
+      Map<String, GSCharacterBuild>? characterBuilds}) {
     return _GSCharacter(
       id: id,
       name: name,
@@ -61,7 +61,7 @@ class _$GSCharacterTearOff {
       skills: skills,
       promoteId: promoteId,
       propGrowCurveAndInitials: propGrowCurveAndInitials,
-      characterBuild: characterBuild,
+      characterBuilds: characterBuilds,
     );
   }
 
@@ -96,7 +96,8 @@ mixin _$GSCharacter {
   @FightPropStringConverter()
   Map<FightProp, PropGrowCurveAndInitial> get propGrowCurveAndInitials =>
       throw _privateConstructorUsedError;
-  GSCharacterBuild? get characterBuild => throw _privateConstructorUsedError;
+  Map<String, GSCharacterBuild>? get characterBuilds =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -129,11 +130,10 @@ abstract class $GSCharacterCopyWith<$Res> {
       int promoteId,
       @FightPropStringConverter()
           Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild});
+      Map<String, GSCharacterBuild>? characterBuilds});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res> get desc;
-  $GSCharacterBuildCopyWith<$Res>? get characterBuild;
 }
 
 /// @nodoc
@@ -162,7 +162,7 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
     Object? skills = freezed,
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
-    Object? characterBuild = freezed,
+    Object? characterBuilds = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -229,10 +229,10 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
           ? _value.propGrowCurveAndInitials
           : propGrowCurveAndInitials // ignore: cast_nullable_to_non_nullable
               as Map<FightProp, PropGrowCurveAndInitial>,
-      characterBuild: characterBuild == freezed
-          ? _value.characterBuild
-          : characterBuild // ignore: cast_nullable_to_non_nullable
-              as GSCharacterBuild?,
+      characterBuilds: characterBuilds == freezed
+          ? _value.characterBuilds
+          : characterBuilds // ignore: cast_nullable_to_non_nullable
+              as Map<String, GSCharacterBuild>?,
     ));
   }
 
@@ -247,17 +247,6 @@ class _$GSCharacterCopyWithImpl<$Res> implements $GSCharacterCopyWith<$Res> {
   $I18nCopyWith<$Res> get desc {
     return $I18nCopyWith<$Res>(_value.desc, (value) {
       return _then(_value.copyWith(desc: value));
-    });
-  }
-
-  @override
-  $GSCharacterBuildCopyWith<$Res>? get characterBuild {
-    if (_value.characterBuild == null) {
-      return null;
-    }
-
-    return $GSCharacterBuildCopyWith<$Res>(_value.characterBuild!, (value) {
-      return _then(_value.copyWith(characterBuild: value));
     });
   }
 }
@@ -289,14 +278,12 @@ abstract class _$GSCharacterCopyWith<$Res>
       int promoteId,
       @FightPropStringConverter()
           Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild});
+      Map<String, GSCharacterBuild>? characterBuilds});
 
   @override
   $I18nCopyWith<$Res> get name;
   @override
   $I18nCopyWith<$Res> get desc;
-  @override
-  $GSCharacterBuildCopyWith<$Res>? get characterBuild;
 }
 
 /// @nodoc
@@ -327,7 +314,7 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
     Object? skills = freezed,
     Object? promoteId = freezed,
     Object? propGrowCurveAndInitials = freezed,
-    Object? characterBuild = freezed,
+    Object? characterBuilds = freezed,
   }) {
     return _then(_GSCharacter(
       id: id == freezed
@@ -394,10 +381,10 @@ class __$GSCharacterCopyWithImpl<$Res> extends _$GSCharacterCopyWithImpl<$Res>
           ? _value.propGrowCurveAndInitials
           : propGrowCurveAndInitials // ignore: cast_nullable_to_non_nullable
               as Map<FightProp, PropGrowCurveAndInitial>,
-      characterBuild: characterBuild == freezed
-          ? _value.characterBuild
-          : characterBuild // ignore: cast_nullable_to_non_nullable
-              as GSCharacterBuild?,
+      characterBuilds: characterBuilds == freezed
+          ? _value.characterBuilds
+          : characterBuilds // ignore: cast_nullable_to_non_nullable
+              as Map<String, GSCharacterBuild>?,
     ));
   }
 }
@@ -423,7 +410,7 @@ class _$_GSCharacter extends _GSCharacter {
       required this.skills,
       required this.promoteId,
       @FightPropStringConverter() required this.propGrowCurveAndInitials,
-      this.characterBuild})
+      this.characterBuilds})
       : super._();
 
   factory _$_GSCharacter.fromJson(Map<String, dynamic> json) =>
@@ -465,11 +452,11 @@ class _$_GSCharacter extends _GSCharacter {
   @FightPropStringConverter()
   final Map<FightProp, PropGrowCurveAndInitial> propGrowCurveAndInitials;
   @override
-  final GSCharacterBuild? characterBuild;
+  final Map<String, GSCharacterBuild>? characterBuilds;
 
   @override
   String toString() {
-    return 'GSCharacter(id: $id, name: $name, desc: $desc, element: $element, rarity: $rarity, weaponType: $weaponType, initialWeaponKey: $initialWeaponKey, critical: $critical, criticalHurt: $criticalHurt, staminaRecoverSpeed: $staminaRecoverSpeed, chargeEfficiency: $chargeEfficiency, constellations: $constellations, inherentSkills: $inherentSkills, skills: $skills, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials, characterBuild: $characterBuild)';
+    return 'GSCharacter(id: $id, name: $name, desc: $desc, element: $element, rarity: $rarity, weaponType: $weaponType, initialWeaponKey: $initialWeaponKey, critical: $critical, criticalHurt: $criticalHurt, staminaRecoverSpeed: $staminaRecoverSpeed, chargeEfficiency: $chargeEfficiency, constellations: $constellations, inherentSkills: $inherentSkills, skills: $skills, promoteId: $promoteId, propGrowCurveAndInitials: $propGrowCurveAndInitials, characterBuilds: $characterBuilds)';
   }
 
   @override
@@ -502,7 +489,7 @@ class _$_GSCharacter extends _GSCharacter {
             const DeepCollectionEquality().equals(
                 other.propGrowCurveAndInitials, propGrowCurveAndInitials) &&
             const DeepCollectionEquality()
-                .equals(other.characterBuild, characterBuild));
+                .equals(other.characterBuilds, characterBuilds));
   }
 
   @override
@@ -524,7 +511,7 @@ class _$_GSCharacter extends _GSCharacter {
       const DeepCollectionEquality().hash(skills),
       const DeepCollectionEquality().hash(promoteId),
       const DeepCollectionEquality().hash(propGrowCurveAndInitials),
-      const DeepCollectionEquality().hash(characterBuild));
+      const DeepCollectionEquality().hash(characterBuilds));
 
   @JsonKey(ignore: true)
   @override
@@ -559,7 +546,7 @@ abstract class _GSCharacter extends GSCharacter {
       @FightPropStringConverter()
           required Map<FightProp, PropGrowCurveAndInitial>
               propGrowCurveAndInitials,
-      GSCharacterBuild? characterBuild}) = _$_GSCharacter;
+      Map<String, GSCharacterBuild>? characterBuilds}) = _$_GSCharacter;
   _GSCharacter._() : super._();
 
   factory _GSCharacter.fromJson(Map<String, dynamic> json) =
@@ -601,7 +588,7 @@ abstract class _GSCharacter extends GSCharacter {
   @FightPropStringConverter()
   Map<FightProp, PropGrowCurveAndInitial> get propGrowCurveAndInitials;
   @override
-  GSCharacterBuild? get characterBuild;
+  Map<String, GSCharacterBuild>? get characterBuilds;
   @override
   @JsonKey(ignore: true)
   _$GSCharacterCopyWith<_GSCharacter> get copyWith =>
@@ -617,7 +604,9 @@ class _$GSCharacterBuildTearOff {
   const _$GSCharacterBuildTearOff();
 
   _GSCharacterBuild call(
-      {List<String>? weapons,
+      {bool? recommended,
+      String? role,
+      List<String>? weapons,
       List<List<String>>? artifactSetPairs,
       @EquipTypeStringConverter()
           Map<EquipType, List<FightProp>>? artifactMainPropTypes,
@@ -625,6 +614,8 @@ class _$GSCharacterBuildTearOff {
       @SkillTypeStringConverter()
           List<List<SkillType>>? skillPriority}) {
     return _GSCharacterBuild(
+      recommended: recommended,
+      role: role,
       weapons: weapons,
       artifactSetPairs: artifactSetPairs,
       artifactMainPropTypes: artifactMainPropTypes,
@@ -643,6 +634,8 @@ const $GSCharacterBuild = _$GSCharacterBuildTearOff();
 
 /// @nodoc
 mixin _$GSCharacterBuild {
+  bool? get recommended => throw _privateConstructorUsedError;
+  String? get role => throw _privateConstructorUsedError;
   List<String>? get weapons => throw _privateConstructorUsedError;
   List<List<String>>? get artifactSetPairs =>
       throw _privateConstructorUsedError;
@@ -667,7 +660,9 @@ abstract class $GSCharacterBuildCopyWith<$Res> {
           GSCharacterBuild value, $Res Function(GSCharacterBuild) then) =
       _$GSCharacterBuildCopyWithImpl<$Res>;
   $Res call(
-      {List<String>? weapons,
+      {bool? recommended,
+      String? role,
+      List<String>? weapons,
       List<List<String>>? artifactSetPairs,
       @EquipTypeStringConverter()
           Map<EquipType, List<FightProp>>? artifactMainPropTypes,
@@ -687,6 +682,8 @@ class _$GSCharacterBuildCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? recommended = freezed,
+    Object? role = freezed,
     Object? weapons = freezed,
     Object? artifactSetPairs = freezed,
     Object? artifactMainPropTypes = freezed,
@@ -694,6 +691,14 @@ class _$GSCharacterBuildCopyWithImpl<$Res>
     Object? skillPriority = freezed,
   }) {
     return _then(_value.copyWith(
+      recommended: recommended == freezed
+          ? _value.recommended
+          : recommended // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      role: role == freezed
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
       weapons: weapons == freezed
           ? _value.weapons
           : weapons // ignore: cast_nullable_to_non_nullable
@@ -726,7 +731,9 @@ abstract class _$GSCharacterBuildCopyWith<$Res>
       __$GSCharacterBuildCopyWithImpl<$Res>;
   @override
   $Res call(
-      {List<String>? weapons,
+      {bool? recommended,
+      String? role,
+      List<String>? weapons,
       List<List<String>>? artifactSetPairs,
       @EquipTypeStringConverter()
           Map<EquipType, List<FightProp>>? artifactMainPropTypes,
@@ -748,6 +755,8 @@ class __$GSCharacterBuildCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? recommended = freezed,
+    Object? role = freezed,
     Object? weapons = freezed,
     Object? artifactSetPairs = freezed,
     Object? artifactMainPropTypes = freezed,
@@ -755,6 +764,14 @@ class __$GSCharacterBuildCopyWithImpl<$Res>
     Object? skillPriority = freezed,
   }) {
     return _then(_GSCharacterBuild(
+      recommended: recommended == freezed
+          ? _value.recommended
+          : recommended // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      role: role == freezed
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
       weapons: weapons == freezed
           ? _value.weapons
           : weapons // ignore: cast_nullable_to_non_nullable
@@ -784,7 +801,9 @@ class __$GSCharacterBuildCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.pascal)
 class _$_GSCharacterBuild extends _GSCharacterBuild {
   _$_GSCharacterBuild(
-      {this.weapons,
+      {this.recommended,
+      this.role,
+      this.weapons,
       this.artifactSetPairs,
       @EquipTypeStringConverter() this.artifactMainPropTypes,
       this.artifactAffixPropTypes,
@@ -794,6 +813,10 @@ class _$_GSCharacterBuild extends _GSCharacterBuild {
   factory _$_GSCharacterBuild.fromJson(Map<String, dynamic> json) =>
       _$$_GSCharacterBuildFromJson(json);
 
+  @override
+  final bool? recommended;
+  @override
+  final String? role;
   @override
   final List<String>? weapons;
   @override
@@ -809,7 +832,7 @@ class _$_GSCharacterBuild extends _GSCharacterBuild {
 
   @override
   String toString() {
-    return 'GSCharacterBuild(weapons: $weapons, artifactSetPairs: $artifactSetPairs, artifactMainPropTypes: $artifactMainPropTypes, artifactAffixPropTypes: $artifactAffixPropTypes, skillPriority: $skillPriority)';
+    return 'GSCharacterBuild(recommended: $recommended, role: $role, weapons: $weapons, artifactSetPairs: $artifactSetPairs, artifactMainPropTypes: $artifactMainPropTypes, artifactAffixPropTypes: $artifactAffixPropTypes, skillPriority: $skillPriority)';
   }
 
   @override
@@ -817,6 +840,9 @@ class _$_GSCharacterBuild extends _GSCharacterBuild {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GSCharacterBuild &&
+            const DeepCollectionEquality()
+                .equals(other.recommended, recommended) &&
+            const DeepCollectionEquality().equals(other.role, role) &&
             const DeepCollectionEquality().equals(other.weapons, weapons) &&
             const DeepCollectionEquality()
                 .equals(other.artifactSetPairs, artifactSetPairs) &&
@@ -831,6 +857,8 @@ class _$_GSCharacterBuild extends _GSCharacterBuild {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(recommended),
+      const DeepCollectionEquality().hash(role),
       const DeepCollectionEquality().hash(weapons),
       const DeepCollectionEquality().hash(artifactSetPairs),
       const DeepCollectionEquality().hash(artifactMainPropTypes),
@@ -850,7 +878,9 @@ class _$_GSCharacterBuild extends _GSCharacterBuild {
 
 abstract class _GSCharacterBuild extends GSCharacterBuild {
   factory _GSCharacterBuild(
-      {List<String>? weapons,
+      {bool? recommended,
+      String? role,
+      List<String>? weapons,
       List<List<String>>? artifactSetPairs,
       @EquipTypeStringConverter()
           Map<EquipType, List<FightProp>>? artifactMainPropTypes,
@@ -862,6 +892,10 @@ abstract class _GSCharacterBuild extends GSCharacterBuild {
   factory _GSCharacterBuild.fromJson(Map<String, dynamic> json) =
       _$_GSCharacterBuild.fromJson;
 
+  @override
+  bool? get recommended;
+  @override
+  String? get role;
   @override
   List<String>? get weapons;
   @override

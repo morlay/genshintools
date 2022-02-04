@@ -316,13 +316,15 @@ class _$GOODCharacterTearOff {
       required int level,
       required int constellation,
       required int ascension,
-      required Map<TalentType, int> talent}) {
+      required Map<TalentType, int> talent,
+      String? role}) {
     return _GOODCharacter(
       key: key,
       level: level,
       constellation: constellation,
       ascension: ascension,
       talent: talent,
+      role: role,
     );
   }
 
@@ -341,6 +343,7 @@ mixin _$GOODCharacter {
   int get constellation => throw _privateConstructorUsedError;
   int get ascension => throw _privateConstructorUsedError;
   Map<TalentType, int> get talent => throw _privateConstructorUsedError;
+  String? get role => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -358,7 +361,8 @@ abstract class $GOODCharacterCopyWith<$Res> {
       int level,
       int constellation,
       int ascension,
-      Map<TalentType, int> talent});
+      Map<TalentType, int> talent,
+      String? role});
 }
 
 /// @nodoc
@@ -377,6 +381,7 @@ class _$GOODCharacterCopyWithImpl<$Res>
     Object? constellation = freezed,
     Object? ascension = freezed,
     Object? talent = freezed,
+    Object? role = freezed,
   }) {
     return _then(_value.copyWith(
       key: key == freezed
@@ -399,6 +404,10 @@ class _$GOODCharacterCopyWithImpl<$Res>
           ? _value.talent
           : talent // ignore: cast_nullable_to_non_nullable
               as Map<TalentType, int>,
+      role: role == freezed
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -415,7 +424,8 @@ abstract class _$GOODCharacterCopyWith<$Res>
       int level,
       int constellation,
       int ascension,
-      Map<TalentType, int> talent});
+      Map<TalentType, int> talent,
+      String? role});
 }
 
 /// @nodoc
@@ -436,6 +446,7 @@ class __$GOODCharacterCopyWithImpl<$Res>
     Object? constellation = freezed,
     Object? ascension = freezed,
     Object? talent = freezed,
+    Object? role = freezed,
   }) {
     return _then(_GOODCharacter(
       key: key == freezed
@@ -458,6 +469,10 @@ class __$GOODCharacterCopyWithImpl<$Res>
           ? _value.talent
           : talent // ignore: cast_nullable_to_non_nullable
               as Map<TalentType, int>,
+      role: role == freezed
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -470,7 +485,8 @@ class _$_GOODCharacter extends _GOODCharacter {
       required this.level,
       required this.constellation,
       required this.ascension,
-      required this.talent})
+      required this.talent,
+      this.role})
       : super._();
 
   factory _$_GOODCharacter.fromJson(Map<String, dynamic> json) =>
@@ -486,10 +502,12 @@ class _$_GOODCharacter extends _GOODCharacter {
   final int ascension;
   @override
   final Map<TalentType, int> talent;
+  @override
+  final String? role;
 
   @override
   String toString() {
-    return 'GOODCharacter(key: $key, level: $level, constellation: $constellation, ascension: $ascension, talent: $talent)';
+    return 'GOODCharacter(key: $key, level: $level, constellation: $constellation, ascension: $ascension, talent: $talent, role: $role)';
   }
 
   @override
@@ -502,7 +520,8 @@ class _$_GOODCharacter extends _GOODCharacter {
             const DeepCollectionEquality()
                 .equals(other.constellation, constellation) &&
             const DeepCollectionEquality().equals(other.ascension, ascension) &&
-            const DeepCollectionEquality().equals(other.talent, talent));
+            const DeepCollectionEquality().equals(other.talent, talent) &&
+            const DeepCollectionEquality().equals(other.role, role));
   }
 
   @override
@@ -512,7 +531,8 @@ class _$_GOODCharacter extends _GOODCharacter {
       const DeepCollectionEquality().hash(level),
       const DeepCollectionEquality().hash(constellation),
       const DeepCollectionEquality().hash(ascension),
-      const DeepCollectionEquality().hash(talent));
+      const DeepCollectionEquality().hash(talent),
+      const DeepCollectionEquality().hash(role));
 
   @JsonKey(ignore: true)
   @override
@@ -531,7 +551,8 @@ abstract class _GOODCharacter extends GOODCharacter {
       required int level,
       required int constellation,
       required int ascension,
-      required Map<TalentType, int> talent}) = _$_GOODCharacter;
+      required Map<TalentType, int> talent,
+      String? role}) = _$_GOODCharacter;
   _GOODCharacter._() : super._();
 
   factory _GOODCharacter.fromJson(Map<String, dynamic> json) =
@@ -547,6 +568,8 @@ abstract class _GOODCharacter extends GOODCharacter {
   int get ascension;
   @override
   Map<TalentType, int> get talent;
+  @override
+  String? get role;
   @override
   @JsonKey(ignore: true)
   _$GOODCharacterCopyWith<_GOODCharacter> get copyWith =>

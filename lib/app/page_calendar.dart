@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:genshintools/app/auth/auth.dart';
 import 'package:genshintools/app/gamedata/gamedata.dart';
@@ -123,11 +122,13 @@ class ViewCalendar extends HookWidget {
         gbb.db.characterLevelupPlans(cNameId, c.c.level),
       );
 
-      var skillTypes =
-          c.character.characterBuild?.skillPriority?.expand((e) => e) ??
-              c.character.skills
-                  .map((e) => e.skillType)
-                  .where((skillType) => skillType != SkillType.OTHERS);
+      var skillTypes = c.character
+              .characterBuildFor(c.c.role)
+              .skillPriority
+              ?.expand((e) => e) ??
+          c.character.skills
+              .map((e) => e.skillType)
+              .where((skillType) => skillType != SkillType.OTHERS);
 
       for (var skillType in skillTypes) {
         addToNeeds(

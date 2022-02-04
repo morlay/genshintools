@@ -164,7 +164,7 @@ const characterBuild = (name: string, b: any) => {
       }, []),
       (s: string[]) => s.join("/"),
     ),
-    SkillPriority: b.talent.map((v: string) => v.split("/").map(formatSkillType)),
+    SkillPriority: b.talent.map((v: string) => v.split("/").map(formatSkillType).filter(v => v)),
   };
 };
 
@@ -288,21 +288,6 @@ const fromCSV = async (csv: string, grid: Grid) => {
 };
 
 export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } = {
-  YunJin: [
-    {
-      Recommended: true,
-      Role: "SUPPORT",
-      Weapons: ["试作星镰"],
-      ArtifactMainPropTypes: {
-        EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_DEFENSE_PERCENT"],
-        EQUIP_RING: ["FIGHT_PROP_DEFENSE_PERCENT"],
-        EQUIP_DRESS: ["FIGHT_PROP_DEFENSE_PERCENT"],
-      },
-      ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_DEFENSE_PERCENT", "FIGHT_PROP_DEFENSE"],
-      ArtifactSetPairs: [["华馆梦醒形骸记"]],
-      SkillPriority: [["Q"], ["E"]],
-    },
-  ],
   Shenhe: [
     {
       Recommended: true,

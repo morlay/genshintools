@@ -45,7 +45,7 @@ class ViewArtifactBuilder extends HookWidget {
     ValueNotifier<CharacterWithState> state,
   ) {
     var db = BlocGameData.read(context).db;
-    var builds = current.character.characterAllBuilds();
+    var builds = current.character.characterBuildFor(state.value.c.role);
 
     showModalBottomSheet(
       context: context,

@@ -37,7 +37,7 @@ class PageCharacterList extends HookWidget {
       }
     }, [uid]);
 
-    var characters = BlocGameData.read(context).listCharacterWithState(uid);
+    var characters = BlocGameData.watch(context).listCharacterWithState(uid);
     var grouped = characters.groupListsBy((e) => e.character.element);
     var elements = ElementType.values.where((e) => e != ElementType.Physical);
 
@@ -130,6 +130,10 @@ class CharacterListTile extends HookWidget {
                             children: [
                               Text(c.character.name.text(Lang.CHS)),
                               _buildTalentLevels(context),
+                              Text(
+                                c.c.role ?? "",
+                                style: const TextStyle(fontSize: 9),
+                              ),
                             ],
                           ),
                         ),
@@ -179,8 +183,8 @@ class CharacterListTile extends HookWidget {
               SkillType.NORMAL_ATTACK,
               SkillType.ELEMENTAL_SKILL,
               SkillType.ELEMENTAL_BURST,
-            ].expand(
-                (st) => c.character.characterAllBuilds().shouldSkillLevelup(st)
+            ].expand((st) =>
+                c.character.characterBuildFor(c.c.role).shouldSkillLevelup(st)
                     ? db.characterSkillLevelupPlans(
                         c.character.key,
                         st,
@@ -376,37 +380,32 @@ class CharacterListTile extends HookWidget {
   }
 
   Widget _buildTalentLevels(BuildContext context) {
-    var builds = c.character.characterAllBuilds();
+    var builds = c.character.characterBuildFor(c.c.role);
 
     return Wrap(
       spacing: 4,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        ...c.c.talent.keys.map(
-          (key) => Opacity(
-            opacity: builds
-                    .shouldSkillLevelup(key.asSkillType())
-                    .ifFalseOrNull(() => 0.3) ??
-                1,
-            child: Text.rich(TextSpan(
-              children: [
-                TextSpan(
-                  text: "${key.asSkillType().string()}.",
-                  style: TextStyle(
-                    color: Theme.of(context).hintColor,
-                    fontSize: 10,
+        ...?builds.skillPriority?.expand((k) => k).map(
+              (key) => Text.rich(TextSpan(
+                children: [
+                  TextSpan(
+                    text: "${key.string()}.",
+                    style: TextStyle(
+                      color: Theme.of(context).hintColor,
+                      fontSize: 10,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: "${c.c.talent[key]}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11,
-                  ),
-                )
-              ],
-            )),
-          ),
-        )
+                  TextSpan(
+                    text: "${c.c.talent[TalentType.values[key.index]]}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  )
+                ],
+              )),
+            )
       ],
     );
   }

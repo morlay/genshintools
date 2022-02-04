@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:genshintools/genshindb/genshindb.dart';
@@ -34,10 +35,10 @@ void main() async {
   //   log(db.artifact.findSet("炽烈的炎之魔女").toString());
   // });
   //
-  // test("#fightProps", () {
-  //   log(db.character.fightProps("胡桃", 90, 0).toString());
-  //   log(db.weapon.fightProps("决斗之枪", 90, 0).toString());
-  // });
+  test("#fightProps", () {
+    log(db.character.fightProps("胡桃", 90, 0).toString());
+    log(db.weapon.fightProps("决斗之枪", 90, 0).toString());
+  });
 
   test("buildPlayerArtifact", () {
     var list = [

@@ -71,7 +71,9 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
       });
 
       for (var c in next.characters) {
-        _syncCharacterSkillLevels(client, uid, c.key);
+        if (c.level > 0) {
+          _syncCharacterSkillLevels(client, uid, c.key);
+        }
       }
     }
   }
@@ -189,6 +191,8 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
       });
     });
 
+    Map<String, bool> owned = {};
+
     for (var avatar in avatars) {
       var avatarName = avatar.name;
 
@@ -206,10 +210,13 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         good = good.updateCharacter(
             location,
             (gc) => gc.copyWith(
+                  role: c.defaultCharacterBuildRole(gc.role),
                   level: avatar.level,
                   constellation: avatar.activedConstellationNum,
                   ascension: GOODCharacter.ascensionByLevel(avatar.level),
                 ));
+
+        owned[location] = true;
 
         avatar.weapon?.let((weapon) {
           db.weapon.findOrNull(weapon.name)?.let((w) {
@@ -244,7 +251,9 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
       });
     }
 
-    return good;
+    return good.copyWith(
+      characters: good.characters.where((e) => owned[e.key] ?? false).toList(),
+    );
   }
 
   GOOD playerState(int uid) {

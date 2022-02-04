@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
 part 'generated/character.freezed.dart';
@@ -28,7 +29,7 @@ class GSCharacter with _$GSCharacter {
     @FightPropStringConverter()
         required Map<FightProp, PropGrowCurveAndInitial>
             propGrowCurveAndInitials,
-    GSCharacterBuild? characterBuild,
+    Map<String, GSCharacterBuild>? characterBuilds,
   }) = _GSCharacter;
 
   factory GSCharacter.fromJson(Map<String, dynamic> json) =>
@@ -40,13 +41,27 @@ class GSCharacter with _$GSCharacter {
     return skills.firstWhere((s) => s.skillType == st).materialCosts!;
   }
 
-  GSCharacterBuild characterAllBuilds() {
-    return characterBuild?.copyWith(
-          artifactMainPropTypes: {
-            EquipType.BRACER: [FightProp.HP],
-            EquipType.NECKLACE: [FightProp.ATTACK],
-            ...?characterBuild?.artifactMainPropTypes,
-          },
+  String? defaultCharacterBuildRole([String? role]) {
+    if (role != null && (characterBuilds?.keys.contains(role) ?? false)) {
+      return role;
+    }
+    return characterBuilds?.keys
+        .where((r) => characterBuilds?[r]?.recommended ?? false)
+        .last;
+  }
+
+  GSCharacterBuild characterBuildFor(String? role) {
+    role ??= defaultCharacterBuildRole();
+
+    return characterBuilds?[role]?.let(
+          (b) => b.copyWith(
+            role: role,
+            artifactMainPropTypes: {
+              EquipType.BRACER: [FightProp.HP],
+              EquipType.NECKLACE: [FightProp.ATTACK],
+              ...?b.artifactMainPropTypes,
+            },
+          ),
         ) ??
         GSCharacterBuild();
   }
@@ -58,6 +73,8 @@ class GSCharacterBuild with _$GSCharacterBuild {
 
   @JsonSerializable(fieldRename: FieldRename.pascal)
   factory GSCharacterBuild({
+    bool? recommended,
+    String? role,
     List<String>? weapons,
     List<List<String>>? artifactSetPairs,
     @EquipTypeStringConverter()
