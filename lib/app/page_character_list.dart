@@ -129,10 +129,14 @@ class CharacterListTile extends HookWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(c.character.name.text(Lang.CHS)),
-                              _buildTalentLevels(context),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 2),
+                                child: _buildTalentLevels(context),
+                              ),
                               Text(
                                 c.c.role ?? "",
-                                style: const TextStyle(fontSize: 9),
+                                style: const TextStyle(fontSize: 8),
                               ),
                             ],
                           ),
@@ -386,26 +390,29 @@ class CharacterListTile extends HookWidget {
       spacing: 4,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        ...?builds.skillPriority?.expand((k) => k).map(
-              (key) => Text.rich(TextSpan(
-                children: [
-                  TextSpan(
-                    text: "${key.string()}.",
-                    style: TextStyle(
-                      color: Theme.of(context).hintColor,
-                      fontSize: 10,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "${c.c.talent[TalentType.values[key.index]]}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
-                  )
-                ],
-              )),
+        ...?builds.skillPriority
+            ?.mapIndexed(
+              (i, keys) => keys.mapIndexed((j, key) => Text.rich(TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            "${j > 0 ? " ~= " : (i > 0 ? " > " : "")}${key.string()}.",
+                        style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                          fontSize: 10,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "${c.c.talent[TalentType.values[key.index]]}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                        ),
+                      )
+                    ],
+                  ))),
             )
+            .expand((k) => k)
       ],
     );
   }
