@@ -1,15 +1,11 @@
 import 'dart:developer';
 
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_services_binding/flutter_services_binding.dart';
 import 'package:genshintools/app/gamedata/gamedata.dart';
-import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/syncer/syncer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,7 +13,6 @@ import 'package:path_provider/path_provider.dart';
 import 'app/app_main.dart';
 import 'app/auth/auth.dart';
 import 'app/gacha/gacha.dart';
-import 'firebase_options.dart';
 import 'genshindb/genshindb.dart';
 import 'theme.dart';
 
@@ -26,13 +21,6 @@ void main() async {
   FlutterServicesBinding.ensureInitialized();
 
   try {
-    if (!kIsWeb) {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    }
-
     var d = kIsWeb
         ? HydratedStorage.webStorageDirectory
         : await getTemporaryDirectory();
@@ -64,9 +52,6 @@ class AppRoot extends HookWidget {
     required this.syncer,
     Key? key,
   }) : super(key: key);
-
-  static FirebaseAnalyticsObserver? observer = kIsWeb.ifFalseOrNull(
-      () => FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance));
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +93,6 @@ class AppRoot extends HookWidget {
           child: syncer.provide(MaterialApp(
             title: '原神工具箱',
             theme: theme,
-            navigatorObservers: <NavigatorObserver>[
-              ...?observer?.let((o) => [o])
-            ],
             home: AppMain(),
           )),
         );

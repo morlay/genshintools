@@ -28,9 +28,6 @@ dependencies:
   filesize: ^2.0.1
   flutter_hooks: ^0.18.1
   rxdart: ^0.27.3
-  firebase_core: ^1.10.6
-  firebase_analytics: ^9.0.4
-  firebase_crashlytics: ^2.4.4
 
 dev_dependencies:
   flutter_lints: ^1.0.0
