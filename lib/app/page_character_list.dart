@@ -387,7 +387,7 @@ class CharacterListTile extends HookWidget {
     var builds = c.character.characterBuildFor(c.c.role);
 
     return Wrap(
-      spacing: 4,
+      spacing: 0,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         ...?builds.skillPriority

@@ -138,7 +138,8 @@ class ViewSkillValues extends HookWidget {
       ];
     }
 
-    if (label.endsWith("伤害") || label.contains("射击")) {
+    if ((label.contains("伤害") && !label.contains("提升")) ||
+        label.contains("射击")) {
       var base = FightProp.ATTACK;
       var skillT = t;
 

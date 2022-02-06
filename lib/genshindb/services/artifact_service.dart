@@ -190,6 +190,11 @@ class ArtifactService with _$ArtifactService {
     return artifactAppendPropDepots![find(keyOrName).appendPropDepotId]!;
   }
 
+  GSArtifactAppendDepot artifactAppendDepotFromSetKey(
+      String setKeyOrName, EquipType equipType) {
+    return artifactAppendDepot(findSet(setKeyOrName).artifact(equipType).key);
+  }
+
   double mainFightProp(
     FightProp mainFightProp,
     int rarity,

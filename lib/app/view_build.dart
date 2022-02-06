@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:genshintools/genshindb/genshindb.dart';
 import 'package:genshintools/genshindb/good/good.dart';
 
 import 'gamedata/gamedata.dart';
+import 'page_artifact_add.dart';
 
 class WeaponListTile extends HookWidget {
   final GSWeapon weapon;
@@ -339,7 +342,8 @@ class ViewBuildArtifacts extends HookWidget {
                 _buildMainProp(context, a),
               ],
             );
-          })
+          }),
+          _buildAppendProps(context),
         ],
       ),
     );
@@ -355,7 +359,7 @@ class ViewBuildArtifacts extends HookWidget {
           Text(
             currentArtifact.slotKey.asEquipType().label(),
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).primaryColor,
             ),
@@ -373,7 +377,7 @@ class ViewBuildArtifacts extends HookWidget {
                 TextSpan(
                   text: "${currentArtifact.level}",
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -439,6 +443,123 @@ class ViewBuildArtifacts extends HookWidget {
               ),
             )),
       ],
+    );
+  }
+
+  bool isUsefulAppendProp(FightProp fp) =>
+      (builds.artifactAffixPropTypes?.contains(fp) ?? false);
+
+  Widget _buildAppendProps(BuildContext context) {
+    var blocGameData = BlocGameData.read(context);
+    var as = blocGameData.db.artifact;
+
+    var appendPropIndexes =
+        current.artifacts.fold<Map<FightProp, List<int>>>({}, (ret, a) {
+      var artifactAppendDepot =
+          as.artifactAppendDepotFromSetKey(a.setKey, a.slotKey.asEquipType());
+
+      return a.substats.fold<Map<FightProp, List<int>>>(
+          ret,
+          (substats, ss) => {
+                ...substats,
+                ss.key.asFightProp(): [
+                  ...?substats[ss.key.asFightProp()],
+                  ...artifactAppendDepot.valueIndexes(
+                    ss.key.asFightProp(),
+                    ss.stringValue(),
+                  )
+                ]..sort((a, b) => b - a),
+              });
+    });
+
+    var isDPS = isUsefulAppendProp(FightProp.CRITICAL_HURT);
+
+    var usefullyCount = appendPropIndexes.keys.fold<int>(
+        0,
+        (c, fp) =>
+            (c + (isUsefulAppendProp(fp) ? appendPropIndexes[fp]!.length : 0)));
+
+    var eremCount = appendPropIndexes.keys.fold<int>(
+        0,
+        (c, fp) => (c +
+            ((fp == FightProp.CHARGE_EFFICIENCY ||
+                        fp == FightProp.ELEMENT_MASTERY) &&
+                    isUsefulAppendProp(fp)
+                ? appendPropIndexes[fp]!.length
+                : 0)));
+
+    var critCount = appendPropIndexes.keys.fold<int>(
+        0,
+        (c, fp) => (c +
+            ((fp == FightProp.CRITICAL || fp == FightProp.CRITICAL_HURT) &&
+                    isUsefulAppendProp(fp)
+                ? appendPropIndexes[fp]!.length
+                : 0)));
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Wrap(
+        runSpacing: 6,
+        children: [
+          DefaultTextStyle.merge(
+            style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [const Text("有效词条"), Text("$usefullyCount")],
+            ),
+          ),
+          ...?isDPS.ifTrueOrNull(() => [
+                DefaultTextStyle.merge(
+                  style:
+                      const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("输出词条"),
+                      Text("${usefullyCount - eremCount}")
+                    ],
+                  ),
+                ),
+                DefaultTextStyle.merge(
+                  style:
+                      const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [const Text("双暴词条"), Text("$critCount")],
+                  ),
+                ),
+              ]),
+          ...(appendPropIndexes.keys.toList()
+                ..sort((a, b) => (a.index - b.index)))
+              .map((fp) => Stack(
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: DefaultTextStyle.merge(
+                          style: TextStyle(
+                              fontSize: 8,
+                              fontWeight: isUsefulAppendProp(fp)
+                                  .ifTrueOrNull(() => FontWeight.bold)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(fp.label()),
+                              Text("${appendPropIndexes[fp]!.length}")
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 13),
+                          child: AppendValueIndex(
+                            indexes: appendPropIndexes[fp]!,
+                          ))
+                    ],
+                  ))
+        ],
+      ),
     );
   }
 }
