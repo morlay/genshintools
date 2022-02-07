@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:genshintools/genshindb/genshindb.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
 typedef ShouldHighlight = bool Function(FightProp fightProp);
+typedef ShouldCalc = double Function(FightProp fightProp, double value);
 
 Map<FightProp, bool> hiddenProps = {
   FightProp.ADD_ELEMENTAL_SKILL_LEVEL: true,
@@ -17,10 +20,12 @@ class ViewFightProps extends HookWidget {
   final FightProps fightProps;
   final bool asDashboard;
   final ShouldHighlight? shouldHighlight;
+  final ShouldCalc? shouldCalc;
 
   const ViewFightProps({
     required this.fightProps,
     this.shouldHighlight,
+    this.shouldCalc,
     this.asDashboard = false,
     Key? key,
   }) : super(key: key);
@@ -35,7 +40,7 @@ class ViewFightProps extends HookWidget {
             ?.let((it) => ConstrainedBox(
                   constraints: const BoxConstraints(
                     minWidth: 10 * 6,
-                    maxWidth: 10 * 6,
+                    maxWidth: 10 * 8,
                   ),
                   child: it,
                 )))
@@ -57,13 +62,9 @@ class ViewFightProps extends HookWidget {
     if (asDashboard) {
       switch (k) {
         case FightProp.ADD_ELEMENTAL_SKILL_LEVEL:
-          return null;
         case FightProp.ADD_ELEMENTAL_BURST_LEVEL:
-          return null;
         case FightProp.BASE_HP:
-          return null;
         case FightProp.BASE_ATTACK:
-          return null;
         case FightProp.BASE_DEFENSE:
           return null;
         case FightProp.HP:
@@ -127,7 +128,38 @@ class ViewFightProps extends HookWidget {
       }
     }
 
-    return _buildLabelAndValue(context, k, v);
+    if (shouldCalc == null) {
+      return _buildLabelAndValue(context, k, v);
+    }
+
+    switch (k) {
+      case FightProp.HP_PERCENT:
+        return _buildLabelAndValue(
+          context,
+          k,
+          v,
+          base: FightProp.HP,
+          baseValue: shouldCalc!(k, v),
+        );
+      case FightProp.ATTACK_PERCENT:
+        return _buildLabelAndValue(
+          context,
+          k,
+          v,
+          base: FightProp.ATTACK,
+          baseValue: shouldCalc!(k, v),
+        );
+      case FightProp.DEFENSE_PERCENT:
+        return _buildLabelAndValue(
+          context,
+          k,
+          v,
+          base: FightProp.DEFENSE,
+          baseValue: shouldCalc!(k, v),
+        );
+      default:
+        return _buildLabelAndValue(context, k, v);
+    }
   }
 
   Widget _buildLabelAndValue(
@@ -141,77 +173,67 @@ class ViewFightProps extends HookWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Text(
-              k.label(),
-              textAlign: TextAlign.start,
-              style: TextStyle(
+      child: DefaultTextStyle.merge(
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          fontSize: 12,
+          color: Theme.of(context).primaryColor,
+          fontFeatures: const [FontFeature.tabularFigures()],
+          fontWeight: shouldHighlight
+              ?.let((fn) => fn(k))
+              .ifTrueOrNull(() => FontWeight.bold),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                k.label(),
+                textAlign: TextAlign.start,
+                style: TextStyle(
                   fontSize: 9,
                   color: Theme.of(context).hintColor,
                   fontWeight: shouldHighlight
                       ?.let((fn) => fn(k))
-                      .ifTrueOrNull(() => FontWeight.w900)),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: SizedBox(
-              width: double.infinity,
-              child: DefaultTextStyle.merge(
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: shouldHighlight
-                      ?.let((fn) => fn(k))
-                      .ifTrueOrNull(() => FontWeight.bold),
-                ),
-                child: Stack(
-                  children: [
-                    ...?baseValue
-                        ?.let((baseValue) => (baseValue != v))
-                        .ifTrueOrNull(() => [
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                child: Text(
-                                  format(baseValue, base!.format()),
-                                  style: const TextStyle(
-                                    fontSize: 9,
-                                  ),
-                                ),
-                              )
-                            ]),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: baseValue
-                                ?.let((baseValue) => baseValue != v)
-                                .ifTrueOrNull(
-                                    () => const EdgeInsets.only(top: 9)) ??
-                            const EdgeInsets.all(0),
-                        child: Text.rich(TextSpan(
-                          children: [
-                            ...formatValue.split("%").mapIndexed((i, e) => i > 0
-                                ? const TextSpan(
-                                    text: "%",
-                                    style: TextStyle(fontSize: 9),
-                                  )
-                                : TextSpan(text: e))
-                          ],
-                        )),
-                      ),
-                    )
-                  ],
+                      .ifTrueOrNull(() => FontWeight.w900),
                 ),
               ),
             ),
-          )
-        ],
+            Wrap(
+              spacing: 2,
+              runSpacing: -1,
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: asDashboard ? double.infinity : null,
+                  child: Text.rich(TextSpan(
+                    children: [
+                      ...formatValue.split("%").mapIndexed((i, e) => i > 0
+                          ? const TextSpan(
+                              text: "%",
+                              style: TextStyle(fontSize: 9),
+                            )
+                          : TextSpan(text: e))
+                    ],
+                  )),
+                ),
+                ...?baseValue
+                    ?.let((baseValue) => (baseValue != v))
+                    .ifTrueOrNull(
+                      () => [
+                        Text(
+                          format(baseValue, base!.format()),
+                          style: const TextStyle(
+                            fontSize: 8,
+                          ),
+                        )
+                      ],
+                    ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

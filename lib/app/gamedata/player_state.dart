@@ -27,7 +27,9 @@ class CharacterWithState with _$CharacterWithState {
     ArtifactService as,
     GSCharacterBuild builds,
     FightProps fightProps, {
-    bool? details,
+    String? location,
+    bool? chargeEfficiencyAsDPS,
+    bool? asDetails,
   }) {
     Map<FightProp, List<int>> appendPropIndexes = {};
     Map<FightProp, double> appendPropRanks = {};
@@ -47,8 +49,8 @@ class CharacterWithState with _$CharacterWithState {
           )
         ]..sort((a, b) => b - a);
 
-        appendPropRanks[fp] =
-            artifactAppendDepot.rank(fp, appendPropIndexes[fp]!, fightProps);
+        appendPropRanks[fp] = artifactAppendDepot.rank(
+            fp, appendPropIndexes[fp]!, fightProps, location);
       }
     }
 
@@ -59,48 +61,84 @@ class CharacterWithState with _$CharacterWithState {
 
     Map<String, Rank> ranks = {};
 
+    double allRank = 0;
+    double dpsRank = 0;
+    double critRank = 0;
+    List<String> dpsKeys = [];
+
+    for (var fp in appendPropRanks.keys) {
+      if (isUsed(fp)) {
+        var val = appendPropRanks[fp]!;
+
+        allRank += val;
+
+        if (isDPS) {
+          switch (fp) {
+            case FightProp.CRITICAL:
+            case FightProp.CRITICAL_HURT:
+              dpsRank += val;
+              critRank += val;
+              break;
+            case FightProp.ATTACK:
+            case FightProp.ATTACK_PERCENT:
+            case FightProp.HP:
+            case FightProp.HP_PERCENT:
+            case FightProp.DEFENSE:
+            case FightProp.DEFENSE_PERCENT:
+              dpsRank += val;
+              dpsKeys.add(fp.label()[0]);
+              break;
+            case FightProp.ELEMENT_MASTERY:
+              dpsRank += val;
+              dpsKeys.add("精");
+              break;
+            case FightProp.CHARGE_EFFICIENCY:
+              if (chargeEfficiencyAsDPS ?? false) {
+                dpsRank += val;
+                dpsKeys.add("充");
+              }
+              break;
+            default:
+          }
+        }
+      }
+    }
+
     ranks["有效词条"] = Rank(
-      value: appendPropRanks.keys.fold<double>(
-          0, (c, fp) => (c + (isUsed(fp) ? appendPropRanks[fp]! : 0))),
+      value: allRank,
       indexes: [],
       used: true,
     );
 
-    if (isDPS) {
-      ranks["输出词条"] = Rank(
-        value: ranks["有效词条"]!.value -
-            appendPropRanks.keys.fold<double>(
-                0,
-                (c, fp) => (c +
-                    ((fp == FightProp.CHARGE_EFFICIENCY ||
-                                fp == FightProp.ELEMENT_MASTERY) &&
-                            isUsed(fp)
-                        ? appendPropRanks[fp]!
-                        : 0))),
+    if (critRank > 0) {
+      var rankRanges = [22, 25, 28, 31, 34];
+
+      ranks[dpsKeys.toSet().toList().join("") + "双暴"] = Rank(
+        value: dpsRank,
         indexes: [],
         used: true,
+        rarity: rankRanges.fold<int>(1, (v, b) => (dpsRank > b) ? v + 1 : v),
       );
 
       ranks["双暴词条"] = Rank(
-        value: appendPropRanks.keys.fold<double>(
-            0,
-            (c, fp) => (c +
-                ((fp == FightProp.CRITICAL || fp == FightProp.CRITICAL_HURT) &&
-                        isUsed(fp)
-                    ? appendPropRanks[fp]!
-                    : 0))),
-        indexes: [],
-        used: true,
-      );
+          value: critRank,
+          indexes: [],
+          used: true,
+          rarity: rankRanges.fold<int>(
+              1, (v, b) => (critRank > b / 2) ? v + 1 : v));
     }
 
-    if (details ?? false) {
+    if (asDetails ?? false) {
       for (var fp in (appendPropRanks.keys.toList()
         ..sort((a, b) => a.index - b.index))) {
         ranks[fp.label()] = Rank(
           value: appendPropRanks[fp]!,
           indexes: appendPropIndexes[fp]!,
           used: isUsed(fp),
+          rarity:
+              (appendPropIndexes[fp]!.fold<double>(0, (r, e) => r + (2 + e)) /
+                      appendPropIndexes[fp]!.length)
+                  .round(),
         );
       }
     }
@@ -111,6 +149,7 @@ class CharacterWithState with _$CharacterWithState {
 
 class Rank {
   double value;
+  int rarity;
   List<int> indexes;
   bool used;
 
@@ -118,5 +157,6 @@ class Rank {
     required this.value,
     required this.indexes,
     this.used = false,
+    this.rarity = 1,
   });
 }

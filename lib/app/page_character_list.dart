@@ -148,7 +148,7 @@ class CharacterListTile extends HookWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: SizedBox(
-                                width: 56,
+                                width: 64,
                                 child: AppendPropsRank(
                                   ranks: c.appendPropsRanks(
                                     db.artifact,
@@ -165,6 +165,15 @@ class CharacterListTile extends HookWidget {
                                           c.w.level,
                                           c.w.refinement,
                                         )),
+                                    location: c.character.key,
+                                    chargeEfficiencyAsDPS: c.artifacts
+                                            .where((a) =>
+                                                a.setKey ==
+                                                db.artifact
+                                                    .findSet("绝缘之旗印")
+                                                    .key)
+                                            .length >=
+                                        4,
                                   ),
                                 ),
                               ),

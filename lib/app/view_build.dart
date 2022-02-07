@@ -452,7 +452,17 @@ class ViewBuildArtifacts extends HookWidget {
     var blocGameData = BlocGameData.read(context);
     var as = blocGameData.db.artifact;
 
-    var ranks = current.appendPropsRanks(as, builds, fightProps, details: true);
+    var ranks = current.appendPropsRanks(
+      as,
+      builds,
+      fightProps,
+      location: current.character.key,
+      chargeEfficiencyAsDPS: current.artifacts
+              .where((a) => a.setKey == as.findSet("绝缘之旗印").key)
+              .length >=
+          4,
+      asDetails: true,
+    );
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -475,7 +485,7 @@ class AppendPropsRank extends StatelessWidget {
       runSpacing: 6,
       children: [
         ...ranks.keys.map((key) => DefaultTextStyle.merge(
-              style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold),
               child: Opacity(
                 opacity: ranks[key]!.used ? 1 : 0.6,
                 child: Stack(
@@ -485,13 +495,25 @@ class AppendPropsRank extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: DefaultTextStyle.merge(
-                        style: const TextStyle(fontSize: 8),
+                        style: const TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.normal,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(key, style: const TextStyle(fontSize: 7)),
-                            Text(ranks[key]!.value.toStringAsFixed(1))
+                            Text(ranks[key]!.value.toStringAsFixed(1),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: linearGradientForRarity(
+                                          ranks[key]!.rarity)
+                                      .colors[0],
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures()
+                                  ],
+                                ))
                           ],
                         ),
                       ),

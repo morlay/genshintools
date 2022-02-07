@@ -35,7 +35,7 @@ class GSCharacter with _$GSCharacter {
   factory GSCharacter.fromJson(Map<String, dynamic> json) =>
       _GSCharacter.fromJson(json);
 
-  get key => name.text(Lang.KEY);
+  String get key => name.text(Lang.KEY);
 
   List<List<GSMaterialCost>> materialCosts(SkillType st) {
     return skills.firstWhere((s) => s.skillType == st).materialCosts!;

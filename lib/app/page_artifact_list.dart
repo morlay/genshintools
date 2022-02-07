@@ -116,6 +116,7 @@ class GOODArtifactListTile extends HookWidget {
     var uid = BlocAuth.watch(context).state.chosenUid();
     var bloc = BlocGameData.read(context);
     var db = BlocGameData.read(context).db;
+
     var a = db.artifact
         .findSet(artifact.setKey)
         .artifact(artifact.slotKey.asEquipType());
@@ -124,6 +125,23 @@ class GOODArtifactListTile extends HookWidget {
           (c) => c.characterBuildFor(
               bloc.playerState(uid).character(artifact.location).role),
         );
+
+    var fightProps = db.character.findOrNull(artifact.location)?.let((cc) {
+          var c = bloc.findCharacterWithState(uid, cc.key);
+
+          return db.character
+              .fightProps(
+                c.c.key,
+                c.c.level,
+                c.c.constellation,
+              )
+              .merge(db.weapon.fightProps(
+                c.w.key,
+                c.w.level,
+                c.w.refinement,
+              ));
+        }) ??
+        FightProps({});
 
     var appendDepot = db.artifact.artifactAppendDepot(a.key);
 
@@ -173,11 +191,14 @@ class GOODArtifactListTile extends HookWidget {
       title: Row(
         children: [
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(a.name.text(Lang.CHS)),
+                Text(
+                  a.name.text(Lang.CHS),
+                  style: const TextStyle(fontSize: 11),
+                ),
                 ViewFightProps(
                   shouldHighlight: (fp) => true,
                   fightProps: FightProps({
@@ -198,10 +219,11 @@ class GOODArtifactListTile extends HookWidget {
             child: VerticalDivider(),
           ),
           Expanded(
-            flex: 3,
+            flex: 7,
             child: Wrap(
               spacing: 8,
               runSpacing: 8,
+              alignment: WrapAlignment.spaceAround,
               children: [
                 ...artifact.substats.map((ss) {
                   return Stack(
@@ -221,6 +243,20 @@ class GOODArtifactListTile extends HookWidget {
                         shouldHighlight: (fp) {
                           return builds?.artifactAffixPropTypes?.contains(fp) ??
                               false;
+                        },
+                        shouldCalc: (fp, value) {
+                          if (fp == FightProp.ATTACK_PERCENT) {
+                            return fightProps.get(FightProp.BASE_ATTACK) *
+                                value;
+                          }
+                          if (fp == FightProp.HP_PERCENT) {
+                            return fightProps.get(FightProp.BASE_HP) * value;
+                          }
+                          if (fp == FightProp.DEFENSE_PERCENT) {
+                            return fightProps.get(FightProp.BASE_DEFENSE) *
+                                value;
+                          }
+                          return value;
                         },
                         fightProps: FightProps({
                           ss.key.asFightProp(): appendDepot.valueFor(
