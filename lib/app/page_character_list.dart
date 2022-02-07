@@ -12,6 +12,7 @@ import 'package:genshintools/hook/hook.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'page_character.dart';
+import 'view_build.dart';
 import 'view_material.dart';
 
 class PageCharacterList extends HookWidget {
@@ -141,7 +142,34 @@ class CharacterListTile extends HookWidget {
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      ...?c.todo.ifTrueOrNull(() => [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: SizedBox(
+                                width: 56,
+                                child: AppendPropsRank(
+                                  ranks: c.appendPropsRanks(
+                                    db.artifact,
+                                    c.character
+                                        .characterBuildFor(c.c.role ?? ""),
+                                    db.character
+                                        .fightProps(
+                                          c.c.key,
+                                          c.c.level,
+                                          c.c.constellation,
+                                        )
+                                        .merge(db.weapon.fightProps(
+                                          c.w.key,
+                                          c.w.level,
+                                          c.w.refinement,
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ]),
                     ],
                   ),
                   Padding(

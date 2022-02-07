@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/constants.dart';
+import 'package:genshintools/genshindb/genshindb.dart';
 
 import 'equip_affix.dart';
 import 'i18n.dart';
@@ -90,6 +91,55 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
       return t.toStringAsFixed(3).substring(1);
     }
     return t.toStringAsFixed(0);
+  }
+
+  double rank(FightProp fp, List<int> indexes, FightProps fightProps) {
+    return sum(indexes.map((i) {
+      double base = 1;
+
+      calcBase(double v, double p, bool isPercent) {
+        if (isPercent) {
+          if (p < v) {
+            base = p / v;
+          }
+        } else {
+          if (v < p) {
+            base = v / p;
+          }
+        }
+      }
+
+      switch (fp) {
+        case FightProp.ATTACK:
+        case FightProp.ATTACK_PERCENT:
+          var v = calc(FightProp.ATTACK, [i]);
+          var p = calc(FightProp.ATTACK_PERCENT, [i]) *
+              fightProps.get(FightProp.BASE_ATTACK);
+
+          calcBase(v, p, fp == FightProp.ATTACK_PERCENT);
+          break;
+        case FightProp.DEFENSE:
+        case FightProp.DEFENSE_PERCENT:
+          var v = calc(FightProp.DEFENSE, [i]);
+          var p = calc(FightProp.DEFENSE_PERCENT, [i]) *
+              fightProps.get(FightProp.BASE_DEFENSE);
+
+          calcBase(v, p, fp == FightProp.DEFENSE_PERCENT);
+          break;
+        case FightProp.HP:
+        case FightProp.HP_PERCENT:
+          var v = calc(FightProp.HP, [i]);
+          var p = calc(FightProp.HP_PERCENT, [i]) *
+              fightProps.get(FightProp.BASE_HP);
+
+          calcBase(v, p, fp == FightProp.HP_PERCENT);
+          break;
+        default:
+      }
+
+      // 第三档为 1
+      return (calc(fp, [i]) / calc(fp, [2])) * base;
+    })).toDouble();
   }
 
   List<int> valueIndexes(FightProp fp, String? s) {

@@ -514,6 +514,7 @@ class PageCharacter extends HookWidget {
               current: current,
               builds: builds,
               state: state,
+              fightProps: fightProps,
             ),
           )
         ],

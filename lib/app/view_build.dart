@@ -316,11 +316,13 @@ class ViewBuildArtifactSetPair extends HookWidget {
 class ViewBuildArtifacts extends HookWidget {
   final GSCharacterBuild builds;
   final CharacterWithState current;
+  final FightProps fightProps;
   final ValueNotifier<CharacterWithState> state;
 
   const ViewBuildArtifacts({
     required this.builds,
     required this.current,
+    required this.fightProps,
     required this.state,
     Key? key,
   }) : super(key: key);
@@ -446,120 +448,64 @@ class ViewBuildArtifacts extends HookWidget {
     );
   }
 
-  bool isUsefulAppendProp(FightProp fp) =>
-      (builds.artifactAffixPropTypes?.contains(fp) ?? false);
-
   Widget _buildAppendProps(BuildContext context) {
     var blocGameData = BlocGameData.read(context);
     var as = blocGameData.db.artifact;
 
-    var appendPropIndexes =
-        current.artifacts.fold<Map<FightProp, List<int>>>({}, (ret, a) {
-      var artifactAppendDepot =
-          as.artifactAppendDepotFromSetKey(a.setKey, a.slotKey.asEquipType());
-
-      return a.substats.fold<Map<FightProp, List<int>>>(
-          ret,
-          (substats, ss) => {
-                ...substats,
-                ss.key.asFightProp(): [
-                  ...?substats[ss.key.asFightProp()],
-                  ...artifactAppendDepot.valueIndexes(
-                    ss.key.asFightProp(),
-                    ss.stringValue(),
-                  )
-                ]..sort((a, b) => b - a),
-              });
-    });
-
-    var isDPS = isUsefulAppendProp(FightProp.CRITICAL_HURT);
-
-    var usefullyCount = appendPropIndexes.keys.fold<int>(
-        0,
-        (c, fp) =>
-            (c + (isUsefulAppendProp(fp) ? appendPropIndexes[fp]!.length : 0)));
-
-    var eremCount = appendPropIndexes.keys.fold<int>(
-        0,
-        (c, fp) => (c +
-            ((fp == FightProp.CHARGE_EFFICIENCY ||
-                        fp == FightProp.ELEMENT_MASTERY) &&
-                    isUsefulAppendProp(fp)
-                ? appendPropIndexes[fp]!.length
-                : 0)));
-
-    var critCount = appendPropIndexes.keys.fold<int>(
-        0,
-        (c, fp) => (c +
-            ((fp == FightProp.CRITICAL || fp == FightProp.CRITICAL_HURT) &&
-                    isUsefulAppendProp(fp)
-                ? appendPropIndexes[fp]!.length
-                : 0)));
+    var ranks = current.appendPropsRanks(as, builds, fightProps, details: true);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Wrap(
-        runSpacing: 6,
-        children: [
-          DefaultTextStyle.merge(
-            style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [const Text("有效词条"), Text("$usefullyCount")],
-            ),
-          ),
-          ...?isDPS.ifTrueOrNull(() => [
-                DefaultTextStyle.merge(
-                  style:
-                      const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("输出词条"),
-                      Text("${usefullyCount - eremCount}")
-                    ],
-                  ),
-                ),
-                DefaultTextStyle.merge(
-                  style:
-                      const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [const Text("双暴词条"), Text("$critCount")],
-                  ),
-                ),
-              ]),
-          ...(appendPropIndexes.keys.toList()
-                ..sort((a, b) => (a.index - b.index)))
-              .map((fp) => Stack(
-                    children: [
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: DefaultTextStyle.merge(
-                          style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: isUsefulAppendProp(fp)
-                                  .ifTrueOrNull(() => FontWeight.bold)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(fp.label()),
-                              Text("${appendPropIndexes[fp]!.length}")
-                            ],
-                          ),
+      child: AppendPropsRank(ranks: ranks),
+    );
+  }
+}
+
+class AppendPropsRank extends StatelessWidget {
+  const AppendPropsRank({
+    Key? key,
+    required this.ranks,
+  }) : super(key: key);
+
+  final Map<String, Rank> ranks;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      runSpacing: 6,
+      children: [
+        ...ranks.keys.map((key) => DefaultTextStyle.merge(
+              style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+              child: Opacity(
+                opacity: ranks[key]!.used ? 1 : 0.6,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: DefaultTextStyle.merge(
+                        style: const TextStyle(fontSize: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(key, style: const TextStyle(fontSize: 7)),
+                            Text(ranks[key]!.value.toStringAsFixed(1))
+                          ],
                         ),
                       ),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 13),
-                          child: AppendValueIndex(
-                            indexes: appendPropIndexes[fp]!,
-                          ))
-                    ],
-                  ))
-        ],
-      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: AppendValueIndex(
+                          indexes: ranks[key]!.indexes,
+                        ))
+                  ],
+                ),
+              ),
+            ))
+      ],
     );
   }
 }
@@ -570,8 +516,8 @@ class TopLeftTrianglePath extends CustomClipper<Path> {
     var path = Path();
     path.moveTo(0, 0);
     path.lineTo(0, size.height);
-    path.lineTo(size.width / 5 * 2, size.height);
-    path.lineTo(size.width / 5 * 3, 0);
+    path.lineTo(size.width / 5 * 2 - 1, size.height);
+    path.lineTo(size.width / 5 * 3 - 1, 0);
     return path;
   }
 

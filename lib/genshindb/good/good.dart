@@ -216,7 +216,7 @@ class GOODCharacter with _$GOODCharacter {
   factory GOODCharacter.fromJson(Map<String, dynamic> json) =>
       _GOODCharacter.fromJson(json);
 
-  get own => level > 0;
+  bool get own => level > 0;
 
   int skillLevel(SkillType skill) {
     return talent[TalentType.values[skill.index]] ?? 1;
