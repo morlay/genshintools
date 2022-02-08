@@ -32,6 +32,7 @@ class CharacterWithState with _$CharacterWithState {
     bool? asDetails,
   }) {
     Map<FightProp, List<int>> appendPropIndexes = {};
+
     Map<FightProp, double> appendPropRanks = {};
 
     for (var a in artifacts) {
@@ -40,31 +41,67 @@ class CharacterWithState with _$CharacterWithState {
 
       for (var ss in a.substats) {
         var fp = ss.key.asFightProp();
+        var tfp = fp;
 
-        appendPropIndexes[fp] = [
-          ...?appendPropIndexes[fp],
-          ...artifactAppendDepot.valueIndexes(
+        switch (fp) {
+          case FightProp.HP_PERCENT:
+            tfp = FightProp.HP;
+            break;
+          case FightProp.DEFENSE_PERCENT:
+            tfp = FightProp.DEFENSE;
+            break;
+          case FightProp.ATTACK_PERCENT:
+            tfp = FightProp.ATTACK;
+            break;
+          default:
+        }
+
+        appendPropIndexes[tfp] = [
+          ...?appendPropIndexes[tfp],
+          ...artifactAppendDepot.valueNs(
             ss.key.asFightProp(),
             ss.stringValue(),
           )
         ]..sort((a, b) => b - a);
 
-        appendPropRanks[fp] = artifactAppendDepot.rank(
-            fp, appendPropIndexes[fp]!, fightProps, location);
+        appendPropRanks[tfp] = (appendPropRanks[tfp] ?? 0) +
+            artifactAppendDepot.rank(
+              fp,
+              artifactAppendDepot.valueNs(
+                ss.key.asFightProp(),
+                ss.stringValue(),
+              ),
+              fightProps,
+              location,
+            );
       }
     }
 
     bool isUsed(FightProp fp) =>
         (builds.artifactAffixPropTypes?.contains(fp) ?? false);
 
+    int fpRarity(FightProp fp, double rank) => [1, 2, 3, 4].fold<int>(
+          1,
+          (v, b) => (rank >
+                  b *
+                      ((fp == FightProp.CRITICAL ||
+                              fp == FightProp.CRITICAL_HURT)
+                          ? 2
+                          : 1))
+              ? v + 1
+              : v,
+        );
+
     var isDPS = isUsed(FightProp.CRITICAL_HURT);
 
     Map<String, Rank> ranks = {};
 
+    var critRanges = [8, 12, 16, 20];
+
     double allRank = 0;
     double dpsRank = 0;
     double critRank = 0;
-    List<String> dpsKeys = [];
+    List<FightProp> dpsKeys = [];
 
     for (var fp in appendPropRanks.keys) {
       if (isUsed(fp)) {
@@ -81,21 +118,27 @@ class CharacterWithState with _$CharacterWithState {
               break;
             case FightProp.ATTACK:
             case FightProp.ATTACK_PERCENT:
+              dpsRank += val;
+              dpsKeys.add(FightProp.ATTACK);
+              break;
             case FightProp.HP:
             case FightProp.HP_PERCENT:
+              dpsRank += val;
+              dpsKeys.add(FightProp.HP);
+              break;
             case FightProp.DEFENSE:
             case FightProp.DEFENSE_PERCENT:
               dpsRank += val;
-              dpsKeys.add(fp.label()[0]);
+              dpsKeys.add(FightProp.DEFENSE);
               break;
             case FightProp.ELEMENT_MASTERY:
               dpsRank += val;
-              dpsKeys.add("精");
+              dpsKeys.add(fp);
               break;
             case FightProp.CHARGE_EFFICIENCY:
               if (chargeEfficiencyAsDPS ?? false) {
                 dpsRank += val;
-                dpsKeys.add("充");
+                dpsKeys.add(fp);
               }
               break;
             default:
@@ -111,34 +154,57 @@ class CharacterWithState with _$CharacterWithState {
     );
 
     if (critRank > 0) {
-      var rankRanges = [22, 25, 28, 31, 34];
+      var props = dpsKeys.toSet().toList();
 
-      ranks[dpsKeys.toSet().toList().join("") + "双暴"] = Rank(
+      var critR = Rank(
+        value: critRank,
+        indexes: [],
+        used: true,
+        rarity: critRanges.fold<int>(1, (v, b) => (critRank > b) ? v + 1 : v),
+      );
+
+      double totalN = props.fold(
+          20,
+          (t, fp) => (t +
+              (4 * (fp == FightProp.ATTACK && location == "HuTao" ? 0.4 : 1))));
+
+      double otherR = critR.rarity * (20 / (totalN));
+
+      for (var fp in props) {
+        switch (fp) {
+          case FightProp.ATTACK:
+            otherR += fpRarity(fp, appendPropRanks[fp]!) *
+                ((4 * (location == "HuTao" ? 0.4 : 1)) / (totalN));
+            break;
+          default:
+            otherR += fpRarity(fp, appendPropRanks[fp]!) * (4 / (totalN));
+        }
+      }
+
+      ranks[props
+              .map(
+                  (fp) => fp == FightProp.ELEMENT_MASTERY ? "精" : fp.label()[0])
+              .join("") +
+          "双暴"] = Rank(
         value: dpsRank,
         indexes: [],
         used: true,
-        rarity: rankRanges.fold<int>(1, (v, b) => (dpsRank > b) ? v + 1 : v),
+        rarity: otherR.toInt(),
       );
 
-      ranks["双暴词条"] = Rank(
-          value: critRank,
-          indexes: [],
-          used: true,
-          rarity: rankRanges.fold<int>(
-              1, (v, b) => (critRank > b / 2) ? v + 1 : v));
+      ranks["双暴词条"] = critR;
     }
 
     if (asDetails ?? false) {
       for (var fp in (appendPropRanks.keys.toList()
         ..sort((a, b) => a.index - b.index))) {
+        var rank = appendPropRanks[fp]!;
+
         ranks[fp.label()] = Rank(
-          value: appendPropRanks[fp]!,
+          value: rank,
           indexes: appendPropIndexes[fp]!,
           used: isUsed(fp),
-          rarity:
-              (appendPropIndexes[fp]!.fold<double>(0, (r, e) => r + (2 + e)) /
-                      appendPropIndexes[fp]!.length)
-                  .round(),
+          rarity: fpRarity(fp, rank),
         );
       }
     }

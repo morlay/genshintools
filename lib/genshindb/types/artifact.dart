@@ -73,9 +73,9 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
 
   Iterable<FightProp> get keys => values.keys;
 
-  double calc(FightProp fp, List<int>? indexes) {
+  double calc(FightProp fp, List<int>? ns) {
     var values = get(fp);
-    return sum((indexes ?? []).map((i) => values[i]));
+    return sum((ns ?? []).map((i) => values[abs(i) - 1]));
   }
 
   final Map<FightProp, Map<String, List<int>>> _fpCanValues = {};
@@ -147,11 +147,11 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
       }
 
       // 平均值
-      return (calc(fp, [i]) / (calc(fp, [0, 1, 2, 3]) / 4)) * base;
+      return (calc(fp, [i]) / (calc(fp, [1, 2, 3, 4]) / 4)) * base;
     })).toDouble();
   }
 
-  List<int> valueIndexes(FightProp fp, String? s) {
+  List<int> valueNs(FightProp fp, String? s) {
     if (s == null) {
       return [];
     }
@@ -173,11 +173,11 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
   }
 
   double valueFor(FightProp fp, String? s) {
-    return calc(fp, valueIndexes(fp, s));
+    return calc(fp, valueNs(fp, s));
   }
 
   String valueFix(FightProp fp, String? s) {
-    var indexes = valueIndexes(fp, s);
+    var indexes = valueNs(fp, s);
     return "${format(calc(fp, indexes))}?${indexes.length}";
   }
 
@@ -191,9 +191,15 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
     var values = get(fp);
 
     for (var n = 1; n <= 6; n++) {
-      combination(values, n).forEach((indexes) {
-        var t = sum(indexes.map((i) => values[i]));
-        set["${format(t)}?${indexes.length}"] = indexes;
+      combination(values, n).forEach((ns) {
+        if (fp == FightProp.HP ||
+            fp == FightProp.ATTACK ||
+            fp == FightProp.DEFENSE) {
+          ns = ns.map((i) => -i).toList();
+        }
+
+        var t = sum(ns.map((i) => values[abs(i) - 1]));
+        set["${format(t)}?${ns.length}"] = ns;
       });
     }
 
@@ -203,6 +209,10 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
         {}, (previousValue, v) => {...previousValue, v: set[v]!});
 
     return _fpCanValues[fp]!;
+  }
+
+  abs(int i) {
+    return i < 0 ? -i : i;
   }
 }
 
@@ -224,7 +234,7 @@ List<List<int>> combination<T>(List<T> inputArr, int n) {
       for (var i = 0; i < arr.length; i++) {
         combine(arr, [
           ...m,
-          i,
+          i + 1,
         ]);
       }
     }

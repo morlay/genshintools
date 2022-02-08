@@ -153,6 +153,7 @@ class PageCharacter extends HookWidget {
                             ),
                           ),
                           data: """
+双暴词条练度评分采用 [「20+4n」](https://bbs.nga.cn/read.php?tid=28464477);
 配装参考数据来自 [Genshin Impact Helper Team](https://heystacks.org/doc/743/genshin-impact-general-character-strats)
 """,
                         ),

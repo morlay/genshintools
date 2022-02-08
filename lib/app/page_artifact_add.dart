@@ -149,7 +149,7 @@ class PageArtifactAdd extends HookWidget {
                   (ss.value == 0
                       ? 1
                       : artifactAppendDepot
-                          .valueIndexes(ss.key.asFightProp(), ss.stringValue())
+                          .valueNs(ss.key.asFightProp(), ss.stringValue())
                           .length),
             );
 
@@ -254,7 +254,7 @@ class PageArtifactAdd extends HookWidget {
 
   Widget buildAppendValue(
       GSArtifactAppendDepot artifactAppendDepot, FightProp fp, String v) {
-    var indexes = artifactAppendDepot.valueIndexes(fp, v);
+    var indexes = artifactAppendDepot.valueNs(fp, v);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -272,10 +272,13 @@ class PageArtifactAdd extends HookWidget {
           ),
         ),
         Positioned(
-          right: 0,
+          left: 0,
           bottom: -6,
-          child: AppendValueIndex(
-            indexes: indexes,
+          child: SizedBox(
+            width: 56,
+            child: AppendValueIndex(
+              indexes: indexes,
+            ),
           ),
         )
       ],
@@ -456,21 +459,38 @@ class AppendValueIndex extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ...indexes.map(
-          (i) => Padding(
-            padding: const EdgeInsets.only(right: 1),
-            child: Container(
+    if (indexes.isEmpty) {
+      return Row(
+        children: const [],
+      );
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        runSpacing: 1,
+        spacing: 1,
+        children: [
+          ...indexes.map(
+            (n) => Container(
               width: 5,
               height: 5,
               decoration: BoxDecoration(
-                color: linearGradientForRarity(i + 2).colors[0],
+                color: n > 0
+                    ? linearGradientForRarity((n < 0 ? -n : n) + 1).colors[0]
+                    : null,
+                border: n < 0
+                    ? Border.all(
+                        width: 1.5,
+                        color: linearGradientForRarity((n < 0 ? -n : n) + 1)
+                            .colors[0],
+                      )
+                    : null,
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

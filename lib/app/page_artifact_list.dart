@@ -71,7 +71,11 @@ class PageArtifactList extends HookWidget {
                           },
                           title: Row(
                             children: const [
-                              AppendValueIndex(indexes: [0, 1, 2, 3]),
+                              SizedBox(
+                                width: 24 * 2,
+                                child: AppendValueIndex(
+                                    indexes: [-4, -3, -2, -1, 1, 2, 3, 4]),
+                              ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
@@ -232,10 +236,13 @@ class GOODArtifactListTile extends HookWidget {
                       Positioned(
                         bottom: -4,
                         left: 2,
-                        child: AppendValueIndex(
-                          indexes: appendDepot.valueIndexes(
-                            ss.key.asFightProp(),
-                            ss.stringValue(),
+                        child: SizedBox(
+                          width: 56,
+                          child: AppendValueIndex(
+                            indexes: appendDepot.valueNs(
+                              ss.key.asFightProp(),
+                              ss.stringValue(),
+                            ),
                           ),
                         ),
                       ),
