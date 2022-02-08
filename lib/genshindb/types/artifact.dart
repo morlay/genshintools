@@ -124,7 +124,7 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
           base = calcBase(v, p, fp == FightProp.ATTACK_PERCENT);
 
           if (location == "HuTao") {
-            base = base * 0.6;
+            base = base * 0.4;
           }
 
           break;
