@@ -29,7 +29,8 @@ class _$GSEnemyTearOff {
       required String type,
       required GSMonsterRarity monsterRarity,
       I18n? title,
-      I18n? specialName}) {
+      I18n? specialName,
+      FightProps? addProps}) {
     return _Enemy(
       id: id,
       name: name,
@@ -38,6 +39,7 @@ class _$GSEnemyTearOff {
       monsterRarity: monsterRarity,
       title: title,
       specialName: specialName,
+      addProps: addProps,
     );
   }
 
@@ -58,6 +60,7 @@ mixin _$GSEnemy {
   GSMonsterRarity get monsterRarity => throw _privateConstructorUsedError;
   I18n? get title => throw _privateConstructorUsedError;
   I18n? get specialName => throw _privateConstructorUsedError;
+  FightProps? get addProps => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -75,11 +78,13 @@ abstract class $GSEnemyCopyWith<$Res> {
       String type,
       GSMonsterRarity monsterRarity,
       I18n? title,
-      I18n? specialName});
+      I18n? specialName,
+      FightProps? addProps});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res>? get title;
   $I18nCopyWith<$Res>? get specialName;
+  $FightPropsCopyWith<$Res>? get addProps;
 }
 
 /// @nodoc
@@ -99,6 +104,7 @@ class _$GSEnemyCopyWithImpl<$Res> implements $GSEnemyCopyWith<$Res> {
     Object? monsterRarity = freezed,
     Object? title = freezed,
     Object? specialName = freezed,
+    Object? addProps = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -129,6 +135,10 @@ class _$GSEnemyCopyWithImpl<$Res> implements $GSEnemyCopyWith<$Res> {
           ? _value.specialName
           : specialName // ignore: cast_nullable_to_non_nullable
               as I18n?,
+      addProps: addProps == freezed
+          ? _value.addProps
+          : addProps // ignore: cast_nullable_to_non_nullable
+              as FightProps?,
     ));
   }
 
@@ -160,6 +170,17 @@ class _$GSEnemyCopyWithImpl<$Res> implements $GSEnemyCopyWith<$Res> {
       return _then(_value.copyWith(specialName: value));
     });
   }
+
+  @override
+  $FightPropsCopyWith<$Res>? get addProps {
+    if (_value.addProps == null) {
+      return null;
+    }
+
+    return $FightPropsCopyWith<$Res>(_value.addProps!, (value) {
+      return _then(_value.copyWith(addProps: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -174,7 +195,8 @@ abstract class _$EnemyCopyWith<$Res> implements $GSEnemyCopyWith<$Res> {
       String type,
       GSMonsterRarity monsterRarity,
       I18n? title,
-      I18n? specialName});
+      I18n? specialName,
+      FightProps? addProps});
 
   @override
   $I18nCopyWith<$Res> get name;
@@ -182,6 +204,8 @@ abstract class _$EnemyCopyWith<$Res> implements $GSEnemyCopyWith<$Res> {
   $I18nCopyWith<$Res>? get title;
   @override
   $I18nCopyWith<$Res>? get specialName;
+  @override
+  $FightPropsCopyWith<$Res>? get addProps;
 }
 
 /// @nodoc
@@ -202,6 +226,7 @@ class __$EnemyCopyWithImpl<$Res> extends _$GSEnemyCopyWithImpl<$Res>
     Object? monsterRarity = freezed,
     Object? title = freezed,
     Object? specialName = freezed,
+    Object? addProps = freezed,
   }) {
     return _then(_Enemy(
       id: id == freezed
@@ -232,6 +257,10 @@ class __$EnemyCopyWithImpl<$Res> extends _$GSEnemyCopyWithImpl<$Res>
           ? _value.specialName
           : specialName // ignore: cast_nullable_to_non_nullable
               as I18n?,
+      addProps: addProps == freezed
+          ? _value.addProps
+          : addProps // ignore: cast_nullable_to_non_nullable
+              as FightProps?,
     ));
   }
 }
@@ -247,7 +276,8 @@ class _$_Enemy extends _Enemy {
       required this.type,
       required this.monsterRarity,
       this.title,
-      this.specialName})
+      this.specialName,
+      this.addProps})
       : super._();
 
   factory _$_Enemy.fromJson(Map<String, dynamic> json) =>
@@ -267,10 +297,12 @@ class _$_Enemy extends _Enemy {
   final I18n? title;
   @override
   final I18n? specialName;
+  @override
+  final FightProps? addProps;
 
   @override
   String toString() {
-    return 'GSEnemy(id: $id, name: $name, dropTag: $dropTag, type: $type, monsterRarity: $monsterRarity, title: $title, specialName: $specialName)';
+    return 'GSEnemy(id: $id, name: $name, dropTag: $dropTag, type: $type, monsterRarity: $monsterRarity, title: $title, specialName: $specialName, addProps: $addProps)';
   }
 
   @override
@@ -286,7 +318,8 @@ class _$_Enemy extends _Enemy {
                 .equals(other.monsterRarity, monsterRarity) &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality()
-                .equals(other.specialName, specialName));
+                .equals(other.specialName, specialName) &&
+            const DeepCollectionEquality().equals(other.addProps, addProps));
   }
 
   @override
@@ -298,7 +331,8 @@ class _$_Enemy extends _Enemy {
       const DeepCollectionEquality().hash(type),
       const DeepCollectionEquality().hash(monsterRarity),
       const DeepCollectionEquality().hash(title),
-      const DeepCollectionEquality().hash(specialName));
+      const DeepCollectionEquality().hash(specialName),
+      const DeepCollectionEquality().hash(addProps));
 
   @JsonKey(ignore: true)
   @override
@@ -319,7 +353,8 @@ abstract class _Enemy extends GSEnemy {
       required String type,
       required GSMonsterRarity monsterRarity,
       I18n? title,
-      I18n? specialName}) = _$_Enemy;
+      I18n? specialName,
+      FightProps? addProps}) = _$_Enemy;
   _Enemy._() : super._();
 
   factory _Enemy.fromJson(Map<String, dynamic> json) = _$_Enemy.fromJson;
@@ -338,6 +373,8 @@ abstract class _Enemy extends GSEnemy {
   I18n? get title;
   @override
   I18n? get specialName;
+  @override
+  FightProps? get addProps;
   @override
   @JsonKey(ignore: true)
   _$EnemyCopyWith<_Enemy> get copyWith => throw _privateConstructorUsedError;

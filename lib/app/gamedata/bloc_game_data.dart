@@ -13,6 +13,8 @@ import 'package:genshintools/syncer/syncer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'buffs.dart';
+
 typedef PlayerStates = Map<int, GOOD>;
 
 class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
@@ -47,6 +49,35 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
       log("$err");
       return GSDB.create();
     }
+  }
+
+  List<FightProps> allBuffs(int uid) {
+    return [
+      ...buffs,
+      ...findCharacterWithState(uid, "班尼特").let((c) {
+        var fps = c.computeFightProps(db);
+        return [
+          FightProps({
+            FightProp.ATTACK: c.calcSkillValue(
+                fps, SkillType.ELEMENTAL_BURST, "攻击力加成比例", fps.calcAttackAdd),
+          }, name: "班尼特 加攻")
+        ];
+      }),
+      ...findCharacterWithState(uid, "云堇").let((c) {
+        var fps = c.computeFightProps(db);
+        return [
+          FightProps({
+            FightProp.NORMAL_ATTACK_EXTRA_HURT: c.calcSkillValue(
+              fps,
+              SkillType.ELEMENTAL_BURST,
+              "伤害值提升",
+              (t, params) =>
+                  fps.calc(t, params) + fps.calc("{param1:F2P}防御力", [0.05]),
+            ),
+          }, name: "云堇 普攻附伤")
+        ];
+      }),
+    ];
   }
 
   syncGameInfo(MiHoYoBBSClient client, int uid,

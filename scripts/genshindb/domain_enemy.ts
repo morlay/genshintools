@@ -55,6 +55,16 @@ export const Enemies = mapKeys(
         Type: t.Type,
         SecurityLevel: t.SecurityLevel,
         Id: t.Id,
+        AddProps: {
+          "FIGHT_PROP_ENEMY_FIRE_SUB_HURT": t.ElecSubHurt,
+          "FIGHT_PROP_ENEMY_ROCK_SUB_HURT": t.ElecSubHurt,
+          "FIGHT_PROP_ENEMY_ELEC_SUB_HURT": t.ElecSubHurt,
+          "FIGHT_PROP_ENEMY_GRASS_SUB_HURT": t.GrassSubHurt,
+          "FIGHT_PROP_ENEMY_WATER_SUB_HURT": t.WaterSubHurt,
+          "FIGHT_PROP_ENEMY_ICE_SUB_HURT": t.IceSubHurt,
+          "FIGHT_PROP_ENEMY_WIND_SUB_HURT": t.WindSubHurt,
+          "FIGHT_PROP_ENEMY_PHYSICAL_SUB_HURT": t.PhysicalSubHurt,
+        }
       };
 
       // ignores

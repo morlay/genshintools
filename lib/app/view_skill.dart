@@ -25,6 +25,12 @@ class ViewSkillValues extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    var finalFightProps = fightProps.merge(FightProps({
+      FightProp.ENEMY_LEVEL: 93,
+      ...?BlocGameData.read(context).db.enemy.find("急冻树").addProps?.fightProps,
+      FightProp.ENEMY_ICE_SUB_HURT: 0.1,
+    }, name: "爆炎/急冻树"));
+
     return Wrap(
       runSpacing: 8,
       children: [
@@ -62,9 +68,11 @@ class ViewSkillValues extends HookWidget {
                 runSpacing: 2,
                 children: [
                   ..._skillValues(
+                    context,
                     parts[0],
                     parts[1],
                     skill.paramsForLevel(level),
+                    finalFightProps,
                   ).map(
                     (e) => Row(
                       children: [
@@ -90,7 +98,8 @@ class ViewSkillValues extends HookWidget {
     );
   }
 
-  Iterable<Widget> _skillValues(String label, String t, List<double> params) {
+  Iterable<Widget> _skillValues(BuildContext ctx, String label, String t,
+      List<double> params, FightProps fightProps) {
     if (t.endsWith("普通攻击伤害")) {
       return [];
     }
@@ -98,12 +107,7 @@ class ViewSkillValues extends HookWidget {
     if (label.endsWith("攻击力加成比例")) {
       return [
         Text(
-          (fightProps.calc("$t基础攻击力", params) +
-                  fightProps.calc(
-                    "{param1:F2P}基础攻击力",
-                    [fightProps.get(FightProp.ATTACK_ADD_RADIO)],
-                  ))
-              .toStringAsFixed(0),
+          fightProps.calcAttackAdd(t, params).toStringAsFixed(0),
         ),
       ];
     }
@@ -184,6 +188,7 @@ class ViewSkillValues extends HookWidget {
           return [
             ...?canPhysicalHurt.ifTrueOrNull(
               () => skillVal.elementAttackAndCriticalHurtValues(
+                ctx,
                 ElementType.Physical,
                 fightProps,
                 [
@@ -193,6 +198,7 @@ class ViewSkillValues extends HookWidget {
             ),
             ...withPatchedFightProps(fightProps, hurtType, (patchedFightProps) {
               return skillVal.elementAttackAndCriticalHurtValues(
+                ctx,
                 characterWithState.character.element,
                 patchedFightProps,
                 [
@@ -205,6 +211,7 @@ class ViewSkillValues extends HookWidget {
           return [
             ...?canPhysicalHurt.ifTrueOrNull(
               () => skillVal.elementAttackAndCriticalHurtValues(
+                ctx,
                 ElementType.Physical,
                 fightProps,
                 [
@@ -214,6 +221,7 @@ class ViewSkillValues extends HookWidget {
             ),
             ...withPatchedFightProps(fightProps, hurtType, (patchedFightProps) {
               return skillVal.elementAttackAndCriticalHurtValues(
+                ctx,
                 characterWithState.character.element,
                 patchedFightProps,
                 [
@@ -225,6 +233,7 @@ class ViewSkillValues extends HookWidget {
         case HurtType.PlungingAttack:
           return [
             ...skillVal.elementAttackAndCriticalHurtValues(
+              ctx,
               ElementType.Physical,
               fightProps,
               [
@@ -232,6 +241,7 @@ class ViewSkillValues extends HookWidget {
               ],
             ),
             ...skillVal.elementAttackAndCriticalHurtValues(
+              ctx,
               characterWithState.character.element,
               fightProps,
               [
@@ -242,6 +252,7 @@ class ViewSkillValues extends HookWidget {
         case HurtType.ElementalSkill:
           return [
             ...skillVal.elementAttackAndCriticalHurtValues(
+              ctx,
               characterWithState.character.element,
               fightProps,
               [
@@ -252,6 +263,7 @@ class ViewSkillValues extends HookWidget {
         case HurtType.ElementalBurst:
           return [
             ...skillVal.elementAttackAndCriticalHurtValues(
+              ctx,
               characterWithState.character.element,
               fightProps,
               [
@@ -310,10 +322,9 @@ class ViewSkillValues extends HookWidget {
               );
 
           return fn(
-            fightProps.add(
-              FightProp.NORMAL_ATTACK_ADD_HURT,
-              paramsOfE[0],
-            ),
+            fightProps.merge(FightProps({
+              FightProp.NORMAL_ATTACK_RADIO: paramsOfE[3],
+            }, name: "炽焰箭")),
           ).map((e) => withPrefix("E", e));
         }
         return fn(fightProps);
@@ -357,13 +368,15 @@ class ViewSkillValues extends HookWidget {
                   0,
                   fightProps.get(FightProp.BASE_ATTACK) * 4,
                 );
-                break;
+                return fn(
+                  fightProps.merge(FightProps({
+                    FightProp.ATTACK: attackAdd,
+                  }, name: "蝶引来生")),
+                ).map((e) => withPrefix(st.key.string(), e));
               default:
             }
 
-            return fn(
-              fightProps.add(FightProp.ATTACK, attackAdd),
-            ).map((e) => withPrefix(st.key.string(), e));
+            return fn(fightProps).map((e) => withPrefix(st.key.string(), e));
           }
         }
 
@@ -371,17 +384,6 @@ class ViewSkillValues extends HookWidget {
     }
   }
 }
-
-Map<ElementType, FightProp> elementFightProps = {
-  ElementType.Pyro: FightProp.FIRE_ADD_HURT,
-  ElementType.Electro: FightProp.ELEC_ADD_HURT,
-  ElementType.Hydro: FightProp.WATER_ADD_HURT,
-  ElementType.Cryo: FightProp.ICE_ADD_HURT,
-  ElementType.Anemo: FightProp.WIND_ADD_HURT,
-  ElementType.Geo: FightProp.ROCK_ADD_HURT,
-  ElementType.Dendro: FightProp.GRASS_ADD_HURT,
-  ElementType.Physical: FightProp.PHYSICAL_ADD_HURT,
-};
 
 Widget elementalContainer(
   Color color,
@@ -448,6 +450,7 @@ class SkillVal {
   });
 
   Iterable<Widget> elementAttackAndCriticalHurtValues(
+    BuildContext context,
     ElementType elementType,
     FightProps fightProps,
     List<FightProp> hurtAddFightTypes,
@@ -458,18 +461,34 @@ class SkillVal {
         _attackAndCriticalHurtValueWith(
           fightProps,
           (r) => fightProps.attackHurt(
+            elementType,
             r,
-            [elementFightProps[elementType]!, ...hurtAddFightTypes],
+            hurtAddFightTypes,
             base,
           ),
         ),
         to: elementType,
       ),
-      ...elementType == ElementType.Anemo
-          ? [
-              _swirlHurt(fightProps),
-            ]
-          : [],
+      ...?(elementType == ElementType.Anemo).ifTrueOrNull(() => [
+            _elementalReaction(
+              fightProps,
+              ElementalReaction.Swirl,
+              ElementType.Pyro,
+              hurtAddFightTypes,
+            ),
+            _elementalReaction(
+              fightProps,
+              ElementalReaction.Swirl,
+              ElementType.Cryo,
+              hurtAddFightTypes,
+            ),
+            _elementalReaction(
+              fightProps,
+              ElementalReaction.Swirl,
+              ElementType.Electro,
+              hurtAddFightTypes,
+            )
+          ]),
       ...elementType == ElementType.Pyro
           ? [
               _elementalReaction(
@@ -546,7 +565,41 @@ class SkillVal {
               ),
             ]
           : [],
-    ];
+    ].map((e) => GestureDetector(
+          onTap: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (ctx) {
+                  return Column(
+                    children: [
+                      const ListTile(title: Text("环境与增益")),
+                      const Divider(height: 1),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ...fightProps.allFrom
+                                  .where((fps) => fps.name != null)
+                                  .map((fps) =>
+                                      fightProps.fightPropsConvert(fps))
+                                  .map((e) => ListTile(
+                                        title: Text(e.name ?? ""),
+                                        subtitle: Text(e.keys
+                                            .map((fp) =>
+                                                "${fp.label()}: ${format(e.get(fp), fp.format())}")
+                                            .join("; ")),
+                                      )),
+                              const ListTile(title: Text(""))
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                });
+          },
+          child: e,
+        ));
   }
 
   Widget _elementalReaction(
@@ -567,8 +620,9 @@ class SkillVal {
             fightProps,
             (r) => fightProps.vaporizeHurt(
                 fightProps.attackHurt(
+                  from,
                   r,
-                  [elementFightProps[from]!, ...hurtAddFightTypes],
+                  hurtAddFightTypes,
                   base,
                 ),
                 from),
@@ -585,8 +639,9 @@ class SkillVal {
             fightProps,
             (r) => fightProps.meltHurt(
                 fightProps.attackHurt(
+                  from,
                   r,
-                  [elementFightProps[from]!, ...hurtAddFightTypes],
+                  hurtAddFightTypes,
                   base,
                 ),
                 from),
@@ -594,13 +649,27 @@ class SkillVal {
           from: from,
           to: to,
         );
+      case ElementalReaction.Swirl:
+        return elementalContainer(
+          elementColor(from),
+          Text(
+            fightProps
+                .elementalReactionHurt(
+                  from,
+                  ElementalReaction.Swirl,
+                )
+                .toStringAsFixed(0),
+          ),
+          from: ElementType.Anemo,
+          to: from,
+        );
       case ElementalReaction.ElectroCharged:
         to =
             from == ElementType.Hydro ? ElementType.Electro : ElementType.Hydro;
         return elementalContainer(
           elementColor(ElementType.Electro),
           Text(
-            fightProps.elementalReactionHurt(ea).toStringAsFixed(0) +
+            fightProps.elementalReactionHurt(from, ea).toStringAsFixed(0) +
                 (ea == ElementalReaction.ElectroCharged ? " * 2" : ""),
           ),
           from: from,
@@ -611,7 +680,7 @@ class SkillVal {
         return elementalContainer(
           elementColor(ElementType.Pyro),
           Text(
-            fightProps.elementalReactionHurt(ea).toStringAsFixed(0),
+            fightProps.elementalReactionHurt(from, ea).toStringAsFixed(0),
           ),
           from: from,
           to: to,
@@ -621,7 +690,7 @@ class SkillVal {
         return elementalContainer(
           elementColor(ElementType.Cryo),
           Text(
-            fightProps.elementalReactionHurt(ea).toStringAsFixed(0),
+            fightProps.elementalReactionHurt(from, ea).toStringAsFixed(0),
           ),
           from: from,
           to: to,
@@ -632,60 +701,10 @@ class SkillVal {
     return elementalContainer(
       elementColor(from),
       Text(
-        fightProps.elementalReactionHurt(ea).toStringAsFixed(0),
+        fightProps.elementalReactionHurt(from, ea).toStringAsFixed(0),
       ),
       from: from,
       to: to,
-    );
-  }
-
-  Widget _swirlHurt(FightProps fightProps) {
-    return elementalContainer(
-      elementColor(ElementType.Anemo),
-      Row(
-        children: [
-          ...[
-            ElementType.Pyro,
-            ElementType.Cryo,
-            ElementType.Electro,
-          ].map((e) => Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: GSImageElement(element: e, size: 14),
-                    ),
-                    const Positioned(
-                      left: 0,
-                      child:
-                          GSImageElement(element: ElementType.Anemo, size: 14),
-                    )
-                  ],
-                ),
-              )),
-          Expanded(
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return LinearGradient(
-                  colors: [
-                    elementColor(ElementType.Pyro),
-                    elementColor(ElementType.Cryo),
-                    elementColor(ElementType.Electro),
-                  ],
-                  tileMode: TileMode.mirror,
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.srcATop,
-              child: Text(
-                fightProps
-                    .elementalReactionHurt(ElementalReaction.Swirl)
-                    .toStringAsFixed(0),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

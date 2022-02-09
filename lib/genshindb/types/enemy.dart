@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:genshintools/genshindb/constants.dart';
-
-import 'i18n.dart';
+import 'package:genshintools/genshindb/genshindb.dart';
 
 part 'generated/enemy.freezed.dart';
 part 'generated/enemy.g.dart';
@@ -19,6 +17,7 @@ class GSEnemy with _$GSEnemy {
     required GSMonsterRarity monsterRarity,
     I18n? title,
     I18n? specialName,
+    FightProps? addProps,
   }) = _Enemy;
 
   factory GSEnemy.fromJson(Map<String, dynamic> json) => _Enemy.fromJson(json);

@@ -239,9 +239,6 @@ export const Characters = (await import("../../vendordata/GenshinData/ExcelBinOu
             const enName = `${base.Name.EN} ${(ElementTypes as any)[skillDepot.ElementType]}`;
             const key = pascalCase(enName);
 
-            console.log(enName);
-            console.log(JSON.stringify(skillDepot, null, 2));
-
             return {
               ...ret,
               [id]: {

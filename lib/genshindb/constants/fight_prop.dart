@@ -121,35 +121,35 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_PHYSICAL_ADD_HURT")
   PHYSICAL_ADD_HURT,
 
-  @EnumMeta(label: "火抗加成")
+  @EnumMeta(label: "减火抗")
   @JsonValue("FIGHT_PROP_FIRE_SUB_HURT")
   FIRE_SUB_HURT,
 
-  @EnumMeta(label: "雷抗加成")
+  @EnumMeta(label: "减雷抗")
   @JsonValue("FIGHT_PROP_ELEC_SUB_HURT")
   ELEC_SUB_HURT,
 
-  @EnumMeta(label: "水抗加成")
+  @EnumMeta(label: "减水抗")
   @JsonValue("FIGHT_PROP_WATER_SUB_HURT")
   WATER_SUB_HURT,
 
-  @EnumMeta(label: "风抗加成")
+  @EnumMeta(label: "减风抗")
   @JsonValue("FIGHT_PROP_WIND_SUB_HURT")
   WIND_SUB_HURT,
 
-  @EnumMeta(label: "岩抗加成")
+  @EnumMeta(label: "减岩抗")
   @JsonValue("FIGHT_PROP_ROCK_SUB_HURT")
   ROCK_SUB_HURT,
 
-  @EnumMeta(label: "草抗加成")
+  @EnumMeta(label: "减草抗")
   @JsonValue("FIGHT_PROP_GRASS_SUB_HURT")
   GRASS_SUB_HURT,
 
-  @EnumMeta(label: "冰抗加成")
+  @EnumMeta(label: "减冰抗")
   @JsonValue("FIGHT_PROP_ICE_SUB_HURT")
   ICE_SUB_HURT,
 
-  @EnumMeta(label: "物抗加成")
+  @EnumMeta(label: "减物抗")
   @JsonValue("FIGHT_PROP_PHYSICAL_SUB_HURT")
   PHYSICAL_SUB_HURT,
 
@@ -169,6 +169,10 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_NORMAL_ATTACK_EXTRA_HURT")
   NORMAL_ATTACK_EXTRA_HURT,
 
+  @EnumMeta(label: "普攻倍率")
+  @JsonValue("FIGHT_PROP_NORMAL_ATTACK_RADIO")
+  NORMAL_ATTACK_RADIO,
+
   @EnumMeta(label: "普攻加暴")
   @JsonValue("FIGHT_PROP_NORMAL_ATTACK_ADD_CRITICAL")
   NORMAL_ATTACK_ADD_CRITICAL,
@@ -176,6 +180,10 @@ enum FightProp {
   @EnumMeta(label: "重击加伤")
   @JsonValue("FIGHT_PROP_CHARGED_ATTACK_ADD_HURT")
   CHARGED_ATTACK_ADD_HURT,
+
+  @EnumMeta(label: "重击倍率")
+  @JsonValue("FIGHT_PROP_CHARGED_ATTACK_RADIO")
+  CHARGED_ATTACK_RADIO,
 
   @EnumMeta(label: "重击附伤", format: "I")
   @JsonValue("FIGHT_PROP_CHARGED_ATTACK_EXTRA_HURT")
@@ -189,6 +197,10 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_PLUNGING_ATTACK_ADD_HURT")
   PLUNGING_ATTACK_ADD_HURT,
 
+  @EnumMeta(label: "下落攻击倍率")
+  @JsonValue("FIGHT_PROP_PLUNGING_ATTACK_RADIO")
+  PLUNGING_ATTACK_RADIO,
+
   @EnumMeta(label: "下落攻击附伤", format: "I")
   @JsonValue("FIGHT_PROP_PLUNGING_ATTACK_EXTRA_HURT")
   PLUNGING_ATTACK_EXTRA_HURT,
@@ -201,6 +213,10 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_ELEMENTAL_SKILL_ADD_HURT")
   ELEMENTAL_SKILL_ADD_HURT,
 
+  @EnumMeta(label: "元素战技倍率")
+  @JsonValue("FIGHT_PROP_ELEMENTAL_SKILL_RADIO")
+  ELEMENTAL_SKILL_RADIO,
+
   @EnumMeta(label: "元素战技附伤", format: "I")
   @JsonValue("FIGHT_PROP_ELEMENTAL_SKILL_EXTRA_HURT")
   ELEMENTAL_SKILL_EXTRA_HURT,
@@ -212,6 +228,10 @@ enum FightProp {
   @EnumMeta(label: "元素爆发加伤")
   @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_ADD_HURT")
   ELEMENTAL_BURST_ADD_HURT,
+
+  @EnumMeta(label: "元素爆发倍率")
+  @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_RADIO")
+  ELEMENTAL_BURST_RADIO,
 
   @EnumMeta(label: "元素爆发附伤", format: "I")
   @JsonValue("FIGHT_PROP_ELEMENTAL_BURST_EXTRA_HURT")
@@ -257,15 +277,41 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_ENEMY_LEVEL")
   ENEMY_LEVEL,
 
-  @EnumMeta(label: "怪物抗性")
-  @JsonValue("FIGHT_PROP_ENEMY_RESISTANCE")
-  ENEMY_RESISTANCE,
-  @EnumMeta(label: "怪物减抗")
-  @JsonValue("FIGHT_PROP_ENEMY_SUB_RESISTANCE")
-  ENEMY_SUB_RESISTANCE,
   @EnumMeta(label: "怪物减防")
   @JsonValue("FIGHT_PROP_ENEMY_SUB_DEFENSE")
   ENEMY_SUB_DEFENSE,
+
+  @EnumMeta(label: "怪物火抗")
+  @JsonValue("FIGHT_PROP_ENEMY_FIRE_SUB_HURT")
+  ENEMY_FIRE_SUB_HURT,
+
+  @EnumMeta(label: "怪物雷抗")
+  @JsonValue("FIGHT_PROP_ENEMY_ELEC_SUB_HURT")
+  ENEMY_ELEC_SUB_HURT,
+
+  @EnumMeta(label: "怪物水抗")
+  @JsonValue("FIGHT_PROP_ENEMY_WATER_SUB_HURT")
+  ENEMY_WATER_SUB_HURT,
+
+  @EnumMeta(label: "怪物风抗")
+  @JsonValue("FIGHT_PROP_ENEMY_WIND_SUB_HURT")
+  ENEMY_WIND_SUB_HURT,
+
+  @EnumMeta(label: "怪物岩抗")
+  @JsonValue("FIGHT_PROP_ENEMY_ROCK_SUB_HURT")
+  ENEMY_ROCK_SUB_HURT,
+
+  @EnumMeta(label: "怪物草抗")
+  @JsonValue("FIGHT_PROP_ENEMY_GRASS_SUB_HURT")
+  ENEMY_GRASS_SUB_HURT,
+
+  @EnumMeta(label: "怪物冰抗")
+  @JsonValue("FIGHT_PROP_ENEMY_ICE_SUB_HURT")
+  ENEMY_ICE_SUB_HURT,
+
+  @EnumMeta(label: "怪物物抗")
+  @JsonValue("FIGHT_PROP_ENEMY_PHYSICAL_SUB_HURT")
+  ENEMY_PHYSICAL_SUB_HURT,
 
   @EnumMeta(label: "速度提升")
   @JsonValue("FIGHT_PROP_SPEED_PERCENT")

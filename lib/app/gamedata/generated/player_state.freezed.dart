@@ -22,12 +22,14 @@ class _$CharacterWithStateTearOff {
       {required GSCharacter character,
       required GOODCharacter c,
       required GOODWeapon w,
-      required List<GOODArtifact> artifacts}) {
+      required List<GOODArtifact> artifacts,
+      List<FightProps>? buffs}) {
     return _CharacterWithState(
       character: character,
       c: c,
       w: w,
       artifacts: artifacts,
+      buffs: buffs,
     );
   }
 }
@@ -41,6 +43,7 @@ mixin _$CharacterWithState {
   GOODCharacter get c => throw _privateConstructorUsedError;
   GOODWeapon get w => throw _privateConstructorUsedError;
   List<GOODArtifact> get artifacts => throw _privateConstructorUsedError;
+  List<FightProps>? get buffs => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CharacterWithStateCopyWith<CharacterWithState> get copyWith =>
@@ -56,7 +59,8 @@ abstract class $CharacterWithStateCopyWith<$Res> {
       {GSCharacter character,
       GOODCharacter c,
       GOODWeapon w,
-      List<GOODArtifact> artifacts});
+      List<GOODArtifact> artifacts,
+      List<FightProps>? buffs});
 
   $GSCharacterCopyWith<$Res> get character;
   $GOODCharacterCopyWith<$Res> get c;
@@ -78,6 +82,7 @@ class _$CharacterWithStateCopyWithImpl<$Res>
     Object? c = freezed,
     Object? w = freezed,
     Object? artifacts = freezed,
+    Object? buffs = freezed,
   }) {
     return _then(_value.copyWith(
       character: character == freezed
@@ -96,6 +101,10 @@ class _$CharacterWithStateCopyWithImpl<$Res>
           ? _value.artifacts
           : artifacts // ignore: cast_nullable_to_non_nullable
               as List<GOODArtifact>,
+      buffs: buffs == freezed
+          ? _value.buffs
+          : buffs // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>?,
     ));
   }
 
@@ -132,7 +141,8 @@ abstract class _$CharacterWithStateCopyWith<$Res>
       {GSCharacter character,
       GOODCharacter c,
       GOODWeapon w,
-      List<GOODArtifact> artifacts});
+      List<GOODArtifact> artifacts,
+      List<FightProps>? buffs});
 
   @override
   $GSCharacterCopyWith<$Res> get character;
@@ -159,6 +169,7 @@ class __$CharacterWithStateCopyWithImpl<$Res>
     Object? c = freezed,
     Object? w = freezed,
     Object? artifacts = freezed,
+    Object? buffs = freezed,
   }) {
     return _then(_CharacterWithState(
       character: character == freezed
@@ -177,6 +188,10 @@ class __$CharacterWithStateCopyWithImpl<$Res>
           ? _value.artifacts
           : artifacts // ignore: cast_nullable_to_non_nullable
               as List<GOODArtifact>,
+      buffs: buffs == freezed
+          ? _value.buffs
+          : buffs // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>?,
     ));
   }
 }
@@ -188,7 +203,8 @@ class _$_CharacterWithState extends _CharacterWithState {
       {required this.character,
       required this.c,
       required this.w,
-      required this.artifacts})
+      required this.artifacts,
+      this.buffs})
       : super._();
 
   @override
@@ -199,10 +215,12 @@ class _$_CharacterWithState extends _CharacterWithState {
   final GOODWeapon w;
   @override
   final List<GOODArtifact> artifacts;
+  @override
+  final List<FightProps>? buffs;
 
   @override
   String toString() {
-    return 'CharacterWithState(character: $character, c: $c, w: $w, artifacts: $artifacts)';
+    return 'CharacterWithState(character: $character, c: $c, w: $w, artifacts: $artifacts, buffs: $buffs)';
   }
 
   @override
@@ -213,7 +231,8 @@ class _$_CharacterWithState extends _CharacterWithState {
             const DeepCollectionEquality().equals(other.character, character) &&
             const DeepCollectionEquality().equals(other.c, c) &&
             const DeepCollectionEquality().equals(other.w, w) &&
-            const DeepCollectionEquality().equals(other.artifacts, artifacts));
+            const DeepCollectionEquality().equals(other.artifacts, artifacts) &&
+            const DeepCollectionEquality().equals(other.buffs, buffs));
   }
 
   @override
@@ -222,7 +241,8 @@ class _$_CharacterWithState extends _CharacterWithState {
       const DeepCollectionEquality().hash(character),
       const DeepCollectionEquality().hash(c),
       const DeepCollectionEquality().hash(w),
-      const DeepCollectionEquality().hash(artifacts));
+      const DeepCollectionEquality().hash(artifacts),
+      const DeepCollectionEquality().hash(buffs));
 
   @JsonKey(ignore: true)
   @override
@@ -235,7 +255,8 @@ abstract class _CharacterWithState extends CharacterWithState {
       {required GSCharacter character,
       required GOODCharacter c,
       required GOODWeapon w,
-      required List<GOODArtifact> artifacts}) = _$_CharacterWithState;
+      required List<GOODArtifact> artifacts,
+      List<FightProps>? buffs}) = _$_CharacterWithState;
   _CharacterWithState._() : super._();
 
   @override
@@ -246,6 +267,8 @@ abstract class _CharacterWithState extends CharacterWithState {
   GOODWeapon get w;
   @override
   List<GOODArtifact> get artifacts;
+  @override
+  List<FightProps>? get buffs;
   @override
   @JsonKey(ignore: true)
   _$CharacterWithStateCopyWith<_CharacterWithState> get copyWith =>

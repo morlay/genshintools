@@ -19,6 +19,9 @@ _$_Enemy _$$_EnemyFromJson(Map<String, dynamic> json) => _$_Enemy(
       specialName: json['SpecialName'] == null
           ? null
           : I18n.fromJson(json['SpecialName'] as Map<String, dynamic>),
+      addProps: json['AddProps'] == null
+          ? null
+          : FightProps.fromJson(json['AddProps'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_EnemyToJson(_$_Enemy instance) => <String, dynamic>{
@@ -29,6 +32,7 @@ Map<String, dynamic> _$$_EnemyToJson(_$_Enemy instance) => <String, dynamic>{
       'MonsterRarity': _$GSMonsterRarityEnumMap[instance.monsterRarity],
       'Title': instance.title,
       'SpecialName': instance.specialName,
+      'AddProps': instance.addProps,
     };
 
 const _$GSMonsterRarityEnumMap = {

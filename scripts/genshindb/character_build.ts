@@ -37,7 +37,7 @@ const statsMap: Record<string, string> = {
 
 const resolvePropTypes = (s: string): string[] => {
   return reduce(
-    s.split("/"),
+    trim(s, "*").split("/"),
     (ret: string[], s: string) => {
       const f =
         statsMap[s.trim()] ||
@@ -196,7 +196,7 @@ const fromCSV = async (csv: string, grid: Grid) => {
   const pickList = (cell: string, splitter = /[~=)*]/) => {
     return cell
       .split("\n")
-      .map((v) => v.trim())
+      .map((v) => trim(v.trim()))
       .filter((v: string) => v && !(v.startsWith("*") || v.startsWith("(") || v.endsWith(".")))
       .map((w: string) =>
         w
@@ -210,7 +210,7 @@ const fromCSV = async (csv: string, grid: Grid) => {
   const pickMainStats = (cell: string) => {
     return cell
       .split("\n")
-      .map((v) => v.trim())
+      .map((v) => trim(v.trim(), "*"))
       .filter((v: string) => v && !(v.startsWith("*") || v.startsWith("(") || v.endsWith(".")))
       .reduce((ret, v: string) => {
         const parts = v.split("-");

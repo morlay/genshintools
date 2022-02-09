@@ -42,6 +42,7 @@ class PageCharacter extends HookWidget {
     var db = blocGameData.db;
 
     var current = blocGameData.findCharacterWithState(uid, "$id");
+
     var builds = current.character.characterBuildFor(current.c.role);
 
     current = current.copyWith(
@@ -63,6 +64,7 @@ class PageCharacter extends HookWidget {
       c: current.c.copyWith(
         level: current.c.level > 0 ? current.c.level : 1,
       ),
+      buffs: [],
     ));
 
     useEffect(() {
@@ -80,21 +82,9 @@ class PageCharacter extends HookWidget {
 
     var c = characterValueNotifier.value;
 
-    var fightProps = db.character
-        .fightProps(
-          id.toString(),
-          c.c.level,
-          c.c.constellation,
-        )
-        .merge(db.weapon.fightProps(
-          c.w.key,
-          c.w.level,
-          c.w.refinement,
-        ))
-        .merge(db.artifact.fightProps(
-          c.artifacts,
-        ))
-        .compute();
+    var fightProps = c.computeFightProps(db);
+
+    print(builds.artifactMainPropTypes);
 
     return Scaffold(
       body: Column(
@@ -129,7 +119,10 @@ class PageCharacter extends HookWidget {
                               flex: 4,
                               child: SingleChildScrollView(
                                 child: _buildDashboard(
-                                    context, fightProps, builds),
+                                  context,
+                                  fightProps,
+                                  builds,
+                                ),
                               ),
                             )
                           ],
@@ -184,7 +177,7 @@ class PageCharacter extends HookWidget {
                   collapsed: ExpandableButton(
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Center(child: Text("等级修改")),
+                      child: Center(child: Text("展开配置")),
                     ),
                   ),
                   expanded: Column(
@@ -192,10 +185,10 @@ class PageCharacter extends HookWidget {
                       ExpandableButton(
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text("等级修改")),
+                          child: Center(child: Text("收起配置")),
                         ),
                       ),
-                      _buildSettings(context, characterValueNotifier),
+                      _buildSettings(context, uid, characterValueNotifier)
                     ],
                   ),
                 ),
@@ -227,11 +220,45 @@ class PageCharacter extends HookWidget {
 
   Widget _buildSettings(
     BuildContext context,
+    int uid,
     ValueNotifier<CharacterWithState> cvn,
   ) {
+    var buffs = BlocGameData.read(context).allBuffs(uid);
+
     var s = cvn.value;
 
-    Map<String, Slider> sliders = {
+    Map<String, Widget> sliders = {
+      "全局 buff": GridView(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 100,
+          childAspectRatio: 2,
+        ),
+        children: [
+          ...buffs.map(
+            (e) => GestureDetector(
+              onTap: () {
+                if (s.hasBuff(e)) {
+                  cvn.value = s.copyWith(
+                    buffs:
+                        (s.buffs ?? []).where((m) => m.name != e.name).toList(),
+                  );
+                } else {
+                  cvn.value = s.copyWith(
+                    buffs: [...?s.buffs, e],
+                  );
+                }
+              },
+              child: Card(
+                color: s.hasBuff(e) ? Theme.of(context).focusColor : null,
+                child: Center(
+                  child: Text(e.name ?? ""),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
       "角色等级": Slider(
         value: s.c.level.toDouble(),
         min: 1,
@@ -353,34 +380,35 @@ class PageCharacter extends HookWidget {
 
     return DefaultTabController(
       length: sliders.keys.length,
-      child: Column(
-        children: [
-          TabBar(
-            isScrollable: true,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Theme.of(context).primaryColor,
-            labelColor: Theme.of(context).primaryColor,
-            unselectedLabelColor: Theme.of(context).unselectedWidgetColor,
-            tabs: [
-              ...sliders.keys.map(
-                (key) => Tab(
-                  child: Text(key, style: const TextStyle(fontSize: 11)),
-                  height: 24,
+      child: SizedBox(
+        height: 160,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TabBar(
+              isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: Theme.of(context).primaryColor,
+              labelColor: Theme.of(context).primaryColor,
+              unselectedLabelColor: Theme.of(context).unselectedWidgetColor,
+              tabs: [
+                ...sliders.keys.map(
+                  (key) => Tab(
+                    child: Text(key, style: const TextStyle(fontSize: 11)),
+                    height: 24,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 60,
-            child: Center(
+              ],
+            ),
+            Expanded(
               child: TabBarView(
                 children: [
-                  ...sliders.values.map((v) => v),
+                  ...sliders.values.map((e) => Center(child: e)),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -594,10 +622,7 @@ class PageCharacter extends HookWidget {
                           skill.skillType,
                           c.c.skillLevel(skill.skillType),
                         ),
-                        fightProps: fightProps.merge(FightProps({
-                          FightProp.ENEMY_LEVEL: c.c.level.toDouble(),
-                          FightProp.ENEMY_RESISTANCE: 0.1,
-                        })),
+                        fightProps: fightProps,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(

@@ -23,9 +23,13 @@ class _$FightPropsTearOff {
   const _$FightPropsTearOff();
 
   _FightProps call(
-      @FightPropStringConverter() Map<FightProp, double> fightProps) {
+      @FightPropStringConverter() Map<FightProp, double> fightProps,
+      {String? name,
+      List<FightProps>? from}) {
     return _FightProps(
       fightProps,
+      name: name,
+      from: from,
     );
   }
 
@@ -41,6 +45,8 @@ const $FightProps = _$FightPropsTearOff();
 mixin _$FightProps {
   @FightPropStringConverter()
   Map<FightProp, double> get fightProps => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  List<FightProps>? get from => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,7 +59,10 @@ abstract class $FightPropsCopyWith<$Res> {
   factory $FightPropsCopyWith(
           FightProps value, $Res Function(FightProps) then) =
       _$FightPropsCopyWithImpl<$Res>;
-  $Res call({@FightPropStringConverter() Map<FightProp, double> fightProps});
+  $Res call(
+      {@FightPropStringConverter() Map<FightProp, double> fightProps,
+      String? name,
+      List<FightProps>? from});
 }
 
 /// @nodoc
@@ -67,12 +76,22 @@ class _$FightPropsCopyWithImpl<$Res> implements $FightPropsCopyWith<$Res> {
   @override
   $Res call({
     Object? fightProps = freezed,
+    Object? name = freezed,
+    Object? from = freezed,
   }) {
     return _then(_value.copyWith(
       fightProps: fightProps == freezed
           ? _value.fightProps
           : fightProps // ignore: cast_nullable_to_non_nullable
               as Map<FightProp, double>,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      from: from == freezed
+          ? _value.from
+          : from // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>?,
     ));
   }
 }
@@ -83,7 +102,10 @@ abstract class _$FightPropsCopyWith<$Res> implements $FightPropsCopyWith<$Res> {
           _FightProps value, $Res Function(_FightProps) then) =
       __$FightPropsCopyWithImpl<$Res>;
   @override
-  $Res call({@FightPropStringConverter() Map<FightProp, double> fightProps});
+  $Res call(
+      {@FightPropStringConverter() Map<FightProp, double> fightProps,
+      String? name,
+      List<FightProps>? from});
 }
 
 /// @nodoc
@@ -99,12 +121,22 @@ class __$FightPropsCopyWithImpl<$Res> extends _$FightPropsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? fightProps = freezed,
+    Object? name = freezed,
+    Object? from = freezed,
   }) {
     return _then(_FightProps(
       fightProps == freezed
           ? _value.fightProps
           : fightProps // ignore: cast_nullable_to_non_nullable
               as Map<FightProp, double>,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      from: from == freezed
+          ? _value.from
+          : from // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>?,
     ));
   }
 }
@@ -112,7 +144,9 @@ class __$FightPropsCopyWithImpl<$Res> extends _$FightPropsCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_FightProps extends _FightProps {
-  _$_FightProps(@FightPropStringConverter() this.fightProps) : super._();
+  _$_FightProps(@FightPropStringConverter() this.fightProps,
+      {this.name, this.from})
+      : super._();
 
   factory _$_FightProps.fromJson(Map<String, dynamic> json) =>
       _$$_FightPropsFromJson(json);
@@ -120,10 +154,14 @@ class _$_FightProps extends _FightProps {
   @override
   @FightPropStringConverter()
   final Map<FightProp, double> fightProps;
+  @override
+  final String? name;
+  @override
+  final List<FightProps>? from;
 
   @override
   String toString() {
-    return 'FightProps(fightProps: $fightProps)';
+    return 'FightProps(fightProps: $fightProps, name: $name, from: $from)';
   }
 
   @override
@@ -132,12 +170,17 @@ class _$_FightProps extends _FightProps {
         (other.runtimeType == runtimeType &&
             other is _FightProps &&
             const DeepCollectionEquality()
-                .equals(other.fightProps, fightProps));
+                .equals(other.fightProps, fightProps) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.from, from));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(fightProps));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(fightProps),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(from));
 
   @JsonKey(ignore: true)
   @override
@@ -152,8 +195,9 @@ class _$_FightProps extends _FightProps {
 
 abstract class _FightProps extends FightProps {
   factory _FightProps(
-          @FightPropStringConverter() Map<FightProp, double> fightProps) =
-      _$_FightProps;
+      @FightPropStringConverter() Map<FightProp, double> fightProps,
+      {String? name,
+      List<FightProps>? from}) = _$_FightProps;
   _FightProps._() : super._();
 
   factory _FightProps.fromJson(Map<String, dynamic> json) =
@@ -162,6 +206,10 @@ abstract class _FightProps extends FightProps {
   @override
   @FightPropStringConverter()
   Map<FightProp, double> get fightProps;
+  @override
+  String? get name;
+  @override
+  List<FightProps>? get from;
   @override
   @JsonKey(ignore: true)
   _$FightPropsCopyWith<_FightProps> get copyWith =>

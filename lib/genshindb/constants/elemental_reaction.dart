@@ -37,7 +37,7 @@ enum ElementalReaction {
 }
 
 extension ElementalReactionHurts on ElementalReaction {
-  dynamic elementMasterAddHurt(double elementMaster) {
+  double elementMasterAddHurt(double elementMaster) {
     var k = 4.44;
     var a = 1400;
     switch (ElementalReaction.values[index]) {
@@ -55,7 +55,7 @@ extension ElementalReactionHurts on ElementalReaction {
         break;
       default:
     }
-    return k * elementMaster / (elementMaster + a);
+    return (k * elementMaster) / (elementMaster + a);
   }
 
   double characterHurtBase(int characterLevel) {

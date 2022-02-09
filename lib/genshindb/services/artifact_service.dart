@@ -156,11 +156,10 @@ class ArtifactService with _$ArtifactService {
     });
 
     for (var a in artifacts) {
-      fps = fps.add(
-        a.mainStatKey.asFightProp(),
-        mainFightProp(a.mainStatKey.asFightProp(), a.rarity, a.level),
-      );
-
+      fps = fps.merge(FightProps({
+        a.mainStatKey.asFightProp():
+            mainFightProp(a.mainStatKey.asFightProp(), a.rarity, a.level),
+      }));
       fps = fps.merge(appendFightProps(a.rarity, a.substatsAsFightProps()));
     }
 

@@ -29,6 +29,7 @@ class EquipAffix with _$EquipAffix {
 
     switch (activeWhenNum) {
       case 4:
+        // 4 件套
         switch (name.text(Lang.CHS)) {
           case "苍白之火":
             fp = fp.add(FightProp.ATTACK_PERCENT, params[0] * 2);
@@ -77,7 +78,6 @@ class EquipAffix with _$EquipAffix {
             break;
           case "翠绿之影":
             fp = fp.add(FightProp.SWIRL_ADD_HURT, params[0]);
-            fp = fp.add(FightProp.ENEMY_SUB_RESISTANCE, params[1]);
             break;
           case "角斗士的终幕礼":
             fp = fp.add(FightProp.NORMAL_ATTACK_ADD_HURT, params[0]);
@@ -103,8 +103,11 @@ class EquipAffix with _$EquipAffix {
             fp = fp.add(FightProp.ELEMENT_MASTERY, params[1]);
             break;
         }
-        break;
+        return fp.copyWith(
+          name: name.text(Lang.CHS),
+        );
       case 2:
+        // 2 件套
         switch (name.text(Lang.CHS)) {
           case "赌徒":
             fp = fp.add(FightProp.ELEMENTAL_SKILL_ADD_CRITICAL, params[0]);
@@ -117,8 +120,9 @@ class EquipAffix with _$EquipAffix {
             fp = fp.add(FightProp.ELEMENTAL_BURST_ADD_HURT, params[0]);
             break;
         }
-        break;
+        return fp;
       default:
+        // 武器
         switch (name.text(Lang.CHS)) {
           case "护国的无垢之心":
             fp = fp.add(FightProp.HP_PERCENT, params[0]);
@@ -190,7 +194,9 @@ class EquipAffix with _$EquipAffix {
                     .ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80,
                 params[0]);
         }
+        return fp.copyWith(
+          name: name.text(Lang.CHS),
+        );
     }
-    return fp;
   }
 }
