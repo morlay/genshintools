@@ -44,11 +44,12 @@ _$_InherentSkilll _$$_InherentSkilllFromJson(Map<String, dynamic> json) =>
     _$_InherentSkilll(
       name: I18n.fromJson(json['Name'] as Map<String, dynamic>),
       desc: I18n.fromJson(json['Desc'] as Map<String, dynamic>),
+      addProps: FightProps.fromJson(json['AddProps'] as Map<String, dynamic>),
+      additionalProps: (json['AdditionalProps'] as List<dynamic>)
+          .map((e) => FightProps.fromJson(e as Map<String, dynamic>))
+          .toList(),
       paramNames: (json['ParamNames'] as List<dynamic>?)
           ?.map((e) => I18n.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      params: (json['Params'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
           .toList(),
       breakLevel: json['BreakLevel'] as int?,
     );
@@ -57,7 +58,8 @@ Map<String, dynamic> _$$_InherentSkilllToJson(_$_InherentSkilll instance) =>
     <String, dynamic>{
       'Name': instance.name,
       'Desc': instance.desc,
+      'AddProps': instance.addProps,
+      'AdditionalProps': instance.additionalProps,
       'ParamNames': instance.paramNames,
-      'Params': instance.params,
       'BreakLevel': instance.breakLevel,
     };

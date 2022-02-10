@@ -82,10 +82,6 @@ class AppRoot extends HookWidget {
               lazy: false,
               create: (_) => BlocDailyNote(),
             ),
-            BlocProvider<BlocArtifact>(
-              lazy: false,
-              create: (_) => BlocArtifact(),
-            ),
             BlocProvider<BlocGameData>(
                 lazy: false,
                 create: (_) => BlocGameData(blocGameData.requireData)),

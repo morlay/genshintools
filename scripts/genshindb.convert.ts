@@ -23,6 +23,7 @@ import {
   WeaponsByKey,
 } from "./genshindb";
 import { Trials } from "./genshindb/character_trial";
+import { OpenConfigs } from "./genshindb/openconfig";
 
 writeJSONSync("./assets/genshindb/characters.json", {
   Characters: mapValues(CharactersByKey, (c: any) => ({
@@ -72,4 +73,7 @@ writeJSONSync("./assets/trials.json", {
 writeJSONSync("./assets/builds.json", {
   Builds: Builds,
 });
+
+writeJSONSync("./assets/openconfigs.json", OpenConfigs);
+
 

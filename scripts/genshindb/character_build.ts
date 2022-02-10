@@ -23,7 +23,9 @@ const statsMap: Record<string, string> = {
   "Crit DMG": "FIGHT_PROP_CRITICAL_HURT",
   // hack
   DMG: "FIGHT_PROP_CRITICAL_HURT",
+
   "Healing Bonus": "FIGHT_PROP_HEAL_ADD",
+  "Healing Bonus%": "FIGHT_PROP_HEAL_ADD",
 
   "Pyro DMG": "FIGHT_PROP_FIRE_ADD_HURT",
   "Hydro DMG": "FIGHT_PROP_WATER_ADD_HURT",
@@ -33,6 +35,7 @@ const statsMap: Record<string, string> = {
   "Anemo DMG": "FIGHT_PROP_WIND_ADD_HURT",
   "Dendro DMG": "FIGHT_PROP_GRASS_ADD_HURT",
   "Physical DMG": "FIGHT_PROP_PHYSICAL_ADD_HURT",
+  "Phys DMG": "FIGHT_PROP_PHYSICAL_ADD_HURT",
 };
 
 const resolvePropTypes = (s: string): string[] => {
@@ -41,6 +44,7 @@ const resolvePropTypes = (s: string): string[] => {
     (ret: string[], s: string) => {
       const f =
         statsMap[s.trim()] ||
+        statsMap[trim(s.trim(), "*")] ||
         statsMap[s.trim().replace("Damage", "DMG")] ||
         statsMap[s.trim().replace("Attack", "ATK")] ||
         statsMap[s.trim().replace("Defence", "ATK")];
@@ -48,6 +52,7 @@ const resolvePropTypes = (s: string): string[] => {
       if (f) {
         return [...ret, f];
       }
+      console.warn(`unknown prop name ${s}`);
 
       return ret;
     },
@@ -87,11 +92,12 @@ const weaponAliases: { [k: string]: string } = {
   "Festering Desire R5": "Festering Desire",
 };
 
-const artifactAliases: { [k: string]: string } = {
+const artifactSetAliases: { [k: string]: string } = {
   "Emblem of Severed Fates": "Emblem of Severed Fate",
   "Maiden's Beloved": "Maiden Beloved",
   "Lavawalkers Epiphany": "Lavawalker",
   Thundersoothers: "Thundersoother",
+  "Instructors": "Instructor",
 };
 
 const characterBuild = (name: string, b: any) => {
@@ -125,7 +131,7 @@ const characterBuild = (name: string, b: any) => {
         if (found) {
           return found.Name.CHS;
         }
-        console.log(`${name} missing weapon ${id}`);
+        console.warn(`${name} missing weapon ${id}`);
         return "";
       })
       .filter((v: string) => v),
@@ -141,17 +147,17 @@ const characterBuild = (name: string, b: any) => {
       b.artifacts.reduce((ret: string[][], sets: string[]) => {
         const pair = sets
           .map((setName) => {
-            const found = findArtifactSet(pascalCase(artifactAliases[setName] || setName));
+            const found = findArtifactSet(pascalCase(artifactSetAliases[setName] || setName));
             if (found) {
               return found.Name.CHS;
             }
-            if ("18AtkSet" === pascalCase(artifactAliases[setName] || setName)) {
+            if ("18AtkSet" === pascalCase(artifactSetAliases[setName] || setName)) {
               return "角斗士的终幕礼";
             }
-            if ("20ErSet" === pascalCase(artifactAliases[setName] || setName)) {
+            if ("20ErSet" === pascalCase(artifactSetAliases[setName] || setName)) {
               return "绝缘之旗印";
             }
-            console.log(`${name} missing artifact set ${setName}`);
+            console.warn(`${name} missing artifact set ${setName}`);
             return null;
           })
           .filter((s) => s) as string[];

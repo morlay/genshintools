@@ -135,7 +135,6 @@ class AddAccountFromMiYoBBS extends HookWidget {
                       encodedCookie =
                           encodedCookie.substring(1, encodedCookie.length - 1);
                     }
-                    print(encodedCookie);
                     addAccount(context, encodedCookie);
                   },
                 );

@@ -79,9 +79,6 @@ class ViewCalendar extends HookWidget {
         return Rx.fromCallable(() => BlocGameData.read(context).syncGameInfo(
               blocAuth.state.authedClient(),
               blocAuth.state.chosenUid(),
-              BlocArtifact.read(context)
-                  .playerArtifactBuild(uid)
-                  .allArtifacts(),
             ));
       }
     }, [uid]);

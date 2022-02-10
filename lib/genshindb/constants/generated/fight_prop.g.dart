@@ -45,14 +45,14 @@ const _$FightPropLabelMap = {
   FightProp.GRASS_ADD_HURT: "草伤加成",
   FightProp.ICE_ADD_HURT: "冰伤加成",
   FightProp.PHYSICAL_ADD_HURT: "物伤加成",
-  FightProp.FIRE_SUB_HURT: "减火抗",
-  FightProp.ELEC_SUB_HURT: "减雷抗",
-  FightProp.WATER_SUB_HURT: "减水抗",
-  FightProp.WIND_SUB_HURT: "减风抗",
-  FightProp.ROCK_SUB_HURT: "减岩抗",
-  FightProp.GRASS_SUB_HURT: "减草抗",
-  FightProp.ICE_SUB_HURT: "减冰抗",
-  FightProp.PHYSICAL_SUB_HURT: "减物抗",
+  FightProp.FIRE_SUB_HURT: "火抗",
+  FightProp.ELEC_SUB_HURT: "雷抗",
+  FightProp.WATER_SUB_HURT: "水抗",
+  FightProp.WIND_SUB_HURT: "风抗",
+  FightProp.ROCK_SUB_HURT: "岩抗",
+  FightProp.GRASS_SUB_HURT: "草抗",
+  FightProp.ICE_SUB_HURT: "冰抗",
+  FightProp.PHYSICAL_SUB_HURT: "物抗",
   FightProp.ADD_HURT: "伤害增加",
   FightProp.SUB_HURT: "伤害减少",
   FightProp.NORMAL_ATTACK_ADD_HURT: "普攻加伤",
@@ -98,8 +98,6 @@ const _$FightPropLabelMap = {
   FightProp.ATTACK_ADD_RADIO: "攻击力加成比例",
   FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75:
       "元素爆发加伤（基于元素充能效率）",
-  FightProp.ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80:
-      "攻击力加成（基于元素充能效率超出部分）",
   FightProp.ATTACK_PERCENT__ON__HP: "攻击力加成（基于最大生命值）",
   FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP: "普攻附伤(基于最大生命值)",
   FightProp.CHARGED_ATTACK_EXTRA_HURT__ON__HP: "重击附伤(基于最大生命值)",
@@ -189,7 +187,6 @@ const _$FightPropFormatMap = {
   FightProp.SKILL_CD_MINUS_RATIO: "P",
   FightProp.ATTACK_ADD_RADIO: "P",
   FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75: "P",
-  FightProp.ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80: "P",
   FightProp.ATTACK_PERCENT__ON__HP: "P",
   FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP: "P",
   FightProp.CHARGED_ATTACK_EXTRA_HURT__ON__HP: "P",
@@ -302,8 +299,6 @@ const _$FightPropEnumMap = {
   FightProp.ATTACK_ADD_RADIO: 'FIGHT_PROP_ATTACK_ADD_RADIO',
   FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75:
       r'ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75',
-  FightProp.ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80:
-      r'ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80',
   FightProp.ATTACK_PERCENT__ON__HP: 'ATTACK_PERCENT__ON__HP',
   FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP:
       'NORMAL_ATTACK_EXTRA_HURT__ON__HP',

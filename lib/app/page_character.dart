@@ -84,8 +84,6 @@ class PageCharacter extends HookWidget {
 
     var fightProps = c.computeFightProps(db);
 
-    print(builds.artifactMainPropTypes);
-
     return Scaffold(
       body: Column(
         children: [

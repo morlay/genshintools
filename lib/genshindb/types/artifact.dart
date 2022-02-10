@@ -1,9 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:genshintools/genshindb/constants.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
-
-import 'equip_affix.dart';
-import 'i18n.dart';
 
 part 'generated/artifact.freezed.dart';
 part 'generated/artifact.g.dart';

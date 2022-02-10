@@ -50,8 +50,9 @@ class InherentSkill with _$InherentSkill {
   factory InherentSkill({
     required I18n name,
     required I18n desc,
+    required FightProps addProps,
+    required List<FightProps> additionalProps,
     List<I18n>? paramNames,
-    List<double>? params,
     int? breakLevel,
   }) = _InherentSkilll;
 
@@ -59,45 +60,9 @@ class InherentSkill with _$InherentSkill {
       _$InherentSkillFromJson(json);
 
   FightProps patchedFightProps() {
-    var v = name.text(Lang.CHS);
-
-    switch (v) {
-      case "储之千日，用之一刻":
-        return FightProps({
-          FightProp.ROCK_ADD_HURT: params![0],
-        }, name: v);
-      case "炊金馔玉":
-        return FightProps({
-          FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP: params![0],
-          FightProp.CHARGED_ATTACK_EXTRA_HURT__ON__HP: params![0],
-          FightProp.PLUNGING_ATTACK_EXTRA_HURT__ON__HP: params![0],
-          FightProp.ELEMENTAL_SKILL_EXTRA_HURT__ON__HP: params![1],
-          FightProp.ELEMENTAL_BURST_EXTRA_HURT__ON__HP: params![2],
-        }, name: v);
-      case "悬岩宸断":
-        return FightProps({
-          FightProp.SHIELD_COST_MINUS_RATIO: params![0] * 5,
-        }, name: v);
-      case "袖火百景图":
-        return FightProps({
-          FightProp.FIRE_ADD_HURT: params![0] * 5,
-        }, name: v);
-      case "血之灶火":
-        return FightProps({
-          FightProp.FIRE_ADD_HURT: params![1],
-        }, name: v);
-      case "玉衡之贵":
-        return FightProps({
-          FightProp.ELEMENTAL_BURST_ADD_CRITICAL: params![0],
-          FightProp.CHARGE_EFFICIENCY: params![1],
-        }, name: v);
-      case "虚实工笔":
-        return FightProps({
-          FightProp.WATER_ADD_HURT: 0.2,
-        }, name: v);
-      default:
-        return FightProps({});
-    }
+    return additionalProps.isNotEmpty
+        ? addProps.merge(additionalProps.first)
+        : addProps;
   }
 }
 

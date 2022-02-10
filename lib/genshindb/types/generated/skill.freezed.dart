@@ -317,14 +317,16 @@ class _$InherentSkillTearOff {
   _InherentSkilll call(
       {required I18n name,
       required I18n desc,
+      required FightProps addProps,
+      required List<FightProps> additionalProps,
       List<I18n>? paramNames,
-      List<double>? params,
       int? breakLevel}) {
     return _InherentSkilll(
       name: name,
       desc: desc,
+      addProps: addProps,
+      additionalProps: additionalProps,
       paramNames: paramNames,
-      params: params,
       breakLevel: breakLevel,
     );
   }
@@ -341,8 +343,9 @@ const $InherentSkill = _$InherentSkillTearOff();
 mixin _$InherentSkill {
   I18n get name => throw _privateConstructorUsedError;
   I18n get desc => throw _privateConstructorUsedError;
+  FightProps get addProps => throw _privateConstructorUsedError;
+  List<FightProps> get additionalProps => throw _privateConstructorUsedError;
   List<I18n>? get paramNames => throw _privateConstructorUsedError;
-  List<double>? get params => throw _privateConstructorUsedError;
   int? get breakLevel => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -359,12 +362,14 @@ abstract class $InherentSkillCopyWith<$Res> {
   $Res call(
       {I18n name,
       I18n desc,
+      FightProps addProps,
+      List<FightProps> additionalProps,
       List<I18n>? paramNames,
-      List<double>? params,
       int? breakLevel});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res> get desc;
+  $FightPropsCopyWith<$Res> get addProps;
 }
 
 /// @nodoc
@@ -380,8 +385,9 @@ class _$InherentSkillCopyWithImpl<$Res>
   $Res call({
     Object? name = freezed,
     Object? desc = freezed,
+    Object? addProps = freezed,
+    Object? additionalProps = freezed,
     Object? paramNames = freezed,
-    Object? params = freezed,
     Object? breakLevel = freezed,
   }) {
     return _then(_value.copyWith(
@@ -393,14 +399,18 @@ class _$InherentSkillCopyWithImpl<$Res>
           ? _value.desc
           : desc // ignore: cast_nullable_to_non_nullable
               as I18n,
+      addProps: addProps == freezed
+          ? _value.addProps
+          : addProps // ignore: cast_nullable_to_non_nullable
+              as FightProps,
+      additionalProps: additionalProps == freezed
+          ? _value.additionalProps
+          : additionalProps // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>,
       paramNames: paramNames == freezed
           ? _value.paramNames
           : paramNames // ignore: cast_nullable_to_non_nullable
               as List<I18n>?,
-      params: params == freezed
-          ? _value.params
-          : params // ignore: cast_nullable_to_non_nullable
-              as List<double>?,
       breakLevel: breakLevel == freezed
           ? _value.breakLevel
           : breakLevel // ignore: cast_nullable_to_non_nullable
@@ -421,6 +431,13 @@ class _$InherentSkillCopyWithImpl<$Res>
       return _then(_value.copyWith(desc: value));
     });
   }
+
+  @override
+  $FightPropsCopyWith<$Res> get addProps {
+    return $FightPropsCopyWith<$Res>(_value.addProps, (value) {
+      return _then(_value.copyWith(addProps: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -433,14 +450,17 @@ abstract class _$InherentSkilllCopyWith<$Res>
   $Res call(
       {I18n name,
       I18n desc,
+      FightProps addProps,
+      List<FightProps> additionalProps,
       List<I18n>? paramNames,
-      List<double>? params,
       int? breakLevel});
 
   @override
   $I18nCopyWith<$Res> get name;
   @override
   $I18nCopyWith<$Res> get desc;
+  @override
+  $FightPropsCopyWith<$Res> get addProps;
 }
 
 /// @nodoc
@@ -458,8 +478,9 @@ class __$InherentSkilllCopyWithImpl<$Res>
   $Res call({
     Object? name = freezed,
     Object? desc = freezed,
+    Object? addProps = freezed,
+    Object? additionalProps = freezed,
     Object? paramNames = freezed,
-    Object? params = freezed,
     Object? breakLevel = freezed,
   }) {
     return _then(_InherentSkilll(
@@ -471,14 +492,18 @@ class __$InherentSkilllCopyWithImpl<$Res>
           ? _value.desc
           : desc // ignore: cast_nullable_to_non_nullable
               as I18n,
+      addProps: addProps == freezed
+          ? _value.addProps
+          : addProps // ignore: cast_nullable_to_non_nullable
+              as FightProps,
+      additionalProps: additionalProps == freezed
+          ? _value.additionalProps
+          : additionalProps // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>,
       paramNames: paramNames == freezed
           ? _value.paramNames
           : paramNames // ignore: cast_nullable_to_non_nullable
               as List<I18n>?,
-      params: params == freezed
-          ? _value.params
-          : params // ignore: cast_nullable_to_non_nullable
-              as List<double>?,
       breakLevel: breakLevel == freezed
           ? _value.breakLevel
           : breakLevel // ignore: cast_nullable_to_non_nullable
@@ -494,8 +519,9 @@ class _$_InherentSkilll extends _InherentSkilll {
   _$_InherentSkilll(
       {required this.name,
       required this.desc,
+      required this.addProps,
+      required this.additionalProps,
       this.paramNames,
-      this.params,
       this.breakLevel})
       : super._();
 
@@ -507,15 +533,17 @@ class _$_InherentSkilll extends _InherentSkilll {
   @override
   final I18n desc;
   @override
-  final List<I18n>? paramNames;
+  final FightProps addProps;
   @override
-  final List<double>? params;
+  final List<FightProps> additionalProps;
+  @override
+  final List<I18n>? paramNames;
   @override
   final int? breakLevel;
 
   @override
   String toString() {
-    return 'InherentSkill(name: $name, desc: $desc, paramNames: $paramNames, params: $params, breakLevel: $breakLevel)';
+    return 'InherentSkill(name: $name, desc: $desc, addProps: $addProps, additionalProps: $additionalProps, paramNames: $paramNames, breakLevel: $breakLevel)';
   }
 
   @override
@@ -525,9 +553,11 @@ class _$_InherentSkilll extends _InherentSkilll {
             other is _InherentSkilll &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.desc, desc) &&
+            const DeepCollectionEquality().equals(other.addProps, addProps) &&
+            const DeepCollectionEquality()
+                .equals(other.additionalProps, additionalProps) &&
             const DeepCollectionEquality()
                 .equals(other.paramNames, paramNames) &&
-            const DeepCollectionEquality().equals(other.params, params) &&
             const DeepCollectionEquality()
                 .equals(other.breakLevel, breakLevel));
   }
@@ -537,8 +567,9 @@ class _$_InherentSkilll extends _InherentSkilll {
       runtimeType,
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(desc),
+      const DeepCollectionEquality().hash(addProps),
+      const DeepCollectionEquality().hash(additionalProps),
       const DeepCollectionEquality().hash(paramNames),
-      const DeepCollectionEquality().hash(params),
       const DeepCollectionEquality().hash(breakLevel));
 
   @JsonKey(ignore: true)
@@ -556,8 +587,9 @@ abstract class _InherentSkilll extends InherentSkill {
   factory _InherentSkilll(
       {required I18n name,
       required I18n desc,
+      required FightProps addProps,
+      required List<FightProps> additionalProps,
       List<I18n>? paramNames,
-      List<double>? params,
       int? breakLevel}) = _$_InherentSkilll;
   _InherentSkilll._() : super._();
 
@@ -569,9 +601,11 @@ abstract class _InherentSkilll extends InherentSkill {
   @override
   I18n get desc;
   @override
-  List<I18n>? get paramNames;
+  FightProps get addProps;
   @override
-  List<double>? get params;
+  List<FightProps> get additionalProps;
+  @override
+  List<I18n>? get paramNames;
   @override
   int? get breakLevel;
   @override

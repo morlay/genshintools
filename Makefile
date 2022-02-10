@@ -63,6 +63,10 @@ install.flutter:
 convert:
 	$(TS_NODE) ./scripts/genshindb.convert.ts
 
+convert.debug:
+	$(TS_NODE) ./scripts/debug.ts
+
+
 define git_fetch
     if [[ -d $(2) ]]; then \
 		echo "pulling...";  \

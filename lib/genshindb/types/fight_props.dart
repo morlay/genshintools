@@ -17,7 +17,12 @@ class FightProps with _$FightProps {
   }) = _FightProps;
 
   factory FightProps.fromJson(Map<String, dynamic> json) =>
-      _FightProps.fromJson({"fightProps": json});
+      _FightProps.fromJson(
+        {
+          "name": json["_name"],
+          "fightProps": json..remove("_name"),
+        },
+      );
 
   Iterable<FightProp> get keys => fightProps.keys;
 

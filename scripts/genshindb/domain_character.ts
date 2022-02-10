@@ -1,8 +1,8 @@
 import { addPropSet, cleanText, groupMulti, groupOne, i18n, i18nWithKey, pascalCase } from "./common";
 import { Materials } from "./domain_material";
 import { mapKeys, reduce } from "lodash-es";
-import { Trials } from "./character_trial";
 import { Weapons } from "./domain_weapon";
+import { resolveAndFixProps } from "./openconfig";
 
 export const CharacterLevelupExps = (
   await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarLevelExcelConfigData.json")
@@ -50,12 +50,15 @@ export const CharacterPropGrowCurveValues = (
 const Constellations = groupOne(
   (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarTalentExcelConfigData.json")).default,
 
-  (talent) => ({
-    Name: i18nWithKey(talent.NameTextMapHash),
-    Desc: i18n(talent.DescTextMapHash, cleanText),
-    AddProps: addPropSet(talent.AddProps),
-    Params: talent.ParamList,
-  }),
+  (talent) => {
+    const desc = i18n(talent.DescTextMapHash, cleanText);
+
+    return ({
+      Name: i18nWithKey(talent.NameTextMapHash),
+      Desc: desc,
+      ...resolveAndFixProps(talent.OpenConfig, desc.CHS, talent.ParamList, addPropSet(talent.AddProps)),
+    });
+  },
   "TalentId",
 );
 
@@ -68,6 +71,7 @@ const ProudSkills = groupMulti(
     ParamNames: ps.ParamDescList.map((n) => i18n(n, cleanText)).filter((c) => c.CHS),
     Params: ps.ParamList,
     BreakLevel: ps.BreakLevel,
+    OpenConfig: ps.OpenConfig,
     MaterialCosts: [
       ...ps.CostItems.filter((item: any) => item.Id).map((item: any) => ({
         MaterialKey: Materials[item.Id].Name.KEY,
@@ -173,8 +177,14 @@ const SkillDepots = groupOne(
       }),
       Skills: skills,
       InherentSkills: skillDepot.InherentProudSkillOpens.filter((s: any) => s.ProudSkillGroupId)
-        .map((s: any) => ProudSkills[s.ProudSkillGroupId])
-        .flat(),
+        .map((s: any) => {
+          return ProudSkills[s.ProudSkillGroupId]!;
+        })
+        .flat().map((s) => ({
+          ...s,
+          Params: undefined,
+          ...resolveAndFixProps(s.OpenConfig || `${s.ProudSkillGroupId}`, s.Desc.CHS, s.Params, {}),
+        })),
     };
 
     ret.Skills.filter((s) => s).forEach((s) => {

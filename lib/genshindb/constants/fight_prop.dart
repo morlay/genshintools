@@ -121,42 +121,44 @@ enum FightProp {
   @JsonValue("FIGHT_PROP_PHYSICAL_ADD_HURT")
   PHYSICAL_ADD_HURT,
 
-  @EnumMeta(label: "减火抗")
+  @EnumMeta(label: "火抗")
   @JsonValue("FIGHT_PROP_FIRE_SUB_HURT")
   FIRE_SUB_HURT,
 
-  @EnumMeta(label: "减雷抗")
+  @EnumMeta(label: "雷抗")
   @JsonValue("FIGHT_PROP_ELEC_SUB_HURT")
   ELEC_SUB_HURT,
 
-  @EnumMeta(label: "减水抗")
+  @EnumMeta(label: "水抗")
   @JsonValue("FIGHT_PROP_WATER_SUB_HURT")
   WATER_SUB_HURT,
 
-  @EnumMeta(label: "减风抗")
+  @EnumMeta(label: "风抗")
   @JsonValue("FIGHT_PROP_WIND_SUB_HURT")
   WIND_SUB_HURT,
 
-  @EnumMeta(label: "减岩抗")
+  @EnumMeta(label: "岩抗")
   @JsonValue("FIGHT_PROP_ROCK_SUB_HURT")
   ROCK_SUB_HURT,
 
-  @EnumMeta(label: "减草抗")
+  @EnumMeta(label: "草抗")
   @JsonValue("FIGHT_PROP_GRASS_SUB_HURT")
   GRASS_SUB_HURT,
 
-  @EnumMeta(label: "减冰抗")
+  @EnumMeta(label: "冰抗")
   @JsonValue("FIGHT_PROP_ICE_SUB_HURT")
   ICE_SUB_HURT,
 
-  @EnumMeta(label: "减物抗")
+  @EnumMeta(label: "物抗")
   @JsonValue("FIGHT_PROP_PHYSICAL_SUB_HURT")
   PHYSICAL_SUB_HURT,
 
+  @Deprecated("")
   @EnumMeta(label: "伤害增加")
   @JsonValue("FIGHT_PROP_ADD_HURT")
   ADD_HURT,
 
+  @Deprecated("")
   @EnumMeta(label: "伤害减少")
   @JsonValue("FIGHT_PROP_SUB_HURT")
   SUB_HURT,
@@ -327,12 +329,9 @@ enum FightProp {
 
   /// 衍生数值
   /// <TO_FIGHT_PROP>__ON__<FROM_FIGHT_PROP>[__OVER$<N>][__MAX$<N>]
-  /// ——75 == .75
+  /// _75 == .75
   @EnumMeta(label: "元素爆发加伤（基于元素充能效率）")
   ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75,
-
-  @EnumMeta(label: "攻击力加成（基于元素充能效率超出部分）")
-  ATTACK_PERCENT__ON__CHARGE_EFFICIENCY__OVER$1__MAX$_80,
 
   @EnumMeta(label: "攻击力加成（基于最大生命值）")
   ATTACK_PERCENT__ON__HP,

@@ -96,7 +96,7 @@ export const addPropSet = (addProps: { PropType?: string; Value?: number }[]) =>
   return addProps
     .filter((p) => p.PropType)
     .reduce(
-      (r: any, p: any) => ({
+      (r: any, p: any) => (p.PropType === "FIGHT_PROP_ADD_HURT" || p.PropType === "FIGHT_PROP_SUB_HURT") ? r: ({
         ...r,
         [p.PropType]: p.Value || 0,
       }),

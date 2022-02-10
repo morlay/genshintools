@@ -26,12 +26,12 @@ class _$GSConstellationTearOff {
       {required I18n name,
       required I18n desc,
       required FightProps addProps,
-      required List<double> params}) {
+      required List<FightProps> additionalProps}) {
     return _GSConstellation(
       name: name,
       desc: desc,
       addProps: addProps,
-      params: params,
+      additionalProps: additionalProps,
     );
   }
 
@@ -48,7 +48,7 @@ mixin _$GSConstellation {
   I18n get name => throw _privateConstructorUsedError;
   I18n get desc => throw _privateConstructorUsedError;
   FightProps get addProps => throw _privateConstructorUsedError;
-  List<double> get params => throw _privateConstructorUsedError;
+  List<FightProps> get additionalProps => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -61,7 +61,11 @@ abstract class $GSConstellationCopyWith<$Res> {
   factory $GSConstellationCopyWith(
           GSConstellation value, $Res Function(GSConstellation) then) =
       _$GSConstellationCopyWithImpl<$Res>;
-  $Res call({I18n name, I18n desc, FightProps addProps, List<double> params});
+  $Res call(
+      {I18n name,
+      I18n desc,
+      FightProps addProps,
+      List<FightProps> additionalProps});
 
   $I18nCopyWith<$Res> get name;
   $I18nCopyWith<$Res> get desc;
@@ -82,7 +86,7 @@ class _$GSConstellationCopyWithImpl<$Res>
     Object? name = freezed,
     Object? desc = freezed,
     Object? addProps = freezed,
-    Object? params = freezed,
+    Object? additionalProps = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -97,10 +101,10 @@ class _$GSConstellationCopyWithImpl<$Res>
           ? _value.addProps
           : addProps // ignore: cast_nullable_to_non_nullable
               as FightProps,
-      params: params == freezed
-          ? _value.params
-          : params // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+      additionalProps: additionalProps == freezed
+          ? _value.additionalProps
+          : additionalProps // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>,
     ));
   }
 
@@ -133,7 +137,11 @@ abstract class _$GSConstellationCopyWith<$Res>
           _GSConstellation value, $Res Function(_GSConstellation) then) =
       __$GSConstellationCopyWithImpl<$Res>;
   @override
-  $Res call({I18n name, I18n desc, FightProps addProps, List<double> params});
+  $Res call(
+      {I18n name,
+      I18n desc,
+      FightProps addProps,
+      List<FightProps> additionalProps});
 
   @override
   $I18nCopyWith<$Res> get name;
@@ -159,7 +167,7 @@ class __$GSConstellationCopyWithImpl<$Res>
     Object? name = freezed,
     Object? desc = freezed,
     Object? addProps = freezed,
-    Object? params = freezed,
+    Object? additionalProps = freezed,
   }) {
     return _then(_GSConstellation(
       name: name == freezed
@@ -174,10 +182,10 @@ class __$GSConstellationCopyWithImpl<$Res>
           ? _value.addProps
           : addProps // ignore: cast_nullable_to_non_nullable
               as FightProps,
-      params: params == freezed
-          ? _value.params
-          : params // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+      additionalProps: additionalProps == freezed
+          ? _value.additionalProps
+          : additionalProps // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>,
     ));
   }
 }
@@ -190,7 +198,7 @@ class _$_GSConstellation extends _GSConstellation {
       {required this.name,
       required this.desc,
       required this.addProps,
-      required this.params})
+      required this.additionalProps})
       : super._();
 
   factory _$_GSConstellation.fromJson(Map<String, dynamic> json) =>
@@ -203,11 +211,11 @@ class _$_GSConstellation extends _GSConstellation {
   @override
   final FightProps addProps;
   @override
-  final List<double> params;
+  final List<FightProps> additionalProps;
 
   @override
   String toString() {
-    return 'GSConstellation(name: $name, desc: $desc, addProps: $addProps, params: $params)';
+    return 'GSConstellation(name: $name, desc: $desc, addProps: $addProps, additionalProps: $additionalProps)';
   }
 
   @override
@@ -218,7 +226,8 @@ class _$_GSConstellation extends _GSConstellation {
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality().equals(other.addProps, addProps) &&
-            const DeepCollectionEquality().equals(other.params, params));
+            const DeepCollectionEquality()
+                .equals(other.additionalProps, additionalProps));
   }
 
   @override
@@ -227,7 +236,7 @@ class _$_GSConstellation extends _GSConstellation {
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(addProps),
-      const DeepCollectionEquality().hash(params));
+      const DeepCollectionEquality().hash(additionalProps));
 
   @JsonKey(ignore: true)
   @override
@@ -245,7 +254,7 @@ abstract class _GSConstellation extends GSConstellation {
       {required I18n name,
       required I18n desc,
       required FightProps addProps,
-      required List<double> params}) = _$_GSConstellation;
+      required List<FightProps> additionalProps}) = _$_GSConstellation;
   _GSConstellation._() : super._();
 
   factory _GSConstellation.fromJson(Map<String, dynamic> json) =
@@ -258,7 +267,7 @@ abstract class _GSConstellation extends GSConstellation {
   @override
   FightProps get addProps;
   @override
-  List<double> get params;
+  List<FightProps> get additionalProps;
   @override
   @JsonKey(ignore: true)
   _$GSConstellationCopyWith<_GSConstellation> get copyWith =>

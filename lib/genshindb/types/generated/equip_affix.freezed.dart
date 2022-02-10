@@ -26,14 +26,14 @@ class _$EquipAffixTearOff {
       {required I18n name,
       required I18n desc,
       required FightProps addProps,
-      required List<double> params,
+      required List<FightProps> additionalProps,
       int? level,
       int? activeWhenNum}) {
     return _EquipAffix(
       name: name,
       desc: desc,
       addProps: addProps,
-      params: params,
+      additionalProps: additionalProps,
       level: level,
       activeWhenNum: activeWhenNum,
     );
@@ -52,7 +52,7 @@ mixin _$EquipAffix {
   I18n get name => throw _privateConstructorUsedError;
   I18n get desc => throw _privateConstructorUsedError;
   FightProps get addProps => throw _privateConstructorUsedError;
-  List<double> get params => throw _privateConstructorUsedError;
+  List<FightProps> get additionalProps => throw _privateConstructorUsedError;
   int? get level => throw _privateConstructorUsedError;
   int? get activeWhenNum => throw _privateConstructorUsedError;
 
@@ -71,7 +71,7 @@ abstract class $EquipAffixCopyWith<$Res> {
       {I18n name,
       I18n desc,
       FightProps addProps,
-      List<double> params,
+      List<FightProps> additionalProps,
       int? level,
       int? activeWhenNum});
 
@@ -93,7 +93,7 @@ class _$EquipAffixCopyWithImpl<$Res> implements $EquipAffixCopyWith<$Res> {
     Object? name = freezed,
     Object? desc = freezed,
     Object? addProps = freezed,
-    Object? params = freezed,
+    Object? additionalProps = freezed,
     Object? level = freezed,
     Object? activeWhenNum = freezed,
   }) {
@@ -110,10 +110,10 @@ class _$EquipAffixCopyWithImpl<$Res> implements $EquipAffixCopyWith<$Res> {
           ? _value.addProps
           : addProps // ignore: cast_nullable_to_non_nullable
               as FightProps,
-      params: params == freezed
-          ? _value.params
-          : params // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+      additionalProps: additionalProps == freezed
+          ? _value.additionalProps
+          : additionalProps // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>,
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
@@ -157,7 +157,7 @@ abstract class _$EquipAffixCopyWith<$Res> implements $EquipAffixCopyWith<$Res> {
       {I18n name,
       I18n desc,
       FightProps addProps,
-      List<double> params,
+      List<FightProps> additionalProps,
       int? level,
       int? activeWhenNum});
 
@@ -184,7 +184,7 @@ class __$EquipAffixCopyWithImpl<$Res> extends _$EquipAffixCopyWithImpl<$Res>
     Object? name = freezed,
     Object? desc = freezed,
     Object? addProps = freezed,
-    Object? params = freezed,
+    Object? additionalProps = freezed,
     Object? level = freezed,
     Object? activeWhenNum = freezed,
   }) {
@@ -201,10 +201,10 @@ class __$EquipAffixCopyWithImpl<$Res> extends _$EquipAffixCopyWithImpl<$Res>
           ? _value.addProps
           : addProps // ignore: cast_nullable_to_non_nullable
               as FightProps,
-      params: params == freezed
-          ? _value.params
-          : params // ignore: cast_nullable_to_non_nullable
-              as List<double>,
+      additionalProps: additionalProps == freezed
+          ? _value.additionalProps
+          : additionalProps // ignore: cast_nullable_to_non_nullable
+              as List<FightProps>,
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
@@ -225,7 +225,7 @@ class _$_EquipAffix extends _EquipAffix {
       {required this.name,
       required this.desc,
       required this.addProps,
-      required this.params,
+      required this.additionalProps,
       this.level,
       this.activeWhenNum})
       : super._();
@@ -240,7 +240,7 @@ class _$_EquipAffix extends _EquipAffix {
   @override
   final FightProps addProps;
   @override
-  final List<double> params;
+  final List<FightProps> additionalProps;
   @override
   final int? level;
   @override
@@ -248,7 +248,7 @@ class _$_EquipAffix extends _EquipAffix {
 
   @override
   String toString() {
-    return 'EquipAffix(name: $name, desc: $desc, addProps: $addProps, params: $params, level: $level, activeWhenNum: $activeWhenNum)';
+    return 'EquipAffix(name: $name, desc: $desc, addProps: $addProps, additionalProps: $additionalProps, level: $level, activeWhenNum: $activeWhenNum)';
   }
 
   @override
@@ -259,7 +259,8 @@ class _$_EquipAffix extends _EquipAffix {
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality().equals(other.addProps, addProps) &&
-            const DeepCollectionEquality().equals(other.params, params) &&
+            const DeepCollectionEquality()
+                .equals(other.additionalProps, additionalProps) &&
             const DeepCollectionEquality().equals(other.level, level) &&
             const DeepCollectionEquality()
                 .equals(other.activeWhenNum, activeWhenNum));
@@ -271,7 +272,7 @@ class _$_EquipAffix extends _EquipAffix {
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(addProps),
-      const DeepCollectionEquality().hash(params),
+      const DeepCollectionEquality().hash(additionalProps),
       const DeepCollectionEquality().hash(level),
       const DeepCollectionEquality().hash(activeWhenNum));
 
@@ -291,7 +292,7 @@ abstract class _EquipAffix extends EquipAffix {
       {required I18n name,
       required I18n desc,
       required FightProps addProps,
-      required List<double> params,
+      required List<FightProps> additionalProps,
       int? level,
       int? activeWhenNum}) = _$_EquipAffix;
   _EquipAffix._() : super._();
@@ -306,7 +307,7 @@ abstract class _EquipAffix extends EquipAffix {
   @override
   FightProps get addProps;
   @override
-  List<double> get params;
+  List<FightProps> get additionalProps;
   @override
   int? get level;
   @override

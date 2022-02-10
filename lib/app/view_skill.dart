@@ -31,6 +31,16 @@ class ViewSkillValues extends HookWidget {
       FightProp.ENEMY_ICE_SUB_HURT: 0.1,
     }, name: "爆炎/急冻树"));
 
+    characterWithState.character.inherentSkills.forEachIndexed((index, skill) {
+      if (characterWithState.c.level >
+          minLevelFromBreakLevel(skill.breakLevel ?? 1)) {
+        finalFightProps = finalFightProps.merge(
+            fightProps.fightPropsConvert(skill.patchedFightProps()).copyWith(
+                  name: skill.name.text(Lang.CHS),
+                ));
+      }
+    });
+
     return Wrap(
       runSpacing: 8,
       children: [
@@ -106,8 +116,11 @@ class ViewSkillValues extends HookWidget {
 
     if (label.endsWith("攻击力加成比例")) {
       return [
-        Text(
-          fightProps.calcAttackAdd(t, params).toStringAsFixed(0),
+        BuffList(
+          fightProps: fightProps,
+          child: Text(
+            fightProps.calcAttackAdd(t, params).toStringAsFixed(0),
+          ),
         ),
       ];
     }
@@ -120,25 +133,43 @@ class ViewSkillValues extends HookWidget {
 
     if (label.endsWith("攻击力提高") || label.endsWith("伤害值提升")) {
       return [
-        Text(
-          fightProps.calc(t, params).toStringAsFixed(0),
+        BuffList(
+          fightProps: fightProps,
+          child: elementalContainer(
+            Colors.grey,
+            Text(
+              fightProps.calc(t, params).toStringAsFixed(0),
+            ),
+          ),
         )
       ];
     }
 
     if (label.endsWith("吸收量") || label.endsWith("吸收量上限")) {
       return [
-        Text((fightProps.calc(t, params) *
-                (1 + fightProps.get(FightProp.SHIELD_COST_MINUS_RATIO)))
-            .toStringAsFixed(0))
+        BuffList(
+          fightProps: fightProps,
+          child: elementalContainer(
+            Colors.brown,
+            Text((fightProps.calc(t, params) *
+                    (1 + fightProps.get(FightProp.SHIELD_COST_MINUS_RATIO)))
+                .toStringAsFixed(0)),
+          ),
+        )
       ];
     }
 
     if (label.contains("治疗")) {
       return [
-        Text((fightProps.calc(t, params) *
-                (1 + fightProps.get(FightProp.HEAL_ADD)))
-            .toStringAsFixed(0))
+        BuffList(
+          fightProps: fightProps,
+          child: elementalContainer(
+            Colors.green,
+            Text((fightProps.calc(t, params) *
+                    (1 + fightProps.get(FightProp.HEAL_ADD)))
+                .toStringAsFixed(0)),
+          ),
+        ),
       ];
     }
 
@@ -565,41 +596,7 @@ class SkillVal {
               ),
             ]
           : [],
-    ].map((e) => GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (ctx) {
-                  return Column(
-                    children: [
-                      const ListTile(title: Text("环境与增益")),
-                      const Divider(height: 1),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              ...fightProps.allFrom
-                                  .where((fps) => fps.name != null)
-                                  .map((fps) =>
-                                      fightProps.fightPropsConvert(fps))
-                                  .map((e) => ListTile(
-                                        title: Text(e.name ?? ""),
-                                        subtitle: Text(e.keys
-                                            .map((fp) =>
-                                                "${fp.label()}: ${format(e.get(fp), fp.format())}")
-                                            .join("; ")),
-                                      )),
-                              const ListTile(title: Text(""))
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                });
-          },
-          child: e,
-        ));
+    ].map((e) => BuffList(fightProps: fightProps, child: e));
   }
 
   Widget _elementalReaction(
@@ -785,6 +782,55 @@ class SkillVal {
           ),
         ),
       ],
+    );
+  }
+}
+
+class BuffList extends StatelessWidget {
+  final Widget child;
+  final FightProps fightProps;
+
+  const BuffList({
+    Key? key,
+    required this.child,
+    required this.fightProps,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (ctx) {
+              return Column(
+                children: [
+                  const ListTile(title: Text("环境与增益")),
+                  const Divider(height: 1),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...fightProps.allFrom
+                              .where((fps) => fps.name != null)
+                              .map((fps) => fightProps.fightPropsConvert(fps))
+                              .map((e) => ListTile(
+                                    title: Text(e.name ?? ""),
+                                    subtitle: Text(e.keys
+                                        .map((fp) =>
+                                            "${fp.label()}: ${format(e.get(fp), fp.format())}")
+                                        .join("; ")),
+                                  )),
+                          const ListTile(title: Text(""))
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              );
+            });
+      },
+      child: child,
     );
   }
 }
