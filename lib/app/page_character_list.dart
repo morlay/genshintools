@@ -36,13 +36,16 @@ class PageCharacterList extends HookWidget {
     }, [uid]);
 
     var characters = BlocGameData.watch(context).listCharacterWithState(uid);
-    var grouped = characters.groupListsBy((e) => e.character.element);
+    Map<dynamic, List<CharacterWithState>> grouped =
+        characters.groupListsBy((e) => e.character.element);
+    grouped["TODO"] = characters.where((c) => c.todo).toList();
+
     var elements = ElementType.values.where((e) => e != ElementType.Physical);
 
     return AppBarWithAccount.buildScaffold(
       context,
       DefaultTabController(
-        length: elements.length,
+        length: elements.length + 1,
         child: Column(
           children: [
             TabBar(
@@ -53,13 +56,16 @@ class PageCharacterList extends HookWidget {
               indicatorColor: Theme.of(context).primaryColor,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text("All Stars",
+                      style: TextStyle(color: Theme.of(context).primaryColor)),
+                ),
                 ...elements.map(
                   (e) => Container(
-                    decoration: BoxDecoration(
-                      color: elementColor(e).withOpacity(0.05),
-                    ),
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: GSImageElement(
                       element: e,
                     ),
@@ -70,7 +76,10 @@ class PageCharacterList extends HookWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  ...elements.map((element) {
+                  ...[
+                    "TODO",
+                    ...elements,
+                  ].map((element) {
                     var l = grouped[element]?.toList() ?? [];
 
                     return ListView.builder(

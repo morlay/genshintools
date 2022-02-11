@@ -31,16 +31,6 @@ class ViewSkillValues extends HookWidget {
       FightProp.ENEMY_ICE_SUB_HURT: 0.1,
     }, name: "爆炎/急冻树"));
 
-    characterWithState.character.inherentSkills.forEachIndexed((index, skill) {
-      if (characterWithState.c.level >
-          minLevelFromBreakLevel(skill.breakLevel ?? 1)) {
-        finalFightProps = finalFightProps.merge(
-            fightProps.fightPropsConvert(skill.patchedFightProps()).copyWith(
-                  name: skill.name.text(Lang.CHS),
-                ));
-      }
-    });
-
     return Wrap(
       runSpacing: 8,
       children: [

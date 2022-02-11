@@ -25,9 +25,7 @@ class GSConstellation with _$GSConstellation {
   get nameID => name.text(Lang.KEY);
 
   FightProps patchedFightProps() {
-    return additionalProps.isNotEmpty
-        ? addProps.merge(additionalProps.first)
-        : addProps;
+    return addProps;
     // switch (name.text(Lang.CHS)) {
     //   case "冒险憧憬":
     //     return addProps.merge(FightProps({

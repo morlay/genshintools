@@ -60,9 +60,7 @@ class InherentSkill with _$InherentSkill {
       _$InherentSkillFromJson(json);
 
   FightProps patchedFightProps() {
-    return additionalProps.isNotEmpty
-        ? addProps.merge(additionalProps.first)
-        : addProps;
+    return addProps;
   }
 }
 

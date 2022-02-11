@@ -24,10 +24,6 @@ class EquipAffix with _$EquipAffix {
       _$EquipAffixFromJson(json);
 
   FightProps patchedFightProps() {
-    return additionalProps.isNotEmpty
-        ? ((additionalProps.first.name ?? "").contains("施放")
-            ? addProps
-            : addProps.merge(additionalProps.first))
-        : addProps;
+    return addProps;
   }
 }
