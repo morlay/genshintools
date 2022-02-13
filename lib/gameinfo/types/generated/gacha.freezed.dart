@@ -205,27 +205,29 @@ class _$GachaLogTearOff {
   const _$GachaLogTearOff();
 
   _GachaLog call(
-      {required String uid,
-      required String gachaType,
+      {required String gachaType,
+      required String id,
+      required String uid,
       required String name,
       required String lang,
       required String itemType,
       required String rankType,
-      required String id,
       required DateTime time,
       @JsonKey(ignore: true) int countSinceLastGold = 0,
-      @JsonKey(ignore: true) int countSinceLastPurple = 0}) {
+      @JsonKey(ignore: true) int countSinceLastPurple = 0,
+      String? uigfGachaType}) {
     return _GachaLog(
-      uid: uid,
       gachaType: gachaType,
+      id: id,
+      uid: uid,
       name: name,
       lang: lang,
       itemType: itemType,
       rankType: rankType,
-      id: id,
       time: time,
       countSinceLastGold: countSinceLastGold,
       countSinceLastPurple: countSinceLastPurple,
+      uigfGachaType: uigfGachaType,
     );
   }
 
@@ -239,18 +241,19 @@ const $GachaLog = _$GachaLogTearOff();
 
 /// @nodoc
 mixin _$GachaLog {
-  String get uid => throw _privateConstructorUsedError;
   String get gachaType => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  String get uid => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get lang => throw _privateConstructorUsedError;
   String get itemType => throw _privateConstructorUsedError;
   String get rankType => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
   DateTime get time => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   int get countSinceLastGold => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   int get countSinceLastPurple => throw _privateConstructorUsedError;
+  String? get uigfGachaType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -263,16 +266,17 @@ abstract class $GachaLogCopyWith<$Res> {
   factory $GachaLogCopyWith(GachaLog value, $Res Function(GachaLog) then) =
       _$GachaLogCopyWithImpl<$Res>;
   $Res call(
-      {String uid,
-      String gachaType,
+      {String gachaType,
+      String id,
+      String uid,
       String name,
       String lang,
       String itemType,
       String rankType,
-      String id,
       DateTime time,
       @JsonKey(ignore: true) int countSinceLastGold,
-      @JsonKey(ignore: true) int countSinceLastPurple});
+      @JsonKey(ignore: true) int countSinceLastPurple,
+      String? uigfGachaType});
 }
 
 /// @nodoc
@@ -285,25 +289,30 @@ class _$GachaLogCopyWithImpl<$Res> implements $GachaLogCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? uid = freezed,
     Object? gachaType = freezed,
+    Object? id = freezed,
+    Object? uid = freezed,
     Object? name = freezed,
     Object? lang = freezed,
     Object? itemType = freezed,
     Object? rankType = freezed,
-    Object? id = freezed,
     Object? time = freezed,
     Object? countSinceLastGold = freezed,
     Object? countSinceLastPurple = freezed,
+    Object? uigfGachaType = freezed,
   }) {
     return _then(_value.copyWith(
-      uid: uid == freezed
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
       gachaType: gachaType == freezed
           ? _value.gachaType
           : gachaType // ignore: cast_nullable_to_non_nullable
+              as String,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as String,
       name: name == freezed
           ? _value.name
@@ -321,10 +330,6 @@ class _$GachaLogCopyWithImpl<$Res> implements $GachaLogCopyWith<$Res> {
           ? _value.rankType
           : rankType // ignore: cast_nullable_to_non_nullable
               as String,
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -337,6 +342,10 @@ class _$GachaLogCopyWithImpl<$Res> implements $GachaLogCopyWith<$Res> {
           ? _value.countSinceLastPurple
           : countSinceLastPurple // ignore: cast_nullable_to_non_nullable
               as int,
+      uigfGachaType: uigfGachaType == freezed
+          ? _value.uigfGachaType
+          : uigfGachaType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -347,16 +356,17 @@ abstract class _$GachaLogCopyWith<$Res> implements $GachaLogCopyWith<$Res> {
       __$GachaLogCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String uid,
-      String gachaType,
+      {String gachaType,
+      String id,
+      String uid,
       String name,
       String lang,
       String itemType,
       String rankType,
-      String id,
       DateTime time,
       @JsonKey(ignore: true) int countSinceLastGold,
-      @JsonKey(ignore: true) int countSinceLastPurple});
+      @JsonKey(ignore: true) int countSinceLastPurple,
+      String? uigfGachaType});
 }
 
 /// @nodoc
@@ -370,25 +380,30 @@ class __$GachaLogCopyWithImpl<$Res> extends _$GachaLogCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? uid = freezed,
     Object? gachaType = freezed,
+    Object? id = freezed,
+    Object? uid = freezed,
     Object? name = freezed,
     Object? lang = freezed,
     Object? itemType = freezed,
     Object? rankType = freezed,
-    Object? id = freezed,
     Object? time = freezed,
     Object? countSinceLastGold = freezed,
     Object? countSinceLastPurple = freezed,
+    Object? uigfGachaType = freezed,
   }) {
     return _then(_GachaLog(
-      uid: uid == freezed
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
-              as String,
       gachaType: gachaType == freezed
           ? _value.gachaType
           : gachaType // ignore: cast_nullable_to_non_nullable
+              as String,
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      uid: uid == freezed
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as String,
       name: name == freezed
           ? _value.name
@@ -406,10 +421,6 @@ class __$GachaLogCopyWithImpl<$Res> extends _$GachaLogCopyWithImpl<$Res>
           ? _value.rankType
           : rankType // ignore: cast_nullable_to_non_nullable
               as String,
-      id: id == freezed
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -422,6 +433,10 @@ class __$GachaLogCopyWithImpl<$Res> extends _$GachaLogCopyWithImpl<$Res>
           ? _value.countSinceLastPurple
           : countSinceLastPurple // ignore: cast_nullable_to_non_nullable
               as int,
+      uigfGachaType: uigfGachaType == freezed
+          ? _value.uigfGachaType
+          : uigfGachaType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -431,25 +446,28 @@ class __$GachaLogCopyWithImpl<$Res> extends _$GachaLogCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$_GachaLog extends _GachaLog {
   _$_GachaLog(
-      {required this.uid,
-      required this.gachaType,
+      {required this.gachaType,
+      required this.id,
+      required this.uid,
       required this.name,
       required this.lang,
       required this.itemType,
       required this.rankType,
-      required this.id,
       required this.time,
       @JsonKey(ignore: true) this.countSinceLastGold = 0,
-      @JsonKey(ignore: true) this.countSinceLastPurple = 0})
+      @JsonKey(ignore: true) this.countSinceLastPurple = 0,
+      this.uigfGachaType})
       : super._();
 
   factory _$_GachaLog.fromJson(Map<String, dynamic> json) =>
       _$$_GachaLogFromJson(json);
 
   @override
-  final String uid;
-  @override
   final String gachaType;
+  @override
+  final String id;
+  @override
+  final String uid;
   @override
   final String name;
   @override
@@ -459,8 +477,6 @@ class _$_GachaLog extends _GachaLog {
   @override
   final String rankType;
   @override
-  final String id;
-  @override
   final DateTime time;
   @override
   @JsonKey(ignore: true)
@@ -468,10 +484,12 @@ class _$_GachaLog extends _GachaLog {
   @override
   @JsonKey(ignore: true)
   final int countSinceLastPurple;
+  @override
+  final String? uigfGachaType;
 
   @override
   String toString() {
-    return 'GachaLog(uid: $uid, gachaType: $gachaType, name: $name, lang: $lang, itemType: $itemType, rankType: $rankType, id: $id, time: $time, countSinceLastGold: $countSinceLastGold, countSinceLastPurple: $countSinceLastPurple)';
+    return 'GachaLog(gachaType: $gachaType, id: $id, uid: $uid, name: $name, lang: $lang, itemType: $itemType, rankType: $rankType, time: $time, countSinceLastGold: $countSinceLastGold, countSinceLastPurple: $countSinceLastPurple, uigfGachaType: $uigfGachaType)';
   }
 
   @JsonKey(ignore: true)
@@ -487,24 +505,27 @@ class _$_GachaLog extends _GachaLog {
 
 abstract class _GachaLog extends GachaLog {
   factory _GachaLog(
-      {required String uid,
-      required String gachaType,
+      {required String gachaType,
+      required String id,
+      required String uid,
       required String name,
       required String lang,
       required String itemType,
       required String rankType,
-      required String id,
       required DateTime time,
       @JsonKey(ignore: true) int countSinceLastGold,
-      @JsonKey(ignore: true) int countSinceLastPurple}) = _$_GachaLog;
+      @JsonKey(ignore: true) int countSinceLastPurple,
+      String? uigfGachaType}) = _$_GachaLog;
   _GachaLog._() : super._();
 
   factory _GachaLog.fromJson(Map<String, dynamic> json) = _$_GachaLog.fromJson;
 
   @override
-  String get uid;
-  @override
   String get gachaType;
+  @override
+  String get id;
+  @override
+  String get uid;
   @override
   String get name;
   @override
@@ -514,8 +535,6 @@ abstract class _GachaLog extends GachaLog {
   @override
   String get rankType;
   @override
-  String get id;
-  @override
   DateTime get time;
   @override
   @JsonKey(ignore: true)
@@ -523,6 +542,8 @@ abstract class _GachaLog extends GachaLog {
   @override
   @JsonKey(ignore: true)
   int get countSinceLastPurple;
+  @override
+  String? get uigfGachaType;
   @override
   @JsonKey(ignore: true)
   _$GachaLogCopyWith<_GachaLog> get copyWith =>

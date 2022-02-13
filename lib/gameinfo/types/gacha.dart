@@ -21,16 +21,17 @@ class GachaLog with _$GachaLog {
 
   @JsonSerializable(fieldRename: FieldRename.snake)
   factory GachaLog({
-    required String uid,
     required String gachaType,
+    required String id,
+    required String uid,
     required String name,
     required String lang,
     required String itemType,
     required String rankType,
-    required String id,
     required DateTime time,
     @JsonKey(ignore: true) @Default(0) int countSinceLastGold,
     @JsonKey(ignore: true) @Default(0) int countSinceLastPurple,
+    String? uigfGachaType,
   }) = _GachaLog;
 
   factory GachaLog.fromJson(Map<String, dynamic> json) =>

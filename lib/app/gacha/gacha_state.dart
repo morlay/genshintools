@@ -4,24 +4,66 @@ import 'package:genshintools/gameinfo/gameinfo.dart';
 part 'generated/gacha_state.freezed.dart';
 part 'generated/gacha_state.g.dart';
 
+// https://github.com/DGP-Studio/Snap.Genshin/wiki/StandardFormat
+@freezed
+class UigfInfo with _$UigfInfo {
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  factory UigfInfo({
+    required String uid,
+    required String lang,
+    @Default("v2.2") String uigfVersion,
+  }) = _UigfInfo;
+
+  factory UigfInfo.fromJson(Map<String, dynamic> json) =>
+      _UigfInfo.fromJson(json);
+}
+
 @freezed
 class GachaState with _$GachaState {
   GachaState._();
 
   factory GachaState({
-    @Default({}) Map<String, List<GachaLog>> logs,
+    required List<GachaLog> list,
+    UigfInfo? info,
   }) = _GachaState;
 
-  factory GachaState.fromJson(Map<String, dynamic> json) =>
-      _GachaState.fromJson(json);
+  static Map<String, dynamic> migrateFromOldStruct(Map<String, dynamic> json) {
+    if (json["list"] == null) {
+      var logs = ((json["logs"] as Map<String, dynamic>)
+          .map((key, value) => MapEntry(key, value as List))).values;
+      return {
+        "list": logs.expand((l) => l).toList(),
+      };
+    }
+    return json;
+  }
 
-  GachaState withGachaLogs(GachaType type, List<GachaLog> gachaLogs) {
+  factory GachaState.fromJson(Map<String, dynamic> json) =>
+      _GachaState.fromJson(migrateFromOldStruct(json)).withGachaLogs([]);
+
+  GachaState withGachaLogs(List<GachaLog> gachaLogs) {
+    var nextList = {
+      ...list,
+      ...gachaLogs,
+    }
+        .map(
+          (e) => e.copyWith(
+            uigfGachaType: e.gachaType == "400" ? "301" : e.gachaType,
+          ),
+        )
+        .toList()
+      ..sort((a, b) => a.id.compareTo(b.id));
+
+    var finalInfo = nextList.isNotEmpty
+        ? UigfInfo(
+            uid: nextList.first.uid,
+            lang: nextList.first.lang,
+          )
+        : info;
+
     return copyWith(
-      logs: {
-        ...logs,
-        type.name: gachaLogs.toSet().toList()
-          ..sort((a, b) => a.id.compareTo(b.id)),
-      },
+      info: finalInfo,
+      list: nextList,
     );
   }
 
@@ -54,5 +96,9 @@ class GachaState with _$GachaState {
     }
 
     return gachaLogs;
+  }
+
+  List<GachaLog> listFor(String type) {
+    return list.where((a) => a.uigfGachaType == type).toList();
   }
 }

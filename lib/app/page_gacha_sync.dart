@@ -104,7 +104,7 @@ class FormGachaSync extends HookWidget {
     var types = await client.listGachaType();
 
     for (var gachaType in types) {
-      List<GachaLog> logs = [...?state.logs[gachaType.name]];
+      List<GachaLog> logs = state.listFor(gachaType.key);
 
       var untilId = logs.isNotEmpty ? logs.last.id : "0";
       var noNextPage = false;
@@ -144,7 +144,7 @@ class FormGachaSync extends HookWidget {
         }
       }
 
-      blocGacha.syncGachaLogs(uid, gachaType, logs);
+      blocGacha.syncGachaLogs(uid, logs);
     }
 
     info.value = '完成全部同步';

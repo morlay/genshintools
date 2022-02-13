@@ -21,14 +21,14 @@ class BlocGacha extends HydratedCubit<GachaStates> with WebDAVSyncMixin {
 
   syncGachaLogs(
     int uid,
-    GachaType type,
     List<GachaLog> logs,
   ) {
-    emit({...state, uid: gachaState(uid).withGachaLogs(type, logs)});
+    emit({...state, uid: gachaState(uid).withGachaLogs(logs)});
   }
 
   GachaState gachaState(int uid) {
-    return state[uid] ?? GachaState(logs: {});
+    return state[uid] ??
+        GachaState(info: UigfInfo(uid: "$uid", lang: "zh-cn"), list: []);
   }
 
   @override

@@ -15,8 +15,12 @@ class ViewGachaLogList extends HookWidget {
   Widget build(BuildContext context) {
     var state = BlocGacha.watch(context).gachaState(uid);
 
-    var logs = state.logs;
-    var types = (logs.keys.toList()..sort()).reversed;
+    var types = {
+      "301": "角色活动祈愿",
+      "302": "武器活动祈愿",
+      "200": "常驻祈愿",
+      "100": "新手祈愿",
+    };
 
     return DefaultTabController(
       length: types.length,
@@ -28,7 +32,7 @@ class ViewGachaLogList extends HookWidget {
           labelColor: Theme.of(context).primaryColor,
           unselectedLabelColor: Theme.of(context).unselectedWidgetColor,
           tabs: [
-            ...types.map(
+            ...types.values.map(
               (type) => Tab(
                 child: Text(type),
               ),
@@ -37,8 +41,8 @@ class ViewGachaLogList extends HookWidget {
         ),
         Expanded(
           child: TabBarView(children: [
-            ...types.map((type) {
-              var gachaLogs = state.sortAndCount(logs[type]!);
+            ...types.keys.map((type) {
+              var gachaLogs = state.sortAndCount(state.listFor(type));
 
               if (gachaLogs.isEmpty) {
                 return const Center(
