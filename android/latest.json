@@ -2,6 +2,6 @@
   "packageName": "dev.morlay.genshintools",
   "version": "2.4.0",
   "buildNumber": "22023307",
-  "downloadURL": "https://gitee.com/morlay/genshintools-release/raw/stable/android/genshintools-release-2.4.0-22021307.apk",
+  "downloadURL": "https://cdn.jsdelivr.net/gh/morlay/genshintools@release-beta//android/genshintools-release-2.4.0-22021307.apk",
   "description": "[feat] 副词条统计\n\n[feat] 切换配装升级流派，如融化甘雨/冰冻甘雨\n\n[fix] 伤害计算修正，如钟离基于最大生命的附加伤害\n\n[fix] 升级摩拉计算修复\n\n[feat] 角色列表页显示升级材料\n\n[feat] 添加 WebView 从米游社 Web 登录\n\n[feat] 重构以支持 GOOD 结构\n\n[feat] 同步 2.4 数据\n\n[feat] 可录入圣遗物（强烈建议配置同步）"
 }
