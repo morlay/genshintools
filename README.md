@@ -5,7 +5,7 @@
 **Requirements**
 
 * `node@16+` (esmodule needed) and `pnpm`
-* `flutter@2.8+`
+* `flutter@2.10+`
 
 ```shell
 # install dep

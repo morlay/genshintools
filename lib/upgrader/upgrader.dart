@@ -13,8 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'release.dart';
 
-var gitRawBase = "https://gitee.com/morlay/genshintools-release/raw";
-
 class Upgrader {
   static checkVersion(BuildContext context) async {
     if (kIsWeb) {
@@ -107,7 +105,7 @@ ${lr.description?.let((description) => description) ?? "无"}
   Future<Release> latestRelease() {
     return dio
         .get(
-          "$gitRawBase/$channel/android/latest.json",
+          "https://ghproxy.com/https://raw.githubusercontent.com/morlay/genshintools/release-$channel/android/latest.json",
         )
         .then((value) => jsonDecode(value.data))
         .then((data) => Release.fromJson(data));

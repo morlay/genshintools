@@ -6,7 +6,10 @@ gen:
 gen.watch:
 	flutter pub run build_runner watch --delete-conflicting-outputs
 
-distribute.android:
+
+distribute.android: distribute.android.stable
+
+distribute.android.stable:
 	CHANNEL=stable $(TS_NODE) ./scripts/distribute.ts
 
 distribute.android.beta:
@@ -16,7 +19,7 @@ distribute.android.beta:
 # time build number  22011218n
 #                     y m d H n=M/6
 # each 6 minute could only one build
-BUILD_NUMBER=$(shell date +%y%m%d%H)
+BUILD_NUMBER=$(shell TZ=UTC-8 date +%y%m%d%H)
 # todo enabled when 2.5 $(shell echo `expr $$(date +%M) / 6`);
 
 build.android:
@@ -46,6 +49,7 @@ fmt:
 	pnpx prettier -w ./scripts/{,**/}*.ts
 
 dep: dep.npm dep.flutter
+
 install: install.npm install.flutter
 
 dep.npm:

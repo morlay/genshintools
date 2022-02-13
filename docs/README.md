@@ -9,7 +9,9 @@
 
 ## 安装
 
-code 中 `genshintools-release-*.apk` 文件，下载安装即可
+打开 https://github.com/morlay/genshintools/tree/release-stable/android
+
+`genshintools-release-*.apk` 文件，下载安装即可
 
 ## Q & A
 

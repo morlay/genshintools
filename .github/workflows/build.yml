@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "^17"
+      - uses: pnpm/action-setup@v2
+        with:
+          version: "^6"
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - run: make install
+      - run: make convert.genshin-data
+      - run: make build.android
+
+      - run: make distribute.android.${{ github.ref == 'refs/heads/main' && 'stable' || 'beta' }}
+
+      - uses: JamesIves/github-pages-deploy-action@v4.2.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: release-${{ github.ref == 'refs/heads/main' && 'stable' || 'beta' }}
+          FOLDER: ./build/.distribute
+          CLEAN: true

@@ -2,26 +2,26 @@ lockfileVersion: 5.3
 
 specifiers:
   '@fast-csv/parse': ^4.3.6
-  '@types/lodash-es': ^4.17.5
-  '@types/node': ^17.0.14
+  '@types/lodash-es': ^4.17.6
+  '@types/node': ^17.0.17
   formdata-node: ^4.3.2
   lodash-es: ^4.17.21
   node-fetch: ^3.2.0
   prettier: ^2.5.1
-  ts-node: ^10.4.0
+  ts-node: ^10.5.0
   typescript: ^4.5.5
 
 dependencies:
   '@fast-csv/parse': 4.3.6
-  '@types/lodash-es': 4.17.5
+  '@types/lodash-es': 4.17.6
   formdata-node: 4.3.2
   lodash-es: 4.17.21
   node-fetch: 3.2.0
 
 devDependencies:
-  '@types/node': 17.0.14
+  '@types/node': 17.0.17
   prettier: 2.5.1
-  ts-node: 10.4.0_43d2036524ce97aa8076ce68340fa9ec
+  ts-node: 10.5.0_241ff727c41c38f37d2c0695b583de34
   typescript: 4.5.5
 
 packages:
@@ -41,7 +41,7 @@ packages:
   /@fast-csv/parse/4.3.6:
     resolution: {integrity: sha512-uRsLYksqpbDmWaSmzvJcuApSEe38+6NQZBUsuAyMZKqHxH0g1wcJgsKUvN3WC8tewaqFjBMMGrkHmC+T7k8LvA==}
     dependencies:
-      '@types/node': 14.18.10
+      '@types/node': 14.18.11
       lodash.escaperegexp: 4.1.2
       lodash.groupby: 4.6.0
       lodash.isfunction: 3.0.9
@@ -66,8 +66,8 @@ packages:
     resolution: {integrity: sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==}
     dev: true
 
-  /@types/lodash-es/4.17.5:
-    resolution: {integrity: sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A==}
+  /@types/lodash-es/4.17.6:
+    resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
     dependencies:
       '@types/lodash': 4.14.178
     dev: false
@@ -76,12 +76,12 @@ packages:
     resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
     dev: false
 
-  /@types/node/14.18.10:
-    resolution: {integrity: sha512-6iihJ/Pp5fsFJ/aEDGyvT4pHGmCpq7ToQ/yf4bl5SbVAvwpspYJ+v3jO7n8UyjhQVHTy+KNszOozDdv+O6sovQ==}
+  /@types/node/14.18.11:
+    resolution: {integrity: sha512-zCoCEMA+IPpsRkyCFBqew5vGb7r8RSiB3uwdu/map7uwLAfu1MTazW26/pUDWoNnF88vJz4W3U56i5gtXNqxGg==}
     dev: false
 
-  /@types/node/17.0.14:
-    resolution: {integrity: sha512-SbjLmERksKOGzWzPNuW7fJM7fk3YXVTFiZWB/Hs99gwhk+/dnrQRPBQjPW9aO+fi1tAffi9PrwFvsmOKmDTyng==}
+  /@types/node/17.0.17:
+    resolution: {integrity: sha512-e8PUNQy1HgJGV3iU/Bp2+D/DXh3PYeyli8LgIwsQcs1Ar1LoaWHSIT6Rw+H2rNJmiq6SNWiDytfx8+gYj7wDHw==}
     dev: true
 
   /acorn-walk/8.2.0:
@@ -188,8 +188,8 @@ packages:
     hasBin: true
     dev: true
 
-  /ts-node/10.4.0_43d2036524ce97aa8076ce68340fa9ec:
-    resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
+  /ts-node/10.5.0_241ff727c41c38f37d2c0695b583de34:
+    resolution: {integrity: sha512-6kEJKwVxAJ35W4akuiysfKwKmjkbYxwQMTBaAxo9KKAx/Yd26mPUyhGz3ji+EsJoAgrLqVsYHNuuYwQe22lbtw==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
@@ -207,7 +207,7 @@ packages:
       '@tsconfig/node12': 1.0.9
       '@tsconfig/node14': 1.0.1
       '@tsconfig/node16': 1.0.2
-      '@types/node': 17.0.14
+      '@types/node': 17.0.17
       acorn: 8.7.0
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -215,6 +215,7 @@ packages:
       diff: 4.0.2
       make-error: 1.3.6
       typescript: 4.5.5
+      v8-compile-cache-lib: 3.0.0
       yn: 3.1.1
     dev: true
 
@@ -222,6 +223,10 @@ packages:
     resolution: {integrity: sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
+
+  /v8-compile-cache-lib/3.0.0:
+    resolution: {integrity: sha512-mpSYqfsFvASnSn5qMiwrr4VKfumbPyONLCOPmsR3A6pTY/r0+tSaVbgPWSAIuzbk3lCTa+FForeTiO+wBQGkjA==}
     dev: true
 
   /web-streams-polyfill/3.2.0:

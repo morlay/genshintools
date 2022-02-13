@@ -11,7 +11,7 @@ if (!channel) {
 }
 
 const repo = "git@gitee.com:morlay/genshintools-release.git";
-const publicPath = `https://gitee.com/morlay/genshintools-release/raw/${channel}`;
+const publicPath = `https://ghproxy.com/https://raw.githubusercontent.com/morlay/genshintools/release-${channel}`;
 
 const latest = {
   packageName: outputMeta.applicationId,
@@ -37,15 +37,19 @@ copyFileSync(
   join(androidDir, outputMeta.elements[0].outputFile),
 );
 
-const files = readdirSync("docs");
 
-for (const file of files) {
-  copyFileSync(join("docs", file), join(androidDir, file));
+if (process.env.PUSH) {
+  const files = readdirSync("docs");
+
+  for (const file of files) {
+    copyFileSync(join("docs", file), join(distributeDir, file));
+  }
+
+  execSync(`git init`, { cwd: distributeDir });
+  execSync(`git checkout -b ${channel}`, { cwd: distributeDir });
+  execSync(`git remote add origin ${repo}`, { cwd: distributeDir });
+  execSync(`git add .`, { cwd: distributeDir });
+  execSync(`git commit -m "release ${latest.version}"`, { cwd: distributeDir });
+  execSync(`git push -uf origin ${channel}`, { cwd: distributeDir });
 }
 
-execSync(`git init`, { cwd: distributeDir });
-execSync(`git checkout -b ${channel}`, { cwd: distributeDir });
-execSync(`git remote add origin ${repo}`, { cwd: distributeDir });
-execSync(`git add .`, { cwd: distributeDir });
-execSync(`git commit -m "release ${latest.version}"`, { cwd: distributeDir });
-execSync(`git push -uf origin ${channel}`, { cwd: distributeDir });
