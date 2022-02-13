@@ -36,20 +36,3 @@ copyFileSync(
   join(apkReleaseDir, outputMeta.elements[0].outputFile),
   join(androidDir, outputMeta.elements[0].outputFile),
 );
-
-
-if (process.env.PUSH) {
-  const files = readdirSync("docs");
-
-  for (const file of files) {
-    copyFileSync(join("docs", file), join(distributeDir, file));
-  }
-
-  execSync(`git init`, { cwd: distributeDir });
-  execSync(`git checkout -b ${channel}`, { cwd: distributeDir });
-  execSync(`git remote add origin ${repo}`, { cwd: distributeDir });
-  execSync(`git add .`, { cwd: distributeDir });
-  execSync(`git commit -m "release ${latest.version}"`, { cwd: distributeDir });
-  execSync(`git push -uf origin ${channel}`, { cwd: distributeDir });
-}
-
