@@ -20,7 +20,12 @@ class CharacterWithState with _$CharacterWithState {
   bool get todo => artifacts.length == 5;
 
   double weight() {
-    var i = c.level / 90.0 * 100 + character.rarity / 5 * 100;
+    var i = (c.level / 90.0) * 100 +
+        (w.level / 90.0) * 100 +
+        character.rarity / 5 * 100;
+    if (todo) {
+      return 500 + i;
+    }
     return i;
   }
 

@@ -428,7 +428,7 @@ class PageCharacter extends HookWidget {
         fightProps: fightProps,
         weapon: db.weapon.find(current.w.key),
         level: c.w.level,
-        refinement: current.w.refinement,
+        refinement: c.w.refinement,
         backup: "当前配装",
       ),
       ...?builds.weapons?.map((e) => WeaponListTile(
