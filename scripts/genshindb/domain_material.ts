@@ -36,7 +36,7 @@ export const Dungeons = groupOne(
       OpenWeekdays: DungeonOpenWeekdays[t.Id],
     };
 
-    if (t.Type == "DUNGEON_PLOT" || v.Name.CHS.indexOf("test") > -1) {
+    if (t.Type == "DUNGEON_PLOT" || (v.Name.CHS || "").includes("test")) {
       return null;
     }
 

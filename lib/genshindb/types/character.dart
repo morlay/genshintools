@@ -45,9 +45,7 @@ class GSCharacter with _$GSCharacter {
     if (role != null && (characterBuilds?.keys.contains(role) ?? false)) {
       return role;
     }
-    return characterBuilds?.keys
-        .where((r) => characterBuilds?[r]?.recommended ?? false)
-        .last;
+    return characterBuilds?.keys.last;
   }
 
   GSCharacterBuild characterBuildFor(String? role) {

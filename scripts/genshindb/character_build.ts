@@ -6,6 +6,7 @@ import { existsSync } from "fs";
 import { pascalCase } from "./common";
 import { findWeapon } from "./domain_weapon";
 import { findArtifactSet } from "./domain_artifact";
+import { FightProp } from "./openconfig";
 
 const statsMap: Record<string, string> = {
   "HP%": "FIGHT_PROP_HP_PERCENT",
@@ -294,19 +295,32 @@ const fromCSV = async (csv: string, grid: Grid) => {
 };
 
 export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } = {
-  Shenhe: [
+  YaeMiko: [
     {
-      Recommended: true,
-      Role: "SUPPORT",
-      Weapons: ["息灾"],
+      Recommended: false,
+      Role: "DPS",
+      Weapons: ["神乐之真意"],
       ArtifactMainPropTypes: {
-        EQUIP_SHOES: ["FIGHT_PROP_CHARGE_EFFICIENCY"],
-        EQUIP_RING: ["FIGHT_PROP_ATTACK_PERCENT"],
-        EQUIP_DRESS: ["FIGHT_PROP_ATTACK_PERCENT"],
+        EQUIP_SHOES: [
+          FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
+        ],
+        EQUIP_RING: [
+          FightProp[FightProp.FIGHT_PROP_ELEC_ADD_HURT],
+        ],
+        EQUIP_DRESS: [
+          FightProp[FightProp.FIGHT_PROP_CRITICAL],
+        ],
       },
-      ArtifactAffixPropTypes: ["FIGHT_PROP_CHARGE_EFFICIENCY", "FIGHT_PROP_ATTACK_PERCENT", "FIGHT_PROP_ATTACK"],
-      ArtifactSetPairs: [["绝缘之旗印"]],
-      SkillPriority: [["Q"], ["E"]],
+      ArtifactAffixPropTypes: [
+        FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
+        FightProp[FightProp.FIGHT_PROP_ATTACK],
+        FightProp[FightProp.FIGHT_PROP_CRITICAL],
+        FightProp[FightProp.FIGHT_PROP_CRITICAL_HURT],
+      ],
+      ArtifactSetPairs: [
+        ["如雷的盛怒", "角斗士的终幕礼"],
+      ],
+      SkillPriority: [["E"], ["Q"]],
     },
   ],
 };

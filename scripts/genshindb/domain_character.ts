@@ -56,7 +56,7 @@ const Constellations = groupOne(
     return ({
       Name: i18nWithKey(talent.NameTextMapHash),
       Desc: desc,
-      ...resolveAndFixProps(talent.OpenConfig, desc.CHS, talent.ParamList, addPropSet(talent.AddProps)),
+      ...resolveAndFixProps(talent.OpenConfig || `talent-${talent.TalentId}`, desc.CHS, talent.ParamList, addPropSet(talent.AddProps)),
     });
   },
   "TalentId",
@@ -183,7 +183,7 @@ const SkillDepots = groupOne(
         .flat().map((s) => ({
           ...s,
           Params: undefined,
-          ...resolveAndFixProps(s.OpenConfig || `${s.ProudSkillGroupId}`, s.Desc.CHS, s.Params, {}),
+          ...resolveAndFixProps(s.OpenConfig || `skill-${s.ProudSkillGroupId}`, s.Desc.CHS, s.Params, {}),
         })),
     };
 
@@ -211,7 +211,7 @@ export const Characters = (await import("../../vendordata/GenshinData/ExcelBinOu
       WeaponType: a.WeaponType,
       InitialWeaponKey: Weapons[a.InitialWeapon].Name.KEY,
       StaminaRecoverSpeed: a.StaminaRecoverSpeed,
-      ChargeEfficiency: a.ChargeEfficiency,
+      ChargeEfficiency: 1, // todo always 1.0
       Critical: a.Critical,
       CriticalHurt: a.CriticalHurt,
       PromoteId: a.AvatarPromoteId,

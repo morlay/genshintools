@@ -53,7 +53,7 @@ const createConfigFn = <T extends (...args: any[]) => any>(fn: T, ...patterns: R
   });
 };
 
-enum FightProp {
+export enum FightProp {
   FIGHT_PROP_ATTACK,
   FIGHT_PROP_ATTACK_PERCENT,
   FIGHT_PROP_DEFENSE_PERCENT,
@@ -258,7 +258,7 @@ export const OpenConfigs: {
   [k: string]: {
     Config: Array<{ [k: string]: string | number }>,
     Desc: string,
-    P: string,
+    Params: number[],
   }
 } = {};
 
@@ -283,7 +283,7 @@ const resolveConfig = (openConfig: string, desc: string, params: number[]) => {
 
     if (size(pc) > 0) {
       const mayWhen = part.split("，")[0];
-      if (mayWhen.match(/[后时内]$/)) {
+      if (mayWhen.match(/[后时内]$/) || mayWhen.includes("影响下")) {
         if (["装备", "攻击造成伤害时", "点按"].every(v => part.indexOf(v) == -1)) {
           pc["$when"] = mayWhen;
         }
@@ -301,7 +301,7 @@ const resolveConfig = (openConfig: string, desc: string, params: number[]) => {
   OpenConfigs[openConfig] = {
     Config: config,
     Desc: desc,
-    P: params.join(", "),
+    Params: params,
   };
 
   return config;
@@ -334,7 +334,7 @@ const configsToProps = (configs: Array<{ [k: string]: string | number }>, params
         setFightProps(addProps, fns, params);
         return {
           ...addProps,
-          _name: fns["$when"],
+          $when: fns["$when"],
         };
       }, {}),
   };

@@ -1,4 +1,4 @@
-import { mapValues, findLast, omit } from "lodash-es";
+import { mapValues, omit } from "lodash-es";
 
 import {
   writeJSONSync,
@@ -22,18 +22,17 @@ import {
   ArtifactSetsByKey,
   WeaponsByKey,
 } from "./genshindb";
-import { Trials } from "./genshindb/character_trial";
-import { OpenConfigs } from "./genshindb/openconfig";
+import { OpenConfigs, resolveAndFixProps } from "./genshindb/openconfig";
 
 writeJSONSync("./assets/genshindb/characters.json", {
   Characters: mapValues(CharactersByKey, (c: any) => ({
     ...c,
-    CharacterBuilds: Builds[c.Name.KEY].reduce((ret, b) => {
+    CharacterBuilds: (Builds[c.Name.KEY] || []).reduce((ret, b) => {
       return ({
         ...ret,
         [b.Role]: omit(b, "Role"),
       });
-    },{}),
+    }, {}),
   })),
   CharacterPromotes,
   CharacterPropGrowCurveValues,
@@ -66,14 +65,29 @@ writeJSONSync("./assets/genshindb/materials.json", {
   Dungeons: Dungeons,
 });
 
-writeJSONSync("./assets/trials.json", {
-  Trials: Trials,
-});
-
 writeJSONSync("./assets/builds.json", {
   Builds: Builds,
 });
 
-writeJSONSync("./assets/openconfigs.json", OpenConfigs);
+const whens: { [k:string]: boolean } = {};
+
+writeJSONSync(
+  "./assets/openconfigs.json",
+  {
+    OpenConfigs: mapValues(OpenConfigs, (c, k) => {
+      const props = resolveAndFixProps(k, c.Desc, c.Params, {});
+
+      props.AdditionalProps.forEach((p) => {
+        whens[p.$when || ""] = true;
+      });
+
+      return ({
+        ...props,
+        Desc: c.Desc,
+      });
+    }),
+    Whens: whens,
+  },
+);
 
 

@@ -19,8 +19,8 @@ class FightProps with _$FightProps {
   factory FightProps.fromJson(Map<String, dynamic> json) =>
       _FightProps.fromJson(
         {
-          "name": json["_name"],
-          "fightProps": json..remove("_name"),
+          "name": json["\$when"],
+          "fightProps": json..remove("\$when"),
         },
       );
 
