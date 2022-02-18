@@ -452,21 +452,51 @@ class ViewBuildArtifacts extends HookWidget {
     var blocGameData = BlocGameData.read(context);
     var as = blocGameData.db.artifact;
 
-    var ranks = current.appendPropsRanks(
-      as,
-      builds,
-      fightProps,
-      location: current.character.key,
-      chargeEfficiencyAsDPS: current.artifacts
-              .where((a) => a.setKey == as.findSet("绝缘之旗印").key)
-              .length >=
-          4,
-      asDetails: true,
-    );
-
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: AppendPropsRank(ranks: ranks),
+      child: Column(
+        children: current.artifacts.last.substats.isNotEmpty
+            ? [
+                AppendPropsRank(
+                  ranks: current.appendPropsRanks(
+                    as,
+                    builds,
+                    fightProps,
+                    location: current.character.key,
+                    chargeEfficiencyAsDPS: current.chargeEfficiencyAsDPS(as),
+                    asDetails: true,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (state.value.artifacts.last.substats.isEmpty) {
+                      state.value = state.value.copyWith(
+                        artifacts: current.artifacts,
+                      );
+                    } else {
+                      state.value = state.value.copyWith(
+                        artifacts: current.graduatedArtifacts(as),
+                      );
+                    }
+                  },
+                  child: Text(
+                    state.value.artifacts.last.substats.isEmpty
+                        ? "查看当前配装"
+                        : "查看毕业词条",
+                    style: const TextStyle(fontSize: 7),
+                  ),
+                ),
+              ]
+            : [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "当前面板包含 18+6 词条",
+                    style: TextStyle(fontSize: 7),
+                  ),
+                ),
+              ],
+      ),
     );
   }
 }

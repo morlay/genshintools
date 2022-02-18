@@ -76,13 +76,17 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
 
   final Map<FightProp, Map<String, List<int>>> _fpCanValues = {};
 
-  static String format(double t, [percent = false]) {
+  static String format(
+    double t, {
+    bool percent = false,
+    String percentSymbol = "%",
+  }) {
     if (t < 1) {
       // to fix
       // 0.05249999836087227 should be .053
       t = (t + 1e-5);
       if (percent) {
-        return (t * 1e2).toStringAsFixed(1) + "%";
+        return (t * 1e2).toStringAsFixed(1) + percentSymbol;
       }
       return t.toStringAsFixed(3).substring(1);
     }
@@ -143,7 +147,7 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
       }
 
       // 平均值
-      return (calc(fp, [i]) / (calc(fp, [1, 2, 3, 4]) / 4)) * base;
+      return (calc(fp, [i]) / (avgValue(fp))) * base;
     })).toDouble();
   }
 
@@ -169,7 +173,15 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
   }
 
   double valueFor(FightProp fp, String? s) {
-    return calc(fp, valueNs(fp, s));
+    var ns = valueNs(fp, s);
+    if (ns.isNotEmpty) {
+      return calc(fp, valueNs(fp, s));
+    }
+    try {
+      return double.parse(s ?? "");
+    } catch (e) {
+      return 0;
+    }
   }
 
   String valueFix(FightProp fp, String? s) {
@@ -207,8 +219,12 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
     return _fpCanValues[fp]!;
   }
 
-  abs(int i) {
+  int abs(int i) {
     return i < 0 ? -i : i;
+  }
+
+  double avgValue(FightProp fp) {
+    return calc(fp, [1, 2, 3, 4]) / 4;
   }
 }
 

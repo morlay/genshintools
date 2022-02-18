@@ -266,7 +266,7 @@ class PageArtifactAdd extends HookWidget {
                 fp,
                 indexes,
               ),
-              true,
+              percent: true,
             ),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),

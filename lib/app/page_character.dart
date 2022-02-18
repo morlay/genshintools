@@ -46,26 +46,41 @@ class PageCharacter extends HookWidget {
     var builds = current.character.characterBuildFor(current.c.role);
 
     current = current.copyWith(
+      buffs: [],
+      c: current.c.own
+          ? current.c
+          : current.c.copyWith(
+              level: 90,
+              talent: {
+                TalentType.auto: 9,
+                TalentType.skill: 9,
+                TalentType.burst: 9,
+              },
+              constellation: current.character.rarity == 4 ? 6 : 0),
+      w: current.c.own
+          ? current.w
+          : current.w.copyWith(
+              level: 90,
+              key: db.weapon.findOrNull(builds.weapons?.first ?? "")?.key ??
+                  current.w.key,
+            ),
       artifacts: current.artifacts.length == 5
           ? current.artifacts
-          : db.artifact
-              .buildArtifactsBySetPair(
-                builds.artifactSetPairs?[0] ?? ["角斗士的终幕礼"],
-                builds,
-              )
-              .map((a) =>
-                  current.artifacts
-                      .firstWhereOrNull((e) => e.slotKey == a.slotKey) ??
-                  a)
-              .toList(),
+          : current.graduatedArtifacts(db.artifact, defaultArtifacts: [
+              ...db.artifact
+                  .buildArtifactsBySetPair(
+                    builds.artifactSetPairs?[0] ?? ["角斗士的终幕礼"],
+                    builds,
+                  )
+                  .map((a) =>
+                      current.artifacts
+                          .firstWhereOrNull((e) => e.slotKey == a.slotKey) ??
+                      a)
+                  .map((a) => a.copyWith(level: 20))
+            ]),
     );
 
-    var characterValueNotifier = useState(current.copyWith(
-      c: current.c.copyWith(
-        level: current.c.level > 0 ? current.c.level : 1,
-      ),
-      buffs: [],
-    ));
+    var characterValueNotifier = useState(current);
 
     useEffect(() {
       characterValueNotifier.value = characterValueNotifier.value.copyWith(
@@ -144,7 +159,7 @@ class PageCharacter extends HookWidget {
                             ),
                           ),
                           data: """
-双暴词条练度评分采用 [「20+4n」](https://bbs.nga.cn/read.php?tid=28464477);
+双暴词条练度评分采用 [18+6 算法](https://ngabbs.com/read.php?tid=29797262);
 配装参考数据来自 [Genshin Impact Helper Team](https://heystacks.org/doc/743/genshin-impact-general-character-strats)
 """,
                         ),

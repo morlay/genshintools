@@ -15,12 +15,12 @@ distribute.android.stable:
 distribute.android.beta:
 	CHANNEL=beta $(TS_NODE) ./scripts/distribute.ts
 
-#  max build number 2147483647
+#  max build number 2100000000
 # time build number  22011218n
+# 				ex.  220218147
 #                     y m d H n=M/6
 # each 6 minute could only one build
-BUILD_NUMBER=$(shell TZ=UTC-8 date +%y%m%d%H)
-# todo enabled when 2.5 $(shell echo `expr $$(date +%M) / 6`);
+BUILD_NUMBER=$(shell TZ=UTC-8 date +%y%m%d%H)$(shell TZ=UTC-8 echo `expr $$(date +%M) / 6`)
 
 build.android:
 	flutter build apk --release \

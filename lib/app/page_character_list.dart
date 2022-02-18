@@ -230,15 +230,14 @@ class CharacterListTile extends HookWidget {
               SkillType.NORMAL_ATTACK,
               SkillType.ELEMENTAL_SKILL,
               SkillType.ELEMENTAL_BURST,
-            ].expand((st) =>
-                c.character.characterBuildFor(c.c.role).shouldSkillLevelup(st)
-                    ? db.characterSkillLevelupPlans(
-                        c.character.key,
-                        st,
-                        c.c.skillLevel(st),
-                        c.c.level,
-                      )
-                    : [])
+            ].expand((st) {
+              var b = c.character.characterBuildFor(c.c.role);
+              return b.shouldSkillLevelup(st)
+                  ? db.characterSkillLevelupPlans(
+                      c.character.key, st, c.c.skillLevel(st), c.c.level,
+                      maxLevel: b.emBuild().ifTrueOrNull(() => 6))
+                  : [];
+            })
           ],
         ),
         ...?db.weapon

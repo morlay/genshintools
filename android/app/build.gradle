@@ -62,8 +62,14 @@ android {
             minifyEnabled true
 
             applicationVariants.all { variant ->
-                variant.outputs.all { //output ->
+                variant.outputs.all {
                     outputFileName = "genshintools-${variant.name}-${variant.versionName}-${flutterVersionCode}.apk"
+                }
+            }
+
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    output.versionCodeOverride = flutterVersionCode.toInteger()
                 }
             }
         }

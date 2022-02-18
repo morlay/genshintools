@@ -300,7 +300,7 @@ class GOODArtifact with _$GOODArtifact {
   }
 
   Map<FightProp, String> substatsAsFightProps() {
-    return substats.fold<Map<FightProp, String>>({}, (ret, s) {
+    var subProps = substats.fold<Map<FightProp, String>>({}, (ret, s) {
       return {
         ...ret,
         s.key.asFightProp(): GSArtifactAppendDepot.format(
@@ -308,6 +308,7 @@ class GOODArtifact with _$GOODArtifact {
         )
       };
     });
+    return subProps;
   }
 }
 

@@ -119,11 +119,8 @@ class GSDB {
   }
 
   List<LevelupPlan> characterSkillLevelupPlans(
-    String keyOrName,
-    SkillType skillType,
-    int current,
-    int characterLevel,
-  ) {
+      String keyOrName, SkillType skillType, int current, int characterLevel,
+      {int? maxLevel}) {
     var c = character.find(keyOrName);
 
     characterLevel = rangeLimit(characterLevel, 1, 90);
@@ -148,7 +145,7 @@ class GSDB {
 
     var materialCosts = c.materialCosts(skillType);
 
-    for (var to in List<int>.generate(9, (i) => i + 1)) {
+    for (var to in List<int>.generate(maxLevel ?? 9, (i) => i + 1)) {
       if (from < to) {
         var costs = materialCosts[from];
 

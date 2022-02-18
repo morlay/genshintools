@@ -132,11 +132,11 @@ class ViewCalendar extends HookWidget {
           needs,
           avatar,
           gbb.db.characterSkillLevelupPlans(
-            cNameId,
-            skillType,
-            c.c.skillLevel(skillType),
-            c.c.level,
-          ),
+              cNameId, skillType, c.c.skillLevel(skillType), c.c.level,
+              maxLevel: c.character
+                  .characterBuildFor(c.c.role)
+                  .emBuild()
+                  .ifTrueOrNull(() => 6)),
         );
       }
     });
