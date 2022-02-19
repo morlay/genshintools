@@ -25,11 +25,9 @@ jobs:
       - run: make convert.genshin-data
       - run: make build.android
 
-      - run: make distribute.android.${{ github.ref == 'refs/heads/main' && 'stable' || 'beta' }}
-
       - uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: release-${{ github.ref == 'refs/heads/main' && 'stable' || 'beta' }}
+          BRANCH: release-stable
           FOLDER: ./build/.release
           CLEAN: true

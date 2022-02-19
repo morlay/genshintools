@@ -1,4 +1,4 @@
-import { forEach, isNumber, isString, round, size, trim } from "lodash-es";
+import { forEach, isNumber, round, size, trim } from "lodash-es";
 
 
 const format = (n: number, prec: number, percent: boolean) => {
@@ -312,7 +312,7 @@ const setFightProps = (fps: { [k: string]: number }, fs: { [k: string]: string |
     if (fns[k]) {
       const rets = fns[k](params[fs[k] as any] || fs[k]);
       forEach(rets, (v: number, k: FightProp) => {
-        fps[FightProp[k]] = (fps[FightProp[k]] || 0) + (v || 0);
+        fps[FightProp[k]] = (v || fps[FightProp[k]] || 0);
       });
     }
   }
