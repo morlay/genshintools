@@ -13,7 +13,7 @@ const weekdays: any = {
 };
 
 export const DungeonOpenWeekdays = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/DailyDungeonConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/DailyDungeonConfigData.json")
 ).default.reduce((dungeonOpenWeekdays, item) => {
   keys(item).forEach((key) => {
     if (has(weekdays, key)) {
@@ -26,7 +26,7 @@ export const DungeonOpenWeekdays = (
 }, {} as { [DungeonId: number]: number[] });
 
 export const Dungeons = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/DungeonExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/DungeonExcelConfigData.json")).default,
   (t) => {
     const v = {
       Id: t.Id,
@@ -46,7 +46,7 @@ export const Dungeons = groupOne(
 );
 
 export const MaterialSources = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/MaterialSourceDataExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/MaterialSourceDataExcelConfigData.json")).default,
   (t) => {
     const sources = t.TextList.map((v) => i18n(v)).filter((n) => !!n.CHS);
     let dropTags: string[] = [];
@@ -87,7 +87,7 @@ export const MaterialSources = groupOne(
 );
 
 export const Materials = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/MaterialExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/MaterialExcelConfigData.json")).default,
   (m) => {
     const n = i18nWithKey(m.NameTextMapHash);
 

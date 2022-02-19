@@ -90,8 +90,8 @@ ${lr.description?.let((description) => description) ?? "无"}
           },
         );
       }
-    } catch (e) {
-      log("check version failed", error: e);
+    } catch (e, st) {
+      log("check version failed", error: e, stackTrace: st);
     }
   }
 
@@ -103,19 +103,21 @@ ${lr.description?.let((description) => description) ?? "无"}
   });
 
   String get baseURL =>
-      "https://ghproxy.com/https://raw.githubusercontent.com/morlay/genshintools/release-$channel";
+      "https://raw.githubusercontent.com/morlay/genshintools/release-$channel";
+
+  proxy(String u) => "https://now-proxy-3.vercel.app/$u";
+
+  proxyForDownload(String u) => "https://ghproxy.com/$u";
 
   Future<Release> latestRelease() {
     return dio
-        .get(
-          "$baseURL/android/latest.json",
-        )
-        .then((value) => jsonDecode(value.data))
+        .get(proxy("$baseURL/android/latest.json"))
+        .then((resp) => (resp.data is Map) ? resp.data : jsonDecode(resp.data))
         .then((data) => Release.fromJson(data))
         .then(
           (r) => r.downloadURL.startsWith("/")
               ? r.copyWith(
-                  downloadURL: "$baseURL${r.downloadURL}",
+                  downloadURL: proxyForDownload("$baseURL${r.downloadURL}"),
                 )
               : r,
         );

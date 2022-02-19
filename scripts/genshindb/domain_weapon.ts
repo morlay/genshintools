@@ -4,7 +4,7 @@ import { EquipAffixes } from "./domain_equip_affix";
 import { mapKeys } from "lodash-es";
 
 export const WeaponPropGrowCurveValues = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponCurveExcelConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/WeaponCurveExcelConfigData.json")
 ).default
   .filter((a) => a.Level <= 90)
   .reduce((ret, a) => {
@@ -18,7 +18,7 @@ export const WeaponPropGrowCurveValues = (
   }, {} as { [k: string]: number[] });
 
 export const WeaponPromotes = groupMulti(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponPromoteExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/WeaponPromoteExcelConfigData.json")).default,
   (a) => {
     return {
       UnlockMaxLevel: a.UnlockMaxLevel,
@@ -43,7 +43,7 @@ export const WeaponPromotes = groupMulti(
 );
 
 const weaponLevelExcelConfigData = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponLevelExcelConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/WeaponLevelExcelConfigData.json")
 ).default;
 
 export const WeaponLevelupExps = new Array(5).fill(0).map((_, i) => {
@@ -51,7 +51,7 @@ export const WeaponLevelupExps = new Array(5).fill(0).map((_, i) => {
 });
 
 export const Weapons = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/WeaponExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/WeaponExcelConfigData.json")).default,
   (a) => {
     const name = i18nWithKey(a.NameTextMapHash);
 

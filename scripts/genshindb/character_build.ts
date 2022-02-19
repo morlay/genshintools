@@ -2,11 +2,12 @@ import { reduce, trim, uniq, uniqBy } from "lodash-es";
 import fetch from "node-fetch";
 import { parseString } from "@fast-csv/parse";
 import { writeFile, readFile } from "fs/promises";
-import { existsSync } from "fs";
+import { existsSync, mkdirSync } from "fs";
 import { pascalCase } from "./common";
 import { findWeapon } from "./domain_weapon";
 import { findArtifactSet } from "./domain_artifact";
 import { FightProp } from "./openconfig";
+import { dirname } from "path";
 
 const statsMap: Record<string, string> = {
   "HP%": "FIGHT_PROP_HP_PERCENT",
@@ -189,11 +190,12 @@ enum Grid {
 }
 
 const loadOrSync = async (g: Grid) => {
-  const file = `./vendordata/${Grid[g]}-${g}.csv`;
+  const file = `./build/${Grid[g]}-${g}.csv`;
   if (existsSync(file)) {
     return String(await readFile(file));
   }
   const csv = await fetch(`${exportURL}&gid=${g}`).then((res) => res.text());
+  await mkdirSync(dirname(file), { recursive: true });
   await writeFile(file, csv);
   return csv;
 };

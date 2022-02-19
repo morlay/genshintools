@@ -5,11 +5,11 @@ import { Weapons } from "./domain_weapon";
 import { resolveAndFixProps } from "./openconfig";
 
 export const CharacterLevelupExps = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarLevelExcelConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/AvatarLevelExcelConfigData.json")
 ).default.map((a) => a.Exp);
 
 export const CharacterPromotes = groupMulti(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarPromoteExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/AvatarPromoteExcelConfigData.json")).default,
   (a) => {
     return {
       UnlockMaxLevel: a.UnlockMaxLevel,
@@ -34,7 +34,7 @@ export const CharacterPromotes = groupMulti(
 );
 
 export const CharacterPropGrowCurveValues = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarCurveExcelConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/AvatarCurveExcelConfigData.json")
 ).default
   .filter((a) => a.Level <= 90)
   .reduce((ret, a) => {
@@ -48,7 +48,7 @@ export const CharacterPropGrowCurveValues = (
   }, {} as { [k: string]: number[] });
 
 const Constellations = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarTalentExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/AvatarTalentExcelConfigData.json")).default,
 
   (talent) => {
     const desc = i18n(talent.DescTextMapHash, cleanText);
@@ -63,7 +63,7 @@ const Constellations = groupOne(
 );
 
 const ProudSkills = groupMulti(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/ProudSkillExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/ProudSkillExcelConfigData.json")).default,
   (ps) => ({
     ProudSkillGroupId: ps.ProudSkillGroupId,
     Name: i18nWithKey(ps.NameTextMapHash),
@@ -91,7 +91,7 @@ const ProudSkills = groupMulti(
 );
 
 const Skills = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarSkillExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/AvatarSkillExcelConfigData.json")).default,
   (skill) => {
     const proudSkills = skill.ProudSkillGroupId ? ProudSkills[skill.ProudSkillGroupId] : [];
     const paramNames = proudSkills.length > 0 ? proudSkills[0].ParamNames : [];
@@ -133,7 +133,7 @@ const ElementTypes = {
 };
 
 const SkillDepots = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarSkillDepotExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/AvatarSkillDepotExcelConfigData.json")).default,
   (skillDepot) => {
     const skills = [...skillDepot.Skills.filter((id) => id > 0), skillDepot.EnergySkill as number]
       .map((id) => Skills[id])
@@ -200,7 +200,7 @@ const SkillDepots = groupOne(
   "Id",
 );
 
-export const Characters = (await import("../../vendordata/GenshinData/ExcelBinOutput/AvatarExcelConfigData.json")).default
+export const Characters = (await import("../../GenshinData/ExcelBinOutput/AvatarExcelConfigData.json")).default
   .filter((a) => a.UseType && i18n(a.DescTextMapHash).CHS)
   .reduce((ret, a) => {
     const base = {

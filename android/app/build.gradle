@@ -87,7 +87,9 @@ android {
                                     downloadURL: "${baseURL}/android/${output.outputFileName}",
                                     description: file("../../RELEASE_NOTES.md").text,
                             ]
-                            file("${releaseDir}/latest.json").write(JsonOutput.toJson(json))
+                            file("${releaseDir}/latest.json").write(
+                                    JsonOutput.prettyPrint(JsonOutput.toJson(json))
+                            )
                         }
                     }
                 }

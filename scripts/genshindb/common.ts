@@ -2,8 +2,8 @@ import { upperFirst, camelCase, reduce } from "lodash-es";
 import { mkdirSync, writeFileSync } from "fs";
 import { dirname } from "path";
 
-const textMapCHS = (await import("../../vendordata/GenshinData/TextMap/TextMapCHS.json")).default;
-const textMapEN = (await import("../../vendordata/GenshinData/TextMap/TextMapEN.json")).default;
+const textMapCHS = (await import("../../GenshinData/TextMap/TextMapCHS.json")).default;
+const textMapEN = (await import("../../GenshinData/TextMap/TextMapEN.json")).default;
 
 const chsText = (hash: number): string => {
   return (textMapCHS as any)[hash];

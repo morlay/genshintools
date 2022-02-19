@@ -3,7 +3,7 @@ import { EquipAffixes } from "./domain_equip_affix";
 import { groupBy, mapKeys, mapValues, reduce } from "lodash-es";
 
 export const ArtifactSets = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/ReliquarySetExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/ReliquarySetExcelConfigData.json")).default,
   (artifactSet) => {
     const affixes = EquipAffixes[artifactSet.EquipAffixId || 0] || [];
 
@@ -27,7 +27,7 @@ export const ArtifactSetsByKey = mapKeys(ArtifactSets, (s) => s.Name.KEY);
 
 export const ArtifactAppendPropDepots = mapValues(
   groupBy(
-    (await import("../../vendordata/GenshinData/ExcelBinOutput/ReliquaryAffixExcelConfigData.json")).default,
+    (await import("../../GenshinData/ExcelBinOutput/ReliquaryAffixExcelConfigData.json")).default,
     (a) => a.DepotId,
   ),
   (artifactAffixDepots) =>
@@ -42,13 +42,13 @@ export const ArtifactAppendPropDepots = mapValues(
 );
 
 export const ArtifactMainPropDepots = groupMulti(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/ReliquaryMainPropExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/ReliquaryMainPropExcelConfigData.json")).default,
   (d) => d.PropType,
   "PropDepotId",
 );
 
 const artifactLevelExcelConfigData = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/ReliquaryLevelExcelConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/ReliquaryLevelExcelConfigData.json")
 ).default;
 
 export const ArtifactLevelupExps = new Array(5)
@@ -60,7 +60,7 @@ export const ArtifactLevelupMainPropValues = new Array(5)
   .map((_, idx) => artifactLevelExcelConfigData.filter((a) => a.Rank == idx + 1).map((v) => addPropSet(v.AddProps)));
 
 const artifactExcelConfigData = (
-  await import("../../vendordata/GenshinData/ExcelBinOutput/ReliquaryExcelConfigData.json")
+  await import("../../GenshinData/ExcelBinOutput/ReliquaryExcelConfigData.json")
 ).default;
 
 export const Artifacts = mapKeys(

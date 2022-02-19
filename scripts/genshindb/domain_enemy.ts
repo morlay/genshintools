@@ -2,7 +2,7 @@ import { groupOne, i18nWithKey, createIndexes } from "./common";
 import { mapKeys, mapValues, reduce, uniq, values } from "lodash-es";
 
 export const MonsterRelationships = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterRelationshipExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/MonsterRelationshipExcelConfigData.json")).default,
   (t) => ({
     DropTag: t.TagStr,
     MonsterRarity: t.MonsterRarity,
@@ -11,19 +11,19 @@ export const MonsterRelationships = groupOne(
 );
 
 export const MonsterTitles = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterTitleExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/MonsterTitleExcelConfigData.json")).default,
   (t) => i18nWithKey(t.TitleNameTextMapHash),
   "TitleID",
 );
 
 export const MonsterSpecialNames = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterSpecialNameExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/MonsterSpecialNameExcelConfigData.json")).default,
   (t) => i18nWithKey(t.SpecialNameTextMapHash),
   "SpecialNameLabID",
 );
 
 export const MonsterDescribes = groupOne(
-  (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterDescribeExcelConfigData.json")).default,
+  (await import("../../GenshinData/ExcelBinOutput/MonsterDescribeExcelConfigData.json")).default,
   (t) => {
     return {
       DropTag: MonsterRelationships[t.Id]?.DropTag,
@@ -38,7 +38,7 @@ export const MonsterDescribes = groupOne(
 
 export const Enemies = mapKeys(
   reduce(
-    (await import("../../vendordata/GenshinData/ExcelBinOutput/MonsterExcelConfigData.json")).default,
+    (await import("../../GenshinData/ExcelBinOutput/MonsterExcelConfigData.json")).default,
     (ret, t) => {
       if (!t.DescribeId) {
         return ret;

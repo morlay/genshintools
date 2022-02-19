@@ -33,8 +33,6 @@ build.ipa:
 clean:
 	flutter clean
 
-convert.genshin-data: ensure.genshin-data convert
-
 fmt:
 	dart format .
 	pnpx prettier -w ./scripts/{,**/}*.ts
@@ -72,5 +70,5 @@ define git_fetch
 endef
 
 ensure.genshin-data:
-	$(call git_fetch,https://github.com/Dimbreath/GenshinData.git,./vendordata/GenshinData)
+	git submodule update --init --remote --force
 
