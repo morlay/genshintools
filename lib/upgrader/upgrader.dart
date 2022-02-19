@@ -102,12 +102,22 @@ ${lr.description?.let((description) => description) ?? "无"}
     required this.channel,
   });
 
+  String get baseURL =>
+      "https://ghproxy.com/https://raw.githubusercontent.com/morlay/genshintools/release-$channel";
+
   Future<Release> latestRelease() {
     return dio
         .get(
-          "https://ghproxy.com/https://raw.githubusercontent.com/morlay/genshintools/release-$channel/android/latest.json",
+          "$baseURL/android/latest.json",
         )
         .then((value) => jsonDecode(value.data))
-        .then((data) => Release.fromJson(data));
+        .then((data) => Release.fromJson(data))
+        .then(
+          (r) => r.downloadURL.startsWith("/")
+              ? r.copyWith(
+                  downloadURL: "$baseURL${r.downloadURL}",
+                )
+              : r,
+        );
   }
 }

@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -62,14 +64,32 @@ android {
             minifyEnabled true
 
             applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "genshintools-${variant.name}-${variant.versionName}-${flutterVersionCode}.apk"
-                }
-            }
-
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
+                variant.outputs.all { output ->
+                    output.outputFileName = "${variant.applicationId}-${variant.name}-${output.getFilter(output.ABI)}-${variant.versionName}-${flutterVersionCode}.apk"
                     output.versionCodeOverride = flutterVersionCode.toInteger()
+
+                    if (variant.name == "release") {
+                        assembleRelease.doLast {
+                            def releaseDir = "../../build/.release/android";
+
+                            copy {
+                                from("${output.outputFile.parent}") {
+                                    include "*.apk"
+                                }
+                                into releaseDir
+                            }
+                            // TODO remove baseURL when next version
+                            def baseURL = "https://ghproxy.com/https://raw.githubusercontent.com/morlay/genshintools/release-stable";
+                            def json = [
+                                    packageName: "${variant.applicationId}",
+                                    version    : "${variant.versionName}",
+                                    buildNumber: "${output.versionCodeOverride}",
+                                    downloadURL: "${baseURL}/android/${output.outputFileName}",
+                                    description: file("../../RELEASE_NOTES.md").text,
+                            ]
+                            file("${releaseDir}/latest.json").write(JsonOutput.toJson(json))
+                        }
+                    }
                 }
             }
         }

@@ -6,15 +6,6 @@ gen:
 gen.watch:
 	flutter pub run build_runner watch --delete-conflicting-outputs
 
-
-distribute.android: distribute.android.stable
-
-distribute.android.stable:
-	CHANNEL=stable $(TS_NODE) ./scripts/distribute.ts
-
-distribute.android.beta:
-	CHANNEL=beta $(TS_NODE) ./scripts/distribute.ts
-
 #  max build number 2100000000
 # time build number  22011218n
 # 				ex.  220218147
