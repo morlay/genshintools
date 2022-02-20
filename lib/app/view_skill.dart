@@ -188,19 +188,12 @@ class ViewSkillValues extends HookWidget {
           hurtType = HurtType.ElementalSkill;
           break;
         default:
-          if (skill.skillType == SkillType.NORMAL_ATTACK &&
-              !label.contains("段")) {
-            hurtType = HurtType.ElementalSkill;
-          }
-
-          if (label.contains("重击") ||
-              label.contains("蓄力") ||
-              label.contains("瞄准")) {
-            hurtType = HurtType.ChangedAttack;
-          }
-
           if (label.contains("下坠期间伤害") || label.contains("坠地冲击伤害")) {
             hurtType = HurtType.PlungingAttack;
+          } else if (label.contains("段伤害")) {
+            hurtType = HurtType.NormalAttack;
+          } else {
+            hurtType = HurtType.ChangedAttack;
           }
       }
 

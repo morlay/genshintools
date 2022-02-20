@@ -190,7 +190,7 @@ enum Grid {
 }
 
 const loadOrSync = async (g: Grid) => {
-  const file = `./build/${Grid[g]}-${g}.csv`;
+  const file = `./.tmp/${Grid[g]}-${g}.csv`;
   if (existsSync(file)) {
     return String(await readFile(file));
   }

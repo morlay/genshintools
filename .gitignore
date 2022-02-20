@@ -49,4 +49,5 @@ app.*.map.json
 /build/
 
 pubspec.lock
-vendordata/
+.tmp/
+

@@ -86,9 +86,9 @@ export enum FightProp {
 
   FIGHT_PROP_ELEMENTAL_SKILL_RADIO,
 
+  ATTACK__ON__HP,
   ATTACK_PERCENT__ON__HP,
   ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75,
-
 
   NORMAL_ATTACK_EXTRA_HURT__ON__HP,
   CHARGED_ATTACK_EXTRA_HURT__ON__HP,
@@ -124,11 +124,11 @@ const fns: { [k: string]: ReturnType<typeof createConfigFn> } = {
     });
   }, /基于生命值上限，钟离的以下攻击造成的伤害提高/),
 
-  UpElementalBurstHurtOnChargeEfficiency: createConfigFn((v: number) => ({
-    [FightProp.ATTACK_PERCENT__ON__HP]: v,
+  UpAttackOnHp: createConfigFn((v: number) => ({
+    [FightProp.ATTACK__ON__HP]: v,
   }), /基于装备该武器的角色生命值上限的(?<param>[.\d]+%)，获得攻击力加成/),
 
-  UpAttackPercentOnHp: createConfigFn((v: number) => ({
+  UpElementalBurstHurtOnChargeEfficiency: createConfigFn((v: number) => ({
     [FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75]: v,
   }), /基于元素充能效率的(?<param>[.\d]+%)，提高元素爆发造成的伤害/),
 

@@ -334,7 +334,7 @@ enum FightProp {
   ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75,
 
   @EnumMeta(label: "攻击力加成（基于最大生命值）")
-  ATTACK_PERCENT__ON__HP,
+  ATTACK__ON__HP,
 
   @EnumMeta(label: "普攻附伤(基于最大生命值)")
   NORMAL_ATTACK_EXTRA_HURT__ON__HP,

@@ -98,7 +98,7 @@ const _$FightPropLabelMap = {
   FightProp.ATTACK_ADD_RADIO: "攻击力加成比例",
   FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75:
       "元素爆发加伤（基于元素充能效率）",
-  FightProp.ATTACK_PERCENT__ON__HP: "攻击力加成（基于最大生命值）",
+  FightProp.ATTACK__ON__HP: "攻击力加成（基于最大生命值）",
   FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP: "普攻附伤(基于最大生命值)",
   FightProp.CHARGED_ATTACK_EXTRA_HURT__ON__HP: "重击附伤(基于最大生命值)",
   FightProp.PLUNGING_ATTACK_EXTRA_HURT__ON__HP: "下落攻击附伤(基于最大生命值)",
@@ -187,7 +187,7 @@ const _$FightPropFormatMap = {
   FightProp.SKILL_CD_MINUS_RATIO: "P",
   FightProp.ATTACK_ADD_RADIO: "P",
   FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75: "P",
-  FightProp.ATTACK_PERCENT__ON__HP: "P",
+  FightProp.ATTACK__ON__HP: "P",
   FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP: "P",
   FightProp.CHARGED_ATTACK_EXTRA_HURT__ON__HP: "P",
   FightProp.PLUNGING_ATTACK_EXTRA_HURT__ON__HP: "P",
@@ -299,7 +299,7 @@ const _$FightPropEnumMap = {
   FightProp.ATTACK_ADD_RADIO: 'FIGHT_PROP_ATTACK_ADD_RADIO',
   FightProp.ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75:
       r'ELEMENTAL_BURST_ADD_HURT__ON__CHARGE_EFFICIENCY__MAX$_75',
-  FightProp.ATTACK_PERCENT__ON__HP: 'ATTACK_PERCENT__ON__HP',
+  FightProp.ATTACK__ON__HP: 'ATTACK__ON__HP',
   FightProp.NORMAL_ATTACK_EXTRA_HURT__ON__HP:
       'NORMAL_ATTACK_EXTRA_HURT__ON__HP',
   FightProp.CHARGED_ATTACK_EXTRA_HURT__ON__HP:
