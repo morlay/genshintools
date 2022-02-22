@@ -5,8 +5,8 @@ import 'package:genshintools/genshindb/good/good.dart';
 import 'package:genshintools/genshindb/types.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
-part 'generated/artifact_service.freezed.dart';
-part 'generated/artifact_service.g.dart';
+part '__generated__/artifact_service.freezed.dart';
+part '__generated__/artifact_service.g.dart';
 
 @freezed
 class ArtifactService with _$ArtifactService {

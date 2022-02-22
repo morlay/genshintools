@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'generated/gacha.freezed.dart';
-part 'generated/gacha.g.dart';
+part '__generated__/gacha.freezed.dart';
+part '__generated__/gacha.g.dart';
 
 @freezed
 class GachaType with _$GachaType {

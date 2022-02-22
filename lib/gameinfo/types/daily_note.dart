@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'generated/daily_note.freezed.dart';
-part 'generated/daily_note.g.dart';
+part '__generated__/daily_note.freezed.dart';
+part '__generated__/daily_note.g.dart';
 
 @freezed
 class DailyNote with _$DailyNote {

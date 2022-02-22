@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
-part 'generated/good.freezed.dart';
-part 'generated/good.g.dart';
+part '__generated__/good.freezed.dart';
+part '__generated__/good.g.dart';
 
 @freezed
 class GOOD with _$GOOD {

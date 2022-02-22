@@ -7,8 +7,8 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part "generated/webdav.freezed.dart";
-part "generated/webdav.g.dart";
+part '__generated__/webdav.freezed.dart';
+part '__generated__/webdav.g.dart';
 
 @freezed
 class WebDAV with _$WebDAV {

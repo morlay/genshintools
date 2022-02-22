@@ -4,11 +4,11 @@ targets:
       source_gen|combining_builder:
         options:
           build_extensions:
-            "{{dir}}/{{file}}.dart": '{{dir}}/generated/{{file}}.g.dart'
+            "{{dir}}/{{file}}.dart": '{{dir}}/__generated__/{{file}}.g.dart'
       freezed:
         options:
           build_extensions:
-            "{{dir}}/{{file}}.dart": '{{dir}}/generated/{{file}}.freezed.dart'
+            "{{dir}}/{{file}}.dart": '{{dir}}/__generated__/{{file}}.freezed.dart'
       genshintools|enum_extra:
         enabled: true
 

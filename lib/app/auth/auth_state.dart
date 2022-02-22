@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/gameinfo/gameinfo.dart';
 
-part 'generated/auth_state.freezed.dart';
-part 'generated/auth_state.g.dart';
+part '__generated__/auth_state.freezed.dart';
+part '__generated__/auth_state.g.dart';
 
 @freezed
 class AuthStateV1 with _$AuthStateV1 {

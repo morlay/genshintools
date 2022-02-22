@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
-part 'generated/elemental_reaction.g.dart';
+part '__generated__/elemental_reaction.g.dart';
 
 class ElementalReactionStringConverter
     extends _$ElementalReactionStringConverter {

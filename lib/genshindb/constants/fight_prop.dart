@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 
-part 'generated/fight_prop.g.dart';
+part '__generated__/fight_prop.g.dart';
 
 class FightPropStringConverter extends _$FightPropStringConverter {
   const FightPropStringConverter() : super();

@@ -3,8 +3,8 @@ import 'package:genshintools/genshindb/constants.dart';
 import 'package:genshintools/genshindb/types.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
-part 'generated/character_service.freezed.dart';
-part 'generated/character_service.g.dart';
+part '__generated__/character_service.freezed.dart';
+part '__generated__/character_service.g.dart';
 
 @freezed
 class CharacterService with _$CharacterService {

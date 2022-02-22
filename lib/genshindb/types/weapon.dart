@@ -6,8 +6,8 @@ import 'equip_affix.dart';
 import 'i18n.dart';
 import 'prop_grow_curve.dart';
 
-part 'generated/weapon.freezed.dart';
-part 'generated/weapon.g.dart';
+part '__generated__/weapon.freezed.dart';
+part '__generated__/weapon.g.dart';
 
 @freezed
 class GSWeapon with _$GSWeapon {

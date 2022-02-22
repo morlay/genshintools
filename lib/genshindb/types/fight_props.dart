@@ -3,8 +3,8 @@ import 'package:genshintools/genshindb/constants.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
-part 'generated/fight_props.freezed.dart';
-part 'generated/fight_props.g.dart';
+part '__generated__/fight_props.freezed.dart';
+part '__generated__/fight_props.g.dart';
 
 @freezed
 class FightProps with _$FightProps {

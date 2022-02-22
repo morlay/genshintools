@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/types.dart';
 
-part 'generated/material_service.freezed.dart';
-part 'generated/material_service.g.dart';
+part '__generated__/material_service.freezed.dart';
+part '__generated__/material_service.g.dart';
 
 @freezed
 class MaterialService with _$MaterialService {

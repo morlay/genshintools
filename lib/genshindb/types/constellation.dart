@@ -4,8 +4,8 @@ import 'package:genshintools/genshindb/constants.dart';
 import 'fight_props.dart';
 import 'i18n.dart';
 
-part 'generated/constellation.freezed.dart';
-part 'generated/constellation.g.dart';
+part '__generated__/constellation.freezed.dart';
+part '__generated__/constellation.g.dart';
 
 @freezed
 class GSConstellation with _$GSConstellation {

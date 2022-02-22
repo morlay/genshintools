@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/gameinfo/gameinfo.dart';
 
-part 'generated/gacha_state.freezed.dart';
-part 'generated/gacha_state.g.dart';
+part '__generated__/gacha_state.freezed.dart';
+part '__generated__/gacha_state.g.dart';
 
 // https://github.com/DGP-Studio/Snap.Genshin/wiki/StandardFormat
 @freezed

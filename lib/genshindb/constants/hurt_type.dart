@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 
-part 'generated/hurt_type.g.dart';
+part '__generated__/hurt_type.g.dart';
 
 class HurtTypeStringConverter extends _$HurtTypeStringConverter {
   const HurtTypeStringConverter() : super();

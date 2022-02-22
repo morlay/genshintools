@@ -5,8 +5,8 @@ import 'package:genshintools/genshindb/utils.dart';
 import 'fight_props.dart';
 import 'material.dart';
 
-part 'generated/promote.freezed.dart';
-part 'generated/promote.g.dart';
+part '__generated__/promote.freezed.dart';
+part '__generated__/promote.g.dart';
 
 @freezed
 class GSPromoteSet with _$GSPromoteSet {

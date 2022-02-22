@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'fight_props.dart';
 import 'i18n.dart';
 
-part 'generated/equip_affix.freezed.dart';
-part 'generated/equip_affix.g.dart';
+part '__generated__/equip_affix.freezed.dart';
+part '__generated__/equip_affix.g.dart';
 
 @freezed
 class EquipAffix with _$EquipAffix {

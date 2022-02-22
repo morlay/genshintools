@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
-part 'generated/artifact.freezed.dart';
-part 'generated/artifact.g.dart';
+part '__generated__/artifact.freezed.dart';
+part '__generated__/artifact.g.dart';
 
 @freezed
 class GSArtifact with _$GSArtifact {

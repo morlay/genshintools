@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 
-part 'generated/element_type.g.dart';
+part '__generated__/element_type.g.dart';
 
 class ElementTypeStringConverter extends _$ElementTypeStringConverter {
   const ElementTypeStringConverter() : super();

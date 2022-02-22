@@ -48,6 +48,6 @@ app.*.map.json
 /android/app/release
 /build/
 
-pubspec.lock
+__generated__/
 .tmp/
-
+pubspec.lock

@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
-part 'generated/player_artifact_build.freezed.dart';
+part '__generated__/player_artifact_build.freezed.dart';
 
 @freezed
 class PlayerArtifactBuild with _$PlayerArtifactBuild {

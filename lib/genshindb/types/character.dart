@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
-part 'generated/character.freezed.dart';
-part 'generated/character.g.dart';
+part '__generated__/character.freezed.dart';
+part '__generated__/character.g.dart';
 
 @freezed
 class GSCharacter with _$GSCharacter {

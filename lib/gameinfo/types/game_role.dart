@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'generated/game_role.freezed.dart';
-part 'generated/game_role.g.dart';
+part '__generated__/game_role.freezed.dart';
+part '__generated__/game_role.g.dart';
 
 @freezed
 class GameRole with _$GameRole {

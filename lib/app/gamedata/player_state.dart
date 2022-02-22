@@ -3,7 +3,7 @@ import 'package:genshintools/genshindb/genshindb.dart';
 import 'package:genshintools/genshindb/good/good.dart';
 import 'package:genshintools/genshindb/services/artifact_service.dart';
 
-part 'generated/player_state.freezed.dart';
+part '__generated__/player_state.freezed.dart';
 
 @freezed
 class CharacterWithState with _$CharacterWithState {

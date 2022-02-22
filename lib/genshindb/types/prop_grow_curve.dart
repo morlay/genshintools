@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'generated/prop_grow_curve.freezed.dart';
-part 'generated/prop_grow_curve.g.dart';
+part '__generated__/prop_grow_curve.freezed.dart';
+part '__generated__/prop_grow_curve.g.dart';
 
 @freezed
 class PropGrowCurveAndInitial with _$PropGrowCurveAndInitial {

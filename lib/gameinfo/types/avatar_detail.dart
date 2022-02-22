@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'generated/avatar_detail.freezed.dart';
-part 'generated/avatar_detail.g.dart';
+part '__generated__/avatar_detail.freezed.dart';
+part '__generated__/avatar_detail.g.dart';
 
 @freezed
 class AvatarDetail with _$AvatarDetail {

@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'generated/user_info.freezed.dart';
-part 'generated/user_info.g.dart';
+part '__generated__/user_info.freezed.dart';
+part '__generated__/user_info.g.dart';
 
 @freezed
 class UserInfo with _$UserInfo {

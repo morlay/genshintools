@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 
-part 'generated/skill_type.g.dart';
+part '__generated__/skill_type.g.dart';
 
 class SkillTypeStringConverter extends _$SkillTypeStringConverter {
   const SkillTypeStringConverter() : super();
@@ -13,7 +13,7 @@ enum SkillType {
   @JsonValue("A")
   NORMAL_ATTACK,
 
-  @EnumMeta(label: "元素技能")
+  @EnumMeta(label: "元素战技")
   @JsonValue("E")
   ELEMENTAL_SKILL,
 

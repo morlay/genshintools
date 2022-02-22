@@ -6,8 +6,8 @@ import 'package:genshintools/genshindb/utils.dart';
 import 'i18n.dart';
 import 'material.dart';
 
-part 'generated/skill.freezed.dart';
-part 'generated/skill.g.dart';
+part '__generated__/skill.freezed.dart';
+part '__generated__/skill.g.dart';
 
 @freezed
 class Skill with _$Skill {

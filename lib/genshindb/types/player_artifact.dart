@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
-part 'generated/player_artifact.freezed.dart';
+part '__generated__/player_artifact.freezed.dart';
 
 @freezed
 class PlayerArtifact with _$PlayerArtifact {

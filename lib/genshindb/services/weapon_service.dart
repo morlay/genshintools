@@ -3,8 +3,8 @@ import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/types.dart';
 import 'package:genshintools/genshindb/utils.dart';
 
-part 'generated/weapon_service.freezed.dart';
-part 'generated/weapon_service.g.dart';
+part '__generated__/weapon_service.freezed.dart';
+part '__generated__/weapon_service.g.dart';
 
 @freezed
 class WeaponService with _$WeaponService {

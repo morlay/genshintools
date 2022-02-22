@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/constants.dart';
 
-part 'generated/i18n.freezed.dart';
-part 'generated/i18n.g.dart';
+part '__generated__/i18n.freezed.dart';
+part '__generated__/i18n.g.dart';
 
 @freezed
 class I18n with _$I18n {

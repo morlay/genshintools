@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/types.dart';
 
-part 'generated/enemy_service.freezed.dart';
-part 'generated/enemy_service.g.dart';
+part '__generated__/enemy_service.freezed.dart';
+part '__generated__/enemy_service.g.dart';
 
 @freezed
 class EnemyService with _$EnemyService {

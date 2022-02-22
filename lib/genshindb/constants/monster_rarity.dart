@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 
-part 'generated/monster_rarity.g.dart';
+part '__generated__/monster_rarity.g.dart';
 
 class GSMonsterRarityStringConverter extends _$GSMonsterRarityStringConverter {
   const GSMonsterRarityStringConverter() : super();

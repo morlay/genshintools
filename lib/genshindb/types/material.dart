@@ -4,8 +4,8 @@ import 'package:genshintools/genshindb/constants.dart';
 
 import 'i18n.dart';
 
-part 'generated/material.freezed.dart';
-part 'generated/material.g.dart';
+part '__generated__/material.freezed.dart';
+part '__generated__/material.g.dart';
 
 const resetTime = Duration(hours: 5);
 

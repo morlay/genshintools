@@ -8,7 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/extension/extension.dart';
 import 'package:genshintools/genshindb/genshindb.dart';
 
-part 'generated/image.freezed.dart';
+part '__generated__/image.freezed.dart';
 
 @freezed
 class GSImage extends HookWidget with _$GSImage {

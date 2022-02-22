@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshintools/genshindb/annotations.dart';
 
-part 'generated/material_type.g.dart';
+part '__generated__/material_type.g.dart';
 
 class GSMaterialTypeStringConverter extends _$GSMaterialTypeStringConverter {
   const GSMaterialTypeStringConverter() : super();
