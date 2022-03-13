@@ -91,8 +91,11 @@ class GOOD with _$GOOD {
     String location,
     GOODArtifact Function(GOODArtifact artifact) update,
   ) {
-    var found = artifacts
-        .firstWhereOrNull((e) => e.slotKey == sk && e.location == location);
+    var found = artifacts.firstWhereOrNull((e) =>
+        (e.slotKey == sk && e.location == location) ||
+        // 为圣遗物匹配不同元素的旅行者
+        (e.slotKey == sk && e.location == 'Traveler') &&
+            location.startsWith('Traveler'));
 
     if (found != null) {
       return copyWith(
