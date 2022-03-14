@@ -82,17 +82,6 @@ class PageCharacterList extends HookWidget {
                   ].map((element) {
                     var l = grouped[element]?.toList() ?? [];
 
-                    // 对角色列表进行排序
-                    l.sort((left, right) {
-                      // 按等级倒序排列
-                      var res = right.c.level.compareTo(left.c.level);
-                      if (res == 0) {
-                        // 同等级时按名称顺序排列
-                        res = left.c.key.compareTo(right.c.key);
-                      }
-                      return res;
-                    });
-
                     return ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       itemCount: l.length,
