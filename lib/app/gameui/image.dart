@@ -339,9 +339,8 @@ class GSImageWeaponType extends HookWidget {
   }
 }
 
-const imageBaseURL = kIsWeb
-    ? "https://raw.githubusercontent.com/morlay/genshinimages/good/images"
-    : "https://gitee.com/morlay/genshinimages/raw/good/images";
+const imageBaseURL =
+    "https://now-proxy-3.vercel.app/https://raw.githubusercontent.com/morlay/genshinimages/good/images";
 
 class GSImageProvider extends CachedNetworkImageProvider {
   GSImageProvider({
