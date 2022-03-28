@@ -100,6 +100,38 @@ class ViewSkillValues extends HookWidget {
 
   Iterable<Widget> _skillValues(BuildContext ctx, String label, String t,
       List<double> params, FightProps fightProps) {
+    if (label == "元素能量") {
+      var b = fightProps.calc(t, params);
+      var c = fightProps.get(FightProp.CHARGE_EFFICIENCY);
+
+      return [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "前台 (异/无/同)",
+              style: TextStyle(fontSize: 8),
+            ),
+            Text(
+              "${(b / (c * 1 / 3)).toStringAsFixed(0)} / ${(b / (c * 2 / 3)).toStringAsFixed(0)} / ${(b / c).toStringAsFixed(0)}",
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "后台 (异/无/同)",
+              style: TextStyle(fontSize: 8),
+            ),
+            Text(
+              "${(b / (c * 1 / 3 * 0.6)).toStringAsFixed(0)} / ${(b / (c * 2 / 3 * 0.6)).toStringAsFixed(0)} / ${(b / (c * 0.6)).toStringAsFixed(0)}",
+            )
+          ],
+        )
+      ];
+    }
+
     if (t.endsWith("普通攻击伤害")) {
       return [];
     }

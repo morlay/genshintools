@@ -297,17 +297,17 @@ const fromCSV = async (csv: string, grid: Grid) => {
 };
 
 export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } = {
-  YaeMiko: [
+  KamisatoAyato: [
     {
       Recommended: false,
       Role: "DPS",
-      Weapons: ["神乐之真意"],
+      Weapons: ["西风剑"],
       ArtifactMainPropTypes: {
         EQUIP_SHOES: [
-          FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
+          FightProp[FightProp.FIGHT_PROP_HP_PERCENT],
         ],
         EQUIP_RING: [
-          FightProp[FightProp.FIGHT_PROP_ELEC_ADD_HURT],
+          FightProp[FightProp.FIGHT_PROP_WATER_ADD_HURT],
         ],
         EQUIP_DRESS: [
           FightProp[FightProp.FIGHT_PROP_CRITICAL],
@@ -316,11 +316,12 @@ export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } =
       ArtifactAffixPropTypes: [
         FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
         FightProp[FightProp.FIGHT_PROP_ATTACK],
+        FightProp[FightProp.FIGHT_PROP_CHARGE_EFFICIENCY],
         FightProp[FightProp.FIGHT_PROP_CRITICAL],
         FightProp[FightProp.FIGHT_PROP_CRITICAL_HURT],
       ],
       ArtifactSetPairs: [
-        ["如雷的盛怒", "角斗士的终幕礼"],
+        ["角斗士的终幕礼"],
       ],
       SkillPriority: [["E"], ["Q"]],
     },

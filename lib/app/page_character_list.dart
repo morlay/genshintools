@@ -87,7 +87,6 @@ class PageCharacterList extends HookWidget {
                       itemCount: l.length,
                       itemBuilder: (content, i) {
                         var c = l[i];
-
                         return CharacterListTile(c: c);
                       },
                     );

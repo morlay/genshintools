@@ -45,6 +45,10 @@ enum GSMaterialType {
   @JsonValue("MATERIAL_NOTICE_ADD_HP")
   NOTICE_ADD_HP,
 
+  @EnumMeta(label: "香料")
+  @JsonValue("MATERIAL_SPICE_FOOD")
+  SPICE_FOOD,
+
   @EnumMeta(label: "采集物品")
   @JsonValue("MATERIAL_EXCHANGE")
   EXCHANGE,
