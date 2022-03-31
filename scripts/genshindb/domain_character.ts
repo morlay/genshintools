@@ -3,13 +3,21 @@ import { Materials } from "./domain_material";
 import { mapKeys, reduce } from "lodash-es";
 import { Weapons } from "./domain_weapon";
 import { resolveAndFixProps } from "./openconfig";
+import {
+  AvatarCurveExcelConfigData,
+  AvatarExcelConfigData,
+  AvatarLevelExcelConfigData,
+  AvatarPromoteExcelConfigData,
+  AvatarSkillDepotExcelConfigData,
+  AvatarSkillExcelConfigData,
+  AvatarTalentExcelConfigData,
+  ProudSkillExcelConfigData,
+} from "./sources";
 
-export const CharacterLevelupExps = (
-  await import("../../GenshinData/ExcelBinOutput/AvatarLevelExcelConfigData.json")
-).default.map((a) => a.Exp);
+export const CharacterLevelupExps = AvatarLevelExcelConfigData.map((a) => a.Exp);
 
 export const CharacterPromotes = groupMulti(
-  (await import("../../GenshinData/ExcelBinOutput/AvatarPromoteExcelConfigData.json")).default,
+  AvatarPromoteExcelConfigData,
   (a) => {
     return {
       UnlockMaxLevel: a.UnlockMaxLevel,
@@ -21,11 +29,11 @@ export const CharacterPromotes = groupMulti(
         })),
         ...(a.ScoinCost
           ? [
-            {
-              MaterialKey: "Mora",
-              Count: a.ScoinCost,
-            },
-          ]
+              {
+                MaterialKey: "Mora",
+                Count: a.ScoinCost,
+              },
+            ]
           : []),
       ],
     };
@@ -33,37 +41,37 @@ export const CharacterPromotes = groupMulti(
   "AvatarPromoteId",
 );
 
-export const CharacterPropGrowCurveValues = (
-  await import("../../GenshinData/ExcelBinOutput/AvatarCurveExcelConfigData.json")
-).default
-  .filter((a) => a.Level <= 90)
-  .reduce((ret, a) => {
-    return a.CurveInfos.reduce(
-      (ret, info) => ({
-        ...ret,
-        [info.Type]: [...((ret as any)[info.Type] || []), info.Value],
-      }),
-      ret,
-    );
-  }, {} as { [k: string]: number[] });
+export const CharacterPropGrowCurveValues = AvatarCurveExcelConfigData.filter((a) => a.Level <= 90).reduce((ret, a) => {
+  return a.CurveInfos.reduce(
+    (ret, info) => ({
+      ...ret,
+      [info.Type]: [...((ret as any)[info.Type] || []), info.Value],
+    }),
+    ret,
+  );
+}, {} as { [k: string]: number[] });
 
 const Constellations = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/AvatarTalentExcelConfigData.json")).default,
-
+  AvatarTalentExcelConfigData,
   (talent) => {
     const desc = i18n(talent.DescTextMapHash, cleanText);
 
-    return ({
+    return {
       Name: i18nWithKey(talent.NameTextMapHash),
       Desc: desc,
-      ...resolveAndFixProps(talent.OpenConfig || `talent-${talent.TalentId}`, desc.CHS, talent.ParamList, addPropSet(talent.AddProps)),
-    });
+      ...resolveAndFixProps(
+        talent.OpenConfig || `talent-${talent.TalentId}`,
+        desc.CHS,
+        talent.ParamList,
+        addPropSet(talent.AddProps),
+      ),
+    };
   },
   "TalentId",
 );
 
 const ProudSkills = groupMulti(
-  (await import("../../GenshinData/ExcelBinOutput/ProudSkillExcelConfigData.json")).default,
+  ProudSkillExcelConfigData,
   (ps) => ({
     ProudSkillGroupId: ps.ProudSkillGroupId,
     Name: i18nWithKey(ps.NameTextMapHash),
@@ -79,11 +87,11 @@ const ProudSkills = groupMulti(
       })),
       ...(ps.CoinCost
         ? [
-          {
-            MaterialKey: "Mora",
-            Count: ps.CoinCost,
-          },
-        ]
+            {
+              MaterialKey: "Mora",
+              Count: ps.CoinCost,
+            },
+          ]
         : []),
     ],
   }),
@@ -91,7 +99,7 @@ const ProudSkills = groupMulti(
 );
 
 const Skills = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/AvatarSkillExcelConfigData.json")).default,
+  AvatarSkillExcelConfigData,
   (skill) => {
     const proudSkills = skill.ProudSkillGroupId ? ProudSkills[skill.ProudSkillGroupId] : [];
     const paramNames = proudSkills.length > 0 ? proudSkills[0].ParamNames : [];
@@ -113,9 +121,9 @@ const Skills = groupOne(
       MaterialCosts: proudSkills.map((item) => item.MaterialCosts),
       ...(paramNames.length > 0
         ? {
-          ParamNames: paramNames,
-          Params: proudSkills.map((item) => item.Params),
-        }
+            ParamNames: paramNames,
+            Params: proudSkills.map((item) => item.Params),
+          }
         : {}),
     };
   },
@@ -133,7 +141,7 @@ const ElementTypes = {
 };
 
 const SkillDepots = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/AvatarSkillDepotExcelConfigData.json")).default,
+  AvatarSkillDepotExcelConfigData,
   (skillDepot) => {
     const skills = [...skillDepot.Skills.filter((id) => id > 0), skillDepot.EnergySkill as number]
       .map((id) => Skills[id])
@@ -180,7 +188,8 @@ const SkillDepots = groupOne(
         .map((s: any) => {
           return ProudSkills[s.ProudSkillGroupId]!;
         })
-        .flat().map((s) => ({
+        .flat()
+        .map((s) => ({
           ...s,
           Params: undefined,
           ...resolveAndFixProps(s.OpenConfig || `skill-${s.ProudSkillGroupId}`, s.Desc.CHS, s.Params, {}),
@@ -200,9 +209,8 @@ const SkillDepots = groupOne(
   "Id",
 );
 
-export const Characters = (await import("../../GenshinData/ExcelBinOutput/AvatarExcelConfigData.json")).default
-  .filter((a) => a.UseType && i18n(a.DescTextMapHash).CHS)
-  .reduce((ret, a) => {
+export const Characters = AvatarExcelConfigData.filter((a) => a.UseType && i18n(a.DescTextMapHash).CHS).reduce(
+  (ret, a) => {
     const base = {
       Id: a.Id,
       Name: i18nWithKey(a.NameTextMapHash),
@@ -277,7 +285,9 @@ export const Characters = (await import("../../GenshinData/ExcelBinOutput/Avatar
       ...ret,
       [avatar.Id]: avatar,
     };
-  }, {});
+  },
+  {},
+);
 
 export const CharactersByKey = mapKeys(Characters, (c: any) => {
   return c.Name.KEY;

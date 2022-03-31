@@ -24,13 +24,11 @@ jobs:
         with:
           channel: 'stable'
 
-      - run: make install
+      - run: make bootstrap.all
       - run: make convert
       - run: make gen build.android
 
       - uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: release-stable
-          FOLDER: ./build/.release
-          CLEAN: true
+          folder: ./packages/genshintoolsapp/build/.release
+          branch: release-stable

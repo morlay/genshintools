@@ -1,3 +1,7 @@
-[submodule "GenshinData"]
-	path = GenshinData
+[submodule "datasource/paimon-moe"]
+	path = datasource/paimon-moe
+	url = https://github.com/MadeBaruna/paimon-moe.git
+
+[submodule "datasource/GenshinData"]
+	path = datasource/GenshinData
 	url = https://github.com/Dimbreath/GenshinData.git

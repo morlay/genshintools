@@ -1,16 +1,14 @@
 import { upperFirst, camelCase, reduce } from "lodash-es";
 import { mkdirSync, writeFileSync } from "fs";
 import { dirname } from "path";
-
-const textMapCHS = (await import("../../GenshinData/TextMap/TextMapCHS.json")).default;
-const textMapEN = (await import("../../GenshinData/TextMap/TextMapEN.json")).default;
+import { TextMapCHS, TextMapEN } from "./sources";
 
 const chsText = (hash: number): string => {
-  return (textMapCHS as any)[hash];
+  return (TextMapCHS as any)[hash];
 };
 
 const enText = (hash: number): string => {
-  return (textMapEN as any)[hash];
+  return (TextMapEN as any)[hash];
 };
 
 const process =
@@ -96,10 +94,13 @@ export const addPropSet = (addProps: { PropType?: string; Value?: number }[]) =>
   return addProps
     .filter((p) => p.PropType)
     .reduce(
-      (r: any, p: any) => (p.PropType === "FIGHT_PROP_ADD_HURT" || p.PropType === "FIGHT_PROP_SUB_HURT") ? r: ({
-        ...r,
-        [p.PropType]: p.Value || 0,
-      }),
+      (r: any, p: any) =>
+        p.PropType === "FIGHT_PROP_ADD_HURT" || p.PropType === "FIGHT_PROP_SUB_HURT"
+          ? r
+          : {
+              ...r,
+              [p.PropType]: p.Value || 0,
+            },
       {},
     );
 };

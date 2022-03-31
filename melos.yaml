@@ -1,0 +1,50 @@
+name: genshintools
+repository: https://github.com/morlay/genshintools
+
+packages:
+  - packages/**
+
+command:
+  version:
+    linkToCommits: true
+    branch: main
+    workspaceChangelog: true
+
+ide:
+  intellij: true
+
+scripts:
+  analyze:
+    run: melos exec -c 1 -- "dart analyze . --fatal-infos"
+    select-package:
+      ignore:
+        - "*monorepo*"
+
+  test:
+    run: melos exec -f -c 1 -- "dart pub get && dart pub run test --reporter expanded"
+    select-package:
+      dir-exists:
+        - "test/"
+    env:
+      MELOS_TEST: true
+
+  format: dart format -o write .
+
+  depv: melos exec -f -c 1 "flutter pub run dependency_validator"
+
+  dep: melos exec -f -c 1 "flutter pub upgrade"
+
+  generate:
+    run: melos run generate:dart && melos run generate:flutter
+
+  generate:dart:
+    run: melos exec -c 1 --depends-on="build_runner" --no-flutter -- "dart run build_runner build --delete-conflicting-outputs"
+
+  generate:flutter:
+    run: melos exec -c 1 --depends-on="build_runner" --flutter -- "flutter pub run build_runner build --delete-conflicting-outputs"
+
+  build:android:
+    run: melos exec -c 1 --flutter -- "flutter build apk --release --build-number=${BUILD_NUMBER} --target-platform android-arm64 --split-per-abi"
+
+  build:ios:
+    run: melos exec -c 1 --flutter -- "flutter build ios --release --build-number=${BUILD_NUMBER}"

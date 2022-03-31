@@ -1,0 +1,22 @@
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          build_extensions:
+            "{{dir}}/{{file}}.dart": '{{dir}}/__generated__/{{file}}.g.dart'
+      freezed:
+        options:
+          build_extensions:
+            "{{dir}}/{{file}}.dart": '{{dir}}/__generated__/{{file}}.freezed.dart'
+      genshindb|enum_extra:
+        enabled: true
+
+builders:
+  enum_extra:
+    import: "package:genshindb/builder.dart"
+    builder_factories: [ "enumExtraBuilder" ]
+    build_extensions: { ".dart": [ ".enum_extra.g.part" ] }
+    auto_apply: none
+    build_to: cache
+    applies_builders: [ "source_gen|combining_builder" ]
