@@ -99,7 +99,7 @@ const artifactSetAliases: { [k: string]: string } = {
   "Maiden's Beloved": "Maiden Beloved",
   "Lavawalkers Epiphany": "Lavawalker",
   Thundersoothers: "Thundersoother",
-  "Instructors": "Instructor",
+  Instructors: "Instructor",
 };
 
 const characterBuild = (name: string, b: any) => {
@@ -172,11 +172,17 @@ const characterBuild = (name: string, b: any) => {
       }, []),
       (s: string[]) => s.join("/"),
     ),
-    SkillPriority: b.talent.map((v: string) => v.split("/").map(formatSkillType).filter(v => v)),
+    SkillPriority: b.talent.map((v: string) =>
+      v
+        .split("/")
+        .map(formatSkillType)
+        .filter((v) => v),
+    ),
   };
 };
 
-const sheet = "https://now-proxy-3.vercel.app/https:/docs.google.com/spreadsheets/d/1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI";
+const sheet =
+  "https://now-proxy-3.vercel.app/https:/docs.google.com/spreadsheets/d/1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI";
 const exportURL = `${sheet}/export?format=csv&id=1gNxZ2xab1J6o1TuNVWMeLOZ7TPOqrsf3SshP5DLvKzI`;
 
 enum Grid {
@@ -303,15 +309,9 @@ export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } =
       Role: "DPS",
       Weapons: ["西风剑"],
       ArtifactMainPropTypes: {
-        EQUIP_SHOES: [
-          FightProp[FightProp.FIGHT_PROP_HP_PERCENT],
-        ],
-        EQUIP_RING: [
-          FightProp[FightProp.FIGHT_PROP_WATER_ADD_HURT],
-        ],
-        EQUIP_DRESS: [
-          FightProp[FightProp.FIGHT_PROP_CRITICAL],
-        ],
+        EQUIP_SHOES: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
+        EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_WATER_ADD_HURT]],
+        EQUIP_DRESS: [FightProp[FightProp.FIGHT_PROP_CRITICAL]],
       },
       ArtifactAffixPropTypes: [
         FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
@@ -320,9 +320,7 @@ export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } =
         FightProp[FightProp.FIGHT_PROP_CRITICAL],
         FightProp[FightProp.FIGHT_PROP_CRITICAL_HURT],
       ],
-      ArtifactSetPairs: [
-        ["角斗士的终幕礼"],
-      ],
+      ArtifactSetPairs: [["角斗士的终幕礼"]],
       SkillPriority: [["E"], ["Q"]],
     },
   ],

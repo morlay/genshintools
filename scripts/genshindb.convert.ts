@@ -3,7 +3,6 @@ import { mapValues, omit } from "lodash-es";
 import {
   writeJSONSync,
   Enemies,
-  Dungeons,
   Materials,
   EnemyDropTags,
   WeaponPropGrowCurveValues,
@@ -62,7 +61,6 @@ writeJSONSync("./assets/genshindb/artifacts.json", {
 
 writeJSONSync("./assets/genshindb/materials.json", {
   Materials: Materials,
-  Dungeons: Dungeons,
 });
 
 writeJSONSync("./assets/builds.json", {

@@ -1,19 +1,19 @@
 import { addPropSet, i18n, i18nWithKey, groupMulti, cleanText } from "./common";
 import { resolveAndFixProps } from "./openconfig";
+import { EquipAffixExcelConfigData } from "./sources";
 
 export const EquipAffixes = groupMulti(
-  (await import("../../GenshinData/ExcelBinOutput/EquipAffixExcelConfigData.json")).default,
+  EquipAffixExcelConfigData,
   (a) => {
     const desc = i18n(a.DescTextMapHash, cleanText);
 
-    return ({
+    return {
       Id: a.Id,
       Name: i18nWithKey(a.NameTextMapHash),
       Desc: desc,
       Level: a.Level,
       ...resolveAndFixProps(a.OpenConfig, desc.CHS, a.ParamList, addPropSet(a.AddProps)),
-    });
+    };
   },
   "Id",
 );
-

@@ -2,23 +2,25 @@ import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey } fr
 import { Materials } from "./domain_material";
 import { EquipAffixes } from "./domain_equip_affix";
 import { mapKeys } from "lodash-es";
+import {
+  WeaponCurveExcelConfigData,
+  WeaponExcelConfigData,
+  WeaponLevelExcelConfigData,
+  WeaponPromoteExcelConfigData,
+} from "./sources";
 
-export const WeaponPropGrowCurveValues = (
-  await import("../../GenshinData/ExcelBinOutput/WeaponCurveExcelConfigData.json")
-).default
-  .filter((a) => a.Level <= 90)
-  .reduce((ret, a) => {
-    return a.CurveInfos.reduce(
-      (ret, info) => ({
-        ...ret,
-        [info.Type]: [...((ret as any)[info.Type] || []), info.Value],
-      }),
-      ret,
-    );
-  }, {} as { [k: string]: number[] });
+export const WeaponPropGrowCurveValues = WeaponCurveExcelConfigData.filter((a) => a.Level <= 90).reduce((ret, a) => {
+  return a.CurveInfos.reduce(
+    (ret, info) => ({
+      ...ret,
+      [info.Type]: [...((ret as any)[info.Type] || []), info.Value],
+    }),
+    ret,
+  );
+}, {} as { [k: string]: number[] });
 
 export const WeaponPromotes = groupMulti(
-  (await import("../../GenshinData/ExcelBinOutput/WeaponPromoteExcelConfigData.json")).default,
+  WeaponPromoteExcelConfigData,
   (a) => {
     return {
       UnlockMaxLevel: a.UnlockMaxLevel,
@@ -42,16 +44,14 @@ export const WeaponPromotes = groupMulti(
   "WeaponPromoteId",
 );
 
-const weaponLevelExcelConfigData = (
-  await import("../../GenshinData/ExcelBinOutput/WeaponLevelExcelConfigData.json")
-).default;
+const weaponLevelExcelConfigData = WeaponLevelExcelConfigData;
 
 export const WeaponLevelupExps = new Array(5).fill(0).map((_, i) => {
   return weaponLevelExcelConfigData.map((v) => v.RequiredExps[i]);
 });
 
 export const Weapons = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/WeaponExcelConfigData.json")).default,
+  WeaponExcelConfigData,
   (a) => {
     const name = i18nWithKey(a.NameTextMapHash);
 

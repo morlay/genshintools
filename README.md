@@ -1,4 +1,6 @@
-# Genshin Tools
+# GenshinTools
+
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
 
 ## Getting Started
 
@@ -6,25 +8,3 @@
 
 * `node@16+` (esmodule needed) and `pnpm`
 * `flutter@2.10+`
-
-```shell
-# install dep
-make install
-# process genshin data
-make convert.genshin-data
-
-# build android
-make build.android
-
-# build ios
-make build.ios
-```
-
-### Dev
-
-```shell
-# for watching & generate
-make gen
-```
-
-use IDE to run in devices.

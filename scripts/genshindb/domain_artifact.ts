@@ -1,9 +1,16 @@
 import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey } from "./common";
 import { EquipAffixes } from "./domain_equip_affix";
 import { groupBy, mapKeys, mapValues, reduce } from "lodash-es";
+import {
+  ReliquaryAffixExcelConfigData,
+  ReliquaryExcelConfigData,
+  ReliquaryLevelExcelConfigData,
+  ReliquaryMainPropExcelConfigData,
+  ReliquarySetExcelConfigData,
+} from "./sources";
 
 export const ArtifactSets = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/ReliquarySetExcelConfigData.json")).default,
+  ReliquarySetExcelConfigData,
   (artifactSet) => {
     const affixes = EquipAffixes[artifactSet.EquipAffixId || 0] || [];
 
@@ -26,10 +33,7 @@ export const ArtifactSets = groupOne(
 export const ArtifactSetsByKey = mapKeys(ArtifactSets, (s) => s.Name.KEY);
 
 export const ArtifactAppendPropDepots = mapValues(
-  groupBy(
-    (await import("../../GenshinData/ExcelBinOutput/ReliquaryAffixExcelConfigData.json")).default,
-    (a) => a.DepotId,
-  ),
+  groupBy(ReliquaryAffixExcelConfigData, (a) => a.DepotId),
   (artifactAffixDepots) =>
     reduce(
       artifactAffixDepots,
@@ -41,15 +45,9 @@ export const ArtifactAppendPropDepots = mapValues(
     ),
 );
 
-export const ArtifactMainPropDepots = groupMulti(
-  (await import("../../GenshinData/ExcelBinOutput/ReliquaryMainPropExcelConfigData.json")).default,
-  (d) => d.PropType,
-  "PropDepotId",
-);
+export const ArtifactMainPropDepots = groupMulti(ReliquaryMainPropExcelConfigData, (d) => d.PropType, "PropDepotId");
 
-const artifactLevelExcelConfigData = (
-  await import("../../GenshinData/ExcelBinOutput/ReliquaryLevelExcelConfigData.json")
-).default;
+const artifactLevelExcelConfigData = ReliquaryLevelExcelConfigData;
 
 export const ArtifactLevelupExps = new Array(5)
   .fill(0)
@@ -59,14 +57,10 @@ export const ArtifactLevelupMainPropValues = new Array(5)
   .fill(0)
   .map((_, idx) => artifactLevelExcelConfigData.filter((a) => a.Rank == idx + 1).map((v) => addPropSet(v.AddProps)));
 
-const artifactExcelConfigData = (
-  await import("../../GenshinData/ExcelBinOutput/ReliquaryExcelConfigData.json")
-).default;
-
 export const Artifacts = mapKeys(
   mapKeys(
     groupOne(
-      artifactExcelConfigData,
+      ReliquaryExcelConfigData,
       (a) => {
         if (!a.SetId || !ArtifactSets[a.SetId]) {
           return null;

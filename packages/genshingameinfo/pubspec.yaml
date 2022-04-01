@@ -1,0 +1,20 @@
+name: genshingameinfo
+description: genshin game info from mihoyo bbs
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: ">=2.16.0 <3.0.0"
+
+dependencies:
+  freezed_annotation: ^1.1.0
+  dio: ^4.0.4
+  crypto: ^3.0.1
+
+dev_dependencies:
+  dependency_validator: ^3.0.0
+  build_runner: ^2.1.5
+  test: ^1.20.1
+  json_serializable: ^6.0.1
+  freezed: ^1.1.1
+

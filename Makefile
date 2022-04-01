@@ -1,57 +1,42 @@
-TS_NODE=node --experimental-specifier-resolution=node --loader=ts-node/esm
+bootstrap.all: bootstrap.npm bootstrap
+
+bootstrap:
+	dart pub global activate melos && melos bootstrap
 
 gen:
-	flutter pub run build_runner build --delete-conflicting-outputs
+	melos generate
 
-gen.watch:
-	flutter pub run build_runner watch --delete-conflicting-outputs
+dep:
+	melos dep
 
-#  max build number 2100000000
+clean:
+	melos clean
+
+fmt:
+	melos format
+
+#  max build number 2147483647
+#                    220217115
 # time build number  22011218n
-# 				ex.  220218147
 #                     y m d H n=M/6
 # each 6 minute could only one build
 BUILD_NUMBER=$(shell TZ=UTC-8 date +%y%m%d%H)$(shell TZ=UTC-8 echo `expr $$(date +%M) / 6`)
 
 build.android:
-	flutter build apk --release \
-		--target-platform android-arm64 \
-		--split-per-abi \
-		--build-number=$(BUILD_NUMBER)
+	BUILD_NUMBER=$(BUILD_NUMBER) melos build:android
 
 build.ios:
-	flutter build ios --flavor Release \
-		--build-number=$(BUILD_NUMBER)
+	BUILD_NUMBER=$(BUILD_NUMBER) melos build:ios
 
-build.ipa:
-	flutter build ipa --flavor Release \
-		--build-number=$(BUILD_NUMBER)
-	xcodebuild -exportArchive -exportPath ./build/ios \
-		-archivePath ./build/ios/archive/Runner.xcarchive \
-		-exportOptionsPlist ./build/ios/archive/Runner.xcarchive/info.plist
+## Node
 
-clean:
-	flutter clean
-
-fmt:
-	dart format .
-	pnpx prettier -w ./scripts/{,**/}*.ts
-
-dep: dep.npm dep.flutter
-
-install: install.npm install.flutter
+TS_NODE=node --experimental-specifier-resolution=node --loader=ts-node/esm
 
 dep.npm:
 	pnpm up --latest
 
-dep.flutter:
-	flutter pub upgrade
-
-install.npm:
+bootstrap.npm:
 	pnpm i
-
-install.flutter:
-	flutter pub get
 
 convert:
 	$(TS_NODE) ./scripts/genshindb.convert.ts
@@ -69,6 +54,5 @@ define git_fetch
 	fi
 endef
 
-ensure.genshin-data:
+ensure.vendor:
 	git submodule update --init --remote --force
-

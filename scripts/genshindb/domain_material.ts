@@ -1,54 +1,39 @@
-import { has, keys, last, uniq } from "lodash-es";
-import { groupOne, i18n, i18nWithKey } from "./common";
+import { last, mapKeys, mapValues, uniq } from "lodash-es";
+import { groupOne, i18n, i18nWithKey, pascalCase } from "./common";
 import { EnemyDropTagAliases } from "./domain_enemy";
+import { MaterialExcelConfigData, MaterialSourceDataExcelConfigData } from "./sources";
+import { readFileSync } from "fs";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const items = eval(
+  `(${String(readFileSync(join(__dirname, "../../datasource/paimon-moe/src/data/itemList.js")))
+    .replace("export const itemList = ", "")
+    .replace(";", "")})`,
+);
 
 const weekdays: any = {
-  Monday: 1,
-  Tuesday: 2,
-  Wednesday: 3,
-  Thursday: 4,
-  Friday: 5,
-  Saturday: 6,
-  Sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 0,
 };
 
-export const DungeonOpenWeekdays = (
-  await import("../../GenshinData/ExcelBinOutput/DailyDungeonConfigData.json")
-).default.reduce((dungeonOpenWeekdays, item) => {
-  keys(item).forEach((key) => {
-    if (has(weekdays, key)) {
-      ((item as any)[key] as number[]).forEach((dungeonID) => {
-        dungeonOpenWeekdays[dungeonID] = uniq([...(dungeonOpenWeekdays[dungeonID] || []), weekdays[key]]).sort();
-      });
-    }
-  });
-  return dungeonOpenWeekdays;
-}, {} as { [DungeonId: number]: number[] });
-
-export const Dungeons = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/DungeonExcelConfigData.json")).default,
-  (t) => {
-    const v = {
-      Id: t.Id,
-      Name: i18nWithKey(t.NameTextMapHash),
-      DisplayName: i18nWithKey(t.DisplayNameTextMapHash),
-      Type: t.Type,
-      OpenWeekdays: DungeonOpenWeekdays[t.Id],
-    };
-
-    if (t.Type == "DUNGEON_PLOT" || (v.Name.CHS || "").includes("test")) {
-      return null;
-    }
-
-    return v;
-  },
-  "Id",
+const itemOpenWeekdays = mapValues(
+  mapKeys(items, (v, k) => pascalCase(k)),
+  (v: any) => (v.day ? [0, ...v.day.map((day: string) => weekdays[day])] : null),
 );
 
 export const MaterialSources = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/MaterialSourceDataExcelConfigData.json")).default,
+  MaterialSourceDataExcelConfigData,
   (t) => {
-    const sources = t.TextList.map((v) => i18n(v)).filter((n) => !!n.CHS);
+    const sources = [...t.TextList, ...t.JumpList].map((v) => i18n(v)).filter((n) => !!n.CHS);
+
     let dropTags: string[] = [];
     let dropFromRarity = "";
 
@@ -79,7 +64,6 @@ export const MaterialSources = groupOne(
     return {
       DropFromTags: uniq(dropTags).sort(),
       DropFromRarity: dropFromRarity,
-      DungeonId: Dungeons[t.DungeonList[0]]?.Id,
       Sources: sources,
     };
   },
@@ -87,7 +71,7 @@ export const MaterialSources = groupOne(
 );
 
 export const Materials = groupOne(
-  (await import("../../GenshinData/ExcelBinOutput/MaterialExcelConfigData.json")).default,
+  MaterialExcelConfigData,
   (m) => {
     const n = i18nWithKey(m.NameTextMapHash);
 
@@ -126,6 +110,7 @@ export const Materials = groupOne(
       Rarity: m.RankLevel || 0,
       Rank: m.Rank || 0,
       MaterialType: m.MaterialType || "",
+      OpenWeekdays: itemOpenWeekdays[n.KEY],
     };
   },
   "Id",
