@@ -7,7 +7,7 @@ specifiers:
   formdata-node: ^4.3.2
   lodash-es: ^4.17.21
   node-fetch: ^3.2.3
-  prettier: ^2.6.1
+  prettier: ^2.6.2
   ts-node: ^10.7.0
   typescript: ^4.6.3
 
@@ -20,7 +20,7 @@ dependencies:
 
 devDependencies:
   '@types/node': 17.0.23
-  prettier: 2.6.1
+  prettier: 2.6.2
   ts-node: 10.7.0_ee885bc7281b682b6adbed6ae09ee090
   typescript: 4.6.3
 
@@ -182,8 +182,8 @@ packages:
       formdata-polyfill: 4.0.10
     dev: false
 
-  /prettier/2.6.1:
-    resolution: {integrity: sha512-8UVbTBYGwN37Bs9LERmxCPjdvPxlEowx2urIL6urHzdb3SDq4B/Z6xLFCblrSnE4iKWcS6ziJ3aOYrc1kz/E2A==}
+  /prettier/2.6.2:
+    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true

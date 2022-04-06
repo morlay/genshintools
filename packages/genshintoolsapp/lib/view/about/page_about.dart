@@ -1,5 +1,5 @@
 import 'package:genshintoolsapp/domain/auth.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class PageAbout extends HookWidget {

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:genshindb/genshindb.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 typedef ShouldHighlight = bool Function(FightProp fightProp);
 typedef ShouldCalc = double Function(FightProp fightProp, double value);

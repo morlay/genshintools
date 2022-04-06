@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logr/logr.dart';
-import 'package:roundtripper/roundtripbuilders/request_log.dart';
+import 'package:roundtripper/roundtripbuilders.dart';
 import 'package:roundtripper/roundtripper.dart';
 
 import 'auth.dart';

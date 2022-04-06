@@ -1,5 +1,5 @@
 import 'package:genshintoolsapp/domain/auth.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/view/account.dart';
 
 import 'page_gacha_sync.dart';

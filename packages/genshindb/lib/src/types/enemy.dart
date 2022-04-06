@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/constants.dart';
-import 'package:genshindb/types.dart';
+
+import 'fight_props.dart';
+import 'i18n.dart';
 
 part '__generated__/enemy.freezed.dart';
 part '__generated__/enemy.g.dart';

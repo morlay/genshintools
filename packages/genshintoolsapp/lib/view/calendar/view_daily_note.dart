@@ -1,6 +1,6 @@
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ViewDailyNote extends HookWidget {

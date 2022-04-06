@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshingameinfo/genshingameinfo.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 part '__generated__/auth_state.freezed.dart';
 part '__generated__/auth_state.g.dart';

@@ -1,7 +1,9 @@
 bootstrap.all: bootstrap.npm bootstrap
 
 bootstrap:
-	dart pub global activate melos && melos bootstrap
+	dart pub global activate melos
+	dart pub global activate pubtidy
+	melos bootstrap
 
 gen:
 	melos generate
@@ -13,6 +15,7 @@ clean:
 	melos clean
 
 fmt:
+	melos exec -c 1 -- pubtidy
 	melos format
 
 #  max build number 2147483647

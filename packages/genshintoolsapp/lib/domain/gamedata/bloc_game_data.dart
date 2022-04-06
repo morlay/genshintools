@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshingameinfo/genshingameinfo.dart';
 import 'package:genshintoolsapp/domain/syncer.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 import 'buffs.dart';
 import 'player_state.dart';

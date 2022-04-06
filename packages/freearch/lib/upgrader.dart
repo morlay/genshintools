@@ -1,2 +1,1 @@
-export 'src/upgrader/release.dart';
-export 'src/upgrader/upgrader.dart';
+export 'src/upgrader.dart';

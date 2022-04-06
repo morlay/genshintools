@@ -1,12 +1,11 @@
+import 'package:genshintoolsapp/common/flutter.dart';
+import 'package:genshintoolsapp/common/upgrader.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/syncer.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
-import 'package:genshintoolsapp/upgrader/upgrader.dart';
 import 'package:genshintoolsapp/view/artifact.dart';
 import 'package:genshintoolsapp/view/calendar.dart';
 import 'package:genshintoolsapp/view/character.dart';
 import 'package:genshintoolsapp/view/gacha.dart';
-import 'package:rxdart/rxdart.dart';
 
 class AppMain extends HookWidget {
   AppMain({Key? key}) : super(key: key);

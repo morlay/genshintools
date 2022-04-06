@@ -1,6 +1,5 @@
 import 'package:genshingameinfo/genshingameinfo.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 typedef DailyNotes = Map<int, DailyNote>;
 

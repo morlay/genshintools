@@ -1,12 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:genshindb/genshindb.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
 import 'package:genshintoolsapp/view/account.dart';
-import 'package:genshintoolsapp/view/artifact.dart';
 import 'package:genshintoolsapp/view/character.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
+
+import 'page_artifact_add.dart';
 
 class PageArtifactList extends HookWidget {
   static String routeName = "/artifacts";

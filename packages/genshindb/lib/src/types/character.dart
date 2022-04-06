@@ -1,7 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/constants.dart';
 import 'package:genshindb/extension.dart';
-import 'package:genshindb/types.dart';
+
+import 'constellation.dart';
+import 'i18n.dart';
+import 'material.dart';
+import 'prop_grow_curve.dart';
+import 'skill.dart';
 
 part '__generated__/character.freezed.dart';
 part '__generated__/character.g.dart';

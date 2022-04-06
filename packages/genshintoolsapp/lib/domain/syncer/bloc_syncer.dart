@@ -1,4 +1,4 @@
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:webdav/webdav.dart';
 
 class BlocSyncer extends HydratedCubit<WebDAV> {

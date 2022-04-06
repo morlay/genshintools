@@ -14,7 +14,7 @@ targets:
 
 builders:
   enum_extra:
-    import: "package:genshindb/builder.dart"
+    import: "tool/builder.dart"
     builder_factories: [ "enumExtraBuilder" ]
     build_extensions: { ".dart": [ ".enum_extra.g.part" ] }
     auto_apply: none

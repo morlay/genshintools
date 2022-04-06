@@ -1,9 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/genshindb.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
-import 'package:genshintoolsapp/flutter/ui.dart';
 import 'package:genshintoolsapp/view/artifact.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 
@@ -534,8 +533,8 @@ class AppendPropsRank extends StatelessWidget {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: linearGradientForRarity(
-                                          ranks[key]!.rarity)
-                                      .colors[0],
+                                    ranks[key]!.rarity,
+                                  ).colors.first,
                                   fontFeatures: const [
                                     FontFeature.tabularFigures()
                                   ],

@@ -28,7 +28,8 @@ jobs:
       - run: make convert
       - run: make gen build.android
 
-      - uses: JamesIves/github-pages-deploy-action@v4.2.5
+      - uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           folder: ./packages/genshintoolsapp/build/.release
           branch: release-stable
+          single-commit: true

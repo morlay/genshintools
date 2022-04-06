@@ -1,8 +1,7 @@
 import 'dart:io';
 
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/syncer.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
-import 'package:genshintoolsapp/flutter/ui.dart';
 import 'package:webdav/webdav.dart';
 
 class PageSyncSetting extends HookWidget {

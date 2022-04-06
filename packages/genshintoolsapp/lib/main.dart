@@ -5,7 +5,7 @@ import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gacha.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
 import 'package:genshintoolsapp/domain/syncer.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'app_main.dart';

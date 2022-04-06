@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:genshintoolsapp/flutter/utils/extension.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 var base = ThemeData.from(
   colorScheme: ColorScheme.fromSwatch(

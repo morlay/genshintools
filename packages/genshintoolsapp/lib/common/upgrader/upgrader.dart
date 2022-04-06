@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:freearch/freearch.dart';
 import 'package:freearch/upgrader.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';

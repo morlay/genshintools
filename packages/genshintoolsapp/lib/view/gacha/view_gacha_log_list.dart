@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:genshingameinfo/genshingameinfo.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/gacha.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 
 const types = {
@@ -210,27 +210,43 @@ class ViewGachaLogList extends HookWidget {
 
     var isCharacter = log.itemType.contains("角色");
 
+    var fixedCount = (isCharacter ? count - 1 : count) +
+        ([
+          "香菱",
+          "安柏",
+          "凯亚",
+          "丽莎",
+        ].contains(log.name)
+            ? 1
+            : 0);
+
     return WithType(
       type: log.uigfGachaType,
       child: WithCount(
+        alignment: Alignment.topLeft,
+        prefix: "[",
         count: log.rankType == "5"
             ? log.countSinceLastGold
             : log.countSinceLastPurple,
-        prefix:
-            "${count < 0 ? "" : "${isCharacter ? "C" : "R"}${isCharacter ? count - 1 : count} "}[",
         suffix: "]",
-        size: 9,
-        child: isCharacter
-            ? db.character.find(log.name).let((c) => GSImage(
-                  domain: "character",
-                  nameID: c.key,
-                  rarity: c.rarity,
-                ))
-            : db.weapon.find(log.name).let((w) => GSImage(
-                  domain: "weapon",
-                  nameID: w.key,
-                  rarity: w.rarity,
-                )),
+        child: WithCount(
+          count: fixedCount,
+          prefix: "${isCharacter ? "C" : "R"}",
+          active: isCharacter ? fixedCount >= 6 : fixedCount >= 5,
+          child: isCharacter
+              ? db.character.find(log.name).let((c) => GSImage(
+                    domain: "character",
+                    nameID: c.key,
+                    rarity: c.rarity,
+                  ))
+              : db.weapon.find(log.name).let(
+                    (w) => GSImage(
+                      domain: "weapon",
+                      nameID: w.key,
+                      rarity: w.rarity,
+                    ),
+                  ),
+        ),
       ),
     );
   }

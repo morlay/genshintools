@@ -1,1 +1,1 @@
-export 'src/good/good.dart';
+export 'src/good.dart';

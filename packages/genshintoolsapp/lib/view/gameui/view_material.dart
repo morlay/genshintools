@@ -1,6 +1,6 @@
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 import 'image.dart';
 import 'text.dart';

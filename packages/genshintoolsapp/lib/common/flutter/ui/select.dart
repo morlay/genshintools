@@ -1,4 +1,4 @@
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 class SelectState {
   bool selected;

@@ -1,6 +1,6 @@
 import 'package:genshingameinfo/genshingameinfo.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/view/about.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 import 'package:genshintoolsapp/view/syncer.dart';

@@ -1,5 +1,5 @@
 import 'package:genshindb/genshindb.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 
 class ViewLevelupPlans extends HookWidget {

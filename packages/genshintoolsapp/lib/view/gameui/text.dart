@@ -1,6 +1,6 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:genshindb/genshindb.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 class GSDesc extends HookWidget {
   final I18n desc;

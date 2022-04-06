@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:freearch/freearch.dart';
 import 'package:logr/logr.dart';
-import 'package:roundtripper/roundtripbuilders/throws_not_2xx_error.dart';
+import 'package:roundtripper/roundtripbuilders.dart';
 import 'package:roundtripper/roundtripper.dart';
 
 import 'release.dart';

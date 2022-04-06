@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:freearch/freearch.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/genshindb.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 part '__generated__/image.freezed.dart';
 
@@ -58,11 +58,11 @@ class GSImage extends HookWidget with _$GSImage {
 }
 
 var bgs = [
-  [const Color(0xFF838f99), const Color(0xFF4f5864)],
-  [const Color(0xFF5e966c), const Color(0xFF48575c)],
-  [const Color(0xFF499fb3), const Color(0xFF515474)],
-  [const Color(0xFFb886ca), const Color(0xFF595482)],
-  [const Color(0xFFe6ac54), const Color(0xFF695453)],
+  [const Color(0xff9da8b2), const Color(0xff4f5864)],
+  [const Color(0xff60b881), const Color(0xff48575c)],
+  [const Color(0xff3c94f6), const Color(0xff515474)],
+  [const Color(0xffb87fcc), const Color(0xff595482)],
+  [const Color(0xfff3b456), const Color(0xff695453)],
 ];
 
 LinearGradient linearGradientForRarity(int rarity) {
@@ -194,6 +194,7 @@ class WithCount extends HookWidget {
   final String prefix;
   final String suffix;
   final Alignment alignment;
+  final bool active;
 
   const WithCount({
     Key? key,
@@ -203,6 +204,7 @@ class WithCount extends HookWidget {
     this.size = 8,
     this.prefix = "",
     this.suffix = "",
+    this.active = false,
   }) : super(key: key);
 
   @override
@@ -216,16 +218,25 @@ class WithCount extends HookWidget {
                 right: (alignment == Alignment.topRight ||
                         alignment == Alignment.bottomRight)
                     .ifTrueOrNull(() => 0),
-                top: (alignment == Alignment.topRight).ifTrueOrNull(() => 0),
-                bottom:
-                    (alignment == Alignment.bottomRight).ifTrueOrNull(() => 0),
+                top: (alignment == Alignment.topRight ||
+                        alignment == Alignment.topLeft)
+                    .ifTrueOrNull(() => 0),
+                left: (alignment == Alignment.topLeft ||
+                        alignment == Alignment.bottomLeft)
+                    .ifTrueOrNull(() => 0),
+                bottom: (alignment == Alignment.bottomRight ||
+                        alignment == Alignment.bottomLeft)
+                    .ifTrueOrNull(() => 0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withAlpha(80),
-                    borderRadius: BorderRadius.circular(2),
+                    color: active
+                        ? Colors.deepOrangeAccent.withOpacity(0.7)
+                        : Colors.black.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                   clipBehavior: Clip.hardEdge,
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
                   child: Center(
                     child: Text(
                       "$prefix${count > 1e4 ? "${(count / 1e4).toStringAsFixed(0)}w" : count}$suffix",

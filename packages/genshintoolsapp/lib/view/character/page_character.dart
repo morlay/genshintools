@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:genshindb/genshindb.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
-import 'package:genshintoolsapp/flutter/ui.dart';
 import 'package:genshintoolsapp/view/artifact.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 import 'package:url_launcher/url_launcher.dart';

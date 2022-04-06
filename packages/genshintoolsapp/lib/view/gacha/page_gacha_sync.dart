@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:genshingameinfo/genshingameinfo.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gacha.dart';
-import 'package:genshintoolsapp/flutter/flutter.dart';
+import 'package:genshintoolsapp/common/flutter.dart';
 
 class PageGachaSync extends HookWidget {
   static String routeName = "/gacha/sync";
