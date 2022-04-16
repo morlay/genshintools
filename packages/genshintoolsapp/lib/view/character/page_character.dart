@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
-import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
 import 'package:genshintoolsapp/view/artifact.dart';
@@ -56,7 +55,9 @@ class PageCharacter extends HookWidget {
           ? current.w
           : current.w.copyWith(
               level: 90,
-              key: db.weapon.findOrNull(builds.weapons?.first ?? "")?.key ??
+              key: db.weapon
+                      .findOrNull(builds.weapons?.first.getOrNull(0) ?? "")
+                      ?.key ??
                   current.w.key,
             ),
       artifacts: current.artifacts.length == 5
@@ -441,11 +442,14 @@ class PageCharacter extends HookWidget {
         refinement: c.w.refinement,
         backup: "当前配装",
       ),
-      ...?builds.weapons?.map((e) => WeaponListTile(
-            fightProps: fightProps,
-            weapon: db.weapon.find(e),
-            level: c.w.level,
-            refinement: c.w.refinement,
+      ...?builds.weapons?.let((weapons) => weapons.expandIndexed(
+            (i, list) => list.map((e) => WeaponListTile(
+                  fightProps: fightProps,
+                  weapon: db.weapon.find(e),
+                  level: c.w.level,
+                  refinement: c.w.refinement,
+                  backup: "强度 ${weapons.length - i + (10 - weapons.length)}",
+                )),
           )),
     ];
 

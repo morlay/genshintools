@@ -79,7 +79,7 @@ class GSCharacterBuild with _$GSCharacterBuild {
   factory GSCharacterBuild({
     bool? recommended,
     String? role,
-    List<String>? weapons,
+    List<List<String>>? weapons,
     List<List<String>>? artifactSetPairs,
     @EquipTypeStringConverter()
         Map<EquipType, List<FightProp>>? artifactMainPropTypes,

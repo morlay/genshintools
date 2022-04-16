@@ -87,18 +87,25 @@ class WeaponListTile extends HookWidget {
   }
 
   Widget _buildAvatar() {
-    return WithLevel(
-      level: level,
-      child: WithCount(
-        prefix: "R",
-        count: refinement,
-        child: GSImage(
-          size: 52,
-          domain: "weapon",
-          rarity: weapon.rarity,
-          nameID: weapon.key,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        WithLevel(
+          level: level,
+          child: WithCount(
+            prefix: "R",
+            count: refinement,
+            child: GSImage(
+              size: 52,
+              domain: "weapon",
+              rarity: weapon.rarity,
+              nameID: weapon.key,
+            ),
+          ),
         ),
-      ),
+        ...?full
+            ?.ifTrueOrNull(() => [Text("${backup?.let((v) => " [$v]") ?? ""}")])
+      ],
     );
   }
 
@@ -109,7 +116,7 @@ class WeaponListTile extends HookWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Text(
-            "${weapon.name.text(Lang.CHS)}${backup?.let((v) => " [$v]") ?? ""}",
+            "${weapon.name.text(Lang.CHS)}",
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
