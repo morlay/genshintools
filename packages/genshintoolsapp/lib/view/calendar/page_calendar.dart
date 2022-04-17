@@ -6,7 +6,6 @@ import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/view/account.dart';
 import 'package:genshintoolsapp/view/character.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'view_daily_note.dart';
 

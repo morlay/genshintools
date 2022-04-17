@@ -507,12 +507,46 @@ class AppendPropsRank extends StatelessWidget {
   const AppendPropsRank({
     Key? key,
     required this.ranks,
+    this.inline,
   }) : super(key: key);
 
   final Map<String, Rank> ranks;
+  final bool? inline;
 
   @override
   Widget build(BuildContext context) {
+    if (inline ?? false) {
+      return DefaultTextStyle.merge(
+        style: const TextStyle(fontSize: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              ranks.keys.map((k) => k.replaceAll("双暴词条", "双暴")).join(" / "),
+            ),
+            Wrap(
+              spacing: 3,
+              children: [
+                ...ranks.keys.map(
+                  (key) => Text(
+                    ranks[key]!.value.toStringAsFixed(1),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: linearGradientForRarity(
+                        ranks[key]!.rarity,
+                      ).colors.first,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      );
+    }
+
     return Wrap(
       runSpacing: 6,
       children: [

@@ -137,6 +137,7 @@ class GSDB {
       70, // 7
       70, // 8
       80, // 9
+      80, // 10
     ];
 
     List<LevelupPlan> list = [];
