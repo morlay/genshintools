@@ -1,4 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:genshintoolsapp/common/flutter/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -20,25 +21,30 @@ class PageAddAccount extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("添加游戏账号"),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: "通过 Cookie"),
-              Tab(text: "通过 米游社 Web"),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            FormAddAccounts(),
-            const AddAccountFromMiYoBBS(),
-          ],
-        ),
+    var selected = useState(0);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("添加游戏账号"),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.cookie),
+            label: '通过 Cookie',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: '通过 米游社 Web',
+          ),
+        ],
+        currentIndex: selected.value,
+        onTap: (int index) => selected.value = index,
+      ),
+      body: [
+        FormAddAccounts(),
+        const AddAccountFromMiYoBBS(),
+      ][selected.value],
     );
   }
 }

@@ -448,9 +448,13 @@ class AppendValueIndex extends HookWidget {
   const AppendValueIndex({
     Key? key,
     required this.indexes,
+    this.size,
+    this.reverse,
   }) : super(key: key);
 
   final List<int> indexes;
+  final bool? reverse;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -460,32 +464,32 @@ class AppendValueIndex extends HookWidget {
       );
     }
 
-    return SizedBox(
-      width: double.infinity,
-      child: Wrap(
-        runSpacing: 1,
-        spacing: 1,
-        children: [
-          ...indexes.map(
-            (n) => Container(
-              width: 5,
-              height: 5,
-              decoration: BoxDecoration(
-                color: n > 0
-                    ? linearGradientForRarity((n < 0 ? -n : n) + 1).colors[0]
-                    : null,
-                border: n < 0
-                    ? Border.all(
-                        width: 1.5,
-                        color: linearGradientForRarity((n < 0 ? -n : n) + 1)
-                            .colors[0],
-                      )
-                    : null,
-              ),
+    double s = size ?? 4;
+
+    return Wrap(
+      runSpacing: 1,
+      spacing: 1,
+      alignment: reverse?.let((it) => WrapAlignment.end) ?? WrapAlignment.start,
+      children: [
+        ...indexes.map(
+          (n) => Container(
+            width: s,
+            height: s,
+            decoration: BoxDecoration(
+              color: n > 0
+                  ? linearGradientForRarity((n < 0 ? -n : n) + 1).colors[0]
+                  : null,
+              border: n < 0
+                  ? Border.all(
+                      width: 1.5,
+                      color: linearGradientForRarity((n < 0 ? -n : n) + 1)
+                          .colors[0],
+                    )
+                  : null,
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

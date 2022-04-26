@@ -585,10 +585,14 @@ class AppendPropsRank extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.only(top: 10),
+                      child: SizedBox(
+                        width: double.infinity,
                         child: AppendValueIndex(
                           indexes: ranks[key]!.indexes,
-                        ))
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

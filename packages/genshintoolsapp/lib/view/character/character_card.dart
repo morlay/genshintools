@@ -26,7 +26,7 @@ class CharacterCard extends HookWidget {
       child: Opacity(
         opacity: c.c.own ? 1.0 : 0.6,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 12, top: 12),
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -44,7 +44,7 @@ class CharacterCard extends HookWidget {
               Positioned(
                 child: _buildAvatar(context),
                 left: 30,
-                top: 10,
+                top: 0,
               ),
               Positioned(
                 child: _buildMaterialCosts(
@@ -55,7 +55,7 @@ class CharacterCard extends HookWidget {
                     c.c.level,
                   ),
                   SizedBox(
-                    width: 48,
+                    width: 58,
                     height: 20,
                   ),
                 ),
@@ -90,7 +90,7 @@ class CharacterCard extends HookWidget {
                   ),
                 ),
                 left: 30,
-                top: -1,
+                top: -11,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
@@ -121,7 +121,7 @@ class CharacterCard extends HookWidget {
                         SizedBox(width: 120, child: _buildArtifactScope(db))) ??
                     SizedBox(width: 0),
                 left: 0,
-                bottom: -12,
+                bottom: -11,
               ),
               Positioned(
                 child: _buildMaterialCosts(
@@ -140,8 +140,8 @@ class CharacterCard extends HookWidget {
                         : [];
                   }).toList(),
                   SizedBox(
-                    width: 38,
-                    height: 38,
+                    width: 28,
+                    height: 32,
                     child: _buildTalentLevels(context),
                   ),
                 ),
@@ -193,7 +193,7 @@ class CharacterCard extends HookWidget {
           element: c.character.element,
           child: GSImage(
             domain: "character",
-            size: 48,
+            size: 58,
             rarity: c.character.rarity,
             nameID: c.character.key,
           ),

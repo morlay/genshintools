@@ -140,60 +140,80 @@ class CurrentArtifact extends HookWidget {
     var current = state.artifactsOn(c.character.key);
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          ...EquipType.values.map((et) {
-            var list = state.artifacts
-                .where((a) => a.slotKey.asEquipType() == et)
-                .toList();
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 16,
+          children: [
+            ...EquipType.values.map((et) {
+              var list = state.artifacts
+                  .where((a) => a.slotKey.asEquipType() == et)
+                  .toList();
 
-            var currentArtifact =
-                current.firstWhereOrNull((a) => a.slotKey.asEquipType() == et);
+              var currentArtifact = current
+                  .firstWhereOrNull((a) => a.slotKey.asEquipType() == et);
 
-            return Select<GOODArtifact>(
-              title: const Text("圣遗物"),
-              options: list,
-              value: currentArtifact,
-              onSelected: (selected) {
-                if (currentArtifact == null) {
-                  blocGameData.equipArtifact(
-                    uid,
-                    selected.copyWith(
-                      location: c.character.key,
+              return Select<GOODArtifact>(
+                title: const Text("圣遗物"),
+                options: list,
+                value: currentArtifact,
+                onSelected: (selected) {
+                  if (currentArtifact == null) {
+                    blocGameData.equipArtifact(
+                      uid,
+                      selected.copyWith(
+                        location: c.character.key,
+                      ),
+                    );
+                  } else {
+                    blocGameData.equipArtifact(
+                      uid,
+                      selected,
+                      currentArtifact,
+                    );
+                  }
+                },
+                builder: (c, list) {
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 16,
+                        children: [...list],
+                      ),
                     ),
                   );
-                } else {
-                  blocGameData.equipArtifact(
-                    uid,
-                    selected,
-                    currentArtifact,
+                },
+                optionBuilder: (context, option, selected) {
+                  return GOODArtifactCard(
+                    artifact: option.value,
+                    onAvatarTap: () {
+                      option.select();
+                    },
                   );
-                }
-              },
-              optionBuilder: (context, option, selected) {
-                return GOODArtifactListTile(
-                  artifact: option.value,
-                  onAvatarTap: () {
-                    option.select();
-                  },
-                );
-              },
-              tileBuilder: (context, selected) {
-                return selected.value?.let((pa) => GOODArtifactListTile(
-                        artifact: pa,
-                        onAvatarTap: () {
+                },
+                tileBuilder: (context, selected) {
+                  return selected.value?.let((pa) => GOODArtifactCard(
+                          artifact: pa,
+                          onAvatarTap: () {
+                            selected.showOptions(context);
+                          })) ??
+                      ListTile(
+                        onTap: () {
                           selected.showOptions(context);
-                        })) ??
-                    ListTile(
-                      onTap: () {
-                        selected.showOptions(context);
-                      },
-                      title: Text("请选择${et.label()}"),
-                    );
-              },
-            );
-          })
-        ],
+                        },
+                        title: Text("请选择${et.label()}"),
+                      );
+                },
+              );
+            })
+          ],
+        ),
       ),
     );
   }
