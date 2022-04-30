@@ -109,6 +109,7 @@ const artifactSetAliases: { [k: string]: string } = {
     "Tenacity of the Milelith": "Tenacity of the Millelith",
     Thundersoothers: "Thundersoother",
     Instructors: "Instructor",
+    "Physical DMG +25% set": "Pale Flame",
 };
 
 const characterBuild = (name: string, b: any) => {
@@ -229,10 +230,10 @@ const fromCSV = async (csv: string, grid: Grid) => {
             .filter((v: string) => v && !(v.startsWith("*") || v.startsWith("(") || v.endsWith(".")))
             .map((w: string) =>
                 w
-                    .split(/(~?=)|\/|(\n)/)
+                    .split(/(~?=)|\([24]\)|\/|(\n)/)
                     .filter((v) => trim(v))
                     .map((v) => v.replace(/(\d+\. ?)?([^(\[]+)(.+)?(R[1-5]\+?)?/, "$2").trim())
-                    .filter((v) => v && !(v.startsWith("(") || v.startsWith("[") || v === "S1" || v == "~=")),
+                    .filter((v) => v && !(v.startsWith("*") || v.startsWith("(") || v.startsWith("[") || v === "S1" || v == "~=")),
             );
     };
 
