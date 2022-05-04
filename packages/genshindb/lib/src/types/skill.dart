@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/constants.dart';
 import 'package:genshindb/utils.dart';
+import 'package:collection/collection.dart';
 
 import 'fight_props.dart';
 import 'i18n.dart';

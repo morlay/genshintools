@@ -6,5 +6,5 @@
 
 **Requirements**
 
-* `node@16+` (esmodule needed) and `pnpm`
-* `flutter@2.10+`
+* `node@18+` (esmodule needed) and `pnpm`
+* `flutter@3+`

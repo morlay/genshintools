@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/constants.dart';
 import 'package:genshindb/extension.dart';
+import 'package:collection/collection.dart';
 
 part '__generated__/player_artifact.freezed.dart';
 

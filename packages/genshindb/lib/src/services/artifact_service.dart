@@ -4,6 +4,7 @@ import 'package:genshindb/good.dart';
 import 'package:genshindb/types.dart';
 import 'package:genshindb/utils.dart';
 import 'package:genshindb/extension.dart';
+import 'package:collection/collection.dart';
 
 part '__generated__/artifact_service.freezed.dart';
 part '__generated__/artifact_service.g.dart';

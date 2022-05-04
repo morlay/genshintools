@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/constants.dart';
 import 'package:genshindb/types.dart';
 import 'package:genshindb/utils.dart';
+import 'package:collection/collection.dart';
 
 part '__generated__/character_service.freezed.dart';
 part '__generated__/character_service.g.dart';

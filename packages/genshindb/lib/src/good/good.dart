@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/extension.dart';
 import 'package:genshindb/genshindb.dart';
+import 'package:collection/collection.dart';
 
 part '__generated__/good.freezed.dart';
 part '__generated__/good.g.dart';
