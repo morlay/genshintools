@@ -1,85 +1,82 @@
-import { addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey } from "./common";
-import { Materials } from "./domain_material";
-import { EquipAffixes } from "./domain_equip_affix";
-import { mapKeys } from "lodash-es";
+import {addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey} from "./common";
+import {Materials, toMaterialCosts} from "./domain_material";
+import {EquipAffixes} from "./domain_equip_affix";
+import {mapKeys} from "lodash-es";
 import {
-  WeaponCurveExcelConfigData,
-  WeaponExcelConfigData,
-  WeaponLevelExcelConfigData,
-  WeaponPromoteExcelConfigData,
+    WeaponCurveExcelConfigData,
+    WeaponExcelConfigData,
+    WeaponLevelExcelConfigData,
+    WeaponPromoteExcelConfigData,
 } from "./sources";
 
-export const WeaponPropGrowCurveValues = WeaponCurveExcelConfigData.filter((a) => a.Level <= 90).reduce((ret, a) => {
-  return a.CurveInfos.reduce(
-    (ret, info) => ({
-      ...ret,
-      [info.Type]: [...((ret as any)[info.Type] || []), info.Value],
-    }),
-    ret,
-  );
+export const WeaponPropGrowCurveValues = WeaponCurveExcelConfigData.filter((a) => a.level <= 90).reduce((ret, a) => {
+    return a.curveInfos.reduce(
+        (ret, info) => ({
+            ...ret,
+            [info.type]: [...((ret as any)[info.type] || []), info.value],
+        }),
+        ret,
+    );
 }, {} as { [k: string]: number[] });
 
 export const WeaponPromotes = groupMulti(
-  WeaponPromoteExcelConfigData,
-  (a) => {
-    return {
-      UnlockMaxLevel: a.UnlockMaxLevel,
-      AddProps: addPropSet(a.AddProps),
-      MaterialCosts: [
-        ...a.CostItems.filter((item: any) => item.Id).map((item: any) => ({
-          MaterialKey: Materials[item.Id].Name.KEY,
-          Count: item.Count,
-        })),
-        ...(a.CoinCost
-          ? [
-              {
-                MaterialKey: "Mora",
-                Count: a.CoinCost,
-              },
-            ]
-          : []),
-      ],
-    };
-  },
-  "WeaponPromoteId",
+    WeaponPromoteExcelConfigData,
+    (a) => {
+        return {
+            UnlockMaxLevel: a.unlockMaxLevel,
+            AddProps: addPropSet(a.addProps),
+            MaterialCosts: [
+                ...toMaterialCosts(a.costItems),
+                ...(a.coinCost
+                    ? [
+                        {
+                            MaterialKey: "Mora",
+                            Count: a.coinCost,
+                        },
+                    ]
+                    : []),
+            ],
+        };
+    },
+    "weaponPromoteId",
 );
 
 const weaponLevelExcelConfigData = WeaponLevelExcelConfigData;
 
 export const WeaponLevelupExps = new Array(5).fill(0).map((_, i) => {
-  return weaponLevelExcelConfigData.map((v) => v.RequiredExps[i]);
+    return weaponLevelExcelConfigData.map((v) => v.requiredExps[i]);
 });
 
 export const Weapons = groupOne(
-  WeaponExcelConfigData,
-  (a) => {
-    const name = i18nWithKey(a.NameTextMapHash);
+    WeaponExcelConfigData,
+    (a) => {
+        const name = i18nWithKey(a.nameTextMapHash);
 
-    if (name.CHS == "" || name.CHS.indexOf("test") > -1) {
-      return null;
-    }
+        if (name.CHS == "" || name.CHS.indexOf("test") > -1) {
+            return null;
+        }
 
-    return {
-      Id: a.Id,
-      Name: name,
-      Desc: i18n(a.DescTextMapHash),
-      Rarity: a.RankLevel,
-      WeaponType: a.WeaponType,
-      PromoteId: a.WeaponPromoteId,
-      PropGrowCurveAndInitials: a.WeaponProp.filter((p: any) => p.PropType).reduce(
-        (ret, curve) => ({
-          ...ret,
-          [curve.PropType as string]: {
-            GrowCurve: curve.Type,
-            Initial: curve.InitValue,
-          },
-        }),
-        {},
-      ),
-      Affixes: a.SkillAffix.map((id) => EquipAffixes[id]).filter((v) => !!v),
-    };
-  },
-  "Id",
+        return {
+            Id: a.id,
+            Name: name,
+            Desc: i18n(a.descTextMapHash),
+            Rarity: a.rankLevel,
+            WeaponType: a.weaponType,
+            PromoteId: a.weaponPromoteId,
+            PropGrowCurveAndInitials: a.weaponProp.filter((p) => p.propType).reduce(
+                (ret, curve) => ({
+                    ...ret,
+                    [curve.propType as string]: {
+                        GrowCurve: curve.type,
+                        Initial: curve.initValue,
+                    },
+                }),
+                {},
+            ),
+            Affixes: a.skillAffix.map((id) => EquipAffixes[id]).filter((v) => !!v),
+        };
+    },
+    "id",
 );
 
 export const WeaponsByKey = mapKeys(Weapons, (v) => v.Name.KEY);
@@ -87,5 +84,5 @@ export const WeaponsByKey = mapKeys(Weapons, (v) => v.Name.KEY);
 const weaponIndexes = createIndexes(Weapons);
 
 export const findWeapon = (id: string) => {
-  return Weapons[weaponIndexes[id]];
+    return Weapons[weaponIndexes[id]];
 };

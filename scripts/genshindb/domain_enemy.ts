@@ -11,66 +11,66 @@ import {
 export const MonsterRelationships = groupOne(
     MonsterRelationshipExcelConfigData,
     (t) => ({
-        DropTag: t.TagStr,
-        MonsterRarity: t.MonsterRarity,
+        DropTag: t.tagStr,
+        MonsterRarity: t.monsterRarity,
     }),
-    "Id",
+    "id",
 );
 
 export const MonsterTitles = groupOne(
     MonsterTitleExcelConfigData,
-    (t) => i18nWithKey(t.TitleNameTextMapHash),
-    "TitleID",
+    (t) => i18nWithKey(t.titleNameTextMapHash),
+    "titleID",
 );
 
 export const MonsterSpecialNames = groupOne(
     MonsterSpecialNameExcelConfigData,
-    (t) => i18nWithKey(t.SpecialNameTextMapHash),
-    "SpecialNameLabID",
+    (t) => i18nWithKey(t.specialNameTextMapHash),
+    "specialNameLabID",
 );
 
 export const MonsterDescribes = groupOne(
     MonsterDescribeExcelConfigData,
     (t) => {
         return {
-            DropTag: MonsterRelationships[t.Id]?.DropTag,
-            MonsterRarity: MonsterRelationships[t.Id]?.MonsterRarity,
-            SpecialName: MonsterSpecialNames[t.SpecialNameLabID],
-            Title: MonsterTitles[t.TitleID],
-            Name: i18nWithKey(t.NameTextMapHash),
+            DropTag: MonsterRelationships[t.id]?.DropTag,
+            MonsterRarity: MonsterRelationships[t.id]?.MonsterRarity,
+            SpecialName: MonsterSpecialNames[t.specialNameLabID],
+            Title: MonsterTitles[t.titleID],
+            Name: i18nWithKey(t.nameTextMapHash),
         };
     },
-    "Id",
+    "id",
 );
 
 export const Enemies = mapKeys(
     reduce(
         MonsterExcelConfigData,
         (ret, t) => {
-            if (!t.DescribeId) {
+            if (!t.describeId) {
                 return ret;
             }
 
-            if (!MonsterDescribes[t.DescribeId]) {
+            if (!MonsterDescribes[t.describeId]) {
                 // console.log(`invalid ${JSON.stringify(i18nWithID(t.NameTextMapHash))}`);
                 return ret;
             }
 
             const b = {
-                ...MonsterDescribes[t.DescribeId],
-                Name: MonsterDescribes[t.DescribeId].Name || i18nWithKey(t.NameTextMapHash),
-                Type: t.Type,
-                SecurityLevel: t.SecurityLevel,
-                Id: t.Id,
+                ...MonsterDescribes[t.describeId],
+                Name: MonsterDescribes[t.describeId].Name || i18nWithKey(t.nameTextMapHash),
+                Type: t.type,
+                SecurityLevel: t.securityLevel,
+                Id: t.id,
                 AddProps: {
-                    FIGHT_PROP_ENEMY_FIRE_SUB_HURT: t.ElecSubHurt,
-                    FIGHT_PROP_ENEMY_ROCK_SUB_HURT: t.ElecSubHurt,
-                    FIGHT_PROP_ENEMY_ELEC_SUB_HURT: t.ElecSubHurt,
-                    FIGHT_PROP_ENEMY_WATER_SUB_HURT: t.ElecSubHurt,
-                    FIGHT_PROP_ENEMY_GRASS_SUB_HURT: t.GrassSubHurt,
-                    FIGHT_PROP_ENEMY_ICE_SUB_HURT: t.IceSubHurt,
-                    FIGHT_PROP_ENEMY_WIND_SUB_HURT: t.WindSubHurt,
-                    FIGHT_PROP_ENEMY_PHYSICAL_SUB_HURT: t.PhysicalSubHurt,
+                    FIGHT_PROP_ENEMY_FIRE_SUB_HURT: t.fireSubHurt,
+                    FIGHT_PROP_ENEMY_ROCK_SUB_HURT: t.rockSubHurt,
+                    FIGHT_PROP_ENEMY_ELEC_SUB_HURT: t.elecSubHurt,
+                    FIGHT_PROP_ENEMY_WATER_SUB_HURT: t.waterSubHurt,
+                    FIGHT_PROP_ENEMY_GRASS_SUB_HURT: t.grassSubHurt,
+                    FIGHT_PROP_ENEMY_ICE_SUB_HURT: t.iceSubHurt,
+                    FIGHT_PROP_ENEMY_WIND_SUB_HURT: t.windSubHurt,
+                    FIGHT_PROP_ENEMY_PHYSICAL_SUB_HURT: t.physicalSubHurt,
                 },
             };
 

@@ -221,7 +221,7 @@ const loadOrSync = async (g: Grid) => {
 };
 
 const fromCSV = async (csv: string, grid: Grid) => {
-    const ret: any = {};
+    const ret: { [k:string]: any } = {};
 
     const pickList = (cell: string) => {
         return cell
@@ -346,6 +346,6 @@ export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } =
 for (const p of [Grid.Pyro, Grid.Anemo, Grid.Electro, Grid.Cryo, Grid.Hydro, Grid.Geo]) {
     Builds = {
         ...Builds,
-        ...omitBy(await fromCSV(await loadOrSync(p), p), (roles) => some(roles, (r: any) => r.Role.indexOf("WIP") > -1)),
+        ...omitBy(await fromCSV(await loadOrSync(p), p), (roles) => some(roles, (r) => r.Role.indexOf("WIP") > -1)),
     };
 }

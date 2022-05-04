@@ -19,70 +19,70 @@ export const ArtifactSets = groupOne(
     }
 
     return {
-      Id: artifactSet.SetId,
+      Id: artifactSet.setId,
       Name: affixes[0].Name,
-      EquipAffixes: artifactSet.SetNeedNum.map((v, i) => ({
+      EquipAffixes: artifactSet.setNeedNum.map((v, i) => ({
         ...affixes[i],
         ActiveWhenNum: v,
       })),
     };
   },
-  "SetId",
+  "setId",
 );
 
 export const ArtifactSetsByKey = mapKeys(ArtifactSets, (s) => s.Name.KEY);
 
 export const ArtifactAppendPropDepots = mapValues(
-  groupBy(ReliquaryAffixExcelConfigData, (a) => a.DepotId),
+  groupBy(ReliquaryAffixExcelConfigData, (a) => a.depotId),
   (artifactAffixDepots) =>
     reduce(
       artifactAffixDepots,
       (ret, c) => ({
         ...ret,
-        [c.PropType]: [...(ret[c.PropType] || []), c.PropValue],
+        [c.propType]: [...(ret[c.propType] || []), c.propValue],
       }),
       {} as Record<string, number[]>,
     ),
 );
 
-export const ArtifactMainPropDepots = groupMulti(ReliquaryMainPropExcelConfigData, (d) => d.PropType, "PropDepotId");
+export const ArtifactMainPropDepots = groupMulti(ReliquaryMainPropExcelConfigData, (d) => d.propType, "propDepotId");
 
 const artifactLevelExcelConfigData = ReliquaryLevelExcelConfigData;
 
 export const ArtifactLevelupExps = new Array(5)
   .fill(0)
-  .map((_, idx) => artifactLevelExcelConfigData.filter((a) => a.Rank == idx + 1).map((v) => v.Exp || 0));
+  .map((_, idx) => artifactLevelExcelConfigData.filter((a) => a.rank == idx + 1).map((v) => v.exp || 0));
 
 export const ArtifactLevelupMainPropValues = new Array(5)
   .fill(0)
-  .map((_, idx) => artifactLevelExcelConfigData.filter((a) => a.Rank == idx + 1).map((v) => addPropSet(v.AddProps)));
+  .map((_, idx) => artifactLevelExcelConfigData.filter((a) => a.rank == idx + 1).map((v) => addPropSet(v.addProps)));
 
 export const Artifacts = mapKeys(
   mapKeys(
     groupOne(
       ReliquaryExcelConfigData,
       (a) => {
-        if (!a.SetId || !ArtifactSets[a.SetId]) {
+        if (!a.setId || !ArtifactSets[a.setId]) {
           return null;
         }
 
-        const set = ArtifactSets[a.SetId];
+        const set = ArtifactSets[a.setId];
 
         if (set.Name.CHS == "冰之川与雪之砂") {
           return null;
         }
 
-        if (a.RankLevel === 5) {
-          if (i18nWithKey(a.NameTextMapHash).CHS.startsWith("祭")) {
+        if (a.rankLevel === 5) {
+          if (i18nWithKey(a.nameTextMapHash).CHS.startsWith("祭")) {
             return null;
           }
-          if (`${a.SetId}`[1] == "0") {
+          if (`${a.setId}`[1] == "0") {
             return null;
           }
         }
 
-        const name = i18nWithKey(a.NameTextMapHash);
-        const desc = i18n(a.DescTextMapHash);
+        const name = i18nWithKey(a.nameTextMapHash);
+        const desc = i18n(a.descTextMapHash);
 
         if (name.CHS.startsWith("测试") || desc.CHS == "") {
           return null;
@@ -93,19 +93,19 @@ export const Artifacts = mapKeys(
         }
 
         return {
-          Id: a.Id,
-          EquipType: a.EquipType,
-          Rarity: a.RankLevel,
+          Id: a.id,
+          EquipType: a.equipType,
+          Rarity: a.rankLevel,
           Name: name,
           Desc: desc,
-          MaxLevel: a.MaxLevel,
-          SetKey: ArtifactSets[a.SetId].Name.KEY,
-          AppendPropNum: a.AppendPropNum,
-          MainPropDepotId: a.MainPropDepotId,
-          AppendPropDepotId: a.AppendPropDepotId,
+          MaxLevel: a.maxLevel,
+          SetKey: ArtifactSets[a.setId].Name.KEY,
+          AppendPropNum: a.appendPropNum,
+          MainPropDepotId: a.mainPropDepotId,
+          AppendPropDepotId: a.appendPropDepotId,
         };
       },
-      "Id",
+      "id",
     ),
     (a) => `${a.Name.KEY}/${a.Rarity}`,
   ),
