@@ -1,4 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
@@ -20,10 +23,7 @@ class PageArtifactList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var uid = BlocAuth
-        .watch(context)
-        .state
-        .chosenUid();
+    var uid = BlocAuth.watch(context).state.chosenUid();
     var blocGameData = BlocGameData.watch(context);
     var equipTypes = EquipType.values;
 
@@ -40,24 +40,19 @@ class PageArtifactList extends HookWidget {
           children: [
             TabBar(
               isScrollable: true,
-              labelColor: Theme
-                  .of(context)
-                  .primaryColor,
-              indicatorColor: Theme
-                  .of(context)
-                  .primaryColor,
+              labelColor: Theme.of(context).primaryColor,
+              indicatorColor: Theme.of(context).primaryColor,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: [
                 ...equipTypes.map(
-                      (et) =>
-                      Tab(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          child: Text(et.label()),
-                        ),
+                  (et) => Tab(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
                       ),
+                      child: Text(et.label()),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -77,6 +72,9 @@ class PageArtifactList extends HookWidget {
                             onTap: () {
                               PageArtifactAdd.show(context, et);
                             },
+                            onLongPress: () {
+                              _import(context);
+                            },
                             title: Row(
                               children: const [
                                 SizedBox(
@@ -86,7 +84,7 @@ class PageArtifactList extends HookWidget {
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.symmetric(horizontal: 8.0),
+                                      EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Text(
                                     "表示词条个数, 颜色分别代表数值档位",
                                     style: TextStyle(fontSize: 10),
@@ -125,6 +123,90 @@ class PageArtifactList extends HookWidget {
       ),
     );
   }
+
+  _import(BuildContext context) {
+    var uid = BlocAuth.read(context).state.chosenUid();
+    var blocGameData = BlocGameData.read(context);
+    var characters = blocGameData.db.character;
+
+    showAlert(
+      context,
+      content: Text("是否开始批量导入?\n此操作不可逆转，现有圣遗物会被清空\n"),
+      onConfirm: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['json'],
+          withData: true,
+        );
+        var artifacts = [];
+        if (result != null) {
+          PlatformFile file = result.files.first;
+
+          var convert = (Uint8List? l) {
+            if (l != null) {
+              Uint8List nonNullTerminated = l;
+              if (l.last == 0) {
+                nonNullTerminated =
+                    new Uint8List.view(l.buffer, l.offsetInBytes, l.length - 1);
+              }
+              return utf8.decode(nonNullTerminated, allowMalformed: true);
+            } else
+              return "";
+          };
+
+          Map<String, dynamic> json = jsonDecode(convert(file.bytes));
+
+          if (json.keys.contains("artifacts")) {
+            //GOOD format
+            //export by Amenoma https://github.com/daydreaming666/Amenoma
+            artifacts = json["artifacts"];
+          } else if (json.keys.contains("feather")) {
+            //mona-uranai format
+            //export by YAS https://github.com/wormtql/yas
+            artifacts = (json["flower"] +
+                    json["feather"] +
+                    json["sand"] +
+                    json["cup"] +
+                    json["head"])
+                .map((artifact) => <String, dynamic>{
+                      "setKey": _mona2GOODMap[artifact["setName"]],
+                      "slotKey": _mona2GOODMap[artifact["position"]],
+                      "level": artifact["level"],
+                      "rarity": artifact["star"],
+                      "mainStatKey": _mona2GOODMap[artifact["mainTag"]["name"]],
+                      "location":
+                          characters.getCharacterKey(artifact["equip"]) ?? "",
+                      "lock": artifact["omit"] as bool? ?? false,
+                      "substats": (artifact['normalTags'] as List<dynamic>)
+                          .map((e) => <String, dynamic>{
+                                "key": _mona2GOODMap[e["name"]],
+                                "value": double.parse(
+                                            e["value"].toStringAsFixed(3)) <
+                                        1
+                                    ? e["value"] * 100
+                                    : e["value"]
+                              })
+                          .toList()
+                    })
+                .toList();
+          } else {
+            //MingyuLab format
+            //export by Amenoma https://github.com/daydreaming666/Amenoma
+          }
+          blocGameData.importArtifacts(
+              uid, artifacts.map((e) => GOODArtifact.fromJson(e)).toList());
+        }
+        final snackBar = SnackBar(
+          content: Text.rich(TextSpan(children: [
+            const TextSpan(text: "批量导入成功，共导入"),
+            TextSpan(text: artifacts.length.toString()),
+            const TextSpan(text: "个圣遗物"),
+          ])),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+    );
+  }
 }
 
 class GOODArtifactCard extends HookWidget {
@@ -139,43 +221,34 @@ class GOODArtifactCard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var uid = BlocAuth
-        .watch(context)
-        .state
-        .chosenUid();
+    var uid = BlocAuth.watch(context).state.chosenUid();
     var bloc = BlocGameData.read(context);
-    var db = BlocGameData
-        .read(context)
-        .db;
+    var db = BlocGameData.read(context).db;
 
     var a = db.artifact
         .findSet(artifact.setKey)
         .artifact(artifact.slotKey.asEquipType());
 
     var builds = db.character.findOrNull(artifact.location)?.let(
-          (c) =>
-          c.characterBuildFor(
-              bloc
-                  .playerState(uid)
-                  .character(artifact.location)
-                  .role),
-    );
+          (c) => c.characterBuildFor(
+              bloc.playerState(uid).character(artifact.location).role),
+        );
 
     var fightProps = db.character.findOrNull(artifact.location)?.let((cc) {
-      var c = bloc.findCharacterWithState(uid, cc.key);
+          var c = bloc.findCharacterWithState(uid, cc.key);
 
-      return db.character
-          .fightProps(
-        c.c.key,
-        c.c.level,
-        c.c.constellation,
-      )
-          .merge(db.weapon.fightProps(
-        c.w.key,
-        c.w.level,
-        c.w.refinement,
-      ));
-    }) ??
+          return db.character
+              .fightProps(
+                c.c.key,
+                c.c.level,
+                c.c.constellation,
+              )
+              .merge(db.weapon.fightProps(
+                c.w.key,
+                c.w.level,
+                c.w.refinement,
+              ));
+        }) ??
         FightProps({});
 
     var appendDepot = db.artifact.artifactAppendDepot(a.key);
@@ -183,9 +256,8 @@ class GOODArtifactCard extends HookWidget {
     double infoWidth = 50;
 
     return InkWell(
-      onTap: () =>
-          PageArtifactAdd.show(
-              context, artifact.slotKey.asEquipType(), artifact),
+      onTap: () => PageArtifactAdd.show(
+          context, artifact.slotKey.asEquipType(), artifact),
       onLongPress: () => _remove(context, artifact),
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -275,7 +347,7 @@ class GOODArtifactCard extends HookWidget {
                                 }
                                 if (fp == FightProp.DEFENSE_PERCENT) {
                                   return fightProps
-                                      .get(FightProp.BASE_DEFENSE) *
+                                          .get(FightProp.BASE_DEFENSE) *
                                       value;
                                 }
                                 return null;
@@ -313,20 +385,19 @@ class GOODArtifactCard extends HookWidget {
             top: -8,
             child: Column(
               children: [
-                ...?db.character.findOrNull(artifact.location)?.let((c) =>
-                [
-                  SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: GSImage(
-                      domain: "character",
-                      rarity: c.rarity,
-                      nameID: c.key,
-                      rounded: true,
-                      borderSize: 2,
-                    ),
-                  )
-                ]),
+                ...?db.character.findOrNull(artifact.location)?.let((c) => [
+                      SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: GSImage(
+                          domain: "character",
+                          rarity: c.rarity,
+                          nameID: c.key,
+                          rounded: true,
+                          borderSize: 2,
+                        ),
+                      )
+                    ]),
               ],
             ),
           ),
@@ -336,10 +407,7 @@ class GOODArtifactCard extends HookWidget {
   }
 
   _remove(BuildContext context, GOODArtifact pa) {
-    var uid = BlocAuth
-        .read(context)
-        .state
-        .chosenUid();
+    var uid = BlocAuth.read(context).state.chosenUid();
 
     showAlert(
       context,
@@ -384,9 +452,7 @@ class FightPropView extends HookWidget {
           _buildLabel(),
           DefaultTextStyle.merge(
             style: TextStyle(
-              color: Theme
-                  .of(context)
-                  .primaryColor,
+              color: Theme.of(context).primaryColor,
               fontWeight: highlight?.ifTrueOrNull(() => FontWeight.bold),
             ),
             child: Stack(
@@ -408,8 +474,8 @@ class FightPropView extends HookWidget {
                   right: 0,
                   child: Text(
                     calcValue
-                        ?.let((calc) => calc(fightProp, value))
-                        ?.let((v) => "${v.toInt()}") ??
+                            ?.let((calc) => calc(fightProp, value))
+                            ?.let((v) => "${v.toInt()}") ??
                         "",
                     style: TextStyle(
                       fontSize: 6,
@@ -450,8 +516,7 @@ class FightPropView extends HookWidget {
           ),
         ),
         ...?(n.length > 1).ifTrueOrNull(
-              () =>
-          [
+          () => [
             Positioned(
               top: -2,
               right: -4,
@@ -495,3 +560,71 @@ class FightPropView extends HookWidget {
     }
   }
 }
+
+Map<String, String> _mona2GOODMap = {
+  //name
+  'critical': 'critRate_',
+  'criticalDamage': 'critDMG_',
+  'attackStatic': 'atk',
+  'attackPercentage': 'atk_',
+  'elementalMastery': 'eleMas',
+  'recharge': 'enerRech_',
+  'lifeStatic': 'hp',
+  'lifePercentage': 'hp_',
+  'defendStatic': 'def',
+  'defendPercentage': 'def_',
+  'physicalBonus': 'physical_dmg_',
+  'cureEffect': 'heal_',
+  'rockBonus': 'geo_dmg_',
+  'windBonus': 'anemo_dmg_',
+  'iceBonus': 'cryo_dmg_',
+  'waterBonus': 'hydro_dmg_',
+  'fireBonus': 'pyro_dmg_',
+  'thunderBonus': 'electro_dmg_',
+  //slotKey
+  'flower': 'flower',
+  'feather': 'plume',
+  'sand': 'sands',
+  'cup': 'goblet',
+  'head': 'circlet',
+  //setKey
+  'archaicPetra': 'ArchaicPetra',
+  'blizzardStrayer': 'BlizzardStrayer',
+  'bloodstainedChivalry': 'BloodstainedChivalry',
+  'crimsonWitch': 'CrimsonWitchOfFlames',
+  'gladiatorFinale': 'GladiatorsFinale',
+  'heartOfDepth': 'HeartOfDepth',
+  'lavaWalker': 'Lavawalker',
+  'maidenBeloved': 'MaidenBeloved',
+  'noblesseOblige': 'NoblesseOblige',
+  'retracingBolide': 'RetracingBolide',
+  'thunderSmoother': 'Thundersoother',
+  'thunderingFury': 'ThunderingFury',
+  'viridescentVenerer': 'ViridescentVenerer',
+  'wandererTroupe': 'WanderersTroupe',
+  'berserker': 'Berserker',
+  'braveHeart': 'BraveHeart',
+  'defenderWill': 'DefendersWill',
+  'exile': 'TheExile',
+  'gambler': 'Gambler',
+  'instructor': 'Instructor',
+  'martialArtist': 'MartialArtist',
+  'prayersForDestiny': 'PrayersForDestiny',
+  'prayersForIllumination': 'PrayersForIllumination',
+  'prayersForWisdom': 'PrayersForWisdom',
+  'prayersToSpringtime': 'PrayersToSpringtime',
+  'resolutionOfSojourner': 'ResolutionOfSojourner',
+  'scholar': 'Scholar',
+  'tinyMiracle': 'TinyMiracle',
+  'adventurer': 'Adventurer',
+  'luckyDog': 'LuckyDog',
+  'travelingDoctor': 'TravelingDoctor',
+  'tenacityOfTheMillelith': 'TenacityOfTheMillelith',
+  'paleFlame': 'PaleFlame',
+  'emblemOfSeveredFate': 'EmblemOfSeveredFate',
+  'shimenawaReminiscence': 'ShimenawasReminiscence',
+  'huskOfOpulentDreams': 'HuskOfOpulentDreams',
+  'oceanHuedClam': 'OceanHuedClam',
+  'EchoesOfAnOffering': 'EchoesOfAnOffering',
+  'VermillionHereafter': 'VermillionHereafter',
+};

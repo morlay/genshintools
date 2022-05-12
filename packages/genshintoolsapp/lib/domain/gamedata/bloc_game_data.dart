@@ -143,6 +143,10 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
     }
   }
 
+  void importArtifacts(int uid, List<GOODArtifact> artifacts) {
+    emit({...state, uid: playerState(uid).importArtifacts(artifacts)});
+  }
+
   void equipArtifact(int uid, GOODArtifact artifact, [GOODArtifact? value]) {
     emit({...state, uid: playerState(uid).equipArtifact(artifact, value)});
   }

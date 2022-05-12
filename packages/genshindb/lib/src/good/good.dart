@@ -131,6 +131,12 @@ class GOOD with _$GOOD {
     );
   }
 
+  GOOD importArtifacts(List<GOODArtifact> artifacts) {
+    return copyWith(
+      artifacts: artifacts,
+    );
+  }
+
   GOOD equipArtifact(GOODArtifact artifact, GOODArtifact? from) {
     if (from != null) {
       if (from.location == artifact.location) {

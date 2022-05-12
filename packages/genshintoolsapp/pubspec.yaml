@@ -25,6 +25,7 @@ dependencies:
   webview_flutter: ^3.0.0
   flutter_hooks: ^0.18.1
   rxdart: ^0.27.3
+  file_picker: ^4.3.3
 
   genshingameinfo:
     path: "../genshingameinfo"

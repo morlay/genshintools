@@ -44,6 +44,20 @@ class CharacterService with _$CharacterService {
     return characters?[_indexes[keyOrName]];
   }
 
+  String? getCharacterKey(String? keyOrName) {
+    if (keyOrName == null) return null;
+    if (_indexes.isEmpty) {
+      characters?.forEach((key, value) {
+        _indexes["${value.id}"] = value.key;
+        for (var lang in value.name.keys) {
+          _indexes[value.name.text(lang)] = value.key;
+        }
+      });
+    }
+
+    return _indexes[keyOrName];
+  }
+
   FightProps fightProps(
     String keyOrName,
     int level,
