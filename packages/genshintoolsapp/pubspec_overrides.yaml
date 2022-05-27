@@ -1,0 +1,10 @@
+# melos_managed_dependency_overrides: freearch,genshindb,genshingameinfo,webdav
+dependency_overrides:
+  freearch:
+    path: ../freearch
+  genshindb:
+    path: ../genshindb
+  genshingameinfo:
+    path: ../genshingameinfo
+  webdav:
+    path: ../webdav

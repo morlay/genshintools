@@ -1,7 +1,7 @@
 name: genshintoolsapp
 description: genshin tools app
 publish_to: 'none'
-version: 2.6.0
+version: 2.7.0
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -15,7 +15,7 @@ dependencies:
   flutter_markdown: ^0.6.8
   flutter_bloc: ^8.0.0
   provider: ^6.0.2
-  hydrated_bloc: ^8.0.0
+  hydrated_bloc: ^9.0.0-dev.2
   path_provider: ^2.0.7
   expandable: ^5.0.1
   flutter_services_binding: ^0.1.0
@@ -25,15 +25,10 @@ dependencies:
   webview_flutter: ^3.0.0
   flutter_hooks: ^0.18.1
   rxdart: ^0.27.3
-
-  genshingameinfo:
-    path: "../genshingameinfo"
-  genshindb:
-    path: "../genshindb"
-  freearch:
-    path: "../freearch"
-  webdav:
-    path: "../webdav"
+  genshingameinfo: ^1.0.0
+  genshindb: ^2.7.0
+  freearch:  ^1.0.0
+  webdav:  ^1.0.0
 
 dev_dependencies:
   dependency_validator: ^3.0.0

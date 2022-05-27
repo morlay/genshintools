@@ -12,17 +12,7 @@ import 'app_main.dart';
 import 'theme.dart';
 
 void main() async {
-  FlutterServicesBinding.ensureInitialized();
-
   try {
-    var d = kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory();
-
-    var s = await HydratedStorage.build(
-      storageDirectory: d,
-    );
-
     var syncer = WebDAVSyncer();
 
     HydratedBlocOverrides.runZoned(
@@ -31,8 +21,19 @@ void main() async {
           syncer: syncer,
         ),
       ),
-      storage: s,
       blocObserver: syncer,
+      createStorage: () async {
+        WidgetsFlutterBinding.ensureInitialized();
+
+        var d = kIsWeb
+            ? HydratedStorage.webStorageDirectory
+            : await getTemporaryDirectory();
+
+        return HydratedStorage.build(
+          storageDirectory: d,
+        );
+        ;
+      },
     );
   } catch (e) {
     log("$e");

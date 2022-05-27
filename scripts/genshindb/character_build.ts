@@ -221,7 +221,7 @@ const loadOrSync = async (g: Grid) => {
 };
 
 const fromCSV = async (csv: string, grid: Grid) => {
-    const ret: { [k:string]: any } = {};
+    const ret: { [k: string]: any } = {};
 
     const pickList = (cell: string) => {
         return cell
@@ -318,27 +318,44 @@ const fromCSV = async (csv: string, grid: Grid) => {
 };
 
 export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } = {
-    KamisatoAyato: [
+    KukiShinobu: [
         {
             Recommended: false,
-            Role: "DPS",
+            Role: "SUPPORT",
             Weapons: [
                 ["西风剑"]
             ],
             ArtifactMainPropTypes: {
                 EQUIP_SHOES: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
-                EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_WATER_ADD_HURT]],
-                EQUIP_DRESS: [FightProp[FightProp.FIGHT_PROP_CRITICAL]],
+                EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
+                EQUIP_DRESS: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
             },
             ArtifactAffixPropTypes: [
-                FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
-                FightProp[FightProp.FIGHT_PROP_ATTACK],
                 FightProp[FightProp.FIGHT_PROP_CHARGE_EFFICIENCY],
-                FightProp[FightProp.FIGHT_PROP_CRITICAL],
-                FightProp[FightProp.FIGHT_PROP_CRITICAL_HURT],
+                FightProp[FightProp.FIGHT_PROP_HP_PERCENT],
             ],
-            ArtifactSetPairs: [["角斗士的终幕礼"]],
+            ArtifactSetPairs: [["千岩牢固"]],
             SkillPriority: [["E"], ["Q"]],
+        },
+    ],
+    Yelan: [
+        {
+            Recommended: false,
+            Role: "DPS",
+            Weapons: [
+                ["若水"]
+            ],
+            ArtifactMainPropTypes: {
+                EQUIP_SHOES: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
+                EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
+                EQUIP_DRESS: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
+            },
+            ArtifactAffixPropTypes: [
+                FightProp[FightProp.FIGHT_PROP_CHARGE_EFFICIENCY],
+                FightProp[FightProp.FIGHT_PROP_HP_PERCENT],
+            ],
+            ArtifactSetPairs: [["沉沦之心"]],
+            SkillPriority: [["Q"], ["E"]],
         },
     ],
 };

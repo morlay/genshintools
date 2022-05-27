@@ -148,4 +148,8 @@ enum GSMaterialType {
   @EnumMeta(label: "家具图纸")
   @JsonValue("MATERIAL_FURNITURE_FORMULA")
   FURNITURE_FORMULA,
+
+  @EnumMeta(label: "机器人")
+  @JsonValue("MATERIAL_ACTIVITY_ROBOT")
+  ACTIVITY_ROBOT
 }

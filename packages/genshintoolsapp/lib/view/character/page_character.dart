@@ -572,11 +572,9 @@ class PageCharacter extends HookWidget {
     var skillPriority =
         c.character.characterBuildFor(c.c.role).skillPriority ?? [];
 
-    var skills = c.character.skills
-      ..sort(
-        (a, b) =>
-            b.priority(skillPriority).compareTo(a.priority(skillPriority)),
-      );
+    var skills = [...c.character.skills]..sort(
+      (a, b) => b.priority(skillPriority).compareTo(a.priority(skillPriority)),
+    );
 
     return DefaultTabController(
       length: len,

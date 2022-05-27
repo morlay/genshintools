@@ -349,7 +349,7 @@ class GSImageWeaponType extends HookWidget {
 // todo make to config
 var _github = Github(
   "morlay/genshinimages",
-  "882da7db6d7424e882bbe32c6ba18d58da200878",
+  "de904750c15ea7df4a1b69aeb87877e42003aa99",
 );
 
 class GSImageProvider extends CachedNetworkImageProvider {
