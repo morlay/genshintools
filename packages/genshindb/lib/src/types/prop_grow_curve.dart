@@ -24,7 +24,7 @@ class PropGrowCurveValueSet with _$PropGrowCurveValueSet {
   ) = _PropGrowCurveValueSet;
 
   factory PropGrowCurveValueSet.fromJson(Map<String, dynamic> json) =>
-      _$PropGrowCurveValueSetFromJson({"values": json});
+      _$PropGrowCurveValueSetFromJson({'values': json});
 
   double multi(String growCurve, double initial, int level) {
     if (level < 1) {

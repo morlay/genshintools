@@ -1,8 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  errors:
+    # https://github.com/rrousselGit/freezed/issues/488
+    invalid_annotation_target: ignore
+
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-  errors:
-    invalid_annotation_target: ignore
+

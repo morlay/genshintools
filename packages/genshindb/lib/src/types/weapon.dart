@@ -31,14 +31,14 @@ class GSWeapon with _$GSWeapon {
   factory GSWeapon.fromJson(Map<String, dynamic> json) =>
       _GSWeapon.fromJson(json);
 
-  get key => name.text(Lang.KEY);
+  String get key => name.text(Lang.KEY);
 
   List<EquipAffix> weaponAffixes(int affixLevel) {
-    affixLevel = rangeLimit(affixLevel, 1, 5);
+    var l = rangeLimit(affixLevel, 1, 5);
     List<EquipAffix> picked = [];
 
     affixes.forEachIndexed((i, list) {
-      picked.add(list[affixLevel - 1]);
+      picked.add(list[l - 1]);
     });
 
     return picked;

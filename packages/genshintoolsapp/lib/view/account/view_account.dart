@@ -8,7 +8,7 @@ import 'package:genshintoolsapp/view/syncer.dart';
 import 'page_account_add.dart';
 
 class AppBarWithAccount extends AppBar {
-  static buildScaffold(
+  static Scaffold buildScaffold(
     BuildContext context,
     Widget body, {
     List<Widget>? actions,
@@ -36,12 +36,10 @@ class AppBarWithAccount extends AppBar {
           title: BlocBuilder<BlocAuth, AuthState>(builder: (context, state) {
             return Row(
               children: [
-                state.hasLogon()
-                    ? ViewGameRole(gameRole: state.currentGameRole)
-                    : const Text("请添加游戏账号"),
+                if (state.hasLogon()) ViewGameRole(gameRole: state.currentGameRole) else const Text('请添加游戏账号'),
               ],
             );
-          }),
+          },),
         );
 }
 
@@ -70,8 +68,8 @@ class ViewGameRole extends HookWidget {
         ),
         Text.rich(
           TextSpan(children: [
-            TextSpan(text: "${gameRole.regionName} / ${gameRole.gameUid}"),
-          ]),
+            TextSpan(text: '${gameRole.regionName} / ${gameRole.gameUid}'),
+          ],),
           style: const TextStyle(
             fontSize: 10,
           ),
@@ -99,11 +97,11 @@ class CommonDrawer extends HookWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Expanded(child: Text("")),
+                Expanded(child: Text('')),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    "原神工具箱",
+                    '原神工具箱',
                     style: TextStyle(color: Colors.white, fontSize: 22),
                   ),
                 )
@@ -148,7 +146,7 @@ class CommonDrawer extends HookWidget {
           ),
         ],
       );
-    });
+    },);
   }
 
   _removeAccount(BuildContext context, GameRole role) {
@@ -158,16 +156,16 @@ class CommonDrawer extends HookWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text("是否解除游戏账户 ${role.nickname}(${role.gameUid}) 的关联?"),
+          content: Text('是否解除游戏账户 ${role.nickname}(${role.gameUid}) 的关联?'),
           actions: [
             TextButton(
-              child: const Text("取消"),
+              child: const Text('取消'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text("确定"),
+              child: const Text('确定'),
               onPressed: () {
                 blocAuth.removeAccount(role.gameUid);
                 Navigator.of(context).pop();

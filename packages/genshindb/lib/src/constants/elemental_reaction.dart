@@ -11,28 +11,28 @@ class ElementalReactionStringConverter
 
 @JsonEnum(alwaysCreate: true)
 enum ElementalReaction {
-  @EnumMeta(label: "融化")
+  @EnumMeta(label: '融化')
   Melt,
 
-  @EnumMeta(label: "蒸发")
+  @EnumMeta(label: '蒸发')
   Vaporize,
 
-  @EnumMeta(label: "扩散")
+  @EnumMeta(label: '扩散')
   Swirl,
 
-  @EnumMeta(label: "超导")
+  @EnumMeta(label: '超导')
   SuperConduct,
 
-  @EnumMeta(label: "感电")
+  @EnumMeta(label: '感电')
   ElectroCharged,
 
-  @EnumMeta(label: "超载")
+  @EnumMeta(label: '超载')
   Overloaded,
 
-  @EnumMeta(label: "碎冰")
+  @EnumMeta(label: '碎冰')
   Shattered,
 
-  @EnumMeta(label: "结晶")
+  @EnumMeta(label: '结晶')
   Crystallize,
 }
 

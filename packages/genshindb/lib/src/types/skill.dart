@@ -65,7 +65,7 @@ class InherentSkill with _$InherentSkill {
   }
 }
 
-minLevelFromBreakLevel(int level) {
+int minLevelFromBreakLevel(int level) {
   switch (level) {
     case 5:
       return 81;
@@ -78,4 +78,5 @@ minLevelFromBreakLevel(int level) {
     case 1:
       return 1;
   }
+  return 1;
 }

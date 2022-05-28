@@ -9,23 +9,23 @@ class EquipTypeStringConverter extends _$EquipTypeStringConverter {
 
 @JsonEnum(alwaysCreate: true)
 enum EquipType {
-  @EnumMeta(label: "花")
-  @JsonValue("EQUIP_BRACER")
+  @EnumMeta(label: '花')
+  @JsonValue('EQUIP_BRACER')
   BRACER,
 
-  @EnumMeta(label: "羽")
-  @JsonValue("EQUIP_NECKLACE")
+  @EnumMeta(label: '羽')
+  @JsonValue('EQUIP_NECKLACE')
   NECKLACE,
 
-  @EnumMeta(label: "沙")
-  @JsonValue("EQUIP_SHOES")
+  @EnumMeta(label: '沙')
+  @JsonValue('EQUIP_SHOES')
   SHOES,
 
-  @EnumMeta(label: "杯")
-  @JsonValue("EQUIP_RING")
+  @EnumMeta(label: '杯')
+  @JsonValue('EQUIP_RING')
   RING,
 
-  @EnumMeta(label: "头")
-  @JsonValue("EQUIP_DRESS")
+  @EnumMeta(label: '头')
+  @JsonValue('EQUIP_DRESS')
   DRESS,
 }

@@ -13,13 +13,12 @@ import 'view_fight_props.dart';
 import 'view_skill.dart';
 
 class PageCharacter extends HookWidget {
-  static String routeName = "/character";
+  static String routeName = '/character';
 
   static void show(BuildContext context, int id) {
     Navigator.of(context).push(
       CupertinoPageRoute(
         settings: RouteSettings(name: PageCharacter.routeName),
-        fullscreenDialog: false,
         builder: (context) => PageCharacter(id: id),
       ),
     );
@@ -35,7 +34,7 @@ class PageCharacter extends HookWidget {
     var blocGameData = BlocGameData.watch(context);
     var db = blocGameData.db;
 
-    var current = blocGameData.findCharacterWithState(uid, "$id");
+    var current = blocGameData.findCharacterWithState(uid, '$id');
 
     var builds = current.character.characterBuildFor(current.c.role);
 
@@ -50,13 +49,13 @@ class PageCharacter extends HookWidget {
                 TalentType.skill: 9,
                 TalentType.burst: 9,
               },
-              constellation: current.character.rarity == 4 ? 6 : 0),
+              constellation: current.character.rarity == 4 ? 6 : 0,),
       w: current.c.own
           ? current.w
           : current.w.copyWith(
               level: 90,
               key: db.weapon
-                      .findOrNull(builds.weapons?.first.getOrNull(0) ?? "")
+                      .findOrNull(builds.weapons?.first.getOrNull(0) ?? '')
                       ?.key ??
                   current.w.key,
             ),
@@ -65,15 +64,15 @@ class PageCharacter extends HookWidget {
           : current.graduatedArtifacts(db.artifact, defaultArtifacts: [
               ...db.artifact
                   .buildArtifactsBySetPair(
-                    builds.artifactSetPairs?[0] ?? ["角斗士的终幕礼"],
+                    builds.artifactSetPairs?[0] ?? ['角斗士的终幕礼'],
                     builds,
                   )
                   .map((a) =>
                       current.artifacts
                           .firstWhereOrNull((e) => e.slotKey == a.slotKey) ??
-                      a)
+                      a,)
                   .map((a) => a.copyWith(level: 20))
-            ]),
+            ],),
     );
 
     var characterValueNotifier = useState(current);
@@ -82,14 +81,16 @@ class PageCharacter extends HookWidget {
       characterValueNotifier.value = characterValueNotifier.value.copyWith(
         artifacts: current.artifacts,
       );
-    }, [current.artifacts.map((e) => e.toString()).join("|")]);
+      return null;
+    }, [current.artifacts.map((e) => e.toString()).join('|')],);
 
     useEffect(() {
       characterValueNotifier.value = characterValueNotifier.value.copyWith(
           c: characterValueNotifier.value.c.copyWith(
         role: current.c.role,
-      ));
-    }, [current.c.role]);
+      ),);
+      return null;
+    }, [current.c.role],);
 
     var c = characterValueNotifier.value;
 
@@ -144,7 +145,7 @@ class PageCharacter extends HookWidget {
                         ),
                         child: MarkdownBody(
                           onTapLink: (name, href, title) {
-                            href?.let((it) => launch(it));
+                            href?.let((h) => launchUrl(Uri.parse(h)));
                           },
                           styleSheet: Theme.of(context).let(
                             (theme) =>
@@ -154,10 +155,10 @@ class PageCharacter extends HookWidget {
                               ),
                             ),
                           ),
-                          data: """
+                          data: '''
 双暴词条练度评分采用 [18+6 算法](https://ngabbs.com/read.php?tid=29797262);
 配装参考数据来自 [Genshin Impact Helper Team](https://heystacks.org/doc/743/genshin-impact-general-character-strats)
-""",
+''',
                         ),
                       )
                     ],
@@ -174,7 +175,6 @@ class PageCharacter extends HookWidget {
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(
-                  width: 1,
                   color: Theme.of(context).focusColor,
                 ),
               ),
@@ -186,7 +186,7 @@ class PageCharacter extends HookWidget {
                   collapsed: ExpandableButton(
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Center(child: Text("展开配置")),
+                      child: Center(child: Text('展开配置')),
                     ),
                   ),
                   expanded: Column(
@@ -194,7 +194,7 @@ class PageCharacter extends HookWidget {
                       ExpandableButton(
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Center(child: Text("收起配置")),
+                          child: Center(child: Text('收起配置')),
                         ),
                       ),
                       _buildSettings(context, uid, characterValueNotifier)
@@ -237,7 +237,7 @@ class PageCharacter extends HookWidget {
     var s = cvn.value;
 
     Map<String, Widget> sliders = {
-      "全局 buff": GridView(
+      '全局 buff': GridView(
         padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 100,
@@ -261,14 +261,14 @@ class PageCharacter extends HookWidget {
               child: Card(
                 color: s.hasBuff(e) ? Theme.of(context).focusColor : null,
                 child: Center(
-                  child: Text(e.name ?? ""),
+                  child: Text(e.name ?? ''),
                 ),
               ),
             ),
           )
         ],
       ),
-      "角色等级": Slider(
+      '角色等级': Slider(
         value: s.c.level.toDouble(),
         min: 1,
         max: 90,
@@ -281,9 +281,8 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "角色命座": Slider(
+      '角色命座': Slider(
         value: s.c.constellation.toDouble(),
-        min: 0,
         max: 6,
         divisions: 6,
         onChanged: (double value) {
@@ -294,7 +293,7 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "${SkillType.NORMAL_ATTACK.label()}等级": Slider(
+      '${SkillType.NORMAL_ATTACK.label()}等级': Slider(
         value: s.c.skillLevel(SkillType.NORMAL_ATTACK).toDouble(),
         min: 1,
         max: 10,
@@ -310,7 +309,7 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "${SkillType.ELEMENTAL_SKILL.label()}等级": Slider(
+      '${SkillType.ELEMENTAL_SKILL.label()}等级': Slider(
         value: s.c.skillLevel(SkillType.ELEMENTAL_SKILL).toDouble(),
         min: 1,
         max: 10,
@@ -326,7 +325,7 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "${SkillType.ELEMENTAL_BURST.label()}等级": Slider(
+      '${SkillType.ELEMENTAL_BURST.label()}等级': Slider(
         value: s.c.skillLevel(SkillType.ELEMENTAL_BURST).toDouble(),
         min: 1,
         max: 10,
@@ -342,7 +341,7 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "武器等级": Slider(
+      '武器等级': Slider(
         value: s.w.level.toDouble(),
         min: 1,
         max: 90,
@@ -355,7 +354,7 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "武器精炼": Slider(
+      '武器精炼': Slider(
         value: s.w.refinement.toDouble(),
         min: 1,
         max: 5,
@@ -368,9 +367,8 @@ class PageCharacter extends HookWidget {
           );
         },
       ),
-      "圣遗物等级": Slider(
+      '圣遗物等级': Slider(
         value: s.artifacts.getOrNull(0)?.level.toDouble() ?? 0,
-        min: 0,
         max: 20,
         divisions: 5,
         onChanged: (double value) {
@@ -403,8 +401,8 @@ class PageCharacter extends HookWidget {
               tabs: [
                 ...sliders.keys.map(
                   (key) => Tab(
-                    child: Text(key, style: const TextStyle(fontSize: 11)),
                     height: 24,
+                    child: Text(key, style: const TextStyle(fontSize: 11)),
                   ),
                 ),
               ],
@@ -440,7 +438,7 @@ class PageCharacter extends HookWidget {
         weapon: db.weapon.find(current.w.key),
         level: c.w.level,
         refinement: c.w.refinement,
-        backup: "当前配装",
+        backup: '当前配装',
       ),
       ...?builds.weapons?.let((weapons) => weapons.expandIndexed(
             (i, list) => list.map((e) => WeaponListTile(
@@ -448,9 +446,9 @@ class PageCharacter extends HookWidget {
                   weapon: db.weapon.find(e),
                   level: c.w.level,
                   refinement: c.w.refinement,
-                  backup: "强度 ${weapons.length - i + (10 - weapons.length)}",
-                )),
-          )),
+                  backup: '强度 ${weapons.length - i + (10 - weapons.length)}',
+                ),),
+          ),),
     ];
 
     return Padding(
@@ -464,7 +462,7 @@ class PageCharacter extends HookWidget {
             alignment: WrapAlignment.center,
             children: [
               Select<String>(
-                title: const Text("角色定位切换"),
+                title: const Text('角色定位切换'),
                 options: c.character.characterBuilds?.keys.toList() ?? [],
                 value: c.c.role,
                 onSelected: (role) {
@@ -484,7 +482,7 @@ class PageCharacter extends HookWidget {
                       }
                     },
                     child: Text(
-                      builds.role ?? "",
+                      builds.role ?? '',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -500,7 +498,7 @@ class PageCharacter extends HookWidget {
                     selected: c.c.role == item.value,
                     trailing: c
                         .character.characterBuilds?[item.value]?.recommended
-                        ?.ifTrueOrNull(() => const Text("推荐")),
+                        ?.ifTrueOrNull(() => const Text('推荐')),
                     onTap: () {
                       item.select();
                     },
@@ -515,7 +513,7 @@ class PageCharacter extends HookWidget {
                 },
               ),
               Select<WeaponListTile>(
-                title: const Text("武器"),
+                title: const Text('武器'),
                 value: weapons.firstWhereOrNull((w) => w.weapon.key == c.w.key),
                 onSelected: (w) {
                   state.value = c.copyWith(
@@ -535,7 +533,7 @@ class PageCharacter extends HookWidget {
                 },
                 tileBuilder: (context, selected) {
                   return GestureDetector(
-                    child: selected.value ?? const Text(""),
+                    child: selected.value ?? const Text(''),
                     onTap: () {
                       selected.showOptions(context);
                     },
@@ -590,19 +588,17 @@ class PageCharacter extends HookWidget {
             tabs: [
               ...skills.map(
                 (skill) => Tab(
+                  height: 24,
                   child: Text(
                     [
-                      skill.skillType.string() != ""
-                          ? "${skill.skillType.string()}.${fightProps.fixSkillLevel(skill.skillType, c.c.skillLevel(skill.skillType))}"
-                              .toString()
-                          : "",
+                      if (skill.skillType.string() != '') '${skill.skillType.string()}.${fightProps.fixSkillLevel(skill.skillType, c.c.skillLevel(skill.skillType))}'
+                              .toString() else '',
                       skill.name.text(Lang.CHS),
-                    ].where((s) => s != "").join(" "),
+                    ].where((s) => s != '').join(' '),
                     style: const TextStyle(
                       fontSize: 11,
                     ),
                   ),
-                  height: 24,
                 ),
               ),
               ...c.character.inherentSkills.map(
@@ -682,7 +678,7 @@ class PageCharacter extends HookWidget {
               child: Image(
                 height: 160,
                 image: GSImageProvider(
-                  domain: "character",
+                  domain: 'character',
                   nameID: c.character.key,
                 ),
               ),
@@ -707,7 +703,6 @@ class PageCharacter extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           GSImageElement(
                             size: 28,
@@ -744,11 +739,11 @@ class PageCharacter extends HookWidget {
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
-                            builder: (context) => (SingleChildScrollView(
+                            builder: (context) => SingleChildScrollView(
                               child: SafeArea(
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                      const EdgeInsets.symmetric(vertical: 8),
                                   child: Column(children: [
                                     ...c.character.constellations.map((e) {
                                       return ListTile(
@@ -769,10 +764,10 @@ class PageCharacter extends HookWidget {
                                         ),
                                       );
                                     })
-                                  ]),
+                                  ],),
                                 ),
                               ),
-                            )),
+                            ),
                           );
                         },
                         child: SizedBox(

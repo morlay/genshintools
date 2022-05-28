@@ -33,19 +33,19 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
     };
 
     return PlayerArtifactBuild(
-      builds: HashMap.of(({...?(json["builds"] as Map<String, dynamic>?), ...v})
+      builds: HashMap.of({...?json['builds'] as Map<String, dynamic>?, ...v}
           .map((key, value) {
         var pa = PlayerArtifact.fromJson(key);
         var usedBy = pa.usedBy != 0 ? pa.usedBy : value;
 
         return MapEntry(pa.copyWith(usedBy: usedBy), usedBy);
-      })),
+      }),),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "builds": builds.map((key, value) => MapEntry(key.toJson(), value))
+      'builds': builds.map((key, value) => MapEntry(key.toJson(), value))
     };
   }
 
@@ -56,7 +56,7 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
   Iterable<PlayerArtifact> allArtifacts() {
     List<PlayerArtifact> list = [];
 
-    for (var pa in builds.keys) {
+    for (final pa in builds.keys) {
       list.add(pa.copyWith(usedBy: builds[pa]!));
     }
 
@@ -76,7 +76,7 @@ class PlayerArtifactBuild with _$PlayerArtifactBuild {
       }
     }
 
-    for (var pa in builds.keys) {
+    for (final pa in builds.keys) {
       if (pa != newPa &&
           builds[pa] == newPa.usedBy &&
           pa.equipType == newPa.equipType) {

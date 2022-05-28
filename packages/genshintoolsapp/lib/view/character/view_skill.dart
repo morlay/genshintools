@@ -22,15 +22,15 @@ class ViewSkillValues extends HookWidget {
   Widget build(BuildContext context) {
     var finalFightProps = fightProps.merge(FightProps({
       FightProp.ENEMY_LEVEL: 93,
-      ...?BlocGameData.read(context).db.enemy.find("急冻树").addProps?.fightProps,
+      ...?BlocGameData.read(context).db.enemy.find('急冻树').addProps?.fightProps,
       FightProp.ENEMY_ICE_SUB_HURT: 0.1,
-    }, name: "爆炎/急冻树"));
+    }, name: '爆炎/急冻树',),);
 
     return Wrap(
       runSpacing: 8,
       children: [
         ...?skill.paramNames?.map((p) {
-          var parts = p.text(Lang.CHS).split("|");
+          var parts = p.text(Lang.CHS).split('|');
 
           return Column(
             children: [
@@ -72,7 +72,6 @@ class ViewSkillValues extends HookWidget {
                     (e) => Row(
                       children: [
                         Expanded(
-                          flex: 1,
                           child: DefaultTextStyle.merge(
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -94,8 +93,8 @@ class ViewSkillValues extends HookWidget {
   }
 
   Iterable<Widget> _skillValues(BuildContext ctx, String label, String t,
-      List<double> params, FightProps fightProps) {
-    if (label == "元素能量") {
+      List<double> params, FightProps fightProps,) {
+    if (label == '元素能量') {
       var b = fightProps.calc(t, params);
       var c = fightProps.get(FightProp.CHARGE_EFFICIENCY);
 
@@ -104,11 +103,11 @@ class ViewSkillValues extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "前台 (异/无/同)",
+              '前台 (异/无/同)',
               style: TextStyle(fontSize: 8),
             ),
             Text(
-              "${(b / (c * 1 / 3)).toStringAsFixed(0)} / ${(b / (c * 2 / 3)).toStringAsFixed(0)} / ${(b / c).toStringAsFixed(0)}",
+              '${(b / (c * 1 / 3)).toStringAsFixed(0)} / ${(b / (c * 2 / 3)).toStringAsFixed(0)} / ${(b / c).toStringAsFixed(0)}',
             )
           ],
         ),
@@ -116,22 +115,22 @@ class ViewSkillValues extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "后台 (异/无/同)",
+              '后台 (异/无/同)',
               style: TextStyle(fontSize: 8),
             ),
             Text(
-              "${(b / (c * 1 / 3 * 0.6)).toStringAsFixed(0)} / ${(b / (c * 2 / 3 * 0.6)).toStringAsFixed(0)} / ${(b / (c * 0.6)).toStringAsFixed(0)}",
+              '${(b / (c * 1 / 3 * 0.6)).toStringAsFixed(0)} / ${(b / (c * 2 / 3 * 0.6)).toStringAsFixed(0)} / ${(b / (c * 0.6)).toStringAsFixed(0)}',
             )
           ],
         )
       ];
     }
 
-    if (t.endsWith("普通攻击伤害")) {
+    if (t.endsWith('普通攻击伤害')) {
       return [];
     }
 
-    if (label.endsWith("攻击力加成比例")) {
+    if (label.endsWith('攻击力加成比例')) {
       return [
         BuffList(
           fightProps: fightProps,
@@ -142,13 +141,13 @@ class ViewSkillValues extends HookWidget {
       ];
     }
 
-    if (label.endsWith("继承生命")) {
+    if (label.endsWith('继承生命')) {
       return [
-        Text(fightProps.calc(t + "生命值上限", params).toStringAsFixed(0)),
+        Text(fightProps.calc('$t生命值上限', params).toStringAsFixed(0)),
       ];
     }
 
-    if (label.endsWith("攻击力提高") || label.endsWith("伤害值提升")) {
+    if (label.endsWith('攻击力提高') || label.endsWith('伤害值提升')) {
       return [
         BuffList(
           fightProps: fightProps,
@@ -162,7 +161,7 @@ class ViewSkillValues extends HookWidget {
       ];
     }
 
-    if (label.endsWith("吸收量") || label.endsWith("吸收量上限")) {
+    if (label.endsWith('吸收量') || label.endsWith('吸收量上限')) {
       return [
         BuffList(
           fightProps: fightProps,
@@ -170,13 +169,13 @@ class ViewSkillValues extends HookWidget {
             Colors.brown,
             Text((fightProps.calc(t, params) *
                     (1 + fightProps.get(FightProp.SHIELD_COST_MINUS_RATIO)))
-                .toStringAsFixed(0)),
+                .toStringAsFixed(0),),
           ),
         )
       ];
     }
 
-    if (label.contains("治疗")) {
+    if (label.contains('治疗')) {
       return [
         BuffList(
           fightProps: fightProps,
@@ -184,25 +183,25 @@ class ViewSkillValues extends HookWidget {
             Colors.green,
             Text((fightProps.calc(t, params) *
                     (1 + fightProps.get(FightProp.HEAL_ADD)))
-                .toStringAsFixed(0)),
+                .toStringAsFixed(0),),
           ),
         ),
       ];
     }
 
-    if ((label.contains("伤害") && !label.contains("提升")) ||
-        label.contains("射击")) {
+    if ((label.contains('伤害') && !label.contains('提升')) ||
+        label.contains('射击')) {
       var base = FightProp.ATTACK;
       var skillT = t;
 
-      if (t.contains("防御力")) {
+      if (t.contains('防御力')) {
         base = FightProp.DEFENSE;
-        skillT = t.replaceAll("防御力", "");
+        skillT = t.replaceAll('防御力', '');
       }
 
-      if (t.contains("生命值上限")) {
+      if (t.contains('生命值上限')) {
         base = FightProp.HP;
-        skillT = t.replaceAll("生命值上限", "");
+        skillT = t.replaceAll('生命值上限', '');
       }
 
       var skillVal = SkillVal(skillT, base: base, params: params);
@@ -220,9 +219,9 @@ class ViewSkillValues extends HookWidget {
           hurtType = HurtType.ElementalSkill;
           break;
         default:
-          if (label.contains("下坠期间伤害") || label.contains("坠地冲击伤害")) {
+          if (label.contains('下坠期间伤害') || label.contains('坠地冲击伤害')) {
             hurtType = HurtType.PlungingAttack;
-          } else if (label.contains("段伤害")) {
+          } else if (label.contains('段伤害')) {
             hurtType = HurtType.NormalAttack;
           } else {
             hurtType = HurtType.ChangedAttack;
@@ -356,7 +355,7 @@ class ViewSkillValues extends HookWidget {
     var characterName = characterWithState.character.name.text(Lang.CHS);
 
     switch (characterName) {
-      case "宵宫":
+      case '宵宫':
         if (hurtType == HurtType.NormalAttack) {
           var paramsOfE = characterWithState.character.skills
               .firstWhere((e) => e.skillType == SkillType.ELEMENTAL_SKILL)
@@ -370,8 +369,8 @@ class ViewSkillValues extends HookWidget {
           return fn(
             fightProps.merge(FightProps({
               FightProp.NORMAL_ATTACK_RADIO: paramsOfE[3],
-            }, name: "炽焰箭")),
-          ).map((e) => withPrefix("E", e));
+            }, name: '炽焰箭',),),
+          ).map((e) => withPrefix('E', e));
         }
         return fn(fightProps);
       default:
@@ -384,13 +383,13 @@ class ViewSkillValues extends HookWidget {
                 ?.let(
                   (skill) => skill.paramNames
                       ?.firstWhereOrNull(
-                        (e) => e.text(Lang.CHS).contains("攻击力提高"),
+                        (e) => e.text(Lang.CHS).contains('攻击力提高'),
                       )
                       ?.let(
                         (p) => MapEntry(
                           st,
                           fightProps.calc(
-                            p.text(Lang.CHS).split("|")[1],
+                            p.text(Lang.CHS).split('|')[1],
                             skill.paramsForLevel(
                               fightProps.fixSkillLevel(
                                 st,
@@ -401,14 +400,14 @@ class ViewSkillValues extends HookWidget {
                         ),
                       ),
                 ) ??
-            MapEntry(st, 0.0));
+            MapEntry(st, 0),);
 
-        for (var st in skillAttackAdds) {
+        for (final st in skillAttackAdds) {
           var attackAdd = st.value;
 
           if (attackAdd > 0) {
             switch (characterName) {
-              case "胡桃":
+              case '胡桃':
                 attackAdd = rangeLimit(
                   attackAdd,
                   0,
@@ -417,7 +416,7 @@ class ViewSkillValues extends HookWidget {
                 return fn(
                   fightProps.merge(FightProps({
                     FightProp.ATTACK: attackAdd,
-                  }, name: "蝶引来生")),
+                  }, name: '蝶引来生',),),
                 ).map((e) => withPrefix(st.key.string(), e));
               default:
             }
@@ -459,27 +458,27 @@ Widget elementalContainer(
             children: [
               Padding(
                 padding: from?.let(
-                        (from) => const EdgeInsets.only(top: 0, left: 7)) ??
+                        (from) => const EdgeInsets.only(left: 7),) ??
                     const EdgeInsets.all(0),
                 child:
                     to?.let((to) => (to != ElementType.Physical).ifTrueOrNull(
                               () => GSImageElement(element: to, size: 14),
-                            )) ??
-                        const Text(""),
+                            ),) ??
+                        const Text(''),
               ),
               ...?from?.let((from) => [
                     Positioned(
                       left: 0,
                       child: GSImageElement(element: from, size: 14),
                     )
-                  ])
+                  ],)
             ],
           ),
         ),
         Expanded(
           child: child,
         ),
-      ]),
+      ],),
     ),
   );
 }
@@ -534,7 +533,7 @@ class SkillVal {
               ElementType.Electro,
               hurtAddFightTypes,
             )
-          ]),
+          ],),
       ...elementType == ElementType.Pyro
           ? [
               _elementalReaction(
@@ -637,7 +636,7 @@ class SkillVal {
                   hurtAddFightTypes,
                   base,
                 ),
-                from),
+                from,),
           ),
           from: from,
           to: to,
@@ -656,7 +655,7 @@ class SkillVal {
                   hurtAddFightTypes,
                   base,
                 ),
-                from),
+                from,),
           ),
           from: from,
           to: to,
@@ -682,7 +681,7 @@ class SkillVal {
           elementColor(ElementType.Electro),
           Text(
             fightProps.elementalReactionHurt(from, ea).toStringAsFixed(0) +
-                (ea == ElementalReaction.ElectroCharged ? " * 2" : ""),
+                (ea == ElementalReaction.ElectroCharged ? ' * 2' : ''),
           ),
           from: from,
           to: to,
@@ -721,7 +720,7 @@ class SkillVal {
   }
 
   Iterable<Widget> _splitAndExpand(
-      String t, String split, Iterable<Widget> Function(String part) each) {
+      String t, String split, Iterable<Widget> Function(String part) each,) {
     return t.split(split).expandIndexed(
           (i, part) => [
             ...?(i > 0).ifTrueOrNull(() => [Text(split)]),
@@ -743,13 +742,13 @@ class SkillVal {
       children: [
         ..._splitAndExpand(
             t,
-            "/",
+            '/',
             (part) => _splitAndExpand(
                   part,
-                  "+",
+                  '+',
                   (p) => _splitAndExpand(
                       p,
-                      "*",
+                      '*',
                       (t) => [
                             _attackAndCriticalHurtValue(
                               fightProps,
@@ -757,8 +756,8 @@ class SkillVal {
                               t,
                               params,
                             )
-                          ]),
-                ))
+                          ],),
+                ),)
       ],
     );
   }
@@ -771,7 +770,7 @@ class SkillVal {
   ) {
     var v = exec(t, params, (radio, i) => fn(radio).toStringAsFixed(0));
     var crit = exec(t, params,
-        (radio, i) => fightProps.criticalHurt(fn(radio)).toStringAsFixed(0));
+        (radio, i) => fightProps.criticalHurt(fn(radio)).toStringAsFixed(0),);
 
     return Stack(
       children: [
@@ -787,7 +786,7 @@ class SkillVal {
                   ),
                 ),
               )
-            ]),
+            ],),
         Padding(
           padding:
               (v != crit).ifTrueOrNull(() => const EdgeInsets.only(top: 9)) ??
@@ -820,7 +819,7 @@ class BuffList extends StatelessWidget {
             builder: (ctx) {
               return Column(
                 children: [
-                  const ListTile(title: Text("环境与增益")),
+                  const ListTile(title: Text('环境与增益')),
                   const Divider(height: 1),
                   Expanded(
                     child: SingleChildScrollView(
@@ -828,22 +827,22 @@ class BuffList extends StatelessWidget {
                         children: [
                           ...fightProps.allFrom
                               .where((fps) => fps.name != null)
-                              .map((fps) => fightProps.fightPropsConvert(fps))
+                              .map(fightProps.fightPropsConvert)
                               .map((e) => ListTile(
-                                    title: Text(e.name ?? ""),
+                                    title: Text(e.name ?? ''),
                                     subtitle: Text(e.keys
                                         .map((fp) =>
-                                            "${fp.label()}: ${format(e.get(fp), fp.format())}")
-                                        .join("; ")),
-                                  )),
-                          const ListTile(title: Text(""))
+                                            '${fp.label()}: ${format(e.get(fp), fp.format())}',)
+                                        .join('; '),),
+                                  ),),
+                          const ListTile(title: Text(''))
                         ],
                       ),
                     ),
                   )
                 ],
               );
-            });
+            },);
       },
       child: child,
     );

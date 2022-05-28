@@ -17,7 +17,6 @@ class SelectState {
 Widget _defaultBuilder(BuildContext context, List<Widget> children) {
   return FractionallySizedBox(
     heightFactor: 1,
-    alignment: Alignment.center,
     child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -43,16 +43,16 @@ class CharacterWithState with _$CharacterWithState {
           w.key,
           w.level,
           w.refinement,
-        ))
+        ),)
         .merge(db.artifact.fightProps(
           artifacts,
-        ))
+        ),)
         .mergeAll(buffs ?? [])
         .compute();
   }
 
   bool chargeEfficiencyAsDPS(ArtifactService as) =>
-      artifacts.where((a) => a.setKey == as.findSet("绝缘之旗印").key).length >= 4;
+      artifacts.where((a) => a.setKey == as.findSet('绝缘之旗印').key).length >= 4;
 
   List<GOODArtifact> graduatedArtifacts(
     ArtifactService as, {
@@ -91,21 +91,21 @@ class CharacterWithState with _$CharacterWithState {
     return (defaultArtifacts ?? artifacts)
         .mapIndexed((i, e) => e.copyWith(
               substats: i == 0 ? props.toList() : [],
-            ))
+            ),)
         .toList();
   }
 
   double calcSkillValue(FightProps fightProps, SkillType st, String label,
-      double Function(String, List<double> params) calc) {
+      double Function(String, List<double> params) calc,) {
     var s = character.skills.firstWhereOrNull((v) => v.skillType == st);
 
     if (s != null) {
       var p = s.paramNames!.firstWhereOrNull((i18n) =>
-          i18n.values.values.map((e) => e.split("|").first).contains(label));
+          i18n.values.values.map((e) => e.split('|').first).contains(label),);
 
       if (p != null) {
         return calc(
-          p.text(Lang.CHS).split("|").last,
+          p.text(Lang.CHS).split('|').last,
           s.paramsForLevel(fightProps.fixSkillLevel(st, c.skillLevel(st))),
         );
       }
@@ -125,11 +125,11 @@ class CharacterWithState with _$CharacterWithState {
     Map<FightProp, List<int>> appendPropIndexes = {};
     Map<FightProp, double> appendPropRanks = {};
 
-    for (var a in artifacts) {
+    for (final a in artifacts) {
       var artifactAppendDepot =
           as.artifactAppendDepotFromSetKey(a.setKey, a.slotKey.asEquipType());
 
-      for (var ss in a.substats) {
+      for (final ss in a.substats) {
         var fp = ss.key.asFightProp();
         var tfp = fp;
 
@@ -172,7 +172,7 @@ class CharacterWithState with _$CharacterWithState {
       location: location,
     );
 
-    bool isUsed(FightProp fp) => (rankRadios.keys.contains(fp));
+    bool isUsed(FightProp fp) => rankRadios.keys.contains(fp);
 
     Map<String, Rank> ranks = {};
 
@@ -188,7 +188,7 @@ class CharacterWithState with _$CharacterWithState {
     double rank = 0;
     double critRank = 0;
 
-    for (var fp in rankRadios.keys) {
+    for (final fp in rankRadios.keys) {
       var val = appendPropRanks[fp] ?? 0;
 
       switch (fp) {
@@ -211,7 +211,7 @@ class CharacterWithState with _$CharacterWithState {
         default:
           return fp.label()[0];
       }
-    }).join("")}${critRank > 0 ? "" : "词条"}";
+    }).join()}${critRank > 0 ? "" : "词条"}";
 
     var totalRadio = rankRadios.values
         .fold<double>(0, (previousValue, v) => previousValue + v);
@@ -226,7 +226,7 @@ class CharacterWithState with _$CharacterWithState {
               (previousValue, fp) =>
                   previousValue +
                   ((rankRadios[fp]! / totalRadio) *
-                      fpRarity(fp, appendPropRanks[fp] ?? 0, rankRadios[fp]!)))
+                      fpRarity(fp, appendPropRanks[fp] ?? 0, rankRadios[fp]!)),)
           .round(),
     );
 
@@ -234,10 +234,10 @@ class CharacterWithState with _$CharacterWithState {
       var critRankRarity = fpRarity(
           FightProp.CRITICAL,
           critRank,
-          ((rankRadios[FightProp.CRITICAL] ?? 0) +
-              (rankRadios[FightProp.CRITICAL_HURT] ?? 0)));
+          (rankRadios[FightProp.CRITICAL] ?? 0) +
+              (rankRadios[FightProp.CRITICAL_HURT] ?? 0),);
 
-      ranks["双暴词条"] = Rank(
+      ranks['双暴词条'] = Rank(
         value: critRank,
         indexes: [],
         used: true,
@@ -246,7 +246,7 @@ class CharacterWithState with _$CharacterWithState {
     }
 
     if (asDetails ?? false) {
-      for (var fp in (appendPropRanks.keys.toList()
+      for (final fp in (appendPropRanks.keys.toList()
         ..sort((a, b) => a.index - b.index))) {
         var rank = appendPropRanks[fp]!;
 

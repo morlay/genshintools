@@ -17,8 +17,8 @@ class BlocAuth extends HydratedCubit<AuthState> with WebDAVSyncMixin {
 
   BlocAuth()
       : super(AuthState(
-          currentUID: "",
-        ));
+          currentUID: '',
+        ),);
 
   addAccounts({
     required List<GameRole> gameRoles,
@@ -34,18 +34,18 @@ class BlocAuth extends HydratedCubit<AuthState> with WebDAVSyncMixin {
   switchAccount(String uid) {
     emit(state.copyWith(
       currentUID: uid,
-    ));
+    ),);
   }
 
   switchChannel(String channel) {
     emit(state.copyWith(
       channel: channel,
-    ));
+    ),);
   }
 
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
-    if (json["encodedCookie"] != null) {
+    if (json['encodedCookie'] != null) {
       return AuthStateV1.fromJson(json).convertToNew();
     }
     return AuthState.fromJson(json);

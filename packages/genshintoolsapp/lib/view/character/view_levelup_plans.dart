@@ -65,7 +65,6 @@ class ViewLevelupPlans extends HookWidget {
                         title: Wrap(
                             spacing: 4,
                             runSpacing: 4,
-                            alignment: WrapAlignment.start,
                             children: [
                               ...e.costs.map(
                                 (material) => GestureDetector(
@@ -78,8 +77,8 @@ class ViewLevelupPlans extends HookWidget {
                                   ),
                                 ),
                               )
-                            ]),
-                      ))
+                            ],),
+                      ),)
                 ],
               ),
             ),

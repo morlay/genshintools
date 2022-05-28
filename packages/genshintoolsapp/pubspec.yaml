@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   collection: ^1.15.0
-  freezed: ^2.0.3
+  freezed_annotation: ^2.0.3
   dio: ^4.0.4
   flutter_markdown: ^0.6.8
   flutter_bloc: ^8.0.0
@@ -25,6 +25,7 @@ dependencies:
   webview_flutter: ^3.0.0
   flutter_hooks: ^0.18.1
   rxdart: ^0.27.3
+  json_annotation: "^4.5.0"
   genshingameinfo: ^1.0.0
   genshindb: ^2.7.0
   freearch:  ^1.0.0

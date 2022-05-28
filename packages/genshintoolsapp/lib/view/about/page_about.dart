@@ -5,17 +5,16 @@ import 'package:package_info_plus/package_info_plus.dart';
 class PageAbout extends HookWidget {
   final PackageInfo packageInfo;
 
-  static String routeName = "/about";
+  static String routeName = '/about';
 
   const PageAbout({required this.packageInfo, Key? key}) : super(key: key);
 
-  static void show(BuildContext context) async {
+  static Future<void> show(BuildContext context) async {
     var pi = await PackageInfo.fromPlatform();
 
-    Navigator.of(context).push(
+    await Navigator.of(context).push(
       CupertinoPageRoute(
         settings: RouteSettings(name: PageAbout.routeName),
-        fullscreenDialog: false,
         builder: (context) => PageAbout(
           packageInfo: pi,
         ),
@@ -27,7 +26,7 @@ class PageAbout extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("关于"),
+        title: const Text('关于'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
@@ -42,7 +41,7 @@ class PageAbout extends HookWidget {
                 ),
               ),
               Text(
-                "版本: ${packageInfo.version}(build ${packageInfo.buildNumber})",
+                '版本: ${packageInfo.version}(build ${packageInfo.buildNumber})',
               ),
               BlocBuilder<BlocAuth, AuthState>(builder: (context, state) {
                 var blocAuth = BlocAuth.watch(context);
@@ -50,18 +49,18 @@ class PageAbout extends HookWidget {
                 return GestureDetector(
                   onTap: () {
                     blocAuth.switchChannel(
-                      blocAuth.state.currentChannel == "stable"
-                          ? "beta"
-                          : "stable",
+                      blocAuth.state.currentChannel == 'stable'
+                          ? 'beta'
+                          : 'stable',
                     );
                   },
-                  child: Text("更新通道: ${blocAuth.state.currentChannel}"),
+                  child: Text('更新通道: ${blocAuth.state.currentChannel}'),
                 );
-              }),
-              const Text(""),
-              const Text(""),
-              Text("${packageInfo.appName} 与米哈游无关。"),
-              const Text("原神的游戏内容和各种素材与商标的版权都属于米哈游。"),
+              },),
+              const Text(''),
+              const Text(''),
+              Text('${packageInfo.appName} 与米哈游无关。'),
+              const Text('原神的游戏内容和各种素材与商标的版权都属于米哈游。'),
             ].map(
               (e) => Row(
                 children: [

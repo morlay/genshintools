@@ -18,7 +18,7 @@ class MaterialService with _$MaterialService {
   GSMaterial find(String keyOrName) {
     var f = findOrNull(keyOrName);
     if (f == null) {
-      throw "Material not found `$keyOrName`";
+      throw 'Material not found `$keyOrName`';
     }
     return f;
   }
@@ -26,17 +26,13 @@ class MaterialService with _$MaterialService {
   GSMaterial? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       materials?.forEach((key, value) {
-        for (var lang in value.name.keys) {
+        for (final lang in value.name.keys) {
           _indexes[value.name.text(lang)] = value.id;
         }
       });
     }
 
-    var m = materials?[_indexes[keyOrName]];
-
-    if (m != null) {
-      return m;
-    }
+    return materials?[_indexes[keyOrName]];
   }
 
   List<GSMaterial> toList() => materials?.values.toList() ?? [];

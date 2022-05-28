@@ -11,7 +11,7 @@ class UigfInfo with _$UigfInfo {
   factory UigfInfo({
     required String uid,
     required String lang,
-    @Default("v2.2") String uigfVersion,
+    @Default('v2.2') String uigfVersion,
   }) = _UigfInfo;
 
   factory UigfInfo.fromJson(Map<String, dynamic> json) =>
@@ -28,11 +28,11 @@ class GachaState with _$GachaState {
   }) = _GachaState;
 
   static Map<String, dynamic> migrateFromOldStruct(Map<String, dynamic> json) {
-    if (json["list"] == null) {
-      var logs = ((json["logs"] as Map<String, dynamic>)
+    if (json['list'] == null) {
+      var logs = ((json['logs'] as Map<String, dynamic>)
           .map((key, value) => MapEntry(key, value as List))).values;
       return {
-        "list": logs.expand((l) => l).toList(),
+        'list': logs.expand((l) => l).toList(),
       };
     }
     return json;
@@ -48,7 +48,7 @@ class GachaState with _$GachaState {
     }
         .map(
           (e) => e.copyWith(
-            uigfGachaType: e.gachaType == "400" ? "301" : e.gachaType,
+            uigfGachaType: e.gachaType == '400' ? '301' : e.gachaType,
           ),
         )
         .toList()
@@ -74,7 +74,7 @@ class GachaState with _$GachaState {
     var countSinceLastGold = 0;
     var index = 0;
 
-    for (var i in gachaLogs) {
+    for (final i in gachaLogs) {
       countSinceLastGold++;
       countSinceLastPurple++;
 
@@ -83,11 +83,11 @@ class GachaState with _$GachaState {
         countSinceLastGold: countSinceLastGold,
       );
 
-      if (i.rankType == "4") {
+      if (i.rankType == '4') {
         countSinceLastPurple = 0;
       }
 
-      if (i.rankType == "5") {
+      if (i.rankType == '5') {
         countSinceLastPurple = 0;
         countSinceLastGold = 0;
       }

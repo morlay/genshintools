@@ -14,7 +14,7 @@ class GSDesc extends HookWidget {
   Widget build(BuildContext context) {
     return MarkdownBody(
       styleSheetTheme: MarkdownStyleSheetBaseTheme.material,
-      data: desc.text(Lang.CHS).replaceAll("\\n", "\n\n"),
+      data: desc.text(Lang.CHS).replaceAll(r'\n', '\n\n'),
     );
   }
 }

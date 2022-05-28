@@ -1,18 +1,18 @@
 import 'package:genshintoolsapp/common/flutter.dart';
 
-var base = ThemeData.from(
+ThemeData base = ThemeData.from(
   colorScheme: ColorScheme.fromSwatch(
     primarySwatch: Colors.brown,
     backgroundColor: Colors.white,
   ),
 );
 
-var textTheme = base.textTheme.apply(
+TextTheme textTheme = base.textTheme.apply(
   displayColor: Colors.grey.shade700,
   bodyColor: Colors.grey.shade600,
 );
 
-var theme = base.copyWith(
+ThemeData theme = base.copyWith(
   focusColor: Colors.grey.shade200,
   unselectedWidgetColor: Colors.grey.shade500,
   iconTheme: base.iconTheme.copyWith(

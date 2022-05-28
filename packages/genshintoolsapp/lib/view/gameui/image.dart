@@ -57,7 +57,7 @@ class GSImage extends HookWidget with _$GSImage {
   }
 }
 
-var bgs = [
+List<List<Color>> bgs = [
   [const Color(0xff9da8b2), const Color(0xff4f5864)],
   [const Color(0xff60b881), const Color(0xff48575c)],
   [const Color(0xff3c94f6), const Color(0xff515474)],
@@ -73,7 +73,6 @@ LinearGradient linearGradientForRarity(int rarity) {
     begin: Alignment.bottomRight,
     end: Alignment.topLeft,
     colors: bgs[rarity - 1],
-    tileMode: TileMode.clamp,
   );
 }
 
@@ -106,10 +105,10 @@ class WithElement extends HookWidget {
                   width: size,
                   height: size,
                   image: GSImageProvider(
-                    domain: "element",
+                    domain: 'element',
                     nameID: element.name,
                   ),
-                ))),
+                ),),),
       ],
     );
   }
@@ -154,7 +153,7 @@ class WithLevel extends HookWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: "Lv.",
+                              text: 'Lv.',
                               style: TextStyle(
                                 fontSize: 0.8 * size,
                                 fontWeight: FontWeight.bold,
@@ -165,7 +164,7 @@ class WithLevel extends HookWidget {
                               ),
                             ),
                             TextSpan(
-                              text: "$level",
+                              text: '$level',
                               style: TextStyle(
                                 fontSize: size,
                                 fontWeight: FontWeight.bold,
@@ -202,8 +201,8 @@ class WithCount extends HookWidget {
     required this.child,
     this.alignment = Alignment.topRight,
     this.size = 8,
-    this.prefix = "",
-    this.suffix = "",
+    this.prefix = '',
+    this.suffix = '',
     this.active = false,
   }) : super(key: key);
 
@@ -276,9 +275,8 @@ class GSImageConstellation extends HookWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            width: 1,
             color: color.withOpacity(0.5),
-          )),
+          ),),
       child: Padding(
         padding: const EdgeInsets.all(2),
         child: Image(
@@ -339,8 +337,8 @@ class GSImageWeaponType extends HookWidget {
       color: color,
       colorBlendMode: BlendMode.srcIn,
       image: GSImageProvider(
-        domain: "weapon_type",
-        nameID: weaponType.toString().split(".").last,
+        domain: 'weapon_type',
+        nameID: weaponType.toString().split('.').last,
       ),
     );
   }
@@ -348,15 +346,15 @@ class GSImageWeaponType extends HookWidget {
 
 // todo make to config
 var _github = Github(
-  "morlay/genshinimages",
-  "good",
+  'morlay/genshinimages',
+  'good',
 );
 
 class GSImageProvider extends CachedNetworkImageProvider {
   GSImageProvider({
     required String domain,
     required String nameID,
-  }) : super(_github.rawURL("/images/$domain/$nameID.png", nocache: true));
+  }) : super(_github.rawURL('/images/$domain/$nameID.png', nocache: true));
 }
 
 Map<ElementType, Color> _elementColors = {

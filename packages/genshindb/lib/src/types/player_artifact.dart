@@ -20,14 +20,14 @@ class PlayerArtifact with _$PlayerArtifact {
   }) = _PlayerArtifact;
 
   factory PlayerArtifact.fromJson(String s) {
-    var valueParts = s.split("|");
+    var valueParts = s.split('|');
 
-    var name = "";
+    var name = '';
     var rarity = 5;
     var usedBy = 0;
     var equipType = EquipType.BRACER;
 
-    valueParts.getOrNull(0)?.split("!").let((list) {
+    valueParts.getOrNull(0)?.split('!').let((list) {
       list.getOrNull(0)?.let((n) {
         name = n;
       });
@@ -35,14 +35,14 @@ class PlayerArtifact with _$PlayerArtifact {
         rarity = int.parse(r);
       });
       list.getOrNull(2)?.let((r) {
-        for (var et in EquipType.values) {
+        for (final et in EquipType.values) {
           if (et.label() == r) {
             equipType = et;
           }
         }
       });
       list.getOrNull(3)?.let((r) {
-        if (r != "") {
+        if (r != '') {
           usedBy = int.parse(r);
         }
       });
@@ -50,16 +50,16 @@ class PlayerArtifact with _$PlayerArtifact {
 
     var level = valueParts
             .getOrNull(1)
-            ?.split("!")
+            ?.split('!')
             .getOrNull(1)
-            ?.let((l) => int.parse(l)) ??
+            ?.let(int.parse) ??
         20;
 
     var mainProp = valueParts
             .getOrNull(1)
-            ?.split("!")
+            ?.split('!')
             .getOrNull(0)
-            ?.let((s) => resolveFightProp(s)) ??
+            ?.let(resolveFightProp) ??
         FightProp.HP;
 
     Map<FightProp, String> appends = {};
@@ -88,21 +88,22 @@ class PlayerArtifact with _$PlayerArtifact {
   }
 
   static FightProp? resolveFightProp(String s) {
-    for (var fp in aliases.keys) {
+    for (final fp in aliases.keys) {
       var alias = aliases[fp]!.toUpperCase();
       if (s.toUpperCase().startsWith(alias)) {
         return fp;
       }
     }
+    return null;
   }
 
   @override
   String toString() {
     return [
-      "$name!$rarity!${equipType.label()}",
-      "${aliases[main]}!$level",
+      '$name!$rarity!${equipType.label()}',
+      '${aliases[main]}!$level',
       ...appends.keys.map((p) => "${aliases[p]}${appends[p]}"),
-    ].join("|");
+    ].join('|');
   }
 
   String toJson() {
@@ -119,23 +120,23 @@ class PlayerArtifact with _$PlayerArtifact {
 }
 
 Map<FightProp, String> aliases = {
-  FightProp.FIRE_ADD_HURT: "${ElementType.Pyro.string()}DMG",
-  FightProp.ELEC_ADD_HURT: "${ElementType.Electro.string()}DMG",
-  FightProp.ICE_ADD_HURT: "${ElementType.Cryo.string()}DMG",
-  FightProp.WATER_ADD_HURT: "${ElementType.Hydro.string()}DMG",
-  FightProp.WIND_ADD_HURT: "${ElementType.Anemo.string()}DMG",
-  FightProp.ROCK_ADD_HURT: "${ElementType.Geo.string()}DMG",
-  FightProp.GRASS_ADD_HURT: "${ElementType.Dendro.string()}DMG",
-  FightProp.PHYSICAL_ADD_HURT: "${ElementType.Physical.string()}DMG",
-  FightProp.CRITICAL_HURT: "CritDMG",
-  FightProp.CRITICAL: "Crit",
-  FightProp.HP: "HP+",
-  FightProp.ATTACK: "ATK+",
-  FightProp.DEFENSE: "DEF+",
-  FightProp.ELEMENT_MASTERY: "EM+",
-  FightProp.DEFENSE_PERCENT: "DEF",
-  FightProp.HP_PERCENT: "HP",
-  FightProp.ATTACK_PERCENT: "ATK",
-  FightProp.HEAL_ADD: "HEAL",
-  FightProp.CHARGE_EFFICIENCY: "ER",
+  FightProp.FIRE_ADD_HURT: '${ElementType.Pyro.string()}DMG',
+  FightProp.ELEC_ADD_HURT: '${ElementType.Electro.string()}DMG',
+  FightProp.ICE_ADD_HURT: '${ElementType.Cryo.string()}DMG',
+  FightProp.WATER_ADD_HURT: '${ElementType.Hydro.string()}DMG',
+  FightProp.WIND_ADD_HURT: '${ElementType.Anemo.string()}DMG',
+  FightProp.ROCK_ADD_HURT: '${ElementType.Geo.string()}DMG',
+  FightProp.GRASS_ADD_HURT: '${ElementType.Dendro.string()}DMG',
+  FightProp.PHYSICAL_ADD_HURT: '${ElementType.Physical.string()}DMG',
+  FightProp.CRITICAL_HURT: 'CritDMG',
+  FightProp.CRITICAL: 'Crit',
+  FightProp.HP: 'HP+',
+  FightProp.ATTACK: 'ATK+',
+  FightProp.DEFENSE: 'DEF+',
+  FightProp.ELEMENT_MASTERY: 'EM+',
+  FightProp.DEFENSE_PERCENT: 'DEF',
+  FightProp.HP_PERCENT: 'HP',
+  FightProp.ATTACK_PERCENT: 'ATK',
+  FightProp.HEAL_ADD: 'HEAL',
+  FightProp.CHARGE_EFFICIENCY: 'ER',
 };

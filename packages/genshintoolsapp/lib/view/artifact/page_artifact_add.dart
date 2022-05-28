@@ -7,10 +7,9 @@ import 'package:genshintoolsapp/view/gameui.dart';
 
 class PageArtifactAdd extends HookWidget {
   static void show(BuildContext context, EquipType equipType,
-      [GOODArtifact? value]) {
+      [GOODArtifact? value,]) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        fullscreenDialog: false,
         builder: (context) =>
             PageArtifactAdd(equipType: equipType, value: value),
       ),
@@ -49,7 +48,7 @@ class PageArtifactAdd extends HookWidget {
 
     var pa = useState(
       value ??
-          (GOODArtifact.create(SlotKey.values[equipType.index], "")
+          (GOODArtifact.create(SlotKey.values[equipType.index], '')
               .copyWith(setKey: defaultArtifact.setKey)),
     );
 
@@ -70,7 +69,7 @@ class PageArtifactAdd extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(value != null ? "修改圣遗物" : "录入圣遗物"),
+        title: Text(value != null ? '修改圣遗物' : '录入圣遗物'),
         actions: [
           IconButton(
             onPressed: () {
@@ -93,7 +92,7 @@ class PageArtifactAdd extends HookWidget {
                 const Divider(height: 1),
                 const ListTile(
                   title: Text(
-                    "副词条",
+                    '副词条',
                     style: TextStyle(fontSize: 12),
                   ),
                 ),
@@ -112,7 +111,7 @@ class PageArtifactAdd extends HookWidget {
                               fp != artifact.mainStatKey.asFightProp() &&
                               artifact.substats
                                   .where((ss) => ss.key.asFightProp() == fp)
-                                  .isEmpty)
+                                  .isEmpty,)
                           .map(
                             (fp) => buildAppendPropSelect(
                               artifact,
@@ -121,7 +120,7 @@ class PageArtifactAdd extends HookWidget {
                               pa,
                             ),
                           ),
-                    ])
+                    ],)
               ],
             )
           ],
@@ -155,7 +154,7 @@ class PageArtifactAdd extends HookWidget {
         .toList()
       ..sort((a, b) => artifactAppendDepot
           .calc(fp, valueIndexes[a])
-          .compareTo(artifactAppendDepot.calc(fp, valueIndexes[b])));
+          .compareTo(artifactAppendDepot.calc(fp, valueIndexes[b])),);
 
     return Select<String>(
       title: Text(fp.label()),
@@ -163,7 +162,7 @@ class PageArtifactAdd extends HookWidget {
       value: artifact.substats
               .firstWhereOrNull((ss) => ss.key.asFightProp() == fp)
               ?.stringValue() ??
-          "",
+          '',
       onSelected: (selected) {
         var next = GOODSubStat(key: GOODArtifact.statKeyFromFightProp(fp))
             .withStringValue(selected);
@@ -190,7 +189,7 @@ class PageArtifactAdd extends HookWidget {
       },
       optionBuilder: (context, option, selected) {
         return Card(
-          color: (option.value.split("?").first == selected.value)
+          color: (option.value.split('?').first == selected.value)
               .ifTrueOrNull(() => Theme.of(context).focusColor),
           child: InkWell(
             onTap: () {
@@ -233,22 +232,21 @@ class PageArtifactAdd extends HookWidget {
                 ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 selected.title,
                 ...?selected.value?.let(
-                  (v) => (v != "").ifTrueOrNull(() => [
+                  (v) => (v != '').ifTrueOrNull(() => [
                         buildAppendValue(artifactAppendDepot, fp, v),
-                      ]),
+                      ],),
                 )
               ],
-            ));
+            ),);
       },
     );
   }
 
   Widget buildAppendValue(
-      GSArtifactAppendDepot artifactAppendDepot, FightProp fp, String v) {
+      GSArtifactAppendDepot artifactAppendDepot, FightProp fp, String v,) {
     var indexes = artifactAppendDepot.valueNs(fp, v);
 
     return Stack(
@@ -281,9 +279,9 @@ class PageArtifactAdd extends HookWidget {
   }
 
   Select<FightProp> buildMainPropSelect(ValueNotifier<GOODArtifact> pa,
-      GOODArtifact artifact, List<FightProp> mainProps) {
+      GOODArtifact artifact, List<FightProp> mainProps,) {
     return Select<FightProp>(
-      title: const Text("主词条"),
+      title: const Text('主词条'),
       options: mainProps,
       value: artifact.mainStatKey.asFightProp(),
       onSelected: (selected) {
@@ -317,8 +315,8 @@ class PageArtifactAdd extends HookWidget {
           subtitle: selected.value?.let((fp) => Text(
                     fp.label(),
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  )) ??
-              const Text("请选择"),
+                  ),) ??
+              const Text('请选择'),
           title: selected.title,
         );
       },
@@ -330,7 +328,7 @@ class PageArtifactAdd extends HookWidget {
     ValueNotifier<GOODArtifact> pa,
   ) {
     return Select<int>(
-      title: const Text("等级"),
+      title: const Text('等级'),
       options: const [0, 4, 8, 12, 16, 20],
       value: artifact.level,
       onSelected: (selected) {
@@ -350,7 +348,7 @@ class PageArtifactAdd extends HookWidget {
           },
           selected: option.value == selected.value,
           selectedTileColor: Theme.of(context).focusColor,
-          title: Text("+${option.value}"),
+          title: Text('+${option.value}'),
         );
       },
       tileBuilder: (context, selected) {
@@ -360,10 +358,10 @@ class PageArtifactAdd extends HookWidget {
           ),
           onTap: () => selected.showOptions(context),
           subtitle: selected.value?.let((lvl) => Text(
-                    "+$lvl",
+                    '+$lvl',
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  )) ??
-              const Text("请选择"),
+                  ),) ??
+              const Text('请选择'),
           title: selected.title,
         );
       },
@@ -377,7 +375,7 @@ class PageArtifactAdd extends HookWidget {
     ValueNotifier<GOODArtifact> pa,
   ) {
     return Select<GSArtifact>(
-      title: const Text("圣遗物"),
+      title: const Text('圣遗物'),
       options: artifacts,
       value: artifacts.firstWhereOrNull((v) => v.setKey == artifact.setKey),
       onSelected: (selected) {
@@ -407,7 +405,7 @@ class PageArtifactAdd extends HookWidget {
                 child: WithLabel(
                   label: Text(option.value.name.text(Lang.CHS)),
                   child: GSImage(
-                    domain: "artifact",
+                    domain: 'artifact',
                     rarity: 5,
                     size: 64,
                     nameID: option.value.key,
@@ -427,12 +425,12 @@ class PageArtifactAdd extends HookWidget {
           subtitle: selected.value?.let((it) => Text(
                     it.name.text(Lang.CHS),
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  )) ??
-              const Text("请选择"),
+                  ),) ??
+              const Text('请选择'),
           title: selected.title,
           leading: selected.value?.let(
             (s) => GSImage(
-              domain: "artifact",
+              domain: 'artifact',
               rarity: 5,
               size: 42,
               nameID: s.key,
@@ -460,7 +458,7 @@ class AppendValueIndex extends HookWidget {
   Widget build(BuildContext context) {
     if (indexes.isEmpty) {
       return Row(
-        children: const [],
+        
       );
     }
 

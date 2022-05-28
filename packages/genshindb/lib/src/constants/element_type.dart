@@ -9,27 +9,27 @@ class ElementTypeStringConverter extends _$ElementTypeStringConverter {
 
 @JsonEnum(alwaysCreate: true)
 enum ElementType {
-  @EnumMeta(label: "火")
+  @EnumMeta(label: '火')
   Pyro,
 
-  @EnumMeta(label: "冰")
+  @EnumMeta(label: '冰')
   Cryo,
 
-  @EnumMeta(label: "雷")
+  @EnumMeta(label: '雷')
   Electro,
 
-  @EnumMeta(label: "水")
+  @EnumMeta(label: '水')
   Hydro,
 
-  @EnumMeta(label: "风")
+  @EnumMeta(label: '风')
   Anemo,
 
-  @EnumMeta(label: "岩")
+  @EnumMeta(label: '岩')
   Geo,
 
-  @EnumMeta(label: "草")
+  @EnumMeta(label: '草')
   Dendro,
 
-  @EnumMeta(label: "物理")
+  @EnumMeta(label: '物理')
   Physical,
 }

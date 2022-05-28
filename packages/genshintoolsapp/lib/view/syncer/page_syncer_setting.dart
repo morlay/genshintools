@@ -5,14 +5,13 @@ import 'package:genshintoolsapp/domain/syncer.dart';
 import 'package:webdav/webdav.dart';
 
 class PageSyncSetting extends HookWidget {
-  static String routeName = "/sync/settings";
+  static String routeName = '/sync/settings';
 
   const PageSyncSetting({Key? key}) : super(key: key);
 
   static show(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        fullscreenDialog: false,
         settings: RouteSettings(name: PageSyncSetting.routeName),
         builder: (context) => const PageSyncSetting(),
       ),
@@ -24,7 +23,7 @@ class PageSyncSetting extends HookWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("配置 WebDAV 数据同步"),
+        title: const Text('配置 WebDAV 数据同步'),
       ),
       body: FormSyncSetting(),
     );
@@ -93,25 +92,25 @@ class FormSyncSetting extends HookWidget {
                 onPressed: () {
                   _form.currentState?.validate().ifTrueOrNull(() async {
                     var wd = WebDAV.fromJson({
-                      "address": address.value.text,
-                      "username": username.value.text,
-                      "password": password.value.text,
+                      'address': address.value.text,
+                      'username': username.value.text,
+                      'password': password.value.text,
                     });
                     try {
                       await wd.ping();
                       blocSyncer.bind(wd.copyWith(valid: true));
                       showSnackBar(
                         context,
-                        content: const Text("连接成功"),
+                        content: const Text('连接成功'),
                       );
                     } on ResponseException catch (err) {
                       blocSyncer.bind(wd.copyWith(
                         valid:
                             err.response?.statusCode != HttpStatus.unauthorized,
-                      ));
+                      ),);
                       showSnackBar(
                         context,
-                        content: Text("连接错误 ${err.statusCode} ${err.response}"),
+                        content: Text('连接错误 ${err.statusCode} ${err.response}'),
                       );
                     }
                   });
@@ -124,7 +123,7 @@ class FormSyncSetting extends HookWidget {
             ),
             const Padding(
               padding: EdgeInsets.only(top: 8),
-              child: Text("配置成功后 5 分钟尝试同步一次（有更新才消耗同步流量）"),
+              child: Text('配置成功后 5 分钟尝试同步一次（有更新才消耗同步流量）'),
             ),
             const Divider(),
             Padding(
@@ -134,24 +133,25 @@ class FormSyncSetting extends HookWidget {
                   if (it.valid == true) {
                     return () => showAlert(
                           context,
-                          content: const Text("本次操作将覆盖本地数据，是否确认？"),
+                          content: const Text('本次操作将覆盖本地数据，是否确认？'),
                           onConfirm: () async {
                             try {
                               await WebDAVSyncer.read(context)
                                   .sync(fromServer: true);
                               showSnackBar(
                                 context,
-                                content: const Text("同步成功"),
+                                content: const Text('同步成功'),
                               );
                             } catch (e) {
                               showSnackBar(
                                 context,
-                                content: Text("同步失败: $e"),
+                                content: Text('同步失败: $e'),
                               );
                             }
                           },
                         );
                   }
+                  return null;
                 }),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40),
@@ -166,23 +166,24 @@ class FormSyncSetting extends HookWidget {
                   if (it.valid == true) {
                     return () => showAlert(
                           context,
-                          content: const Text("本次操作将覆盖 WebDAV 数据，是否确认？"),
+                          content: const Text('本次操作将覆盖 WebDAV 数据，是否确认？'),
                           onConfirm: () async {
                             try {
                               await WebDAVSyncer.read(context).sync();
                               showSnackBar(
                                 context,
-                                content: const Text("同步成功"),
+                                content: const Text('同步成功'),
                               );
                             } catch (e) {
                               showSnackBar(
                                 context,
-                                content: Text("同步失败: $e"),
+                                content: Text('同步失败: $e'),
                               );
                             }
                           },
                         );
                   }
+                  return null;
                 }),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40),

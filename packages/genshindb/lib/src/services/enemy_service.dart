@@ -25,7 +25,7 @@ class EnemyService with _$EnemyService {
   GSEnemy? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       enemies?.forEach((key, value) {
-        for (var lang in value.name.keys) {
+        for (final lang in value.name.keys) {
           _indexes[value.name.text(lang)] = value.id;
         }
       });
@@ -49,7 +49,7 @@ class EnemyService with _$EnemyService {
 
     return [
       ...{...ids}
-    ].map((id) => find(id));
+    ].map(find);
   }
 
   List<GSEnemy> toList() => enemies?.values.toList() ?? [];

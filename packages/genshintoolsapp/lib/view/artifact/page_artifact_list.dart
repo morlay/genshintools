@@ -9,7 +9,7 @@ import 'package:genshintoolsapp/view/gameui.dart';
 import 'page_artifact_add.dart';
 
 class PageArtifactList extends HookWidget {
-  static String routeName = "/artifacts";
+  static String routeName = '/artifacts';
 
   const PageArtifactList({
     Key? key,
@@ -71,13 +71,13 @@ class PageArtifactList extends HookWidget {
                                 SizedBox(
                                   width: 24 * 2,
                                   child: AppendValueIndex(
-                                      indexes: [-4, -3, -2, -1, 1, 2, 3, 4]),
+                                      indexes: [-4, -3, -2, -1, 1, 2, 3, 4],),
                                 ),
                                 Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                      EdgeInsets.symmetric(horizontal: 8),
                                   child: Text(
-                                    "表示词条个数, 颜色分别代表数值档位",
+                                    '表示词条个数, 颜色分别代表数值档位',
                                     style: TextStyle(fontSize: 10),
                                   ),
                                 ),
@@ -98,7 +98,7 @@ class PageArtifactList extends HookWidget {
                               runSpacing: 16,
                               children: [
                                 ...l.map((artifact) =>
-                                    GOODArtifactCard(artifact: artifact)),
+                                    GOODArtifactCard(artifact: artifact),),
                               ],
                             ),
                           )
@@ -138,7 +138,7 @@ class GOODArtifactCard extends HookWidget {
 
     var builds = db.character.findOrNull(artifact.location)?.let(
           (c) => c.characterBuildFor(
-              bloc.playerState(uid).character(artifact.location).role),
+              bloc.playerState(uid).character(artifact.location).role,),
         );
 
     var fightProps = db.character.findOrNull(artifact.location)?.let((cc) {
@@ -154,7 +154,7 @@ class GOODArtifactCard extends HookWidget {
                 c.w.key,
                 c.w.level,
                 c.w.refinement,
-              ));
+              ),);
         }) ??
         FightProps({});
 
@@ -164,10 +164,10 @@ class GOODArtifactCard extends HookWidget {
 
     return InkWell(
       onTap: () => PageArtifactAdd.show(
-          context, artifact.slotKey.asEquipType(), artifact),
+          context, artifact.slotKey.asEquipType(), artifact,),
       onLongPress: () => _remove(context, artifact),
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 6,
         ),
         child: Wrap(
@@ -187,7 +187,7 @@ class GOODArtifactCard extends HookWidget {
                         child: Text(
                           a.name.text(Lang.CHS),
                           style: const TextStyle(fontSize: 7),
-                        )),
+                        ),),
                   ),
                   Positioned(
                     left: 0,
@@ -201,7 +201,7 @@ class GOODArtifactCard extends HookWidget {
                           artifact.mainStatKey.asFightProp(),
                           artifact.rarity,
                           artifact.level,
-                        )),
+                        ),),
                   ),
                   _buildAvatar(a, db, infoWidth),
                 ],
@@ -262,7 +262,7 @@ class GOODArtifactCard extends HookWidget {
                                       value;
                                 }
                                 return null;
-                              }),
+                              },),
                         ),
                       ],
                     );
@@ -301,14 +301,14 @@ class GOODArtifactCard extends HookWidget {
                         width: 24,
                         height: 24,
                         child: GSImage(
-                          domain: "character",
+                          domain: 'character',
                           rarity: c.rarity,
                           nameID: c.key,
                           rounded: true,
                           borderSize: 2,
                         ),
                       )
-                    ]),
+                    ],),
               ],
             ),
           ),
@@ -323,12 +323,12 @@ class GOODArtifactCard extends HookWidget {
     showAlert(
       context,
       content: Text.rich(TextSpan(children: [
-        TextSpan(text: "是否删除 $pa?"),
-        const TextSpan(text: "\n"),
-        const TextSpan(text: "\n"),
+        TextSpan(text: '是否删除 $pa?'),
+        const TextSpan(text: '\n'),
+        const TextSpan(text: '\n'),
         TextSpan(
-            text: "(${pa.toString()})", style: const TextStyle(fontSize: 11)),
-      ])),
+            text: '(${pa.toString()})', style: const TextStyle(fontSize: 11),),
+      ],),),
       onConfirm: () {
         BlocGameData.read(context).removeArtifact(uid, pa);
       },
@@ -358,7 +358,6 @@ class FightPropView extends HookWidget {
       padding: const EdgeInsets.symmetric(vertical: 1),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildLabel(),
           DefaultTextStyle.merge(
@@ -373,10 +372,10 @@ class FightPropView extends HookWidget {
                   top: -2,
                   right: -7,
                   child: Text(
-                    formatValue.contains("%") ? "%" : "",
-                    style: TextStyle(
+                    formatValue.contains('%') ? '%' : '',
+                    style: const TextStyle(
                       fontSize: 6,
-                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontFeatures: [FontFeature.tabularFigures()],
                     ),
                   ),
                 ),
@@ -386,20 +385,20 @@ class FightPropView extends HookWidget {
                   child: Text(
                     calcValue
                             ?.let((calc) => calc(fightProp, value))
-                            ?.let((v) => "${v.toInt()}") ??
-                        "",
-                    style: TextStyle(
+                            ?.let((v) => '${v.toInt()}') ??
+                        '',
+                    style: const TextStyle(
                       fontSize: 6,
                       fontWeight: FontWeight.normal,
-                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontFeatures: [FontFeature.tabularFigures()],
                     ),
                   ),
                 ),
                 Text(
-                  formatValue.replaceAll("%", ""),
-                  style: TextStyle(
+                  formatValue.replaceAll('%', ''),
+                  style: const TextStyle(
                     fontSize: 11,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+                    fontFeatures: [FontFeature.tabularFigures()],
                   ),
                 )
               ],
@@ -419,7 +418,7 @@ class FightPropView extends HookWidget {
         Center(
           child: Text(
             n[n.length - 1],
-            style: TextStyle(
+            style: const TextStyle(
               textBaseline: TextBaseline.ideographic,
               fontSize: 10,
               fontWeight: FontWeight.bold,
@@ -436,10 +435,10 @@ class FightPropView extends HookWidget {
                 child: Center(
                   child: Text(
                     n[0],
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 7,
                         fontWeight: FontWeight.bold,
-                        fontFeatures: const [FontFeature.tabularFigures()]),
+                        fontFeatures: [FontFeature.tabularFigures()],),
                   ),
                 ),
               ),
@@ -453,19 +452,19 @@ class FightPropView extends HookWidget {
   String get _shortName {
     switch (fightProp) {
       case FightProp.CHARGE_EFFICIENCY:
-        return "充";
+        return '充';
       case FightProp.ELEMENT_MASTERY:
-        return "精";
+        return '精';
       case FightProp.CRITICAL:
-        return "%暴";
+        return '%暴';
       case FightProp.CRITICAL_HURT:
-        return "*暴";
+        return '*暴';
       default:
-        if (fightProp.name.contains("HURT_ADD")) {
-          return "+${fightProp.label()[0]}";
+        if (fightProp.name.contains('HURT_ADD')) {
+          return '+${fightProp.label()[0]}';
         }
-        if (fightProp.name.contains("PERCENT")) {
-          return "%${fightProp.label()[0]}";
+        if (fightProp.name.contains('PERCENT')) {
+          return '%${fightProp.label()[0]}';
         }
         return fightProp.label()[0];
     }

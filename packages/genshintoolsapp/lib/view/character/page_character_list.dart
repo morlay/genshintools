@@ -9,7 +9,7 @@ import 'package:genshintoolsapp/view/gameui.dart';
 import 'character_card.dart';
 
 class PageCharacterList extends HookWidget {
-  static String routeName = "/characters";
+  static String routeName = '/characters';
 
   const PageCharacterList({Key? key}) : super(key: key);
 
@@ -24,14 +24,15 @@ class PageCharacterList extends HookWidget {
         return Rx.fromCallable(() => BlocGameData.read(context).syncGameInfo(
               blocAuth.state.authedClient(),
               blocAuth.state.chosenUid(),
-            ));
+            ),);
       }
-    }, [uid]);
+      return null;
+    }, [uid],);
 
     var characters = BlocGameData.watch(context).listCharacterWithState(uid);
     Map<dynamic, List<CharacterWithState>> grouped =
         characters.groupListsBy((e) => e.character.element);
-    grouped["TODO"] = characters.where((c) => c.todo).toList();
+    grouped['TODO'] = characters.where((c) => c.todo).toList();
 
     var elements = ElementType.values.where((e) => e != ElementType.Physical);
 
@@ -44,7 +45,6 @@ class PageCharacterList extends HookWidget {
             TabBar(
               isScrollable: true,
               padding: const EdgeInsets.all(0),
-              indicatorPadding: const EdgeInsets.all(0),
               labelPadding: const EdgeInsets.all(0),
               indicatorColor: Theme.of(context).primaryColor,
               indicatorSize: TabBarIndicatorSize.label,
@@ -52,8 +52,8 @@ class PageCharacterList extends HookWidget {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text("All Stars",
-                      style: TextStyle(color: Theme.of(context).primaryColor)),
+                  child: Text('All Stars',
+                      style: TextStyle(color: Theme.of(context).primaryColor),),
                 ),
                 ...elements.map(
                   (e) => Container(
@@ -70,12 +70,12 @@ class PageCharacterList extends HookWidget {
               child: TabBarView(
                 children: [
                   ...[
-                    "TODO",
+                    'TODO',
                     ...elements,
                   ].map((element) {
                     var l = grouped[element]?.toList() ?? [];
                     return SingleChildScrollView(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: Wrap(
                         spacing: 4,
                         runSpacing: 16,

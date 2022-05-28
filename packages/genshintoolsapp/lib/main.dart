@@ -32,11 +32,10 @@ void main() async {
         return HydratedStorage.build(
           storageDirectory: d,
         );
-        ;
       },
     );
   } catch (e) {
-    log("$e");
+    log('$e');
   }
 }
 
@@ -79,13 +78,13 @@ class AppRoot extends HookWidget {
             ),
             BlocProvider<BlocGameData>(
                 lazy: false,
-                create: (_) => BlocGameData(blocGameData.requireData)),
+                create: (_) => BlocGameData(blocGameData.requireData),),
           ],
           child: syncer.provide(MaterialApp(
             title: '原神工具箱',
             theme: theme,
             home: AppMain(),
-          )),
+          ),),
         );
       },
     );

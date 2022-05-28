@@ -30,19 +30,20 @@ class ViewFightProps extends HookWidget {
 
     Iterable<Widget> views = sorted
         .where((k) => fightProps.get(k) != 0)
-        .map((k) => _buildFightProp(context, k, fightProps[k], asDashboard)
-            ?.let((it) => ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 10 * 6,
-                    maxWidth: 10 * 8,
-                  ),
-                  child: it,
-                )))
+        .map(
+          (k) => _buildFightProp(context, k, fightProps[k]!, asDashboard)?.let(
+            (it) => ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 10 * 6,
+                maxWidth: 10 * 8,
+              ),
+              child: it,
+            ),
+          ),
+        )
         .whereType<Widget>();
 
     return Wrap(
-      runAlignment: WrapAlignment.start,
-      alignment: WrapAlignment.start,
       runSpacing: 4,
       spacing: 4,
       children: [
@@ -52,7 +53,11 @@ class ViewFightProps extends HookWidget {
   }
 
   Widget? _buildFightProp(
-      BuildContext context, FightProp k, double v, bool asDashboard) {
+    BuildContext context,
+    FightProp k,
+    double v,
+    bool asDashboard,
+  ) {
     if (asDashboard) {
       switch (k) {
         case FightProp.ADD_ELEMENTAL_SKILL_LEVEL:
@@ -89,7 +94,7 @@ class ViewFightProps extends HookWidget {
           return ExpandableNotifier(
             child: ExpandablePanel(
               collapsed: ExpandableButton(
-                child: _buildFightProp(context, k, fightProps[k], false),
+                child: _buildFightProp(context, k, fightProps[k]!, false),
               ),
               expanded: Container(
                 decoration: BoxDecoration(
@@ -106,10 +111,11 @@ class ViewFightProps extends HookWidget {
                       fightProps: FightProps(
                         elementalReactionAddHurtTypes.map(
                           (ea, fp) => MapEntry(
-                              fp,
-                              ea.elementMasterAddHurt(
-                                fightProps.get(k),
-                              )),
+                            fp,
+                            ea.elementMasterAddHurt(
+                              fightProps.get(k),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -201,20 +207,22 @@ class ViewFightProps extends HookWidget {
               children: [
                 SizedBox(
                   width: asDashboard ? double.infinity : null,
-                  child: Text.rich(TextSpan(
-                    children: [
-                      ...formatValue.split("%").mapIndexed((i, e) => i > 0
-                          ? const TextSpan(
-                              text: "%",
-                              style: TextStyle(fontSize: 9),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        ...formatValue.split('%').mapIndexed(
+                              (i, e) => i > 0
+                                  ? const TextSpan(
+                                      text: '%',
+                                      style: TextStyle(fontSize: 9),
+                                    )
+                                  : TextSpan(text: e),
                             )
-                          : TextSpan(text: e))
-                    ],
-                  )),
+                      ],
+                    ),
+                  ),
                 ),
-                ...?baseValue
-                    ?.let((baseValue) => (baseValue != v))
-                    .ifTrueOrNull(
+                ...?baseValue?.let((baseValue) => baseValue != v).ifTrueOrNull(
                       () => [
                         Text(
                           format(baseValue, base!.format()),

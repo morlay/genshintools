@@ -1,32 +1,32 @@
-import "package:analyzer/dart/element/element.dart";
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:genshindb/annotations.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
-const _fightPropMetaChecker = const TypeChecker.fromRuntime(EnumMeta);
+const _fightPropMetaChecker = TypeChecker.fromRuntime(EnumMeta);
 
 class EnumExtraGenerator extends GeneratorForAnnotation<JsonEnum> {
   const EnumExtraGenerator();
 
   @override
-  generateForAnnotatedElement(
+  String generateForAnnotatedElement(
     Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
     Map<String, EnumMeta> values = {};
 
-    for (var f in (element as ClassElement).fields) {
+    for (final f in (element as ClassElement).fields) {
       if (_fightPropMetaChecker.hasAnnotationOfExact(f)) {
         values[f.name] = EnumMeta(
           label: _fightPropMetaChecker
               .firstAnnotationOfExact(f)!
-              .getField("label")!
+              .getField('label')!
               .toStringValue()!,
           format: _fightPropMetaChecker
               .firstAnnotationOfExact(f)!
-              .getField("format")!
+              .getField('format')!
               .toStringValue()!,
         );
       }
@@ -37,11 +37,11 @@ class EnumExtraGenerator extends GeneratorForAnnotation<JsonEnum> {
 ${_genStringConverter(element)}      
       
 const _\$${element.name}LabelMap = {
-  ${values.map((k, m) => MapEntry(k, '${element.name}.${k}: "${m.label}"')).values.join(",\n")} 
+  ${values.map((k, m) => MapEntry(k, '${element.name}.$k: "${m.label}"')).values.join(",\n")} 
 };
 
 const _\$${element.name}FormatMap = {
-  ${values.map((k, m) => MapEntry(k, '${element.name}.${k}: "${m.format}"')).values.join(",\n")}
+  ${values.map((k, m) => MapEntry(k, '${element.name}.$k: "${m.format}"')).values.join(",\n")}
 };
 
 extension ${element.name}Meta on ${element.name} {
@@ -64,7 +64,7 @@ extension ${element.name}Meta on ${element.name} {
   }
 
   String _genStringConverter(ClassElement element) {
-    return """
+    return '''
 class _\$${element.name}StringConverter implements JsonConverter<${element.name}, String> {
   const _\$${element.name}StringConverter();
 
@@ -75,6 +75,6 @@ class _\$${element.name}StringConverter implements JsonConverter<${element.name}
   String toJson(${element.name} v) =>
       _\$${element.name}EnumMap[v] ?? "";
 }
-""";
+''';
   }
 }

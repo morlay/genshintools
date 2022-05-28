@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
@@ -58,7 +57,6 @@ class WeaponListTile extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 1,
                       child: _buildInfo(context),
                     ),
                     const SizedBox(
@@ -68,10 +66,9 @@ class WeaponListTile extends HookWidget {
                       ),
                     ),
                     Expanded(
-                      flex: 1,
                       child: ViewFightProps(
                         fightProps: fightProps.fightPropsConvert(db.weapon
-                            .fightProps(weapon.key, level, refinement)),
+                            .fightProps(weapon.key, level, refinement),),
                       ),
                     )
                   ],
@@ -93,18 +90,18 @@ class WeaponListTile extends HookWidget {
         WithLevel(
           level: level,
           child: WithCount(
-            prefix: "R",
+            prefix: 'R',
             count: refinement,
             child: GSImage(
               size: 52,
-              domain: "weapon",
+              domain: 'weapon',
               rarity: weapon.rarity,
               nameID: weapon.key,
             ),
           ),
         ),
         ...?full
-            ?.ifTrueOrNull(() => [Text("${backup?.let((v) => " [$v]") ?? ""}")])
+            ?.ifTrueOrNull(() => [Text(backup?.let((v) => ' [$v]') ?? '')])
       ],
     );
   }
@@ -116,7 +113,7 @@ class WeaponListTile extends HookWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Text(
-            "${weapon.name.text(Lang.CHS)}",
+            weapon.name.text(Lang.CHS),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
@@ -183,7 +180,7 @@ class ViewBuildArtifactSetPair extends HookWidget {
 
     var fightPropsForSets =
         sets.fold<FightProps>(FightProps({}), (fightPropsForSets, artifactSet) {
-      for (var ea in artifactSet.equipAffixes) {
+      for (final ea in artifactSet.equipAffixes) {
         if ((artifactSet.activeNum ?? 0) >= ea.activeWhenNum!) {
           fightPropsForSets = fightPropsForSets
               .merge(fightProps.fightPropsConvert(ea.patchedFightProps()));
@@ -204,7 +201,6 @@ class ViewBuildArtifactSetPair extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 1,
                     child: _buildInfo(context, sets),
                   ),
                   const SizedBox(
@@ -214,7 +210,6 @@ class ViewBuildArtifactSetPair extends HookWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 1,
                     child: ViewFightProps(
                       fightProps: fightPropsForSets,
                     ),
@@ -241,7 +236,7 @@ class ViewBuildArtifactSetPair extends HookWidget {
 
             var img = GSImage(
               size: 52,
-              domain: "artifact",
+              domain: 'artifact',
               rarity: a.rarity,
               nameID: a.key,
             );
@@ -267,11 +262,11 @@ class ViewBuildArtifactSetPair extends HookWidget {
         runSpacing: 4,
         children: [
           ...?backup?.let((it) => [
-                Text("[$it]",
+                Text('[$it]',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                    ))
-              ]),
+                    ),)
+              ],),
           Wrap(
             children: [
               ...sets.expand(
@@ -287,7 +282,7 @@ class ViewBuildArtifactSetPair extends HookWidget {
                           iconPadding: EdgeInsets.zero,
                         ),
                         header: Text(
-                          "${e.name.text(Lang.CHS)} * ${e.activeWhenNum}",
+                          '${e.name.text(Lang.CHS)} * ${e.activeWhenNum}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 11,
@@ -342,7 +337,7 @@ class ViewBuildArtifacts extends HookWidget {
                 _buildHeader(
                     context,
                     state.value.artifacts
-                        .firstWhere((e) => e.slotKey == a.slotKey)),
+                        .firstWhere((e) => e.slotKey == a.slotKey),),
                 _buildMainProp(context, a),
               ],
             );
@@ -358,7 +353,6 @@ class ViewBuildArtifacts extends HookWidget {
       padding: const EdgeInsets.only(top: 2, bottom: 2, right: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             currentArtifact.slotKey.asEquipType().label(),
@@ -372,14 +366,14 @@ class ViewBuildArtifacts extends HookWidget {
             TextSpan(
               children: [
                 const TextSpan(
-                  text: "＋",
+                  text: '＋',
                   style: TextStyle(
                     fontSize: 8,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextSpan(
-                  text: "${currentArtifact.level}",
+                  text: '${currentArtifact.level}',
                   style: const TextStyle(
                     fontSize: 9,
                     fontWeight: FontWeight.bold,
@@ -410,11 +404,10 @@ class ViewBuildArtifacts extends HookWidget {
               decoration: BoxDecoration(
                   border: Border(
                       left: BorderSide(
-                width: 1,
                 color: (fp == artifact?.mainStatKey.asFightProp())
                     ? Theme.of(context).primaryColor
                     : Colors.transparent,
-              ))),
+              ),),),
               padding: const EdgeInsets.only(left: 4),
               child: GestureDetector(
                 onTap: () {
@@ -426,7 +419,7 @@ class ViewBuildArtifacts extends HookWidget {
                                   mainStatKey:
                                       GOODArtifact.statKeyFromFightProp(fp),
                                 )
-                              : artifact)
+                              : artifact,)
                     ],
                   );
                 },
@@ -445,7 +438,7 @@ class ViewBuildArtifacts extends HookWidget {
                   }),
                 ),
               ),
-            )),
+            ),),
       ],
     );
   }
@@ -455,7 +448,7 @@ class ViewBuildArtifacts extends HookWidget {
     var as = blocGameData.db.artifact;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 8),
       child: Column(
         children: current.artifacts.last.substats.isNotEmpty
             ? [
@@ -483,8 +476,8 @@ class ViewBuildArtifacts extends HookWidget {
                   },
                   child: Text(
                     state.value.artifacts.last.substats.isEmpty
-                        ? "查看当前配装"
-                        : "查看毕业词条",
+                        ? '查看当前配装'
+                        : '查看毕业词条',
                     style: const TextStyle(fontSize: 7),
                   ),
                 ),
@@ -493,7 +486,7 @@ class ViewBuildArtifacts extends HookWidget {
                 TextButton(
                   onPressed: () {},
                   child: const Text(
-                    "当前面板包含 18+6 词条",
+                    '当前面板包含 18+6 词条',
                     style: TextStyle(fontSize: 7),
                   ),
                 ),
@@ -523,7 +516,7 @@ class AppendPropsRank extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              ranks.keys.map((k) => k.replaceAll("双暴词条", "双暴")).join(" / "),
+              ranks.keys.map((k) => k.replaceAll('双暴词条', '双暴')).join(' / '),
             ),
             Wrap(
               spacing: 3,
@@ -567,7 +560,6 @@ class AppendPropsRank extends StatelessWidget {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(key, style: const TextStyle(fontSize: 7)),
                             Text(ranks[key]!.value.toStringAsFixed(1),
@@ -579,7 +571,7 @@ class AppendPropsRank extends StatelessWidget {
                                   fontFeatures: const [
                                     FontFeature.tabularFigures()
                                   ],
-                                ))
+                                ),)
                           ],
                         ),
                       ),
@@ -596,7 +588,7 @@ class AppendPropsRank extends StatelessWidget {
                   ],
                 ),
               ),
-            ))
+            ),)
       ],
     );
   }

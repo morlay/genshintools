@@ -11,9 +11,9 @@ class GOOD with _$GOOD {
   GOOD._();
 
   factory GOOD({
-    @Default("GOOD") String format,
+    @Default('GOOD') String format,
     @Default(1) double version,
-    @Default("dev.morlay.genshintools") String source,
+    @Default('dev.morlay.genshintools') String source,
     required List<GOODCharacter> characters,
     required List<GOODArtifact> artifacts,
     required List<GOODWeapon> weapons,
@@ -48,23 +48,23 @@ class GOOD with _$GOOD {
         );
   }
 
-  updateCharacter(
+  GOOD updateCharacter(
     String key,
     GOODCharacter Function(GOODCharacter c) update,
   ) {
     final updated = update(characters.firstWhereOrNull((e) => e.key == key) ??
-        GOODCharacter.create(key));
+        GOODCharacter.create(key),);
 
     return copyWith(
       version: 1,
       characters: _cleanupCharacters([
-        ...characters.where((e) => e.key != ""),
+        ...characters.where((e) => e.key != ''),
         updated,
       ]),
     );
   }
 
-  updateWeapon(
+  GOOD updateWeapon(
     String location,
     GOODWeapon Function(GOODWeapon c) update,
     String defaultKey,
@@ -75,7 +75,7 @@ class GOOD with _$GOOD {
       return copyWith(
         weapons: _cleanupWeapons(weapons
             .map((a) => a.location == found.location ? update(found) : a)
-            .toList()),
+            .toList(),),
       );
     }
 
@@ -96,32 +96,32 @@ class GOOD with _$GOOD {
         (e.slotKey == sk && e.location == location) ||
         // 为圣遗物匹配不同元素的旅行者
         (e.slotKey == sk && e.location == 'Traveler') &&
-            location.startsWith('Traveler'));
+            location.startsWith('Traveler'),);
 
     if (found != null) {
       return copyWith(
         artifacts: _cleanupArtifacts(
-            artifacts.map((a) => a == found ? update(found) : a).toList()),
+            artifacts.map((a) => a == found ? update(found) : a).toList(),),
       );
     }
 
     return copyWith(
       artifacts: _cleanupArtifacts(
-          [...artifacts]..add(update(GOODArtifact.create(sk, location)))),
+          [...artifacts, update(GOODArtifact.create(sk, location))],),
     );
   }
 
   List<GOODCharacter> _cleanupCharacters(List<GOODCharacter> characters) {
-    return characters.where((w) => w.key != "").toList().uniqBy((e) => e.key);
+    return characters.where((w) => w.key != '').toList().uniqBy((e) => e.key);
   }
 
   List<GOODWeapon> _cleanupWeapons(List<GOODWeapon> weapons) {
-    return weapons.where((w) => w.key != "").toList().uniqBy((e) => e.location);
+    return weapons.where((w) => w.key != '').toList().uniqBy((e) => e.location);
   }
 
   List<GOODArtifact> _cleanupArtifacts(List<GOODArtifact> artifacts) {
     return artifacts
-        .where((a) => a.setKey != "")
+        .where((a) => a.setKey != '')
         .toList()
         .uniqBy((e) => e.hashCode);
   }
@@ -138,7 +138,7 @@ class GOOD with _$GOOD {
         return copyWith(
             artifacts: [
           ...artifacts.map((a) => from == a ? artifact : a),
-        ].uniqBy((e) => e.hashCode));
+        ].uniqBy((e) => e.hashCode),);
       } else {
         return copyWith(
             artifacts: [
@@ -155,7 +155,7 @@ class GOOD with _$GOOD {
             }
             return a;
           })
-        ].uniqBy((e) => e.hashCode));
+        ].uniqBy((e) => e.hashCode),);
       }
     }
     return copyWith(
@@ -169,7 +169,7 @@ class GOOD with _$GOOD {
   GOODWeapon weaponOn(String location, [String? defaultKey]) {
     return weapons.firstWhereOrNull((w) => w.location == location) ??
         GOODWeapon(
-          key: defaultKey ?? "",
+          key: defaultKey ?? '',
           level: 1,
           ascension: 0,
           refinement: 1,
@@ -189,7 +189,7 @@ class GOODCharacter with _$GOODCharacter {
 
   static int ascensionByLevel(int level) {
     var ascension = 0;
-    for (var maxLevel in [20, 40, 50, 60, 70, 80]) {
+    for (final maxLevel in [20, 40, 50, 60, 70, 80]) {
       if (level > maxLevel) {
         ascension++;
       }
@@ -215,7 +215,7 @@ class GOODCharacter with _$GOODCharacter {
             TalentType.auto: 1,
             TalentType.skill: 1,
             TalentType.burst: 1,
-          });
+          },);
 
   factory GOODCharacter.fromJson(Map<String, dynamic> json) =>
       _GOODCharacter.fromJson(json);
@@ -241,21 +241,21 @@ class GOODSubStat with _$GOODSubStat {
 
   GOODSubStat withStringValue(String value) {
     return copyWith(
-      value: key.name.endsWith("_")
-          ? double.parse(value.split("?").first) * 100
-          : double.parse(value.split("?").first).toInt().toDouble(),
+      value: key.name.endsWith('_')
+          ? double.parse(value.split('?').first) * 100
+          : double.parse(value.split('?').first).toInt().toDouble(),
     );
   }
 
   String stringValue() {
-    return key.name.endsWith("_")
+    return key.name.endsWith('_')
         ? GSArtifactAppendDepot.format(value / 100)
         : GSArtifactAppendDepot.format(value);
   }
 
   @override
   String toString() {
-    return "${key.name}:${stringValue()}";
+    return '${key.name}:${stringValue()}';
   }
 }
 
@@ -283,7 +283,7 @@ class GOODArtifact with _$GOODArtifact {
       slotKey: slotKey,
       location: location,
       mainStatKey: defaultMainStatKey(slotKey),
-      setKey: "",
+      setKey: '',
       rarity: 5,
       level: 0,
       substats: [],
@@ -308,7 +308,7 @@ class GOODArtifact with _$GOODArtifact {
       return {
         ...ret,
         s.key.asFightProp(): GSArtifactAppendDepot.format(
-          s.key.name.endsWith("_") ? (s.value / 1e2) : s.value,
+          s.key.name.endsWith('_') ? (s.value / 1e2) : s.value,
         )
       };
     });

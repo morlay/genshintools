@@ -33,41 +33,43 @@ class CharacterCard extends HookWidget {
             clipBehavior: Clip.none,
             children: [
               Positioned(
+                right: 0,
+                top: 0,
                 child: RotatedBox(
                   quarterTurns: 1,
                   child: Text(
-                    c.c.role ?? "",
+                    c.c.role ?? '',
                     style: const TextStyle(fontSize: 7),
                   ),
                 ),
-                right: 0,
-                top: 0,
               ),
               Positioned(
-                child: _buildAvatar(context),
                 left: 30,
                 top: 0,
+                child: _buildAvatar(context),
               ),
               Positioned(
+                left: 30,
+                top: 58 - 20,
                 child: _buildMaterialCosts(
                   context,
-                  Text("人物等级 Lv.${c.c.level} → Lv.90"),
+                  Text('人物等级 Lv.${c.c.level} → Lv.90'),
                   db.characterLevelupPlans(
                     c.character.key,
                     c.c.level,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 58,
                     height: 20,
                   ),
                 ),
-                left: 30,
-                top: 58 - 20,
               ),
               Positioned(
+                left: 0,
+                top: 0,
                 child: _buildMaterialCosts(
                   context,
-                  Text("武器等级 Lv.${c.w.level} → Lv.90"),
+                  Text('武器等级 Lv.${c.w.level} → Lv.90'),
                   db.weapon
                           .findOrNull(c.w.key)
                           ?.rarity
@@ -76,14 +78,14 @@ class CharacterCard extends HookWidget {
                                 c.w.key,
                                 c.w.level,
                               )
-                              .toList())) ??
+                              .toList(),),) ??
                       [],
                   _buildWeapon(context, db),
                 ),
-                left: 0,
-                top: 0,
               ),
               Positioned(
+                left: 30,
+                top: -11,
                 child: Text(
                   c.character.name.text(Lang.CHS),
                   style: const TextStyle(
@@ -91,8 +93,6 @@ class CharacterCard extends HookWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                left: 30,
-                top: -11,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
@@ -101,7 +101,7 @@ class CharacterCard extends HookWidget {
                   height: 30 * 2,
                   child: _buildMaterialCosts(
                     context,
-                    const Text("所有圣遗物等级 → Lv.20"),
+                    const Text('所有圣遗物等级 → Lv.20'),
                     c.artifacts
                         .expand(
                           (a) => db.artifactLevelupPlans(
@@ -119,16 +119,18 @@ class CharacterCard extends HookWidget {
                 ),
               ),
               Positioned(
-                child: c.todo.ifTrueOrNull(() =>
-                        SizedBox(width: 120, child: _buildArtifactScope(db))) ??
-                    SizedBox(width: 0),
                 left: 0,
                 bottom: -11,
+                child: c.todo.ifTrueOrNull(() =>
+                        SizedBox(width: 120, child: _buildArtifactScope(db)),) ??
+                    const SizedBox(width: 0),
               ),
               Positioned(
+                right: 0,
+                bottom: 32,
                 child: _buildMaterialCosts(
                   context,
-                  const Text("有效技能等级 → Lv.10"),
+                  const Text('有效技能等级 → Lv.10'),
                   [
                     SkillType.NORMAL_ATTACK,
                     SkillType.ELEMENTAL_SKILL,
@@ -138,7 +140,7 @@ class CharacterCard extends HookWidget {
                     return b.shouldSkillLevelup(st)
                         ? db.characterSkillLevelupPlans(
                             c.character.key, st, c.c.skillLevel(st), c.c.level,
-                            maxLevel: b.emBuild().ifTrueOrNull(() => 6) ?? 10)
+                            maxLevel: b.emBuild().ifTrueOrNull(() => 6) ?? 10,)
                         : [];
                   }).toList(),
                   SizedBox(
@@ -147,8 +149,6 @@ class CharacterCard extends HookWidget {
                     child: _buildTalentLevels(context),
                   ),
                 ),
-                right: 0,
-                bottom: 32,
               ),
             ],
           ),
@@ -163,7 +163,7 @@ class CharacterCard extends HookWidget {
         inline: true,
         ranks: c.appendPropsRanks(
           db.artifact,
-          c.character.characterBuildFor(c.c.role ?? ""),
+          c.character.characterBuildFor(c.c.role ?? ''),
           db.character
               .fightProps(
                 c.c.key,
@@ -174,10 +174,10 @@ class CharacterCard extends HookWidget {
                 c.w.key,
                 c.w.level,
                 c.w.refinement,
-              )),
+              ),),
           location: c.character.key,
           chargeEfficiencyAsDPS: c.artifacts
-                  .where((a) => a.setKey == db.artifact.findSet("绝缘之旗印").key)
+                  .where((a) => a.setKey == db.artifact.findSet('绝缘之旗印').key)
                   .length >=
               4,
         ),
@@ -189,12 +189,12 @@ class CharacterCard extends HookWidget {
     return WithLevel(
       level: c.c.level,
       child: WithCount(
-        prefix: "C",
+        prefix: 'C',
         count: c.c.constellation,
         child: WithElement(
           element: c.character.element,
           child: GSImage(
-            domain: "character",
+            domain: 'character',
             size: 58,
             rarity: c.character.rarity,
             nameID: c.character.key,
@@ -206,17 +206,17 @@ class CharacterCard extends HookWidget {
 
   Widget _buildMaterialCosts(BuildContext context, Widget label,
       List<LevelupPlan> levelPlans, Widget child,
-      {Widget Function({void Function()? onTap, Widget? child})? detector}) {
+      {Widget Function({void Function()? onTap, Widget? child})? detector,}) {
     if (levelPlans.isEmpty) {
       return child;
     }
 
     Map<String, GSMaterial> materials = {};
 
-    for (var p in levelPlans) {
-      for (var c in p.costs) {
+    for (final p in levelPlans) {
+      for (final c in p.costs) {
         materials[c.key] = materials[c.key]?.let((cc) => cc.copyWith(
-                count: ((cc.count ?? 1) + (c.count ?? 1)).toInt())) ??
+                count: ((cc.count ?? 1) + (c.count ?? 1)).toInt(),),) ??
             c;
       }
     }
@@ -254,13 +254,13 @@ class CharacterCard extends HookWidget {
                                 },
                                 leading: GSImage(
                                   size: 42,
-                                  domain: "material",
+                                  domain: 'material',
                                   rarity: m.rarity,
                                   nameID: m.key,
                                 ),
                                 title: Text(m.name.text(Lang.CHS)),
                                 trailing: Text(
-                                  "${m.count ?? 1}",
+                                  '${m.count ?? 1}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -288,12 +288,12 @@ class CharacterCard extends HookWidget {
       level: c.w.level,
       size: 7,
       child: WithCount(
-        prefix: "R",
+        prefix: 'R',
         count: c.w.refinement,
         size: 7,
         child: GSImage(
           size: 28,
-          domain: "weapon",
+          domain: 'weapon',
           rarity: db.weapon.find(c.w.key).rarity,
           nameID: db.weapon.find(c.w.key).key,
         ),
@@ -306,14 +306,14 @@ class CharacterCard extends HookWidget {
       spacing: 2,
       runSpacing: 2,
       children: [
-        ...(c.todo
+        ...c.todo
             ? c.artifacts.expandIndexed((i, a) => [
                   WithLevel(
                     level: a.level,
                     size: 7,
                     child: GSImage(
                       size: 28,
-                      domain: "artifact",
+                      domain: 'artifact',
                       rarity: a.rarity,
                       nameID: db.artifact
                           .findSet(a.setKey)
@@ -331,9 +331,9 @@ class CharacterCard extends HookWidget {
                         const SizedBox(
                           width: 28,
                         ),
-                      ]),
-                ])
-            : []),
+                      ],),
+                ],)
+            : [],
       ],
     );
   }
@@ -351,7 +351,7 @@ class CharacterCard extends HookWidget {
                     children: [
                       Positioned(
                         child: Text(
-                          "${key.string()}.",
+                          '${key.string()}.',
                           style: TextStyle(
                             color: Theme.of(context).hintColor,
                             fontSize: 8,
@@ -361,14 +361,14 @@ class CharacterCard extends HookWidget {
                       Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            "${c.c.talent[TalentType.values[key.index]]}",
+                            '${c.c.talent[TalentType.values[key.index]]}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 8,
                             ),
-                          ))
+                          ),)
                     ],
-                  )),
+                  ),),
             )
             .expand((k) => k)
       ],

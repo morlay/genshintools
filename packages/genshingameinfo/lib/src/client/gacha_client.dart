@@ -23,33 +23,33 @@ class GachaClient extends CommonClient {
           ),
           queryParameters: {
             ...parsedGachaLogURL.queryParameters,
-            "lang": "zh-cn",
+            'lang': 'zh-cn',
           },
         )
         .then((value) => pickDataOrError(value.data as Map<String, dynamic>))
-        .then((value) => (value["gacha_type_list"] as List<dynamic>))
+        .then((value) => value['gacha_type_list'] as List<dynamic>)
         .then((list) => list
             .map((item) => GachaType.fromJson(item as Map<String, dynamic>))
-            .toList());
+            .toList(),);
   }
 
   Future<List<GachaLog>> listAllGachaLog({
     required GachaType gachaType,
     int size = 20,
-    String untilId = "0",
+    String untilId = '0',
   }) async {
     List<GachaLog> data = [];
 
-    var endId = "0";
+    var endId = '0';
     var forceDone = false;
     Iterable<GachaLog> list = [];
 
     while (true) {
       list = await listGachaLog(gachaType: gachaType, endId: endId, size: size);
-      endId = list.isNotEmpty ? list.last.id : "0";
+      endId = list.isNotEmpty ? list.last.id : '0';
 
-      for (var item in list) {
-        if (untilId != "0" && untilId == item.id) {
+      for (final item in list) {
+        if (untilId != '0' && untilId == item.id) {
           forceDone = true;
           break;
         }
@@ -82,16 +82,16 @@ class GachaClient extends CommonClient {
           ),
           queryParameters: {
             ...parsedGachaLogURL.queryParameters,
-            "lang": "zh-cn",
-            "gacha_type": gachaType.key,
-            "size": size,
-            "end_id": endId,
+            'lang': 'zh-cn',
+            'gacha_type': gachaType.key,
+            'size': size,
+            'end_id': endId,
           },
         )
         .then((value) => pickDataOrError(value.data as Map<String, dynamic>))
-        .then((value) => (value["list"] as List<dynamic>))
+        .then((value) => value['list'] as List<dynamic>)
         .then((list) => list
             .map((item) => GachaLog.fromJson(item as Map<String, dynamic>))
-            .toList());
+            .toList(),);
   }
 }

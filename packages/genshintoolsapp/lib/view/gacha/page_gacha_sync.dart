@@ -5,12 +5,11 @@ import 'package:genshintoolsapp/domain/gacha.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
 
 class PageGachaSync extends HookWidget {
-  static String routeName = "/gacha/sync";
+  static String routeName = '/gacha/sync';
 
   static show(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        fullscreenDialog: false,
         settings: RouteSettings(name: PageGachaSync.routeName),
         builder: (context) => const PageGachaSync(),
       ),
@@ -23,7 +22,7 @@ class PageGachaSync extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("同步抽卡记录"),
+        title: const Text('同步抽卡记录'),
       ),
       body: FormGachaSync(),
     );
@@ -38,10 +37,10 @@ class FormGachaSync extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final logURL = useTextEditingController();
-    final info = useState("");
+    final info = useState('');
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
         child: Column(
@@ -51,7 +50,7 @@ class FormGachaSync extends HookWidget {
               minLines: 4,
               maxLines: 4,
               decoration: const InputDecoration(
-                hintText: "https://webstatic.mihoyo.com/....#/log",
+                hintText: 'https://webstatic.mihoyo.com/....#/log',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -100,14 +99,14 @@ class FormGachaSync extends HookWidget {
 
     var types = await client.listGachaType();
 
-    for (var gachaType in types) {
+    for (final gachaType in types) {
       List<GachaLog> logs = state.listFor(gachaType.key);
 
-      var untilId = logs.isNotEmpty ? logs.last.id : "0";
+      var untilId = logs.isNotEmpty ? logs.last.id : '0';
       var noNextPage = false;
       var page = 0;
 
-      var endId = "0";
+      var endId = '0';
 
       while (true) {
         page++;
@@ -120,14 +119,14 @@ class FormGachaSync extends HookWidget {
           var list =
               await client.listGachaLog(gachaType: gachaType, endId: endId);
 
-          endId = list.isNotEmpty ? list.last.id : "0";
+          endId = list.isNotEmpty ? list.last.id : '0';
 
-          for (var item in list.reversed) {
-            if (item.uid != "$uid") {
+          for (final item in list.reversed) {
+            if (item.uid != '$uid') {
               noNextPage = true;
               break;
             }
-            if (untilId != "0" && untilId == item.id) {
+            if (untilId != '0' && untilId == item.id) {
               noNextPage = true;
             }
             logs.add(item);

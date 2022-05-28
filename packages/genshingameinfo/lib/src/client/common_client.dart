@@ -13,9 +13,9 @@ class CommonClient {
   }
 
   Map<String, dynamic> pickDataOrError(Map<String, dynamic> data) {
-    if (data.containsKey("message") && (data["retcode"] as int) != 0) {
+    if (data.containsKey('message') && (data['retcode'] as int) != 0) {
       throw "[${data["retcode"]}] ${data["message"]}";
     }
-    return data["data"];
+    return data['data'];
   }
 }

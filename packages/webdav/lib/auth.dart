@@ -14,16 +14,16 @@ class HttpBaseAuth implements RoundTripBuilder {
   @override
   RoundTrip build(RoundTrip next) {
     return (request) async {
-      return await next(request.copyWith(
+      return next(request.copyWith(
         headers: applyAuthHeader(request.headers ?? {}),
-      ));
+      ),);
     };
   }
 
   Map<String, dynamic> applyAuthHeader(Map<String, dynamic> headers) {
     return {
       ...headers,
-      "authorization":
+      'authorization':
           "Basic ${base64Encode(utf8.encode("$username:$password"))}"
     };
   }

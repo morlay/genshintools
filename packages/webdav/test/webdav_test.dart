@@ -9,26 +9,26 @@ import 'package:test/test.dart';
 import 'package:webdav/webdav.dart';
 
 void main() {
-  var ctx = Logger.withLogger(Logger(StdLogSink("webdav")));
+  var ctx = Logger.withLogger(Logger(StdLogSink('webdav')));
 
   var wd = WebDAV(
-    address: Platform.environment["WEBDAV_ADDRESS"]!,
-    username: Platform.environment["WEBDAV_USERNAME"]!,
-    password: Platform.environment["WEBDAV_PASSWORD"]!,
-    root: "genshintools",
+    address: Platform.environment['WEBDAV_ADDRESS']!,
+    username: Platform.environment['WEBDAV_USERNAME']!,
+    password: Platform.environment['WEBDAV_PASSWORD']!,
+    root: 'genshintools',
   );
 
   test(
-    "client",
+    'client',
     runWith(ctx, () async {
       var now = DateTime.now().toString();
 
       await wd.write(
-        "/tmp.txt",
+        '/tmp.txt',
         Uint8List.fromList(utf8.encode(now)),
       );
 
-      var data = utf8.decode(await wd.read("/tmp.txt"));
+      var data = utf8.decode(await wd.read('/tmp.txt'));
 
       expect(data, now);
     }),

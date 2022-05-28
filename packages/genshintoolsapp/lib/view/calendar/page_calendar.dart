@@ -1,4 +1,4 @@
-import "package:collection/collection.dart";
+import 'package:collection/collection.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
@@ -10,7 +10,7 @@ import 'package:genshintoolsapp/view/gameui.dart';
 import 'view_daily_note.dart';
 
 class PageCalendar extends HookWidget {
-  static String routeName = "/calender";
+  static String routeName = '/calender';
 
   const PageCalendar({Key? key}) : super(key: key);
 
@@ -26,7 +26,7 @@ class PageCalendar extends HookWidget {
               child: ViewCalendar(),
             )
           ],
-        ));
+        ),);
   }
 }
 
@@ -41,7 +41,7 @@ class ViewCalendar extends HookWidget {
     var plan = levelupPlans.firstWhereOrNull((e) => e.always);
 
     if (plan != null) {
-      for (var mc in plan.costs) {
+      for (final mc in plan.costs) {
         var mid = mc.key;
 
         needs[mid] = ViewMaterialNeeds(
@@ -72,9 +72,10 @@ class ViewCalendar extends HookWidget {
         return Rx.fromCallable(() => BlocGameData.read(context).syncGameInfo(
               blocAuth.state.authedClient(),
               blocAuth.state.chosenUid(),
-            ));
+            ),);
       }
-    }, [uid]);
+      return null;
+    }, [uid],);
 
     final gbb = BlocGameData.watch(context);
     final characters = gbb.listCharacterWithState(uid);
@@ -87,7 +88,7 @@ class ViewCalendar extends HookWidget {
       var wNameId = w.name.text(Lang.KEY);
 
       var aw = GSImage(
-        domain: "weapon",
+        domain: 'weapon',
         rarity: w.rarity,
         nameID: wNameId,
       );
@@ -101,7 +102,7 @@ class ViewCalendar extends HookWidget {
       var cNameId = c.character.name.text(Lang.KEY);
 
       var avatar = GSImage(
-        domain: "character",
+        domain: 'character',
         rarity: c.character.rarity,
         nameID: cNameId,
       );
@@ -120,7 +121,7 @@ class ViewCalendar extends HookWidget {
               .map((e) => e.skillType)
               .where((skillType) => skillType != SkillType.OTHERS);
 
-      for (var skillType in skillTypes) {
+      for (final skillType in skillTypes) {
         addToNeeds(
           needs,
           avatar,
@@ -129,7 +130,7 @@ class ViewCalendar extends HookWidget {
               maxLevel: c.character
                   .characterBuildFor(c.c.role)
                   .emBuild()
-                  .ifTrueOrNull(() => 6)),
+                  .ifTrueOrNull(() => 6),),
         );
       }
     });
@@ -164,8 +165,8 @@ class ViewCalendar extends HookWidget {
                             material: item[0].material,
                             materials: item.map((e) => e.material).toList(),
                             needs: item.expand((e) => e.needs).toList(),
-                          ))
-                    ])
+                          ),)
+                    ],)
                   ],
                 );
               }).toList(),
@@ -191,33 +192,33 @@ class ViewMaterialNeeds extends HookWidget {
 
   String group() {
     if (material.openWeekdays != null) {
-      return "秘境掉落";
+      return '秘境掉落';
     }
 
     if (material.materialType == GSMaterialType.AVATAR_MATERIAL) {
       if (material.dropFromRarity == GSMonsterRarity.BIG_BOSS_MONSTER) {
-        return "周BOSS掉落";
+        return '周BOSS掉落';
       }
 
       if (material.dropFromRarity == GSMonsterRarity.BOSS_MONSTER) {
-        return "野外BOSS掉落";
+        return '野外BOSS掉落';
       }
 
-      return "怪物掉落";
+      return '怪物掉落';
     }
 
     if (material.materialType == GSMaterialType.EXCHANGE) {
-      return "野外采集";
+      return '野外采集';
     }
 
-    return "其他";
+    return '其他';
   }
 
   int compareTo(ViewMaterialNeeds n) {
     return rank() < n.rank() ? -1 : 1;
   }
 
-  rank() {
+  double rank() {
     return material.openWeekdays?.let((it) {
           if (material.isTodayOpen()) {
             return material.rank - 2e5;
@@ -241,8 +242,8 @@ class ViewMaterialNeeds extends HookWidget {
         .toList();
 
     return Opacity(
-      opacity: !(material.isTodayOpen())
-          ? !(material.isTomorrowOpen())
+      opacity: !material.isTodayOpen()
+          ? !material.isTomorrowOpen()
               ? 0.4
               : 0.7
           : 1,
@@ -266,7 +267,7 @@ class ViewMaterialNeeds extends HookWidget {
                                   width: 1,
                                 ),
                               )
-                            ]),
+                            ],),
                         GestureDetector(
                           onTap: () {
                             ViewMaterial.showModal(context, m);
@@ -284,7 +285,7 @@ class ViewMaterialNeeds extends HookWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Wrap(
                 spacing: 12,
                 runSpacing: 12,
@@ -316,8 +317,8 @@ class ViewMaterialNeed extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var from = action.split("→").first;
-    var to = action.split("→").last;
+    var from = action.split('→').first;
+    var to = action.split('→').last;
 
     return GestureDetector(
       onTap: () {

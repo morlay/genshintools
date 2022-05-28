@@ -9,7 +9,7 @@ void main() {
   var cookie = File('../../assets/cookie.txt').readAsStringSync();
   var dio = Dio();
 
-  var c = MiHoYoBBSClient(dio: dio, encodedCookie: cookie, useProxy: false);
+  var c = MiHoYoBBSClient(dio: dio, encodedCookie: cookie);
 
   test('listMyGameRole', () async {
     var value = await c.listMyGameRole();

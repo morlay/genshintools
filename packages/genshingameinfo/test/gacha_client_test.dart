@@ -5,7 +5,7 @@ import 'package:genshingameinfo/genshingameinfo.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("GachaClient", () {
+  group('GachaClient', () {
     var gachalogurl = File('../../assets/gachalogurl.txt').readAsStringSync();
     var dio = Dio();
     var c = GachaClient(dio: dio, gachaLogURL: gachalogurl);
@@ -13,16 +13,16 @@ void main() {
     test('listGachaType', () async {
       var value = await c.listGachaType();
       print(value);
-    }, skip: true);
+    }, skip: true,);
 
     test('listAllGachaLog', () async {
       var value = await c.listAllGachaLog(
-        gachaType: GachaType(key: "100", name: ""),
+        gachaType: GachaType(key: '100', name: ''),
         size: 10,
-        untilId: "1628316360000125362",
+        untilId: '1628316360000125362',
       );
       print(value.last);
       print(value.map((e) => e.id));
-    }, skip: true);
+    }, skip: true,);
   });
 }

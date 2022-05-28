@@ -51,18 +51,18 @@ class GSDB {
 
     var from = rangeLimit(current, 1, 90);
 
-    for (var to in [21, 41, 51, 61, 71, 81, 86, 90]) {
+    for (final to in [21, 41, 51, 61, 71, 81, 86, 90]) {
       if (from < to) {
         var exp = character.levelUpCost(from, to);
 
         list.add(
           LevelupPlan(
-            action: "Lv.$from → Lv.$to",
+            action: 'Lv.$from → Lv.$to',
             costs: [
-              material.find("大英雄的经验").copyWith(
+              material.find('大英雄的经验').copyWith(
                     count: exp.let((v) => v / 2e4).round().toInt(),
                   ),
-              material.find("摩拉").copyWith(
+              material.find('摩拉').copyWith(
                     count: exp.let((v) => v / 5).round().toInt(),
                   ),
               ...character
@@ -95,18 +95,18 @@ class GSDB {
 
     var from = rangeLimit(current, 1, rarity == 5 ? 20 : 16);
 
-    for (var to in [8, 12, 16, 20]) {
+    for (final to in [8, 12, 16, 20]) {
       if (from < to) {
         var exp = artifact.levelUpCost(rarity, from, to);
 
         list.add(
           LevelupPlan(
-            action: "Lv.$from → Lv.$to",
+            action: 'Lv.$from → Lv.$to',
             costs: [
-              material.find("祝圣精华").copyWith(
+              material.find('祝圣精华').copyWith(
                     count: exp.let((v) => v / 1e4).round().toInt(),
                   ),
-              material.find("Mora").copyWith(count: exp),
+              material.find('Mora').copyWith(count: exp),
             ],
           ),
         );
@@ -120,7 +120,7 @@ class GSDB {
 
   List<LevelupPlan> characterSkillLevelupPlans(
       String keyOrName, SkillType skillType, int current, int characterLevel,
-      {int? maxLevel}) {
+      {int? maxLevel,}) {
     var c = character.find(keyOrName);
 
     characterLevel = rangeLimit(characterLevel, 1, 90);
@@ -146,7 +146,7 @@ class GSDB {
 
     var materialCosts = c.materialCosts(skillType);
 
-    for (var to in List<int>.generate(maxLevel ?? 9, (i) => i + 1)) {
+    for (final to in List<int>.generate(maxLevel ?? 9, (i) => i + 1)) {
       if (from < to) {
         var costs = materialCosts[from];
 
@@ -155,11 +155,11 @@ class GSDB {
         list.add(
           LevelupPlan(
               always: characterLevel > maxCharacterLevel,
-              action: "$skillTypeStr.$from → $skillTypeStr.$to",
+              action: '$skillTypeStr.$from → $skillTypeStr.$to',
               costs: costs
                   .map((e) =>
-                      material.find(e.materialKey).copyWith(count: e.count))
-                  .toList()),
+                      material.find(e.materialKey).copyWith(count: e.count),)
+                  .toList(),),
         );
         from = to;
       }
@@ -175,17 +175,17 @@ class GSDB {
 
     var from = current;
 
-    for (var to in [21, 41, 51, 61, 71, 81, 90]) {
+    for (final to in [21, 41, 51, 61, 71, 81, 90]) {
       if (from < to) {
         var exp = weapon.levelUpCost(w.rarity, from, to);
 
         list.add(LevelupPlan(
-          action: "Lv.$from → Lv.$to",
+          action: 'Lv.$from → Lv.$to',
           costs: [
-            material.find("精锻用魔矿").copyWith(
+            material.find('精锻用魔矿').copyWith(
                   count: exp.let((v) => v / 1e4).round().toInt(),
                 ),
-            material.find("摩拉").copyWith(
+            material.find('摩拉').copyWith(
                   count: exp.let((v) => v / 10).round().toInt(),
                 ),
             ...weapon
@@ -200,7 +200,7 @@ class GSDB {
                       ),
                 ),
           ],
-        ));
+        ),);
 
         from = to;
       }

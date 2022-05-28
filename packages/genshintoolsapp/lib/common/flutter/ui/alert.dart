@@ -17,14 +17,14 @@ void showAlert(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("取消"),
+            child: const Text('取消'),
           ),
           TextButton(
             onPressed: () {
               onConfirm();
               Navigator.of(context).pop();
             },
-            child: const Text("确认"),
+            child: const Text('确认'),
           ),
         ],
       );
@@ -38,5 +38,5 @@ void showSnackBar(
 }) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: content,
-  ));
+  ),);
 }

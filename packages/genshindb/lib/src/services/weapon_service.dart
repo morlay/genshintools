@@ -21,7 +21,7 @@ class WeaponService with _$WeaponService {
   GSWeapon find(String keyOrName) {
     final f = findOrNull(keyOrName);
     if (f == null) {
-      throw "weapon $keyOrName not found";
+      throw 'weapon $keyOrName not found';
     }
     return f;
   }
@@ -31,8 +31,8 @@ class WeaponService with _$WeaponService {
   GSWeapon? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       weapons?.forEach((id, w) {
-        _indexes["${w.id}"] = w.key;
-        for (var lang in w.name.keys) {
+        _indexes['${w.id}'] = w.key;
+        for (final lang in w.name.keys) {
           _indexes[w.name.text(lang)] = w.key;
         }
       });

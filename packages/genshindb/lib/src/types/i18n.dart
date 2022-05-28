@@ -11,7 +11,7 @@ class I18n with _$I18n {
   ) = _I18n;
 
   factory I18n.fromJson(Map<String, dynamic> json) =>
-      _I18n.fromJson({"values": json});
+      _I18n.fromJson({'values': json});
 
   @override
   Map<String, dynamic> toJson() {
@@ -26,7 +26,7 @@ class I18n with _$I18n {
     if (values.containsKey(lang)) {
       return values[lang]!;
     }
-    return "";
+    return '';
   }
 
   Iterable<Lang> get keys => values.keys;

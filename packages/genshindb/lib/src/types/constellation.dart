@@ -22,7 +22,7 @@ class GSConstellation with _$GSConstellation {
   factory GSConstellation.fromJson(Map<String, dynamic> json) =>
       _GSConstellation.fromJson(json);
 
-  get nameID => name.text(Lang.KEY);
+  String get nameID => name.text(Lang.KEY);
 
   FightProps patchedFightProps() {
     return addProps;

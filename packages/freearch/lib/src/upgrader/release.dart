@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:version/version.dart';
 
 part '__generated__/release.freezed.dart';
+
 part '__generated__/release.g.dart';
 
 @freezed

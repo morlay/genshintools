@@ -25,7 +25,7 @@ class CharacterService with _$CharacterService {
   GSCharacter find(String keyOrName) {
     var f = findOrNull(keyOrName);
     if (f == null) {
-      throw "character not found $keyOrName";
+      throw 'character not found $keyOrName';
     }
     return f;
   }
@@ -35,8 +35,8 @@ class CharacterService with _$CharacterService {
   GSCharacter? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       characters?.forEach((key, value) {
-        _indexes["${value.id}"] = value.key;
-        for (var lang in value.name.keys) {
+        _indexes['${value.id}'] = value.key;
+        for (final lang in value.name.keys) {
           _indexes[value.name.text(lang)] = value.key;
         }
       });
@@ -63,7 +63,7 @@ class CharacterService with _$CharacterService {
       fightProps = fightProps.add(
           fp,
           characterPropGrowCurveValues!
-              .multi(value.growCurve, value.initial, level));
+              .multi(value.growCurve, value.initial, level),);
     });
 
     c.constellations.forEachIndexed((i, constellation) {
@@ -80,7 +80,7 @@ class CharacterService with _$CharacterService {
 
     fightProps = fightProps.merge(
         characterPromotes?.promotedFightProps(c.promoteId, level) ??
-            FightProps({}));
+            FightProps({}),);
 
     return fightProps;
   }

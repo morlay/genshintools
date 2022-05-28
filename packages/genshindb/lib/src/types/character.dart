@@ -111,7 +111,7 @@ class GSCharacterBuild with _$GSCharacterBuild {
   }
 
   bool emBuild() {
-    return (role ?? "").toUpperCase().trim() == "EM BUILD";
+    return (role ?? '').toUpperCase().trim() == 'EM BUILD';
   }
 
   Map<FightProp, double> appendPropRankRadios({
@@ -127,14 +127,14 @@ class GSCharacterBuild with _$GSCharacterBuild {
           ...?em.ifTrueOrNull(() => [
                 FightProp.CRITICAL_HURT,
                 FightProp.CRITICAL,
-              ])
-        ].contains(fp));
+              ],)
+        ].contains(fp),);
 
     var nonCritValueProps = affixPropTypes.where((fp) => ![
           FightProp.CRITICAL_HURT,
           FightProp.CRITICAL,
-          ...(chargeEfficiencyAsDPS) ? [] : [FightProp.CHARGE_EFFICIENCY]
-        ].contains(fp));
+          ...chargeEfficiencyAsDPS ? [] : [FightProp.CHARGE_EFFICIENCY]
+        ].contains(fp),);
 
     Map<FightProp, double> rankRadios = {};
 
@@ -146,7 +146,7 @@ class GSCharacterBuild with _$GSCharacterBuild {
             FightProp.ATTACK,
             FightProp.HP,
             FightProp.DEFENSE,
-          ].contains(fp));
+          ].contains(fp),);
 
       if (firstMainProp != null) {
         rankRadios[firstMainProp] = 6;
@@ -156,18 +156,18 @@ class GSCharacterBuild with _$GSCharacterBuild {
           .where((fp) => fp != firstMainProp)
           .map((fp) => MapEntry(
                 fp,
-                location == "HuTao" && fp == FightProp.ATTACK ? 0.4 : 1.0,
-              ));
+                location == 'HuTao' && fp == FightProp.ATTACK ? 0.4 : 1.0,
+              ),);
 
       var total = others.fold<double>(0, (v, fp) => v + fp.value);
 
       var all = (4 - (others.length - 1)) * others.length.toDouble();
 
-      for (var fp in others) {
+      for (final fp in others) {
         rankRadios[fp.key] = (fp.value / total * all).roundToDouble();
       }
     } else {
-      for (var fp in nonCritValueProps) {
+      for (final fp in nonCritValueProps) {
         if (fp == FightProp.ELEMENT_MASTERY && em) {
           rankRadios[fp] = 8;
         } else {

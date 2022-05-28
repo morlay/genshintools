@@ -19,7 +19,8 @@ class ViewDailyNote extends HookWidget {
           BlocDailyNote.read(context).syncDailyNote(uid, dailyNote);
         });
       }
-    }, [uid]);
+      return null;
+    }, [uid],);
 
     var dailyNote = BlocDailyNote.watch(context).dailyNote(uid);
 
@@ -37,29 +38,29 @@ class ViewDailyNote extends HookWidget {
         runSpacing: 8,
         children: [
           Processing(
-            label: const Text("洞天宝钱"),
-            current: Text("${dailyNote.currentHomeCoin}"),
-            max: Text("${dailyNote.maxHomeCoin}"),
+            label: const Text('洞天宝钱'),
+            current: Text('${dailyNote.currentHomeCoin}'),
+            max: Text('${dailyNote.maxHomeCoin}'),
           ),
           Processing(
-            label: const Text("原萃树脂"),
-            current: Text("${dailyNote.currentResin}"),
-            max: Text("${dailyNote.maxResin}"),
+            label: const Text('原萃树脂'),
+            current: Text('${dailyNote.currentResin}'),
+            max: Text('${dailyNote.maxResin}'),
           ),
           Processing(
-            label: const Text("每日委托"),
-            current: Text("${dailyNote.finishedTaskNum}"),
-            max: Text("${dailyNote.totalTaskNum}"),
+            label: const Text('每日委托'),
+            current: Text('${dailyNote.finishedTaskNum}'),
+            max: Text('${dailyNote.totalTaskNum}'),
           ),
           Processing(
-            label: const Text("派遣中"),
+            label: const Text('派遣中'),
             current: Text(
-                "${dailyNote.currentExpeditionNum - dailyNote.expeditions.where((element) => element.remainedTime == "0").length}"),
-            max: Text("${dailyNote.maxExpeditionNum}"),
+                "${dailyNote.currentExpeditionNum - dailyNote.expeditions.where((element) => element.remainedTime == "0").length}",),
+            max: Text('${dailyNote.maxExpeditionNum}'),
           ),
           Processing(
-            label: const Text("参量质变仪 CD"),
-            current: Text(dailyNote.transformer.cd().toString().split(".")[0]),
+            label: const Text('参量质变仪 CD'),
+            current: Text(dailyNote.transformer.cd().toString().split('.')[0]),
           ),
         ],
       ),
@@ -82,7 +83,7 @@ class Processing extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minWidth: 96),
+      constraints: const BoxConstraints(minWidth: 96),
       child: Column(
         children: [
           DefaultTextStyle.merge(
@@ -103,9 +104,9 @@ class Processing extends HookWidget {
               children: [
                 current,
                 ...max?.let((m) => [
-                          Text(" / "),
+                          const Text(' / '),
                           m,
-                        ]) ??
+                        ],) ??
                     [],
               ],
             ),

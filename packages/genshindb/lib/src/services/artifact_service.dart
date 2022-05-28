@@ -29,14 +29,14 @@ class ArtifactService with _$ArtifactService {
 
   int levelUpCost(int rarity, int current, int to) {
     return artifactLevelupExps?.let((artifactLevelupExps) => levelUpCostFor(
-            artifactLevelupExps[rangeLimit(rarity, 1, 5) - 1], current, to)) ??
+            artifactLevelupExps[rangeLimit(rarity, 1, 5) - 1], current, to,),) ??
         -1;
   }
 
   GSArtifact find(String keyOrName) {
     var a = findOrNull(keyOrName);
     if (a == null) {
-      throw "artifact $keyOrName not found";
+      throw 'artifact $keyOrName not found';
     }
     return a;
   }
@@ -46,8 +46,8 @@ class ArtifactService with _$ArtifactService {
   GSArtifact? findOrNull(String keyOrName) {
     if (_indexes.isEmpty) {
       artifacts?.forEach((key, value) {
-        _indexes["${value.id}"] = value.id;
-        for (var lang in value.name.keys) {
+        _indexes['${value.id}'] = value.id;
+        for (final lang in value.name.keys) {
           _indexes[value.name.text(lang)] = value.id;
         }
       });
@@ -66,8 +66,8 @@ class ArtifactService with _$ArtifactService {
   GSArtifactSet? findSetOrNull(String keyOrName) {
     if (_setIndexes.isEmpty) {
       artifactSets?.forEach((key, value) {
-        _setIndexes["${value.id}"] = value.key;
-        for (var lang in value.name.keys) {
+        _setIndexes['${value.id}'] = value.key;
+        for (final lang in value.name.keys) {
           _setIndexes[value.name.text(lang)] = value.key;
         }
       });
@@ -84,13 +84,13 @@ class ArtifactService with _$ArtifactService {
 
     return artifactSets?[_setIndexes[keyOrName]]?.copyWith(
         artifacts: _setNames[_setIndexes[keyOrName]]
-            ?.map((key, id) => MapEntry(key, find(id))));
+            ?.map((key, id) => MapEntry(key, find(id))),);
   }
 
   List<GSArtifactSet> resolveArtifactSets(List<GOODArtifact> artifacts) {
     return artifacts
         .map((a) => a.setKey)
-        .where((v) => v != "")
+        .where((v) => v != '')
         .groupListsBy((v) => v)
         .values
         .where((list) => list.length >= 2)
@@ -100,8 +100,8 @@ class ArtifactService with _$ArtifactService {
 
   List<GOODArtifact> buildArtifactsBySetPair(
       List<String> setNames, GSCharacterBuild builds,
-      [List<GOODArtifact>? playerArtifacts]) {
-    var sets = setNames.map((setName) => findSet(setName)).toList();
+      [List<GOODArtifact>? playerArtifacts,]) {
+    var sets = setNames.map(findSet).toList();
 
     Map<EquipType, GOODArtifact> ret = {};
 
@@ -132,7 +132,7 @@ class ArtifactService with _$ArtifactService {
       });
 
       ret[equipType] = GOODArtifact(
-        location: "",
+        location: '',
         setKey: s.key,
         rarity: a.rarity,
         level: level,
@@ -149,18 +149,18 @@ class ArtifactService with _$ArtifactService {
     var fps = FightProps({});
 
     resolveArtifactSets(artifacts).forEach((artifactSet) {
-      for (var ea in artifactSet.equipAffixes) {
+      for (final ea in artifactSet.equipAffixes) {
         if ((artifactSet.activeNum ?? 0) >= ea.activeWhenNum!) {
           fps = fps.merge(ea.patchedFightProps());
         }
       }
     });
 
-    for (var a in artifacts) {
+    for (final a in artifacts) {
       fps = fps.merge(FightProps({
         a.mainStatKey.asFightProp():
             mainFightProp(a.mainStatKey.asFightProp(), a.rarity, a.level),
-      }));
+      }),);
       fps = fps.merge(
         appendFightProps(a.rarity, a.substatsAsFightProps()),
       );
@@ -179,10 +179,10 @@ class ArtifactService with _$ArtifactService {
         return [FightProp.ATTACK];
       default:
         return artifactMainPropDepots?[c.mainPropDepotId]
-                ?.where((fp) => !fp.string().contains("_SUB_"))
+                ?.where((fp) => !fp.string().contains('_SUB_'))
                 .where((fp) => !(fp == FightProp.HP ||
                     fp == FightProp.ATTACK ||
-                    fp == FightProp.DEFENSE))
+                    fp == FightProp.DEFENSE),)
                 .toList() ??
             [];
     }
@@ -193,7 +193,7 @@ class ArtifactService with _$ArtifactService {
   }
 
   GSArtifactAppendDepot artifactAppendDepotFromSetKey(
-      String setKeyOrName, EquipType equipType) {
+      String setKeyOrName, EquipType equipType,) {
     return artifactAppendDepot(findSet(setKeyOrName).artifact(equipType).key);
   }
 
@@ -214,7 +214,7 @@ class ArtifactService with _$ArtifactService {
 
     var depot = artifactAppendPropDepots![rarity * 100 + 1]!;
 
-    for (var fp in appends.keys) {
+    for (final fp in appends.keys) {
       fps = fps.add(fp, depot.valueFor(fp, appends[fp]));
     }
 

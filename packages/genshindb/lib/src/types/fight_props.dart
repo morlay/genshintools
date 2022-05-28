@@ -4,6 +4,7 @@ import 'package:genshindb/utils.dart';
 import 'package:collection/collection.dart';
 
 part '__generated__/fight_props.freezed.dart';
+
 part '__generated__/fight_props.g.dart';
 
 @freezed
@@ -19,8 +20,8 @@ class FightProps with _$FightProps {
   factory FightProps.fromJson(Map<String, dynamic> json) =>
       _FightProps.fromJson(
         {
-          "name": json["\$when"],
-          "fightProps": json..remove("\$when"),
+          'name': json[r'$when'],
+          'fightProps': json..remove(r'$when'),
         },
       );
 
@@ -30,7 +31,7 @@ class FightProps with _$FightProps {
         ...?from?.expand((e) => [e, ...e.allFrom]),
       ];
 
-  operator [](FightProp? key) {
+  double? operator [](FightProp? key) {
     return fightProps[key];
   }
 
@@ -39,43 +40,43 @@ class FightProps with _$FightProps {
   }
 
   double calcAttackAdd(String t, List<double> params) {
-    return calc("$t基础攻击力", params) +
+    return calc('$t基础攻击力', params) +
         calc(
-          "{param1:F2P}基础攻击力",
+          '{param1:F2P}基础攻击力',
           [get(FightProp.ATTACK_ADD_RADIO)],
         );
   }
 
   double calc(String label, List<double> params) {
     Map<String, FightProp> bases = {
-      "基础攻击力": FightProp.BASE_ATTACK,
-      "攻击力": FightProp.ATTACK,
-      "防御力": FightProp.DEFENSE,
-      "生命值上限": FightProp.HP,
-      "最大生命值": FightProp.HP,
+      '基础攻击力': FightProp.BASE_ATTACK,
+      '攻击力': FightProp.ATTACK,
+      '防御力': FightProp.DEFENSE,
+      '生命值上限': FightProp.HP,
+      '最大生命值': FightProp.HP,
     };
 
-    return label.split("+").fold<double>(0, (previousValue, l) {
+    return label.split('+').fold<double>(0, (previousValue, l) {
       var base = 0.0;
       l = l.trim();
 
-      for (var n in bases.keys) {
+      for (final n in bases.keys) {
         if (l.contains(n)) {
-          l = l.replaceAll(n, "");
+          l = l.replaceAll(n, '');
           base = get(bases[n]!);
           break;
         }
       }
 
-      l = l.replaceAll("每秒", "");
+      l = l.replaceAll('每秒', '');
 
       return previousValue +
           double.parse(
             exec(l, params, (v, fmt) {
-              if (fmt == "I") {
-                return "$v";
+              if (fmt == 'I') {
+                return '$v';
               }
-              return "${base * v}";
+              return '${base * v}';
             }),
           );
     });
@@ -93,10 +94,12 @@ class FightProps with _$FightProps {
   }
 
   FightProps add(FightProp fp, double v) {
-    return copyWith(fightProps: {
-      ...fightProps,
-      fp: get(fp) + v,
-    });
+    return copyWith(
+      fightProps: {
+        ...fightProps,
+        fp: get(fp) + v,
+      },
+    );
   }
 
   FightProps merge(FightProps fps) {
@@ -120,11 +123,15 @@ class FightProps with _$FightProps {
   }
 
   FightProps compute() {
-    var computedFightProps = FightProps({
-      FightProp.LEVEL: rangeLimit(fightProps[FightProp.LEVEL] ?? 1, 1, 90),
-    }, name: name, from: from);
+    var computedFightProps = FightProps(
+      {
+        FightProp.LEVEL: rangeLimit(fightProps[FightProp.LEVEL] ?? 1, 1, 90),
+      },
+      name: name,
+      from: from,
+    );
 
-    for (var key in FightProp.values) {
+    for (final key in FightProp.values) {
       var v = get(key);
 
       if (v == 0) {
@@ -195,7 +202,7 @@ class FightProps with _$FightProps {
   FightProps fightPropsConvert(FightProps fps) {
     FightProps converted = fps.copyWith(fightProps: {});
 
-    for (var k in fps.keys) {
+    for (final k in fps.keys) {
       converted = converted.merge(fightPropConvert(k, fps.get(k)));
     }
 
@@ -203,26 +210,26 @@ class FightProps with _$FightProps {
   }
 
   FightProps fightPropConvert(FightProp k, double v) {
-    if (k.name.contains("__ON__")) {
-      var parts = k.name.split("__ON__");
-      var parts2 = parts.last.split("__");
+    if (k.name.contains('__ON__')) {
+      var parts = k.name.split('__ON__');
+      var parts2 = parts.last.split('__');
 
       var toFp = FightProp.values.firstWhere((fp) => fp.name == parts.first);
       var fromFp = FightProp.values.firstWhere((fp) => fp.name == parts2.first);
       var props =
           parts2.slice(1).fold<Map<String, double>>({}, (props, element) {
-        var parts = element.split("\$");
+        var parts = element.split(r'$');
         var prop = parts.first.toUpperCase();
-        var value = double.parse(parts.last.replaceAll("_", "."));
+        var value = double.parse(parts.last.replaceAll('_', '.'));
 
         return {
           ...props,
           prop: value,
         };
       });
-      var ret = v * (get(fromFp) - (props["OVER"] ?? 0));
-      if (props["MAX"] != null && ret > props["MAX"]!) {
-        ret = props["MAX"]!;
+      var ret = v * (get(fromFp) - (props['OVER'] ?? 0));
+      if (props['MAX'] != null && ret > props['MAX']!) {
+        ret = props['MAX']!;
       }
       return FightProps({toFp: ret});
     }
@@ -230,13 +237,17 @@ class FightProps with _$FightProps {
   }
 
   /// https://bbs.nga.cn/read.php?tid=25564438
-  double attackHurt(ElementType e, double r, List<FightProp> hurtAddFightTypes,
-      [base = FightProp.ATTACK]) {
+  double attackHurt(
+    ElementType e,
+    double r,
+    List<FightProp> hurtAddFightTypes, [
+    base = FightProp.ATTACK,
+  ]) {
     var hurt = get(base) * r;
 
     var hurtAdd = get(elementFightProps[e]!);
 
-    for (var hurtAddType in hurtAddFightTypes) {
+    for (final hurtAddType in hurtAddFightTypes) {
       var extra = 0.0;
       var radio = 0.0;
 
@@ -264,7 +275,7 @@ class FightProps with _$FightProps {
         default:
       }
 
-      hurt = (hurt * (radio > 0 ? radio : 1) + extra);
+      hurt = hurt * (radio > 0 ? radio : 1) + extra;
 
       hurtAdd += get(hurtAddType);
     }
@@ -283,16 +294,18 @@ class FightProps with _$FightProps {
   }
 
   double resistanceRatio(ElementType et) {
-    var x = get({
-      ElementType.Physical: FightProp.ENEMY_PHYSICAL_SUB_HURT,
-      ElementType.Pyro: FightProp.ENEMY_FIRE_SUB_HURT,
-      ElementType.Hydro: FightProp.ENEMY_WATER_SUB_HURT,
-      ElementType.Cryo: FightProp.ENEMY_ICE_SUB_HURT,
-      ElementType.Anemo: FightProp.ENEMY_WIND_SUB_HURT,
-      ElementType.Electro: FightProp.ENEMY_ELEC_SUB_HURT,
-      ElementType.Geo: FightProp.ENEMY_ROCK_SUB_HURT,
-      ElementType.Dendro: FightProp.ENEMY_GRASS_SUB_HURT,
-    }[et]!);
+    var x = get(
+      {
+        ElementType.Physical: FightProp.ENEMY_PHYSICAL_SUB_HURT,
+        ElementType.Pyro: FightProp.ENEMY_FIRE_SUB_HURT,
+        ElementType.Hydro: FightProp.ENEMY_WATER_SUB_HURT,
+        ElementType.Cryo: FightProp.ENEMY_ICE_SUB_HURT,
+        ElementType.Anemo: FightProp.ENEMY_WIND_SUB_HURT,
+        ElementType.Electro: FightProp.ENEMY_ELEC_SUB_HURT,
+        ElementType.Geo: FightProp.ENEMY_ROCK_SUB_HURT,
+        ElementType.Dendro: FightProp.ENEMY_GRASS_SUB_HURT,
+      }[et]!,
+    );
 
     if (x >= 0.75) {
       return 1 / (1 + 4 * x);
@@ -312,7 +325,8 @@ class FightProps with _$FightProps {
   double meltHurt(double v, ElementType from) {
     var meltRatio = get(FightProp.MELT_ADD_HURT) +
         ElementalReaction.Melt.elementMasterAddHurt(
-            get(FightProp.ELEMENT_MASTERY));
+          get(FightProp.ELEMENT_MASTERY),
+        );
 
     return v * (1 + meltRatio) * (from == ElementType.Pyro ? 2 : 1.5);
   }
@@ -320,7 +334,8 @@ class FightProps with _$FightProps {
   double vaporizeHurt(double v, ElementType from) {
     var vaporize = get(FightProp.VAPORIZE_ADD_HURT) +
         ElementalReaction.Vaporize.elementMasterAddHurt(
-            get(FightProp.ELEMENT_MASTERY));
+          get(FightProp.ELEMENT_MASTERY),
+        );
 
     return v * (1 + vaporize) * (from == ElementType.Hydro ? 2 : 1.5);
   }

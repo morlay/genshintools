@@ -16,6 +16,12 @@ ide:
   intellij: true
 
 scripts:
+  fix:
+    run: melos exec -c 1 -- "dart fix --apply"
+    select-package:
+      ignore:
+        - "*monorepo*"
+
   analyze:
     run: melos exec -c 1 -- "dart analyze . --fatal-infos"
     select-package:

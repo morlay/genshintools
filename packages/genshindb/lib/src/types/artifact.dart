@@ -31,7 +31,7 @@ class GSArtifact with _$GSArtifact {
   factory GSArtifact.fromJson(Map<String, dynamic> json) =>
       _Artifact.fromJson(json);
 
-  get key => name.text(Lang.KEY);
+  String get key => name.text(Lang.KEY);
 }
 
 @freezed
@@ -67,7 +67,7 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
   ) = _GSArtifactAppendDepot;
 
   factory GSArtifactAppendDepot.fromJson(Map<String, dynamic> json) =>
-      _GSArtifactAppendDepot.fromJson({"values": json});
+      _GSArtifactAppendDepot.fromJson({'values': json});
 
   List<double> get(FightProp fp) {
     return values[fp] ?? [];
@@ -83,12 +83,12 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
   static String format(
     double t, {
     bool percent = false,
-    String percentSymbol = "%",
+    String percentSymbol = '%',
   }) {
     if (t < 1) {
       // to fix
       // 0.05249999836087227 should be .053
-      t = (t + 1e-5);
+      t = t + 1e-5;
       if (percent) {
         return (t * 1e2).toStringAsFixed(1) + percentSymbol;
       }
@@ -127,7 +127,7 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
               fightProps.get(FightProp.BASE_ATTACK);
           base = calcBase(v, p, fp == FightProp.ATTACK_PERCENT);
 
-          if (location == "HuTao") {
+          if (location == 'HuTao') {
             base = base * 0.4;
           }
 
@@ -152,7 +152,7 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
 
       // 平均值
       return (calc(fp, [i]) / (avgValue(fp))) * base;
-    })).toDouble();
+    }),).toDouble();
   }
 
   List<int> valueNs(FightProp fp, String? s) {
@@ -162,12 +162,12 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
 
     var values = canValues(fp);
 
-    if (s.contains("?")) {
+    if (s.contains('?')) {
       return values[s] ?? [];
     }
 
     for (int c = 1; c <= 6; c++) {
-      var k = "$s?$c";
+      var k = '$s?$c';
       if (values[k] != null) {
         return values[k]!;
       }
@@ -182,7 +182,7 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
       return calc(fp, valueNs(fp, s));
     }
     try {
-      return double.parse(s ?? "");
+      return double.parse(s ?? '');
     } catch (e) {
       return 0;
     }
@@ -190,11 +190,11 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
 
   String valueFix(FightProp fp, String? s) {
     var indexes = valueNs(fp, s);
-    return "${format(calc(fp, indexes))}?${indexes.length}";
+    return '${format(calc(fp, indexes))}?${indexes.length}';
   }
 
   Map<String, List<int>> canValues(FightProp fp) {
-    var fpKey = "${values.toString()}/${fp}";
+    var fpKey = '$hashCode/$fp';
 
     if (_fpCanValues[fpKey] != null) {
       return _fpCanValues[fpKey] ?? {};
@@ -213,14 +213,14 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
         }
 
         var t = sum(ns.map((i) => canValues[abs(i) - 1]));
-        set["${format(t)}?${ns.length}"] = ns;
+        set['${format(t)}?${ns.length}'] = ns;
       });
     }
 
     var sortedKeys = set.keys..sorted((a, b) => a.compareTo(b));
 
     _fpCanValues[fpKey] = sortedKeys.fold<Map<String, List<int>>>(
-        {}, (previousValue, v) => {...previousValue, v: set[v]!});
+        {}, (previousValue, v) => {...previousValue, v: set[v]!},);
 
     return _fpCanValues[fpKey]!;
   }
@@ -238,7 +238,7 @@ final Map<String, Map<String, List<int>>> _fpCanValues = {};
 
 double sum(Iterable<double> values) {
   double v = 0;
-  for (var d in values) {
+  for (final d in values) {
     v = v + d;
   }
   return v;

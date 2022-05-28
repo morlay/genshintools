@@ -17,14 +17,14 @@ class GSPromoteSet with _$GSPromoteSet {
   ) = _PromoteSet;
 
   factory GSPromoteSet.fromJson(Map<String, dynamic> json) =>
-      _PromoteSet.fromJson({"promotes": json});
+      _PromoteSet.fromJson({'promotes': json});
 
   FightProps promotedFightProps(int promoteId, int currentLevel) {
     return promotes[promoteId]?.let((it) {
           var promoteList = it.reversed;
           var currentPromoteLevel = promoteList.length;
 
-          for (var p in promoteList) {
+          for (final p in promoteList) {
             if (currentLevel > p.unlockMaxLevel) {
               break;
             }
@@ -33,7 +33,7 @@ class GSPromoteSet with _$GSPromoteSet {
 
           return it
               .elementAt(
-                  rangeLimit(currentPromoteLevel, 0, promoteList.length - 1))
+                  rangeLimit(currentPromoteLevel, 0, promoteList.length - 1),)
               .addProps;
         }) ??
         FightProps({});
@@ -48,7 +48,7 @@ class GSPromoteSet with _$GSPromoteSet {
           var promoteList = list.reversed;
           var currentPromoteLevel = promoteList.length;
 
-          for (var p in promoteList) {
+          for (final p in promoteList) {
             if (currentLevel > p.unlockMaxLevel) {
               break;
             }

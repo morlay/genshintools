@@ -24,7 +24,7 @@ class AuthStateV1 with _$AuthStateV1 {
 
     return AuthState(
       currentUID: gameRoles[0].gameUid,
-      channel: "stable",
+      channel: 'stable',
       roles: roles,
       cookies: roles.map((uid, value) => MapEntry(uid, encodedCookie)),
     );
@@ -46,8 +46,8 @@ class AuthState with _$AuthState {
       _AuthState.fromJson(json);
 
   MiHoYoBBSClient authedClient() {
-    if (currentUID == "") {
-      throw "need login";
+    if (currentUID == '') {
+      throw 'need login';
     }
     return client(currentEncodedCookie);
   }
@@ -60,19 +60,19 @@ class AuthState with _$AuthState {
     );
   }
 
-  bool hasLogon() => currentUID != "";
+  bool hasLogon() => currentUID != '';
 
   int chosenUid() {
-    return int.parse(currentUID == "" ? "0" : currentUID);
+    return int.parse(currentUID == '' ? '0' : currentUID);
   }
 
   String get currentEncodedCookie => cookies[currentUID]!;
 
-  String get currentChannel => channel ?? "stable";
+  String get currentChannel => channel ?? 'stable';
 
   GameRole get currentGameRole => roles[currentUID]!;
 
-  mergeFrom(List<GameRole> gameRoles, String encodedCookie) {
+  AuthState mergeFrom(List<GameRole> gameRoles, String encodedCookie) {
     var nextRoles =
         gameRoles.asMap().map((key, value) => MapEntry(value.gameUid, value));
 
@@ -92,13 +92,13 @@ class AuthState with _$AuthState {
     );
   }
 
-  remove(String uidToRemove) {
+  AuthState remove(String uidToRemove) {
     var nextRoles = roles..removeWhere((uid, value) => uid == uidToRemove);
     var nextCookies = cookies..removeWhere((key, value) => key == uidToRemove);
 
     return copyWith(
       currentUID: uidToRemove == currentUID
-          ? (roles.keys.isNotEmpty ? roles.keys.first : "")
+          ? (roles.keys.isNotEmpty ? roles.keys.first : '')
           : currentUID,
       roles: nextRoles,
       cookies: nextCookies,

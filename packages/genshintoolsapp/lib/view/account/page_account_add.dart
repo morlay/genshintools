@@ -1,5 +1,4 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:genshintoolsapp/common/flutter/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -7,13 +6,12 @@ import 'package:webview_flutter/webview_flutter.dart';
 class PageAddAccount extends HookWidget {
   const PageAddAccount({Key? key}) : super(key: key);
 
-  static String routeName = "/accounts/add";
+  static String routeName = '/accounts/add';
 
   static show(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
         settings: RouteSettings(name: PageAddAccount.routeName),
-        fullscreenDialog: false,
         builder: (context) => const PageAddAccount(),
       ),
     );
@@ -25,10 +23,10 @@ class PageAddAccount extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("添加游戏账号"),
+        title: const Text('添加游戏账号'),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.cookie),
             label: '通过 Cookie',
@@ -58,7 +56,7 @@ class FormAddAccounts extends HookWidget {
     final _encodedCookie = useTextEditingController();
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Form(
         key: _formKey,
         child: Column(
@@ -89,10 +87,10 @@ class FormAddAccounts extends HookWidget {
               },
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: EdgeInsets.symmetric(vertical: 16),
               child: MarkdownBody(
                 selectable: true,
-                data: """
+                data: '''
 **Base64 Encoded Cookie**
 
 需要访问 https://bbs.mihoyo.com/ys 并登录
@@ -104,7 +102,7 @@ class FormAddAccounts extends HookWidget {
 **免责声明**
 
 本 Cookie 仅用于 mihoyo bbs 相关 api 的请求，本地存储，也会通过 WebDAV 同步，请妥善保管。
-""",
+''',
               ),
             ),
           ],
@@ -123,15 +121,28 @@ class AddAccountFromMiYoBBS extends HookWidget {
 
     return Column(
       children: [
+        Expanded(
+          child: WebView(
+            onWebViewCreated: (ctrl) {
+              webViewCtrlRef.value = ctrl;
+            },
+            initialUrl: 'https://bbs.mihoyo.com/ys/',
+            javascriptMode: JavascriptMode.unrestricted,
+          ),
+        ),
+        const Divider(height: 1),
         ListTile(
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          title: const Text("登录成功后点击右侧按钮"),
-          subtitle: const Text("下面这个区域只是个 WebView / 浏览器，如果账户密码泄露一定不是本 APP 的问题"),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          title: const Text('登录成功后点击右侧按钮'),
+          subtitle: const Text(
+            '这个区域只是个 WebView / 浏览器，如果账户密码泄露一定不是本 APP 的问题',
+            style: TextStyle(fontSize: 10),
+          ),
           trailing: IconButton(
             onPressed: () {
               webViewCtrlRef.value?.let((ctrl) {
-                ctrl.runJavascriptReturningResult("btoa(document.cookie)").then(
+                ctrl.runJavascriptReturningResult('btoa(document.cookie)').then(
                   (encodedCookie) {
                     if (encodedCookie.startsWith('"')) {
                       encodedCookie =
@@ -145,16 +156,6 @@ class AddAccountFromMiYoBBS extends HookWidget {
             icon: const Icon(Icons.login),
           ),
         ),
-        const Divider(height: 1),
-        Expanded(
-          child: WebView(
-            onWebViewCreated: (ctrl) {
-              webViewCtrlRef.value = ctrl;
-            },
-            initialUrl: "https://bbs.mihoyo.com/ys/",
-            javascriptMode: JavascriptMode.unrestricted,
-          ),
-        )
       ],
     );
   }
@@ -174,7 +175,7 @@ Future<dynamic> addAccount(BuildContext context, String encodedCookie) async {
     Navigator.of(context).pop();
   } catch (err) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("$err")),
+      SnackBar(content: Text('$err')),
     );
   }
 

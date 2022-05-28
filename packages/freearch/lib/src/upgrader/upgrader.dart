@@ -8,7 +8,7 @@ import 'package:roundtripper/roundtripper.dart';
 import 'release.dart';
 
 class Upgrader {
-  checkVersion({
+  Future<void> checkVersion({
     required String currentVersion,
     required String currentBuildNumber,
     required Function(Release r) onUpdate,
@@ -16,17 +16,16 @@ class Upgrader {
     try {
       var lr = await latestRelease();
 
-      if (currentBuildNumber == currentVersion) {
-        currentBuildNumber = "0";
-      }
-
-      if (lr.shouldUpgrade(currentVersion, currentBuildNumber)) {
+      if (lr.shouldUpgrade(
+        currentVersion,
+        currentBuildNumber == currentVersion ? '0' : currentBuildNumber,
+      )) {
         onUpdate(lr);
       }
     } catch (e, st) {
       Logger.current?.error(
         e,
-        "check version failed",
+        'check version failed',
         stackTrace: st,
       );
     }
@@ -36,14 +35,16 @@ class Upgrader {
 
   Upgrader(this.github);
 
-  Client get _client => Client(roundTripBuilders: [
-        ThrowsNot2xxError(),
-      ]);
+  Client get _client => Client(
+        roundTripBuilders: [
+          ThrowsNot2xxError(),
+        ],
+      );
 
   Future<Release> latestRelease() async {
     var req = Request(
-      method: "GET",
-      uri: Uri.parse(github.rawURL("android/latest.json", nocache: true)),
+      method: 'GET',
+      uri: Uri.parse(github.rawURL('android/latest.json', nocache: true)),
     );
 
     var resp = await _client.fetch(req);

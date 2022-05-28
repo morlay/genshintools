@@ -5,6 +5,9 @@ bootstrap:
 	dart pub global activate pubtidy
 	melos bootstrap
 
+lint:
+	melos analyze --no-select
+
 gen:
 	melos generate
 

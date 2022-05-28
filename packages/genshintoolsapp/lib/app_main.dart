@@ -43,7 +43,7 @@ class AppMain extends HookWidget {
       return Stream.periodic(const Duration(minutes: 1)).doOnData((v) {
         WebDAVSyncer.read(context).sync();
       });
-    }, []);
+    }, [],);
 
     return Provider<BottomNavigationBar>.value(
       value: BottomNavigationBar(

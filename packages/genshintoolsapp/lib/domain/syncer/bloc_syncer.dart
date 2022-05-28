@@ -10,27 +10,27 @@ class BlocSyncer extends HydratedCubit<WebDAV> {
     return buildContext.watch<BlocSyncer>();
   }
 
-  static const baseRoot = "genshintools";
+  static const baseRoot = 'genshintools';
 
   BlocSyncer()
       : super(WebDAV(
           root: baseRoot,
-          address: "https://dav.jianguoyun.com/dav/",
-          username: "",
-          password: "",
-        ));
+          address: 'https://dav.jianguoyun.com/dav/',
+          username: '',
+          password: '',
+        ),);
 
   bind(WebDAV webdav) {
     emit(webdav.copyWith(
       root: state.root,
-    ));
+    ),);
   }
 
   @override
   WebDAV? fromJson(Map<String, dynamic> json) {
     return WebDAV.fromJson({
       ...json,
-      "root": baseRoot,
+      'root': baseRoot,
     });
   }
 

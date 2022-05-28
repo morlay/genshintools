@@ -6,7 +6,7 @@ import 'image.dart';
 import 'text.dart';
 
 class ViewMaterial extends HookWidget {
-  static showModal(BuildContext context, GSMaterial m) {
+  static void showModal(BuildContext context, GSMaterial m) {
     showModalBottomSheet(
       context: context,
       clipBehavior: Clip.none,
@@ -30,7 +30,7 @@ class ViewMaterial extends HookWidget {
     var db = BlocGameData.read(context).db;
 
     var a = GSImage(
-      domain: "material",
+      domain: 'material',
       nameID: material.key,
       rarity: material.rarity,
       borderSize: 3,
@@ -86,7 +86,7 @@ class ViewMaterial extends HookWidget {
                               )
                             ],
                           ),
-                        )),
+                        ),),
                     ...?material.dropFromTags?.let((dropFromTags) => [
                           Align(
                             widthFactor: double.infinity,
@@ -100,7 +100,7 @@ class ViewMaterial extends HookWidget {
                                     .map(
                                       (e) => Chip(
                                         avatar: GSImage(
-                                          domain: "enemy",
+                                          domain: 'enemy',
                                           nameID: e.key,
                                           rounded: true,
                                         ),
@@ -113,7 +113,7 @@ class ViewMaterial extends HookWidget {
                               ],
                             ),
                           )
-                        ]),
+                        ],),
                   ],
                 ),
               ),
@@ -142,7 +142,7 @@ class MaterialWithCount extends HookWidget {
       count: count,
       size: 10,
       child: GSImage(
-        domain: "material",
+        domain: 'material',
         size: 36,
         rarity: material.rarity,
         nameID: material.key,

@@ -37,11 +37,11 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         (e) => assetBundle
             .loadString(e)
             .then((v) => jsonDecode(v) as Map<String, dynamic>),
-      ));
+      ),);
 
       return GSDB.fromJsons(jsons);
     } catch (err) {
-      log("$err");
+      log('$err');
       return GSDB.create();
     }
   }
@@ -49,34 +49,34 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
   List<FightProps> allBuffs(int uid) {
     return [
       ...buffs,
-      ...findCharacterWithState(uid, "班尼特").let((c) {
+      ...findCharacterWithState(uid, '班尼特').let((c) {
         var fps = c.computeFightProps(db);
         return [
           FightProps({
             FightProp.ATTACK: c.calcSkillValue(
-                fps, SkillType.ELEMENTAL_BURST, "攻击力加成比例", fps.calcAttackAdd),
-          }, name: "班尼特 加攻")
+                fps, SkillType.ELEMENTAL_BURST, '攻击力加成比例', fps.calcAttackAdd,),
+          }, name: '班尼特 加攻',)
         ];
       }),
-      ...findCharacterWithState(uid, "云堇").let((c) {
+      ...findCharacterWithState(uid, '云堇').let((c) {
         var fps = c.computeFightProps(db);
         return [
           FightProps({
             FightProp.NORMAL_ATTACK_EXTRA_HURT: c.calcSkillValue(
               fps,
               SkillType.ELEMENTAL_BURST,
-              "伤害值提升",
+              '伤害值提升',
               (t, params) =>
-                  fps.calc(t, params) + fps.calc("{param1:F2P}防御力", [0.05]),
+                  fps.calc(t, params) + fps.calc('{param1:F2P}防御力', [0.05]),
             ),
-          }, name: "云堇 普攻附伤")
+          }, name: '云堇 普攻附伤',)
         ];
       }),
     ];
   }
 
   syncGameInfo(MiHoYoBBSClient client, int uid,
-      [Iterable<PlayerArtifact>? playerArtifacts]) async {
+      [Iterable<PlayerArtifact>? playerArtifacts,]) async {
     var data = await client.getUserInfo(uid);
 
     var ids = data.avatars?.map<int>((e) => e.id).toList() ?? [];
@@ -96,7 +96,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         uid: next,
       });
 
-      for (var c in next.characters) {
+      for (final c in next.characters) {
         if (c.level > 0) {
           _syncCharacterSkillLevels(client, uid, c.key);
         }
@@ -109,14 +109,14 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
   _syncCharacterSkillLevels(MiHoYoBBSClient client, int uid, String key) async {
     var c = db.character.find(key);
 
-    if (!key.contains("Traveler")) {
-      if (_talentLastSyncAts["$key@$uid"]
+    if (!key.contains('Traveler')) {
+      if (_talentLastSyncAts['$key@$uid']
               ?.add(const Duration(minutes: 10))
               .isBefore(DateTime.now()) ??
           true) {
-        log("[$uid] syncing skill levels of ${c.name.text(Lang.CHS)}");
+        log('[$uid] syncing skill levels of ${c.name.text(Lang.CHS)}');
 
-        _talentLastSyncAts["$key@$uid"] = DateTime.now();
+        _talentLastSyncAts['$key@$uid'] = DateTime.now();
 
         try {
           await Future.delayed(const Duration(milliseconds: 500));
@@ -187,15 +187,15 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
                 c.initialWeaponKey,
               ),
               artifacts: ps.artifactsOn(c.key),
-            ))
+            ),)
         .toList()
       ..sort((a, b) => a.weight() > b.weight() ? -1 : 1);
   }
 
   GOOD _patchGOODFromMiYoBBS(int uid, GOOD good, List<Avatar> avatars,
-      [Iterable<PlayerArtifact>? playerArtifacts]) {
+      [Iterable<PlayerArtifact>? playerArtifacts,]) {
     playerArtifacts?.forEach((pa) {
-      db.character.findOrNull("${pa.usedBy}")?.let((c) {
+      db.character.findOrNull('${pa.usedBy}')?.let((c) {
         final location = c.key;
 
         db.artifact.findOrNull(pa.name)?.let((a) {
@@ -219,11 +219,11 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
 
     Map<String, bool> owned = {};
 
-    for (var avatar in avatars) {
+    for (final avatar in avatars) {
       var avatarName = avatar.name;
 
-      if (avatarName == "旅行者") {
-        for (var element in ElementType.values) {
+      if (avatarName == '旅行者') {
+        for (final element in ElementType.values) {
           if (element.string() == avatar.element) {
             avatarName = element.label() + avatarName;
           }
@@ -240,7 +240,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
                   level: avatar.level,
                   constellation: avatar.activedConstellationNum,
                   ascension: GOODCharacter.ascensionByLevel(avatar.level),
-                ));
+                ),);
 
         owned[location] = true;
 
@@ -260,7 +260,7 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         });
 
         avatar.reliquaries?.let((rs) {
-          for (var r in rs) {
+          for (final r in rs) {
             db.artifact.findOrNull(r.name)?.let((a) {
               good = good.updateArtifact(
                 SlotKey.values[a.equipType.index],

@@ -6,10 +6,10 @@ import 'package:genshintoolsapp/domain/gamedata.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 
 const types = {
-  "301": "限",
-  "302": "武",
-  "200": "常",
-  "100": "新",
+  '301': '限',
+  '302': '武',
+  '200': '常',
+  '100': '新',
 };
 
 class ViewGachaLogList extends HookWidget {
@@ -22,13 +22,13 @@ class ViewGachaLogList extends HookWidget {
     var state = BlocGacha.watch(context).gachaState(uid);
 
     var logs = types.map((type, _) =>
-        MapEntry(type, state.sortAndCount(state.listFor(type)).reversed));
+        MapEntry(type, state.sortAndCount(state.listFor(type)).reversed),);
 
     var gachaLogs = logs.values.expand((l) => l);
 
     if (gachaLogs.isEmpty) {
       return const Center(
-        child: Text("没有抽卡记录"),
+        child: Text('没有抽卡记录'),
       );
     }
 
@@ -37,16 +37,15 @@ class ViewGachaLogList extends HookWidget {
         Row(
           children: [
             ...types.keys.take(3).expandIndexed((i, type) {
-              var logsOfType = (logs[type] ?? []);
+              var logsOfType = logs[type] ?? [];
 
               return [
                 Expanded(
-                  flex: 1,
                   child: _withListOnTap(
                     context,
                     noCount: true,
                     list: logsOfType
-                        .where((l) => l.rankType == "5" || l.rankType == "4"),
+                        .where((l) => l.rankType == '5' || l.rankType == '4'),
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -55,17 +54,16 @@ class ViewGachaLogList extends HookWidget {
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("${types[type]}"),
+                                Text('${types[type]}'),
                                 Text(
-                                  "${logsOfType.length} 抽",
+                                  '${logsOfType.length} 抽',
                                 ),
                               ],
                             ),
                           ),
                           DefaultTextStyle.merge(
-                            style: TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 18),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: logsOfType.firstOrNull?.let((l) => [
@@ -81,10 +79,10 @@ class ViewGachaLogList extends HookWidget {
                                                 CrossAxisAlignment.end,
                                             children: [
                                               Text(
-                                                  "${l.rankType == "5" ? 0 : l.countSinceLastGold}"),
+                                                  "${l.rankType == "5" ? 0 : l.countSinceLastGold}",),
                                               Text(
-                                                " / ${(type == "302" ? 80 : 90)}",
-                                                style: TextStyle(fontSize: 9),
+                                                " / ${type == "302" ? 80 : 90}",
+                                                style: const TextStyle(fontSize: 9),
                                               ),
                                             ],
                                           ),
@@ -103,13 +101,13 @@ class ViewGachaLogList extends HookWidget {
                                               Text(
                                                 "${l.rankType == "4" ? 0 : l.countSinceLastPurple}",
                                               ),
-                                              Text(" / ${10}",
+                                              const Text(' / ${10}',
                                                   style:
-                                                      TextStyle(fontSize: 9)),
+                                                      TextStyle(fontSize: 9),),
                                             ],
                                           ),
                                         ),
-                                      ]) ??
+                                      ],) ??
                                   [],
                             ),
                           )
@@ -124,26 +122,24 @@ class ViewGachaLogList extends HookWidget {
         ),
         const Divider(height: 0),
         Expanded(
-          flex: 1,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Wrap(
-                alignment: WrapAlignment.start,
                 spacing: 4,
                 runSpacing: 4,
                 children: [
                   ..._renderLogs(
                       context,
                       gachaLogs
-                          .where((l) => l.rankType == "5" || l.rankType == "4")
+                          .where((l) => l.rankType == '5' || l.rankType == '4')
                           .toList()
                         ..sort((a, b) {
                           if (b.rankType == a.rankType) {
                             return b.id.compareTo(a.id);
                           }
                           return b.rankType.compareTo(a.rankType);
-                        }))
+                        }),)
                 ],
               ),
             ),
@@ -173,7 +169,7 @@ class ViewGachaLogList extends HookWidget {
                         ...list.mapIndexed(
                           (i, log) => ListTile(
                             leading: _renderLogAvatar(
-                                context, log, noCount ? -1 : (list.length - i)),
+                                context, log, noCount ? -1 : (list.length - i),),
                             title: Text(log.id),
                             subtitle: Text(log.time.toLocal().toString()),
                           ),
@@ -183,7 +179,7 @@ class ViewGachaLogList extends HookWidget {
                   ),
                 ),
               );
-            });
+            },);
       },
       child: child,
     );
@@ -208,14 +204,14 @@ class ViewGachaLogList extends HookWidget {
   Widget _renderLogAvatar(BuildContext context, GachaLog log, int count) {
     var db = BlocGameData.read(context).db;
 
-    var isCharacter = log.itemType.contains("角色");
+    var isCharacter = log.itemType.contains('角色');
 
     var fixedCount = (isCharacter ? count - 1 : count) +
         ([
-          "香菱",
-          "安柏",
-          "凯亚",
-          "丽莎",
+          '香菱',
+          '安柏',
+          '凯亚',
+          '丽莎',
         ].contains(log.name)
             ? 1
             : 0);
@@ -224,24 +220,24 @@ class ViewGachaLogList extends HookWidget {
       type: log.uigfGachaType,
       child: WithCount(
         alignment: Alignment.topLeft,
-        prefix: "[",
-        count: log.rankType == "5"
+        prefix: '[',
+        count: log.rankType == '5'
             ? log.countSinceLastGold
             : log.countSinceLastPurple,
-        suffix: "]",
+        suffix: ']',
         child: WithCount(
           count: fixedCount,
-          prefix: "${isCharacter ? "C" : "R"}",
+          prefix: isCharacter ? 'C' : 'R',
           active: isCharacter ? fixedCount >= 6 : fixedCount >= 5,
           child: isCharacter
               ? db.character.find(log.name).let((c) => GSImage(
-                    domain: "character",
+                    domain: 'character',
                     nameID: c.key,
                     rarity: c.rarity,
-                  ))
+                  ),)
               : db.weapon.find(log.name).let(
                     (w) => GSImage(
-                      domain: "weapon",
+                      domain: 'weapon',
                       nameID: w.key,
                       rarity: w.rarity,
                     ),
@@ -279,8 +275,8 @@ class WithType extends HookWidget {
               child: Padding(
                 padding: const EdgeInsets.all(1),
                 child: DefaultTextStyle.merge(
-                  style: TextStyle(fontSize: 8, color: Colors.white),
-                  child: Text(types[type] ?? "-"),
+                  style: const TextStyle(fontSize: 8, color: Colors.white),
+                  child: Text(types[type] ?? '-'),
                 ),
               ),
             ),
@@ -301,8 +297,8 @@ class WithType extends HookWidget {
 }
 
 const typeColors = {
-  "301": Colors.pinkAccent,
-  "302": Colors.purpleAccent,
-  "200": Colors.blue,
-  "100": Colors.deepOrangeAccent,
+  '301': Colors.pinkAccent,
+  '302': Colors.purpleAccent,
+  '200': Colors.blue,
+  '100': Colors.deepOrangeAccent,
 };

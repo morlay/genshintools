@@ -43,10 +43,10 @@ class Transformer with _$Transformer {
 
   Duration cd() {
     return Duration(
-      days: recoveryTime?["Day"] ?? 0,
-      hours: recoveryTime?["Hour"] ?? 0,
-      minutes: recoveryTime?["Minute"] ?? 0,
-      seconds: recoveryTime?["Second"] ?? 0,
+      days: recoveryTime?['Day'] ?? 0,
+      hours: recoveryTime?['Hour'] ?? 0,
+      minutes: recoveryTime?['Minute'] ?? 0,
+      seconds: recoveryTime?['Second'] ?? 0,
     );
   }
 }

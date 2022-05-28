@@ -26,7 +26,7 @@ class BlocDailyNote extends HydratedCubit<DailyNotes> {
         DailyNote(
           currentResin: 0,
           maxResin: 160,
-          resinRecoveryTime: "",
+          resinRecoveryTime: '',
           finishedTaskNum: 0,
           totalTaskNum: 4,
           remainResinDiscountNum: 0,
@@ -35,9 +35,9 @@ class BlocDailyNote extends HydratedCubit<DailyNotes> {
           maxExpeditionNum: 5,
           currentHomeCoin: 0,
           maxHomeCoin: 2400,
-          homeCoinRecoveryTime: "",
+          homeCoinRecoveryTime: '',
           expeditions: [],
-          transformer: Transformer(obtained: false)
+          transformer: Transformer(obtained: false),
         );
   }
 

@@ -28,7 +28,7 @@ class BlocGacha extends HydratedCubit<GachaStates> with WebDAVSyncMixin {
 
   GachaState gachaState(int uid) {
     return state[uid] ??
-        GachaState(info: UigfInfo(uid: "$uid", lang: "zh-cn"), list: []);
+        GachaState(info: UigfInfo(uid: '$uid', lang: 'zh-cn'), list: []);
   }
 
   @override

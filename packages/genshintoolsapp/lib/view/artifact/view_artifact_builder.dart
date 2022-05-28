@@ -51,7 +51,7 @@ class ViewArtifactBuilder extends HookWidget {
           ViewBuildArtifactSetPair(
             fightProps: fightProps,
             artifacts: current.artifacts,
-            backup: "当前配装",
+            backup: '当前配装',
           ),
           ...?builds.artifactSetPairs?.map(
             (artifactSetPair) => ViewBuildArtifactSetPair(
@@ -75,8 +75,8 @@ class ViewArtifactBuilder extends HookWidget {
                   labelColor: Theme.of(context).primaryColor,
                   indicatorColor: Theme.of(context).primaryColor,
                   tabs: const [
-                    Tab(text: "当前配装"),
-                    Tab(text: "其他套装"),
+                    Tab(text: '当前配装'),
+                    Tab(text: '其他套装'),
                   ],
                 ),
                 Expanded(
@@ -88,7 +88,6 @@ class ViewArtifactBuilder extends HookWidget {
                           children: [
                             ...artifactSets.map(
                               (artifactSet) => ListTile(
-                                selected: false,
                                 onTap: () {
                                   state.value = state.value.copyWith(
                                     artifacts: artifactSet.artifacts,
@@ -154,7 +153,7 @@ class CurrentArtifact extends HookWidget {
                   .firstWhereOrNull((a) => a.slotKey.asEquipType() == et);
 
               return Select<GOODArtifact>(
-                title: const Text("圣遗物"),
+                title: const Text('圣遗物'),
                 options: list,
                 value: currentArtifact,
                 onSelected: (selected) {
@@ -201,12 +200,12 @@ class CurrentArtifact extends HookWidget {
                           artifact: pa,
                           onAvatarTap: () {
                             selected.showOptions(context);
-                          })) ??
+                          },),) ??
                       ListTile(
                         onTap: () {
                           selected.showOptions(context);
                         },
-                        title: Text("请选择${et.label()}"),
+                        title: Text('请选择${et.label()}'),
                       );
                 },
               );

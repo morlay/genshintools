@@ -36,24 +36,26 @@ class WebDAVSyncer implements BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {}
 
-  sync({bool? fromServer}) async {
+  Future<void> sync({bool? fromServer}) async {
     var c = blocSyncer!.state;
     if (c.shouldSync()) {
       if (fromServer == true) {
-        for (var b in blocs) {
+        for (final b in blocs) {
           var json = await c.readJson(
-            "${b.runtimeType}.json",
+            '${b.runtimeType}.json',
           );
           if (json != null) {
+            // need to this for loaded json from webadv
+            // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
             b.emit(b.fromJson(json));
           }
         }
         return;
       }
 
-      for (var b in blocs) {
+      for (final b in blocs) {
         await c.writeJsonIfChanged(
-          "${b.runtimeType}.json",
+          '${b.runtimeType}.json',
           b.toJson(b.state),
         );
       }

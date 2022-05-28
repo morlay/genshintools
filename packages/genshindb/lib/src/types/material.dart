@@ -35,7 +35,7 @@ class GSMaterial with _$GSMaterial {
 
   String get dropBy =>
       dropFromTags?.let((dropFromTags) =>
-          dropFromTags.isNotEmpty ? dropFromTags.join("") : key) ??
+          dropFromTags.isNotEmpty ? dropFromTags.join() : key,) ??
       key;
 
   bool isTodayOpen() {

@@ -8,10 +8,8 @@ void useObservableEffect(Stream? Function() effect, [List<Object?>? keys]) {
       return () {};
     }
     final ob$ = ob.listen((_) {});
-    return () {
-      ob$.cancel();
-    };
-  }, keys);
+    return ob$.cancel;
+  }, keys,);
 }
 
 T useObservable<T>(BehaviorSubject<T> ob$, [T? defaultValue]) {
@@ -20,10 +18,8 @@ T useObservable<T>(BehaviorSubject<T> ob$, [T? defaultValue]) {
   useEffect(() {
     final subscription = ob$.listen((v) => vn.value = v);
 
-    return () {
-      subscription.cancel();
-    };
-  }, [ob$]);
+    return subscription.cancel;
+  }, [ob$],);
 
   return vn.value;
 }
