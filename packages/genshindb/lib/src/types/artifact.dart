@@ -7,6 +7,7 @@ import 'i18n.dart';
 import 'package:collection/collection.dart';
 
 part '__generated__/artifact.freezed.dart';
+
 part '__generated__/artifact.g.dart';
 
 @freezed
@@ -78,8 +79,6 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
     var values = get(fp);
     return sum((ns ?? []).map((i) => values[abs(i) - 1]));
   }
-
-  final Map<FightProp, Map<String, List<int>>> _fpCanValues = {};
 
   static String format(
     double t, {
@@ -195,33 +194,35 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
   }
 
   Map<String, List<int>> canValues(FightProp fp) {
-    if (_fpCanValues[fp] != null) {
-      return _fpCanValues[fp] ?? {};
+    var fpKey = "${values.toString()}/${fp}";
+
+    if (_fpCanValues[fpKey] != null) {
+      return _fpCanValues[fpKey] ?? {};
     }
 
     Map<String, List<int>> set = {};
 
-    var values = get(fp);
+    var canValues = get(fp);
 
     for (var n = 1; n <= 6; n++) {
-      combination(values, n).forEach((ns) {
+      combination(canValues, n).forEach((ns) {
         if (fp == FightProp.HP ||
             fp == FightProp.ATTACK ||
             fp == FightProp.DEFENSE) {
           ns = ns.map((i) => -i).toList();
         }
 
-        var t = sum(ns.map((i) => values[abs(i) - 1]));
+        var t = sum(ns.map((i) => canValues[abs(i) - 1]));
         set["${format(t)}?${ns.length}"] = ns;
       });
     }
 
     var sortedKeys = set.keys..sorted((a, b) => a.compareTo(b));
 
-    _fpCanValues[fp] = sortedKeys.fold<Map<String, List<int>>>(
+    _fpCanValues[fpKey] = sortedKeys.fold<Map<String, List<int>>>(
         {}, (previousValue, v) => {...previousValue, v: set[v]!});
 
-    return _fpCanValues[fp]!;
+    return _fpCanValues[fpKey]!;
   }
 
   int abs(int i) {
@@ -232,6 +233,8 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
     return calc(fp, [1, 2, 3, 4]) / 4;
   }
 }
+
+final Map<String, Map<String, List<int>>> _fpCanValues = {};
 
 double sum(Iterable<double> values) {
   double v = 0;

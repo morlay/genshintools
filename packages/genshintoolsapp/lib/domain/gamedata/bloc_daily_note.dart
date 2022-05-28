@@ -21,7 +21,7 @@ class BlocDailyNote extends HydratedCubit<DailyNotes> {
     });
   }
 
-  dailyNote(int uid) {
+  DailyNote dailyNote(int uid)  {
     return state[uid] ??
         DailyNote(
           currentResin: 0,
@@ -37,13 +37,13 @@ class BlocDailyNote extends HydratedCubit<DailyNotes> {
           maxHomeCoin: 2400,
           homeCoinRecoveryTime: "",
           expeditions: [],
+          transformer: Transformer(obtained: false)
         );
   }
 
   @override
   DailyNotes fromJson(Map<String, dynamic> json) {
-    return json.map(
-        (key, value) => MapEntry(int.parse(key), DailyNote.fromJson(value)));
+    return json.map((key, value) => MapEntry(int.parse(key), DailyNote.fromJson(value)));
   }
 
   @override

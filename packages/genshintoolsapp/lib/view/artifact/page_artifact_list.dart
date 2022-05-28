@@ -1,12 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
-import 'package:genshintoolsapp/common/flutter/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
 import 'package:genshintoolsapp/view/account.dart';
-import 'package:genshintoolsapp/view/character.dart';
 import 'package:genshintoolsapp/view/gameui.dart';
 
 import 'page_artifact_add.dart';
@@ -20,10 +17,7 @@ class PageArtifactList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var uid = BlocAuth
-        .watch(context)
-        .state
-        .chosenUid();
+    var uid = BlocAuth.watch(context).state.chosenUid();
     var blocGameData = BlocGameData.watch(context);
     var equipTypes = EquipType.values;
 
@@ -40,24 +34,19 @@ class PageArtifactList extends HookWidget {
           children: [
             TabBar(
               isScrollable: true,
-              labelColor: Theme
-                  .of(context)
-                  .primaryColor,
-              indicatorColor: Theme
-                  .of(context)
-                  .primaryColor,
+              labelColor: Theme.of(context).primaryColor,
+              indicatorColor: Theme.of(context).primaryColor,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: [
                 ...equipTypes.map(
-                      (et) =>
-                      Tab(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          child: Text(et.label()),
-                        ),
+                  (et) => Tab(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
                       ),
+                      child: Text(et.label()),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -86,7 +75,7 @@ class PageArtifactList extends HookWidget {
                                 ),
                                 Padding(
                                   padding:
-                                  EdgeInsets.symmetric(horizontal: 8.0),
+                                      EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Text(
                                     "表示词条个数, 颜色分别代表数值档位",
                                     style: TextStyle(fontSize: 10),
@@ -139,43 +128,34 @@ class GOODArtifactCard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var uid = BlocAuth
-        .watch(context)
-        .state
-        .chosenUid();
+    var uid = BlocAuth.watch(context).state.chosenUid();
     var bloc = BlocGameData.read(context);
-    var db = BlocGameData
-        .read(context)
-        .db;
+    var db = BlocGameData.read(context).db;
 
     var a = db.artifact
         .findSet(artifact.setKey)
         .artifact(artifact.slotKey.asEquipType());
 
     var builds = db.character.findOrNull(artifact.location)?.let(
-          (c) =>
-          c.characterBuildFor(
-              bloc
-                  .playerState(uid)
-                  .character(artifact.location)
-                  .role),
-    );
+          (c) => c.characterBuildFor(
+              bloc.playerState(uid).character(artifact.location).role),
+        );
 
     var fightProps = db.character.findOrNull(artifact.location)?.let((cc) {
-      var c = bloc.findCharacterWithState(uid, cc.key);
+          var c = bloc.findCharacterWithState(uid, cc.key);
 
-      return db.character
-          .fightProps(
-        c.c.key,
-        c.c.level,
-        c.c.constellation,
-      )
-          .merge(db.weapon.fightProps(
-        c.w.key,
-        c.w.level,
-        c.w.refinement,
-      ));
-    }) ??
+          return db.character
+              .fightProps(
+                c.c.key,
+                c.c.level,
+                c.c.constellation,
+              )
+              .merge(db.weapon.fightProps(
+                c.w.key,
+                c.w.level,
+                c.w.refinement,
+              ));
+        }) ??
         FightProps({});
 
     var appendDepot = db.artifact.artifactAppendDepot(a.key);
@@ -183,9 +163,8 @@ class GOODArtifactCard extends HookWidget {
     double infoWidth = 50;
 
     return InkWell(
-      onTap: () =>
-          PageArtifactAdd.show(
-              context, artifact.slotKey.asEquipType(), artifact),
+      onTap: () => PageArtifactAdd.show(
+          context, artifact.slotKey.asEquipType(), artifact),
       onLongPress: () => _remove(context, artifact),
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -239,19 +218,23 @@ class GOODArtifactCard extends HookWidget {
                       children: [
                         Positioned(
                           bottom: -1,
-                          right: 0,
-                          child: Opacity(
-                            opacity: 0.7,
-                            child: SizedBox(
-                              width: infoWidth,
-                              child: AppendValueIndex(
-                                reverse: true,
-                                indexes: appendDepot.valueNs(
-                                  ss.key.asFightProp(),
-                                  ss.stringValue(),
+                          left: 0,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                child: AppendValueIndex(
+                                  reverse: true,
+                                  indexes: appendDepot.valueNs(
+                                    ss.key.asFightProp(),
+                                    ss.stringValue(),
+                                  ),
                                 ),
                               ),
-                            ),
+                              SizedBox(
+                                width: infoWidth,
+                                height: 1,
+                              ),
+                            ],
                           ),
                         ),
                         Padding(
@@ -275,7 +258,7 @@ class GOODArtifactCard extends HookWidget {
                                 }
                                 if (fp == FightProp.DEFENSE_PERCENT) {
                                   return fightProps
-                                      .get(FightProp.BASE_DEFENSE) *
+                                          .get(FightProp.BASE_DEFENSE) *
                                       value;
                                 }
                                 return null;
@@ -313,20 +296,19 @@ class GOODArtifactCard extends HookWidget {
             top: -8,
             child: Column(
               children: [
-                ...?db.character.findOrNull(artifact.location)?.let((c) =>
-                [
-                  SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: GSImage(
-                      domain: "character",
-                      rarity: c.rarity,
-                      nameID: c.key,
-                      rounded: true,
-                      borderSize: 2,
-                    ),
-                  )
-                ]),
+                ...?db.character.findOrNull(artifact.location)?.let((c) => [
+                      SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: GSImage(
+                          domain: "character",
+                          rarity: c.rarity,
+                          nameID: c.key,
+                          rounded: true,
+                          borderSize: 2,
+                        ),
+                      )
+                    ]),
               ],
             ),
           ),
@@ -336,10 +318,7 @@ class GOODArtifactCard extends HookWidget {
   }
 
   _remove(BuildContext context, GOODArtifact pa) {
-    var uid = BlocAuth
-        .read(context)
-        .state
-        .chosenUid();
+    var uid = BlocAuth.read(context).state.chosenUid();
 
     showAlert(
       context,
@@ -384,9 +363,7 @@ class FightPropView extends HookWidget {
           _buildLabel(),
           DefaultTextStyle.merge(
             style: TextStyle(
-              color: Theme
-                  .of(context)
-                  .primaryColor,
+              color: Theme.of(context).primaryColor,
               fontWeight: highlight?.ifTrueOrNull(() => FontWeight.bold),
             ),
             child: Stack(
@@ -404,12 +381,12 @@ class FightPropView extends HookWidget {
                   ),
                 ),
                 Positioned(
-                  top: -5,
+                  bottom: -5,
                   right: 0,
                   child: Text(
                     calcValue
-                        ?.let((calc) => calc(fightProp, value))
-                        ?.let((v) => "${v.toInt()}") ??
+                            ?.let((calc) => calc(fightProp, value))
+                            ?.let((v) => "${v.toInt()}") ??
                         "",
                     style: TextStyle(
                       fontSize: 6,
@@ -450,8 +427,7 @@ class FightPropView extends HookWidget {
           ),
         ),
         ...?(n.length > 1).ifTrueOrNull(
-              () =>
-          [
+          () => [
             Positioned(
               top: -2,
               right: -4,

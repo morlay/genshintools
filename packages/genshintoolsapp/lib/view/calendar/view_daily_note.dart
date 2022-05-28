@@ -1,7 +1,6 @@
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ViewDailyNote extends HookWidget {
   const ViewDailyNote({Key? key}) : super(key: key);
@@ -39,26 +38,28 @@ class ViewDailyNote extends HookWidget {
         children: [
           Processing(
             label: const Text("洞天宝钱"),
-            current: dailyNote.currentHomeCoin,
-            max: dailyNote.maxHomeCoin,
+            current: Text("${dailyNote.currentHomeCoin}"),
+            max: Text("${dailyNote.maxHomeCoin}"),
           ),
           Processing(
             label: const Text("原萃树脂"),
-            current: dailyNote.currentResin,
-            max: dailyNote.maxResin,
+            current: Text("${dailyNote.currentResin}"),
+            max: Text("${dailyNote.maxResin}"),
           ),
           Processing(
             label: const Text("每日委托"),
-            current: dailyNote.finishedTaskNum,
-            max: dailyNote.totalTaskNum,
+            current: Text("${dailyNote.finishedTaskNum}"),
+            max: Text("${dailyNote.totalTaskNum}"),
           ),
           Processing(
             label: const Text("派遣中"),
-            current: dailyNote.currentExpeditionNum -
-                dailyNote.expeditions
-                    .where((element) => element.remainedTime == "0")
-                    .length,
-            max: dailyNote.maxExpeditionNum,
+            current: Text(
+                "${dailyNote.currentExpeditionNum - dailyNote.expeditions.where((element) => element.remainedTime == "0").length}"),
+            max: Text("${dailyNote.maxExpeditionNum}"),
+          ),
+          Processing(
+            label: const Text("参量质变仪 CD"),
+            current: Text(dailyNote.transformer.cd().toString().split(".")[0]),
           ),
         ],
       ),
@@ -68,37 +69,49 @@ class ViewDailyNote extends HookWidget {
 
 class Processing extends HookWidget {
   final Widget label;
-  final int current;
-  final int max;
+  final Widget current;
+  final Widget? max;
 
   const Processing({
     required this.label,
     required this.current,
-    required this.max,
+    this.max,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DefaultTextStyle.merge(
-          style: const TextStyle(fontSize: 11),
-          child: Opacity(
-            opacity: 0.7,
-            child: label,
+    return Container(
+      constraints: BoxConstraints(minWidth: 96),
+      child: Column(
+        children: [
+          DefaultTextStyle.merge(
+            style: const TextStyle(fontSize: 11),
+            child: Opacity(
+              opacity: 0.7,
+              child: label,
+            ),
           ),
-        ),
-        DefaultTextStyle.merge(
-          style: const TextStyle(
-            fontSize: 18,
-            height: 1.4,
-            fontWeight: FontWeight.bold,
-            fontFeatures: [FontFeature.tabularFigures()],
+          DefaultTextStyle.merge(
+            style: const TextStyle(
+              fontSize: 18,
+              height: 1.4,
+              fontWeight: FontWeight.bold,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
+            child: Wrap(
+              children: [
+                current,
+                ...max?.let((m) => [
+                          Text(" / "),
+                          m,
+                        ]) ??
+                    [],
+              ],
+            ),
           ),
-          child: Text("$current / $max"),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -107,7 +107,7 @@ class GOOD with _$GOOD {
 
     return copyWith(
       artifacts: _cleanupArtifacts(
-          artifacts..add(update(GOODArtifact.create(sk, location)))),
+          [...artifacts]..add(update(GOODArtifact.create(sk, location)))),
     );
   }
 

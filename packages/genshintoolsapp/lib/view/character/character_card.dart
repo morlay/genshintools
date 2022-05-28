@@ -19,7 +19,7 @@ class CharacterCard extends HookWidget {
   Widget build(BuildContext context) {
     var db = BlocGameData.read(context).db;
 
-    print(c.character.name);
+    // print(c.character.name);
 
     return InkWell(
       onTap: () {

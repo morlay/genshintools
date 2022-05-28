@@ -195,9 +195,14 @@ class ViewSkillValues extends HookWidget {
       var base = FightProp.ATTACK;
       var skillT = t;
 
-      if (t.endsWith("防御力")) {
+      if (t.contains("防御力")) {
         base = FightProp.DEFENSE;
         skillT = t.replaceAll("防御力", "");
+      }
+
+      if (t.contains("生命值上限")) {
+        base = FightProp.HP;
+        skillT = t.replaceAll("生命值上限", "");
       }
 
       var skillVal = SkillVal(skillT, base: base, params: params);

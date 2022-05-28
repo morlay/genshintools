@@ -1,8 +1,8 @@
 import 'dart:math';
 
 const _proxies = [
-  "https://now-proxy-1.vercel.app",
-  "https://now-proxy-2.vercel.app",
+  // "https://now-proxy-1.vercel.app",
+  // "https://now-proxy-2.vercel.app",
   "https://now-proxy-3.vercel.app",
 ];
 

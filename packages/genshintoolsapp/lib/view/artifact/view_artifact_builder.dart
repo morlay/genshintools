@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
-import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
 import 'package:genshintoolsapp/view/character.dart';

@@ -10,6 +10,7 @@ dependencies:
   freezed: ^2.0.3
   dio: ^4.0.4
   crypto: ^3.0.1
+  json_annotation: ^4.5.0
 
 dev_dependencies:
   dependency_validator: ^3.0.0
