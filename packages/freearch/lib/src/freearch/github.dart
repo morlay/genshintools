@@ -20,7 +20,7 @@ class Github {
       return proxyFor(
           'https://github.com/$repo/raw/$branch/${_cleanPath(path)}',);
     }
-    return 'https://cdn.jsdelivr.net/gh/$repo@$branch/${_cleanPath(path)}';
+    return 'https://fastly.jsdelivr.net/gh/$repo@$branch/${_cleanPath(path)}';
   }
 
   String _cleanPath(String p) {

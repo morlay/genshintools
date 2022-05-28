@@ -347,14 +347,14 @@ class GSImageWeaponType extends HookWidget {
 // todo make to config
 var _github = Github(
   'morlay/genshinimages',
-  'good',
+  'cfa1fd56c211a09173f3ac535b5b09bbf4b6c85a',
 );
 
 class GSImageProvider extends CachedNetworkImageProvider {
   GSImageProvider({
     required String domain,
     required String nameID,
-  }) : super(_github.rawURL('/images/$domain/$nameID.png', nocache: true));
+  }) : super(_github.rawURL('/images/$domain/$nameID.png'));
 }
 
 Map<ElementType, Color> _elementColors = {
