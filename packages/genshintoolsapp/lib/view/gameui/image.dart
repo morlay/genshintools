@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:freearch/freearch.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
@@ -12,7 +11,7 @@ class GSImage extends HookWidget with _$GSImage {
 
   factory GSImage({
     required String domain,
-    required String nameID,
+    required String icon,
     @Default(1) final int rarity,
     @Default(56) final int size,
     @Default(0) final int borderSize,
@@ -47,7 +46,7 @@ class GSImage extends HookWidget with _$GSImage {
               height: (size - borderSize).toDouble(),
               image: GSImageProvider(
                 domain: domain,
-                nameID: nameID,
+                icon: icon,
               ),
             ),
           ),
@@ -94,21 +93,21 @@ class WithElement extends HookWidget {
       children: [
         child,
         Positioned(
-            left: size / 8,
-            top: size / 8,
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(size / 2),
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Image(
-                  width: size,
-                  height: size,
-                  image: GSImageProvider(
-                    domain: 'element',
-                    nameID: element.name,
-                  ),
-                ),),),
+          left: size / 8,
+          top: size / 8,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(size / 2),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Image(
+              width: size,
+              height: size,
+              image: AssetImage(
+                  "assets/images/element/${element.toString().split(".").last}.png"),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -254,13 +253,46 @@ class WithCount extends HookWidget {
   }
 }
 
+class GSImageProvider extends CachedNetworkImageProvider {
+  static fromMiHoYo(String group, String icon) {
+    return "https://upload-bbs.mihoyo.com/game_record/genshin/${group}/${icon}.png";
+  }
+
+  static fromAmbr(String group, String icon, {String prefix = ""}) {
+    return "https://api.ambr.top/assets/UI/${prefix}${icon}.png";
+  }
+
+  static String image(String domain, String icon) {
+    switch (domain) {
+      case "weapon":
+      case "artifact":
+        return fromMiHoYo("equip", icon);
+      // case "character":
+      //   return mihoyoIcon("character_icon", icon);
+      // case "constellation":
+      //   return mihoyoIcon("constellation_icon", icon);
+    }
+
+    return fromAmbr(
+      domain,
+      icon,
+      prefix: domain == "artifact" ? "reliquary/" : "",
+    );
+  }
+
+  GSImageProvider({
+    required String domain,
+    required String icon,
+  }) : super(GSImageProvider.image(domain, icon));
+}
+
 class GSImageConstellation extends HookWidget {
-  final String nameID;
   final double size;
   final Color color;
+  final String icon;
 
   const GSImageConstellation({
-    required this.nameID,
+    required this.icon,
     this.size = 24,
     this.color = Colors.white,
     Key? key,
@@ -273,10 +305,11 @@ class GSImageConstellation extends HookWidget {
       height: size,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: color.withOpacity(0.5),
-          ),),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: color.withOpacity(0.5),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(2),
         child: Image(
@@ -284,7 +317,7 @@ class GSImageConstellation extends HookWidget {
           colorBlendMode: BlendMode.srcIn,
           image: GSImageProvider(
             domain: 'constellation',
-            nameID: nameID,
+            icon: icon,
           ),
         ),
       ),
@@ -308,10 +341,8 @@ class GSImageElement extends HookWidget {
       width: size,
       height: size,
       child: Image(
-        image: GSImageProvider(
-          domain: 'element',
-          nameID: element.string(),
-        ),
+        image: AssetImage(
+            "assets/images/element/${element.toString().split('.').last}.png"),
       ),
     );
   }
@@ -336,25 +367,10 @@ class GSImageWeaponType extends HookWidget {
       height: size + 4,
       color: color,
       colorBlendMode: BlendMode.srcIn,
-      image: GSImageProvider(
-        domain: 'weapon_type',
-        nameID: weaponType.toString().split('.').last,
-      ),
+      image: AssetImage(
+          "assets/images/weapon_type/${weaponType.toString().split('.').last}.png"),
     );
   }
-}
-
-// todo make to config
-var _github = Github(
-  'morlay/genshinimages',
-  'cfa1fd56c211a09173f3ac535b5b09bbf4b6c85a',
-);
-
-class GSImageProvider extends CachedNetworkImageProvider {
-  GSImageProvider({
-    required String domain,
-    required String nameID,
-  }) : super(_github.rawURL('/images/$domain/$nameID.png'));
 }
 
 Map<ElementType, Color> _elementColors = {

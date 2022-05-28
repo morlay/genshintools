@@ -18,6 +18,7 @@ class GSMaterial with _$GSMaterial {
     required int id,
     required I18n name,
     required I18n desc,
+    required String icon,
     @GSMaterialTypeStringConverter() required GSMaterialType materialType,
     required int rarity,
     required int rank,

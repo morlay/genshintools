@@ -49,7 +49,8 @@ class PageCharacter extends HookWidget {
                 TalentType.skill: 9,
                 TalentType.burst: 9,
               },
-              constellation: current.character.rarity == 4 ? 6 : 0,),
+              constellation: current.character.rarity == 4 ? 6 : 0,
+            ),
       w: current.c.own
           ? current.w
           : current.w.copyWith(
@@ -61,36 +62,48 @@ class PageCharacter extends HookWidget {
             ),
       artifacts: current.artifacts.length == 5
           ? current.artifacts
-          : current.graduatedArtifacts(db.artifact, defaultArtifacts: [
-              ...db.artifact
-                  .buildArtifactsBySetPair(
-                    builds.artifactSetPairs?[0] ?? ['角斗士的终幕礼'],
-                    builds,
-                  )
-                  .map((a) =>
-                      current.artifacts
-                          .firstWhereOrNull((e) => e.slotKey == a.slotKey) ??
-                      a,)
-                  .map((a) => a.copyWith(level: 20))
-            ],),
+          : current.graduatedArtifacts(
+              db.artifact,
+              defaultArtifacts: [
+                ...db.artifact
+                    .buildArtifactsBySetPair(
+                      builds.artifactSetPairs?[0] ?? ['角斗士的终幕礼'],
+                      builds,
+                    )
+                    .map(
+                      (a) =>
+                          current.artifacts.firstWhereOrNull(
+                              (e) => e.slotKey == a.slotKey) ??
+                          a,
+                    )
+                    .map((a) => a.copyWith(level: 20))
+              ],
+            ),
     );
 
     var characterValueNotifier = useState(current);
 
-    useEffect(() {
-      characterValueNotifier.value = characterValueNotifier.value.copyWith(
-        artifacts: current.artifacts,
-      );
-      return null;
-    }, [current.artifacts.map((e) => e.toString()).join('|')],);
+    useEffect(
+      () {
+        characterValueNotifier.value = characterValueNotifier.value.copyWith(
+          artifacts: current.artifacts,
+        );
+        return null;
+      },
+      [current.artifacts.map((e) => e.toString()).join('|')],
+    );
 
-    useEffect(() {
-      characterValueNotifier.value = characterValueNotifier.value.copyWith(
+    useEffect(
+      () {
+        characterValueNotifier.value = characterValueNotifier.value.copyWith(
           c: characterValueNotifier.value.c.copyWith(
-        role: current.c.role,
-      ),);
-      return null;
-    }, [current.c.role],);
+            role: current.c.role,
+          ),
+        );
+        return null;
+      },
+      [current.c.role],
+    );
 
     var c = characterValueNotifier.value;
 
@@ -440,15 +453,19 @@ class PageCharacter extends HookWidget {
         refinement: c.w.refinement,
         backup: '当前配装',
       ),
-      ...?builds.weapons?.let((weapons) => weapons.expandIndexed(
-            (i, list) => list.map((e) => WeaponListTile(
-                  fightProps: fightProps,
-                  weapon: db.weapon.find(e),
-                  level: c.w.level,
-                  refinement: c.w.refinement,
-                  backup: '强度 ${weapons.length - i + (10 - weapons.length)}',
-                ),),
-          ),),
+      ...?builds.weapons?.let(
+        (weapons) => weapons.expandIndexed(
+          (i, list) => list.map(
+            (e) => WeaponListTile(
+              fightProps: fightProps,
+              weapon: db.weapon.find(e),
+              level: c.w.level,
+              refinement: c.w.refinement,
+              backup: '强度 ${weapons.length - i + (10 - weapons.length)}',
+            ),
+          ),
+        ),
+      ),
     ];
 
     return Padding(
@@ -571,8 +588,9 @@ class PageCharacter extends HookWidget {
         c.character.characterBuildFor(c.c.role).skillPriority ?? [];
 
     var skills = [...c.character.skills]..sort(
-      (a, b) => b.priority(skillPriority).compareTo(a.priority(skillPriority)),
-    );
+        (a, b) =>
+            b.priority(skillPriority).compareTo(a.priority(skillPriority)),
+      );
 
     return DefaultTabController(
       length: len,
@@ -591,8 +609,11 @@ class PageCharacter extends HookWidget {
                   height: 24,
                   child: Text(
                     [
-                      if (skill.skillType.string() != '') '${skill.skillType.string()}.${fightProps.fixSkillLevel(skill.skillType, c.c.skillLevel(skill.skillType))}'
-                              .toString() else '',
+                      if (skill.skillType.string() != '')
+                        '${skill.skillType.string()}.${fightProps.fixSkillLevel(skill.skillType, c.c.skillLevel(skill.skillType))}'
+                            .toString()
+                      else
+                        '',
                       skill.name.text(Lang.CHS),
                     ].where((s) => s != '').join(' '),
                     style: const TextStyle(
@@ -679,7 +700,7 @@ class PageCharacter extends HookWidget {
                 height: 160,
                 image: GSImageProvider(
                   domain: 'character',
-                  nameID: c.character.key,
+                  icon: c.character.icon,
                 ),
               ),
             ),
@@ -744,27 +765,29 @@ class PageCharacter extends HookWidget {
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 8),
-                                  child: Column(children: [
-                                    ...c.character.constellations.map((e) {
-                                      return ListTile(
-                                        leading: GSImageConstellation(
-                                          color: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1
-                                                  ?.color ??
-                                              Colors.black,
-                                          nameID: e.nameID,
-                                          size: 36,
-                                        ),
-                                        title: Text(e.name.text(Lang.CHS)),
-                                        subtitle: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
-                                          child: GSDesc(desc: e.desc),
-                                        ),
-                                      );
-                                    })
-                                  ],),
+                                  child: Column(
+                                    children: [
+                                      ...c.character.constellations.map((e) {
+                                        return ListTile(
+                                          leading: GSImageConstellation(
+                                            color: Theme.of(context)
+                                                    .textTheme
+                                                    .headline1
+                                                    ?.color ??
+                                                Colors.black,
+                                            icon: e.icon,
+                                            size: 36,
+                                          ),
+                                          title: Text(e.name.text(Lang.CHS)),
+                                          subtitle: Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8),
+                                            child: GSDesc(desc: e.desc),
+                                          ),
+                                        );
+                                      })
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -784,7 +807,7 @@ class PageCharacter extends HookWidget {
                                       ? 1
                                       : 0.3,
                                   child: GSImageConstellation(
-                                    nameID: e.nameID,
+                                    icon: e.icon,
                                   ),
                                 ),
                               ),

@@ -32,7 +32,7 @@ class ViewLevelupPlans extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var a = GSImage(
-      nameID: avatar.nameID,
+      icon: avatar.icon,
       domain: avatar.domain,
       rarity: avatar.rarity,
       borderSize: 3,

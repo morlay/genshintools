@@ -19,6 +19,7 @@ class GSWeapon with _$GSWeapon {
     required int id,
     required I18n name,
     required I18n desc,
+    required String icon,
     required int rarity,
     @WeaponTypeStringConverter() required WeaponType weaponType,
     required List<List<EquipAffix>> affixes,

@@ -19,6 +19,7 @@ class GSArtifact with _$GSArtifact {
     required int id,
     required I18n name,
     required I18n desc,
+    required String icon,
     required int rarity,
     @EquipTypeStringConverter() required EquipType equipType,
     required String setKey,
@@ -103,56 +104,58 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
     FightProps fightProps,
     String? location,
   ) {
-    return sum(indexes.map((i) {
-      double base = 1;
+    return sum(
+      indexes.map((i) {
+        double base = 1;
 
-      double calcBase(double v, double p, bool isPercent) {
-        if (isPercent) {
-          if (p < v) {
-            return p / v;
+        double calcBase(double v, double p, bool isPercent) {
+          if (isPercent) {
+            if (p < v) {
+              return p / v;
+            }
+          } else {
+            if (v < p) {
+              return v / p;
+            }
           }
-        } else {
-          if (v < p) {
-            return v / p;
-          }
+          return 1;
         }
-        return 1;
-      }
 
-      switch (fp) {
-        case FightProp.ATTACK:
-        case FightProp.ATTACK_PERCENT:
-          var v = calc(FightProp.ATTACK, [i]);
-          var p = calc(FightProp.ATTACK_PERCENT, [i]) *
-              fightProps.get(FightProp.BASE_ATTACK);
-          base = calcBase(v, p, fp == FightProp.ATTACK_PERCENT);
+        switch (fp) {
+          case FightProp.ATTACK:
+          case FightProp.ATTACK_PERCENT:
+            var v = calc(FightProp.ATTACK, [i]);
+            var p = calc(FightProp.ATTACK_PERCENT, [i]) *
+                fightProps.get(FightProp.BASE_ATTACK);
+            base = calcBase(v, p, fp == FightProp.ATTACK_PERCENT);
 
-          if (location == 'HuTao') {
-            base = base * 0.4;
-          }
+            if (location == 'HuTao') {
+              base = base * 0.4;
+            }
 
-          break;
-        case FightProp.DEFENSE:
-        case FightProp.DEFENSE_PERCENT:
-          var v = calc(FightProp.DEFENSE, [i]);
-          var p = calc(FightProp.DEFENSE_PERCENT, [i]) *
-              fightProps.get(FightProp.BASE_DEFENSE);
+            break;
+          case FightProp.DEFENSE:
+          case FightProp.DEFENSE_PERCENT:
+            var v = calc(FightProp.DEFENSE, [i]);
+            var p = calc(FightProp.DEFENSE_PERCENT, [i]) *
+                fightProps.get(FightProp.BASE_DEFENSE);
 
-          base = calcBase(v, p, fp == FightProp.DEFENSE_PERCENT);
-          break;
-        case FightProp.HP:
-        case FightProp.HP_PERCENT:
-          var v = calc(FightProp.HP, [i]);
-          var p = calc(FightProp.HP_PERCENT, [i]) *
-              fightProps.get(FightProp.BASE_HP);
-          base = calcBase(v, p, fp == FightProp.HP_PERCENT);
-          break;
-        default:
-      }
+            base = calcBase(v, p, fp == FightProp.DEFENSE_PERCENT);
+            break;
+          case FightProp.HP:
+          case FightProp.HP_PERCENT:
+            var v = calc(FightProp.HP, [i]);
+            var p = calc(FightProp.HP_PERCENT, [i]) *
+                fightProps.get(FightProp.BASE_HP);
+            base = calcBase(v, p, fp == FightProp.HP_PERCENT);
+            break;
+          default:
+        }
 
-      // 平均值
-      return (calc(fp, [i]) / (avgValue(fp))) * base;
-    }),).toDouble();
+        // 平均值
+        return (calc(fp, [i]) / (avgValue(fp))) * base;
+      }),
+    ).toDouble();
   }
 
   List<int> valueNs(FightProp fp, String? s) {
@@ -220,7 +223,9 @@ class GSArtifactAppendDepot with _$GSArtifactAppendDepot {
     var sortedKeys = set.keys..sorted((a, b) => a.compareTo(b));
 
     _fpCanValues[fpKey] = sortedKeys.fold<Map<String, List<int>>>(
-        {}, (previousValue, v) => {...previousValue, v: set[v]!},);
+      {},
+      (previousValue, v) => {...previousValue, v: set[v]!},
+    );
 
     return _fpCanValues[fpKey]!;
   }

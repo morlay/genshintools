@@ -197,7 +197,7 @@ class CharacterCard extends HookWidget {
             domain: 'character',
             size: 58,
             rarity: c.character.rarity,
-            nameID: c.character.key,
+            icon: c.character.icon,
           ),
         ),
       ),
@@ -256,7 +256,7 @@ class CharacterCard extends HookWidget {
                                   size: 42,
                                   domain: 'material',
                                   rarity: m.rarity,
-                                  nameID: m.key,
+                                  icon: m.icon,
                                 ),
                                 title: Text(m.name.text(Lang.CHS)),
                                 trailing: Text(
@@ -295,7 +295,7 @@ class CharacterCard extends HookWidget {
           size: 28,
           domain: 'weapon',
           rarity: db.weapon.find(c.w.key).rarity,
-          nameID: db.weapon.find(c.w.key).key,
+          icon: db.weapon.find(c.w.key).icon,
         ),
       ),
     );
@@ -315,10 +315,10 @@ class CharacterCard extends HookWidget {
                       size: 28,
                       domain: 'artifact',
                       rarity: a.rarity,
-                      nameID: db.artifact
+                      icon: db.artifact
                           .findSet(a.setKey)
                           .artifact(a.slotKey.asEquipType())
-                          .key,
+                          .icon,
                     ),
                   ),
                   ...?(i == 0).ifTrueOrNull(() => [

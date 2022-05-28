@@ -55,6 +55,7 @@ const Constellations = groupOne(
 
         return {
             Name: i18nWithKey(talent.nameTextMapHash),
+            Icon: talent.icon || "",
             Desc: desc,
             ...resolveAndFixProps(
                 talent.openConfig || `talent-${talent.talentId}`,
@@ -72,6 +73,7 @@ const ProudSkills = groupMulti(
     (ps) => ({
         ProudSkillGroupId: ps.proudSkillGroupId,
         Name: i18nWithKey(ps.nameTextMapHash),
+        Icon: ps.icon || "",
         Desc: i18n(ps.descTextMapHash, cleanText),
         ParamNames: ps.paramDescList.map((n) => i18n(n, cleanText)).filter((c) => c.CHS),
         Params: ps.paramList,
@@ -110,6 +112,7 @@ const Skills = groupOne(
 
         return {
             Name: i18nWithKey(skill.nameTextMapHash),
+            Icon: skill.skillIcon || "",
             Desc: i18n(skill.descTextMapHash, cleanText),
             SkillType: skillType,
             MaterialCosts: proudSkills.map((item) => item.MaterialCosts),
@@ -211,6 +214,7 @@ export const Characters = AvatarExcelConfigData
             const base = {
                 Id: a.id,
                 Name: i18nWithKey(a.nameTextMapHash),
+                Icon: a.iconName || "",
                 Desc: i18n(a.descTextMapHash),
                 Rarity: a.qualityType === "QUALITY_ORANGE" ? 5 : 4,
                 WeaponType: a.weaponType,

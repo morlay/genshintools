@@ -5,6 +5,7 @@ import 'fight_props.dart';
 import 'i18n.dart';
 
 part '__generated__/constellation.freezed.dart';
+
 part '__generated__/constellation.g.dart';
 
 @freezed
@@ -15,6 +16,7 @@ class GSConstellation with _$GSConstellation {
   factory GSConstellation({
     required I18n name,
     required I18n desc,
+    required String icon,
     required FightProps addProps,
     required List<FightProps> additionalProps,
   }) = _GSConstellation;

@@ -232,13 +232,13 @@ class ViewGachaLogList extends HookWidget {
           child: isCharacter
               ? db.character.find(log.name).let((c) => GSImage(
                     domain: 'character',
-                    nameID: c.key,
+                    icon: c.icon,
                     rarity: c.rarity,
                   ),)
               : db.weapon.find(log.name).let(
                     (w) => GSImage(
                       domain: 'weapon',
-                      nameID: w.key,
+                      icon: w.icon,
                       rarity: w.rarity,
                     ),
                   ),

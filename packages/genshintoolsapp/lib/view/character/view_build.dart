@@ -96,7 +96,7 @@ class WeaponListTile extends HookWidget {
               size: 52,
               domain: 'weapon',
               rarity: weapon.rarity,
-              nameID: weapon.key,
+              icon: weapon.icon,
             ),
           ),
         ),
@@ -238,7 +238,7 @@ class ViewBuildArtifactSetPair extends HookWidget {
               size: 52,
               domain: 'artifact',
               rarity: a.rarity,
-              nameID: a.key,
+              icon: a.icon,
             );
 
             return sets.length == 1

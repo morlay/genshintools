@@ -408,7 +408,7 @@ class PageArtifactAdd extends HookWidget {
                     domain: 'artifact',
                     rarity: 5,
                     size: 64,
-                    nameID: option.value.key,
+                    icon: option.value.icon,
                   ),
                 ),
               ),
@@ -433,7 +433,7 @@ class PageArtifactAdd extends HookWidget {
               domain: 'artifact',
               rarity: 5,
               size: 42,
-              nameID: s.key,
+              icon: s.icon,
             ),
           ),
         );

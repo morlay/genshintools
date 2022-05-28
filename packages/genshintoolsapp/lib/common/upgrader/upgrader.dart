@@ -57,7 +57,7 @@ ${lr.description?.let((description) => description) ?? "无"}
                             ),
                             TextButton(
                               onPressed: () {
-                                launchUrl(Uri.parse(lr.downloadURL));
+                                launchUrl(Uri.parse(lr.downloadURL), mode: LaunchMode.externalApplication);
                               },
                               child: const Text('确认'),
                             ),

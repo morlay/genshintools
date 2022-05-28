@@ -286,7 +286,7 @@ class GOODArtifactCard extends HookWidget {
             level: artifact.level,
             child: GSImage(
               domain: 'artifact',
-              nameID: a.key,
+              icon: a.icon,
               rarity: artifact.rarity,
               size: size.toInt(),
             ),
@@ -303,7 +303,7 @@ class GOODArtifactCard extends HookWidget {
                         child: GSImage(
                           domain: 'character',
                           rarity: c.rarity,
-                          nameID: c.key,
+                          icon: c.icon,
                           rounded: true,
                           borderSize: 2,
                         ),

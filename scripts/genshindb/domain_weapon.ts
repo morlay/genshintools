@@ -59,6 +59,7 @@ export const Weapons = groupOne(
         return {
             Id: a.id,
             Name: name,
+            Icon: a.icon || "",
             Desc: i18n(a.descTextMapHash),
             Rarity: a.rankLevel,
             WeaponType: a.weaponType,

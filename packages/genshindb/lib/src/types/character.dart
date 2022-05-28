@@ -21,6 +21,7 @@ class GSCharacter with _$GSCharacter {
     required int id,
     required I18n name,
     required I18n desc,
+    required String icon,
     @ElementTypeStringConverter() required ElementType element,
     required int rarity,
     @WeaponTypeStringConverter() required WeaponType weaponType,

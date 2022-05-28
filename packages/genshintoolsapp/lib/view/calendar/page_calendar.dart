@@ -17,16 +17,17 @@ class PageCalendar extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarWithAccount.buildScaffold(
-        context,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
-            ViewDailyNote(),
-            Expanded(
-              child: ViewCalendar(),
-            )
-          ],
-        ),);
+      context,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: const [
+          ViewDailyNote(),
+          Expanded(
+            child: ViewCalendar(),
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -65,17 +66,22 @@ class ViewCalendar extends HookWidget {
   Widget build(BuildContext context) {
     final uid = BlocAuth.watch(context).state.chosenUid();
 
-    useObservableEffect(() {
-      final blocAuth = BlocAuth.read(context);
+    useObservableEffect(
+      () {
+        final blocAuth = BlocAuth.read(context);
 
-      if (blocAuth.state.hasLogon()) {
-        return Rx.fromCallable(() => BlocGameData.read(context).syncGameInfo(
+        if (blocAuth.state.hasLogon()) {
+          return Rx.fromCallable(
+            () => BlocGameData.read(context).syncGameInfo(
               blocAuth.state.authedClient(),
               blocAuth.state.chosenUid(),
-            ),);
-      }
-      return null;
-    }, [uid],);
+            ),
+          );
+        }
+        return null;
+      },
+      [uid],
+    );
 
     final gbb = BlocGameData.watch(context);
     final characters = gbb.listCharacterWithState(uid);
@@ -90,7 +96,7 @@ class ViewCalendar extends HookWidget {
       var aw = GSImage(
         domain: 'weapon',
         rarity: w.rarity,
-        nameID: wNameId,
+        icon: w.icon,
       );
 
       addToNeeds(
@@ -104,7 +110,7 @@ class ViewCalendar extends HookWidget {
       var avatar = GSImage(
         domain: 'character',
         rarity: c.character.rarity,
-        nameID: cNameId,
+        icon: c.character.icon,
       );
 
       addToNeeds(
@@ -126,11 +132,15 @@ class ViewCalendar extends HookWidget {
           needs,
           avatar,
           gbb.db.characterSkillLevelupPlans(
-              cNameId, skillType, c.c.skillLevel(skillType), c.c.level,
-              maxLevel: c.character
-                  .characterBuildFor(c.c.role)
-                  .emBuild()
-                  .ifTrueOrNull(() => 6),),
+            cNameId,
+            skillType,
+            c.c.skillLevel(skillType),
+            c.c.level,
+            maxLevel: c.character
+                .characterBuildFor(c.c.role)
+                .emBuild()
+                .ifTrueOrNull(() => 6),
+          ),
         );
       }
     });
@@ -160,13 +170,18 @@ class ViewCalendar extends HookWidget {
                 return ListView(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   children: [
-                    ...ListTile.divideTiles(context: context, tiles: [
-                      ...l.map((item) => ViewMaterialNeeds(
+                    ...ListTile.divideTiles(
+                      context: context,
+                      tiles: [
+                        ...l.map(
+                          (item) => ViewMaterialNeeds(
                             material: item[0].material,
                             materials: item.map((e) => e.material).toList(),
                             needs: item.expand((e) => e.needs).toList(),
-                          ),)
-                    ],)
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 );
               }).toList(),
@@ -234,7 +249,7 @@ class ViewMaterialNeeds extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var list = needs
-        .groupListsBy((e) => e.avatar.nameID)
+        .groupListsBy((e) => e.avatar.icon)
         .values
         .expand(
           (groupedNeeds) => groupedNeeds,
@@ -260,14 +275,16 @@ class ViewMaterialNeeds extends HookWidget {
                 ...(materials.isEmpty ? [material] : materials)
                     .mapIndexed(
                       (i, m) => [
-                        ...?(i > 0).ifTrueOrNull(() => [
-                              const SizedBox(
-                                height: 10,
-                                child: VerticalDivider(
-                                  width: 1,
-                                ),
-                              )
-                            ],),
+                        ...?(i > 0).ifTrueOrNull(
+                          () => [
+                            const SizedBox(
+                              height: 10,
+                              child: VerticalDivider(
+                                width: 1,
+                              ),
+                            )
+                          ],
+                        ),
                         GestureDetector(
                           onTap: () {
                             ViewMaterial.showModal(context, m);
@@ -338,7 +355,7 @@ class ViewMaterialNeed extends HookWidget {
               top: -9,
               child: GSImage(
                 domain: avatar.domain,
-                nameID: avatar.nameID,
+                icon: avatar.icon,
                 rarity: avatar.rarity,
                 size: 18,
                 borderSize: 2,

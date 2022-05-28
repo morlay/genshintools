@@ -38,6 +38,7 @@ export const MonsterDescribes = groupOne(
             SpecialName: MonsterSpecialNames[t.specialNameLabID],
             Title: MonsterTitles[t.titleID],
             Name: i18nWithKey(t.nameTextMapHash),
+            Icon: t.icon || "",
         };
     },
     "id",

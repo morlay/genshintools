@@ -31,7 +31,7 @@ class ViewMaterial extends HookWidget {
 
     var a = GSImage(
       domain: 'material',
-      nameID: material.key,
+      icon: material.icon,
       rarity: material.rarity,
       borderSize: 3,
       size: 72,
@@ -68,52 +68,50 @@ class ViewMaterial extends HookWidget {
                   children: [
                     GSDesc(desc: material.desc),
                     Align(
-                        widthFactor: double.infinity,
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                      widthFactor: double.infinity,
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            ...?material.sources?.map(
+                              (e) => Chip(
+                                label: Text(
+                                  e.text(Lang.CHS),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    ...?material.dropFromTags?.let(
+                      (dropFromTags) => [
+                        Align(
+                          widthFactor: double.infinity,
+                          alignment: Alignment.topLeft,
                           child: Wrap(
                             spacing: 8,
                             runSpacing: 8,
                             children: [
-                              ...?material.sources?.map(
-                                (e) => Chip(
-                                  label: Text(
-                                    e.text(Lang.CHS),
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              )
+                              ...db.enemy
+                                  .listByDropTags(material.dropFromTags ?? [])
+                                  .map(
+                                    (e) => Chip(
+                                      label: Text(
+                                        e.name.text(Lang.CHS),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ),
+                                  )
                             ],
                           ),
-                        ),),
-                    ...?material.dropFromTags?.let((dropFromTags) => [
-                          Align(
-                            widthFactor: double.infinity,
-                            alignment: Alignment.topLeft,
-                            child: Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                ...db.enemy
-                                    .listByDropTags(material.dropFromTags ?? [])
-                                    .map(
-                                      (e) => Chip(
-                                        avatar: GSImage(
-                                          domain: 'enemy',
-                                          nameID: e.key,
-                                          rounded: true,
-                                        ),
-                                        label: Text(
-                                          e.name.text(Lang.CHS),
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                      ),
-                                    )
-                              ],
-                            ),
-                          )
-                        ],),
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -145,7 +143,7 @@ class MaterialWithCount extends HookWidget {
         domain: 'material',
         size: 36,
         rarity: material.rarity,
-        nameID: material.key,
+        icon: material.icon,
       ),
     );
   }

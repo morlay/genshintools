@@ -106,6 +106,7 @@ export const Materials = groupOne(
             ...s,
             Id: m.id,
             Name: n,
+            Icon: m.icon || "",
             Desc: i18n(m.descTextMapHash),
             Rarity: m.rankLevel || 0,
             Rank: m.rank || 0,
