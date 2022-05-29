@@ -397,9 +397,8 @@ class ViewBuildArtifacts extends HookWidget {
       runSpacing: 2,
       children: [
         ...{
+          ...?builds.artifactMainPropTypes?[currentArtifact.slotKey.asEquipType()],
           currentArtifact.mainStatKey.asFightProp(),
-          ...?builds
-              .artifactMainPropTypes?[currentArtifact.slotKey.asEquipType()],
         }.map((fp) => Container(
               decoration: BoxDecoration(
                   border: Border(

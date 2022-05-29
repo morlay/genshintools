@@ -492,16 +492,19 @@ class PageCharacter extends HookWidget {
                   );
                 },
                 tileBuilder: (ctx, s) {
-                  return GestureDetector(
+                  return InkWell(
                     onTap: () {
                       if (roles.length > 1) {
                         s.showOptions(ctx);
                       }
                     },
-                    child: Text(
-                      builds.role ?? '',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        builds.role ?? '',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   );
                 },
@@ -756,7 +759,7 @@ class PageCharacter extends HookWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
