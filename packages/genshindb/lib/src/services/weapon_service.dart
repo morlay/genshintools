@@ -4,6 +4,7 @@ import 'package:genshindb/types.dart';
 import 'package:genshindb/utils.dart';
 
 part '__generated__/weapon_service.freezed.dart';
+
 part '__generated__/weapon_service.g.dart';
 
 @freezed
@@ -41,11 +42,7 @@ class WeaponService with _$WeaponService {
     return weapons?[_indexes[keyOrName]];
   }
 
-  FightProps fightProps(
-    String keyOrName,
-    int level,
-    int affixLevel,
-  ) {
+  FightProps fightPropsForMain(String keyOrName, int level, int affixLevel) {
     var w = find(keyOrName);
 
     var fightProps = FightProps({});
@@ -59,6 +56,18 @@ class WeaponService with _$WeaponService {
     weaponPromotes?.promotedFightProps(w.promoteId, level).let((it) {
       fightProps = fightProps.merge(it);
     });
+
+    return fightProps;
+  }
+
+  FightProps fightProps(
+    String keyOrName,
+    int level,
+    int affixLevel,
+  ) {
+    var w = find(keyOrName);
+
+    var fightProps = fightPropsForMain(keyOrName, level, affixLevel);
 
     if (affixLevel > 0) {
       w.weaponAffixes(affixLevel).forEach((affix) {

@@ -1,11 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
 import 'package:genshintoolsapp/domain/auth.dart';
 import 'package:genshintoolsapp/domain/gamedata.dart';
-import 'package:genshintoolsapp/view/character.dart';
-
-import 'page_artifact_list.dart';
+import 'package:genshintoolsapp/view/gameui.dart';
 
 class ViewArtifactBuilder extends HookWidget {
   const ViewArtifactBuilder({
@@ -24,7 +21,7 @@ class ViewArtifactBuilder extends HookWidget {
     var uid = BlocAuth.read(context).state.chosenUid();
     var c = state.value;
 
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         _showModal(context, uid, state);
       },
@@ -67,49 +64,39 @@ class ViewArtifactBuilder extends HookWidget {
 
         return FractionallySizedBox(
           heightFactor: 0.7,
-          child: DefaultTabController(
-            length: 2,
+          child: SafeArea(
             child: Column(
               children: [
-                TabBar(
-                  labelColor: Theme.of(context).primaryColor,
-                  indicatorColor: Theme.of(context).primaryColor,
-                  tabs: const [
-                    Tab(text: '当前配装'),
-                    Tab(text: '其他套装'),
-                  ],
+                ListTile(
+                  title: Text('其他套装'),
                 ),
                 Expanded(
-                  child: TabBarView(
-                    children: [
-                      CurrentArtifact(uid: uid, c: current),
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            ...artifactSets.map(
-                              (artifactSet) => ListTile(
-                                onTap: () {
-                                  state.value = state.value.copyWith(
-                                    artifacts: artifactSet.artifacts,
-                                  );
-                                  Navigator.of(context).pop();
-                                },
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 16,
-                                ),
-                                title: ViewBuildArtifactSetPair(
-                                  full: true,
-                                  fightProps: fightProps,
-                                  backup: artifactSet.backup,
-                                  artifacts: artifactSet.artifacts,
-                                ),
-                              ),
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ...artifactSets.map(
+                          (artifactSet) => ListTile(
+                            onTap: () {
+                              state.value = state.value.copyWith(
+                                artifacts: artifactSet.artifacts,
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
                             ),
-                          ],
+                            title: ViewBuildArtifactSetPair(
+                              full: true,
+                              fightProps: fightProps,
+                              backup: artifactSet.backup,
+                              artifacts: artifactSet.artifacts,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -121,97 +108,92 @@ class ViewArtifactBuilder extends HookWidget {
   }
 }
 
-class CurrentArtifact extends HookWidget {
-  const CurrentArtifact({
-    Key? key,
-    required this.uid,
-    required this.c,
-  }) : super(key: key);
+class ViewBuildArtifactSetPair extends HookWidget {
+  final FightProps fightProps;
+  final List<GOODArtifact> artifacts;
+  final String? backup;
+  final bool? full;
 
-  final CharacterWithState c;
-  final int uid;
+  const ViewBuildArtifactSetPair({
+    required this.fightProps,
+    required this.artifacts,
+    this.backup,
+    this.full,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var blocGameData = BlocGameData.watch(context);
-    var state = blocGameData.playerState(uid);
-    var current = state.artifactsOn(c.character.key);
+    var db = BlocGameData.read(context).db;
+    var sets = db.artifact.resolveArtifactSets(artifacts);
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        child: Wrap(
-          spacing: 8,
-          runSpacing: 16,
-          children: [
-            ...EquipType.values.map((et) {
-              var list = state.artifacts
-                  .where((a) => a.slotKey.asEquipType() == et)
-                  .toList();
+    if (full ?? false) {
+      return _buildInfo(context, sets);
+    }
 
-              var currentArtifact = current
-                  .firstWhereOrNull((a) => a.slotKey.asEquipType() == et);
+    return InkWell(
+      child: Text(sets.map((e) => e.name.text(Lang.CHS)).join(" + "),
+          textAlign: TextAlign.center),
+    );
+  }
 
-              return Select<GOODArtifact>(
-                title: const Text('圣遗物'),
-                options: list,
-                value: currentArtifact,
-                onSelected: (selected) {
-                  if (currentArtifact == null) {
-                    blocGameData.equipArtifact(
-                      uid,
-                      selected.copyWith(
-                        location: c.character.key,
-                      ),
-                    );
-                  } else {
-                    blocGameData.equipArtifact(
-                      uid,
-                      selected,
-                      currentArtifact,
-                    );
-                  }
-                },
-                builder: (c, list) {
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 16,
-                        children: [...list],
-                      ),
-                    ),
-                  );
-                },
-                optionBuilder: (context, option, selected) {
-                  return GOODArtifactCard(
-                    artifact: option.value,
-                    onAvatarTap: () {
-                      option.select();
-                    },
-                  );
-                },
-                tileBuilder: (context, selected) {
-                  return selected.value?.let((pa) => GOODArtifactCard(
-                          artifact: pa,
-                          onAvatarTap: () {
-                            selected.showOptions(context);
-                          },),) ??
-                      ListTile(
-                        onTap: () {
-                          selected.showOptions(context);
-                        },
-                        title: Text('请选择${et.label()}'),
-                      );
-                },
-              );
-            })
-          ],
-        ),
+  Widget _buildInfo(BuildContext context, List<GSArtifactSet> sets) {
+    return DefaultTextStyle.merge(
+      style: Theme.of(context).textTheme.bodyText2,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Wrap(
+              runSpacing: 4,
+              children: [
+                ...sets.map(
+                  (s) => Wrap(
+                    runSpacing: 2,
+                    children: [
+                      ...s.equipAffixes
+                          .where(
+                            (ea) =>
+                                (s.activeNum ?? 0) >= (ea.activeWhenNum ?? 0),
+                          )
+                          .expand(
+                            (e) => [
+                              Row(
+                                children: [
+                                  Text(
+                                    '${e.name.text(Lang.CHS)} * ${e.activeWhenNum}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  )
+                                ],
+                              ),
+                              GSDesc(
+                                desc: e.desc,
+                              ),
+                            ],
+                          )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ...?backup?.let(
+            (it) => [
+              Text(
+                '[$it]',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 9,
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

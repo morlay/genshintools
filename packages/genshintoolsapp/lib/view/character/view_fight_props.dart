@@ -1,6 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:genshindb/genshindb.dart';
 import 'package:genshintoolsapp/common/flutter.dart';
+import 'package:genshintoolsapp/view/gameui.dart';
 
 typedef ShouldHighlight = bool Function(FightProp fightProp);
 typedef ShouldCalc = double Function(FightProp fightProp, double value);
@@ -44,7 +44,7 @@ class ViewFightProps extends HookWidget {
         .whereType<Widget>();
 
     return Wrap(
-      runSpacing: 4,
+      runSpacing: 0,
       spacing: 4,
       children: [
         ...views,
@@ -101,7 +101,7 @@ class ViewFightProps extends HookWidget {
                   color: Theme.of(context).focusColor,
                 ),
                 child: Wrap(
-                  runSpacing: 4,
+                  runSpacing: 0,
                   children: [
                     ExpandableButton(
                       child:
@@ -164,78 +164,23 @@ class ViewFightProps extends HookWidget {
 
   Widget _buildLabelAndValue(
     BuildContext context,
-    FightProp k,
-    double v, {
+    FightProp fightProp,
+    double value, {
     FightProp? base,
     double? baseValue,
   }) {
-    final formatValue = format(v, k.format());
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
-      child: DefaultTextStyle.merge(
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 12,
-          color: Theme.of(context).primaryColor,
-          fontFeatures: const [FontFeature.tabularFigures()],
-          fontWeight: shouldHighlight
-              ?.let((fn) => fn(k))
-              .ifTrueOrNull(() => FontWeight.bold),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                k.label(),
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Theme.of(context).hintColor,
-                  fontWeight: shouldHighlight
-                      ?.let((fn) => fn(k))
-                      .ifTrueOrNull(() => FontWeight.w900),
-                ),
-              ),
-            ),
-            Wrap(
-              spacing: 2,
-              runSpacing: -1,
-              alignment: WrapAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: asDashboard ? double.infinity : null,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        ...formatValue.split('%').mapIndexed(
-                              (i, e) => i > 0
-                                  ? const TextSpan(
-                                      text: '%',
-                                      style: TextStyle(fontSize: 9),
-                                    )
-                                  : TextSpan(text: e),
-                            )
-                      ],
-                    ),
-                  ),
-                ),
-                ...?baseValue?.let((baseValue) => baseValue != v).ifTrueOrNull(
-                      () => [
-                        Text(
-                          format(baseValue, base!.format()),
-                          style: const TextStyle(
-                            fontSize: 8,
-                          ),
-                        )
-                      ],
-                    ),
-              ],
-            )
-          ],
-        ),
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: FightPropView(
+        fightProp: fightProp,
+        value: value,
+        highlight: shouldHighlight?.let((fn) => fn(fightProp)),
+        calcValue: (fp, v) {
+          if (baseValue != null) {
+            return baseValue;
+          }
+          return null;
+        },
       ),
     );
   }

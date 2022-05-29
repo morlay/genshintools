@@ -60,7 +60,7 @@ class ViewDailyNote extends HookWidget {
           ),
           Processing(
             label: const Text('参量质变仪 CD'),
-            current: Text(dailyNote.transformer.cd().toString().split('.')[0]),
+            current: Text(dailyNote.transformer.cd()),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '__generated__/daily_note.freezed.dart';
+
 part '__generated__/daily_note.g.dart';
 
 @freezed
@@ -41,13 +42,12 @@ class Transformer with _$Transformer {
   factory Transformer.fromJson(Map<String, dynamic> json) =>
       _Transformer.fromJson(json);
 
-  Duration cd() {
-    return Duration(
-      days: recoveryTime?['Day'] ?? 0,
-      hours: recoveryTime?['Hour'] ?? 0,
-      minutes: recoveryTime?['Minute'] ?? 0,
-      seconds: recoveryTime?['Second'] ?? 0,
-    );
+  String cd() {
+    return recoveryTime?['Day'] != null
+        ? "${recoveryTime?['Day']}d"
+        : recoveryTime?['Hour'] != null
+            ? "${recoveryTime?['Hour']}h"
+            : "${0}";
   }
 }
 

@@ -62,3 +62,6 @@ endef
 
 ensure.vendor:
 	git submodule update --init --remote --force
+
+adb.install:
+	adb install packages/genshintoolsapp/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk

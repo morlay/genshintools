@@ -7,7 +7,6 @@ import 'i18n.dart';
 import 'package:collection/collection.dart';
 
 part '__generated__/artifact.freezed.dart';
-
 part '__generated__/artifact.g.dart';
 
 @freezed

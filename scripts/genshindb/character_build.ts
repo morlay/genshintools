@@ -243,7 +243,7 @@ const fromCSV = async (csv: string, grid: Grid) => {
             .map((v) => trim(v.trim(), "*"))
             .filter((v: string) => v && !(v.startsWith("*") || v.startsWith("(") || v.endsWith(".")))
             .reduce((ret, v: string) => {
-                const parts = v.split("-");
+                const parts = v.split(/[-:]/);
 
                 if (parts.length !== 2) {
                     return ret;
@@ -336,26 +336,6 @@ export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } =
             ],
             ArtifactSetPairs: [["千岩牢固"]],
             SkillPriority: [["E"], ["Q"]],
-        },
-    ],
-    Yelan: [
-        {
-            Recommended: false,
-            Role: "DPS",
-            Weapons: [
-                ["若水"]
-            ],
-            ArtifactMainPropTypes: {
-                EQUIP_SHOES: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
-                EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
-                EQUIP_DRESS: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
-            },
-            ArtifactAffixPropTypes: [
-                FightProp[FightProp.FIGHT_PROP_CHARGE_EFFICIENCY],
-                FightProp[FightProp.FIGHT_PROP_HP_PERCENT],
-            ],
-            ArtifactSetPairs: [["沉沦之心"]],
-            SkillPriority: [["Q"], ["E"]],
         },
     ],
 };

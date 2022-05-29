@@ -31,6 +31,19 @@ class FightProps with _$FightProps {
         ...?from?.expand((e) => [e, ...e.allFrom]),
       ];
 
+  double? calcValue(FightProp fp, double value) {
+    if (fp == FightProp.ATTACK_PERCENT) {
+      return get(FightProp.BASE_ATTACK) * value;
+    }
+    if (fp == FightProp.HP_PERCENT) {
+      return get(FightProp.BASE_HP) * value;
+    }
+    if (fp == FightProp.DEFENSE_PERCENT) {
+      return get(FightProp.BASE_DEFENSE) * value;
+    }
+    return null;
+  }
+
   double? operator [](FightProp? key) {
     return fightProps[key];
   }

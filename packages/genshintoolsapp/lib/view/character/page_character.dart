@@ -118,34 +118,53 @@ class PageCharacter extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      _buildRole(context, c, uid, builds),
                       Expanded(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              flex: 5,
+                              flex: 1,
                               child: _buildBuild(
                                 context,
-                                db,
-                                uid,
-                                current,
-                                characterValueNotifier,
-                                fightProps,
-                                builds,
+                                state: characterValueNotifier,
+                                db: db,
+                                uid: uid,
+                                current: current,
+                                fightProps: fightProps,
+                                builds: builds,
                               ),
                             ),
-                            Expanded(
-                              flex: 4,
-                              child: SingleChildScrollView(
-                                child: _buildDashboard(
-                                  context,
-                                  fightProps,
-                                  builds,
-                                ),
+                            SizedBox(
+                              width: 56,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: SingleChildScrollView(
+                                      child: _buildDashboard(
+                                        context,
+                                        fightProps,
+                                        builds,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(),
+                                  SizedBox.square(
+                                    child: _buildAppendProps(
+                                      context,
+                                      state: characterValueNotifier,
+                                      db: db,
+                                      current: current,
+                                      fightProps: fightProps,
+                                      builds: builds,
+                                    ),
+                                  )
+                                ],
                               ),
                             )
                           ],
@@ -178,7 +197,7 @@ class PageCharacter extends HookWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 1,
                   child: _buildSkills(context, c, fightProps),
                 ),
               ],
@@ -222,21 +241,81 @@ class PageCharacter extends HookWidget {
     );
   }
 
+  Widget _buildAppendProps(
+    BuildContext context, {
+    required ValueNotifier<CharacterWithState> state,
+    required CharacterWithState current,
+    required GSDB db,
+    required FightProps fightProps,
+    required GSCharacterBuild builds,
+  }) {
+    var as = db.artifact;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: current.artifacts.last.substats.isNotEmpty
+          ? [
+              AppendPropsRank(
+                ranks: current.appendPropsRanks(
+                  as,
+                  builds,
+                  fightProps,
+                  location: current.character.key,
+                  chargeEfficiencyAsDPS: current.chargeEfficiencyAsDPS(as),
+                  asDetails: true,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  if (state.value.artifacts.last.substats.isEmpty) {
+                    state.value = state.value.copyWith(
+                      artifacts: current.artifacts,
+                    );
+                  } else {
+                    state.value = state.value.copyWith(
+                      artifacts: current.graduatedArtifacts(as),
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Center(
+                    child: Text(
+                      state.value.artifacts.last.substats.isEmpty
+                          ? '返回当前配装'
+                          : '查看毕业词条',
+                      style: const TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ),
+              ),
+            ]
+          : [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: const Center(
+                  child: Text(
+                    '当前面板包含 18+6 词条',
+                    style: TextStyle(fontSize: 8),
+                  ),
+                ),
+              ),
+            ],
+    );
+  }
+
   Widget _buildDashboard(
     BuildContext context,
     FightProps fightProps,
     GSCharacterBuild? builds,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: ViewFightProps(
-        asDashboard: true,
-        fightProps: fightProps,
-        shouldHighlight: (FightProp fp) => [
-          ...?builds?.artifactMainPropTypes?.values.expand((e) => e),
-          ...?builds?.artifactAffixPropTypes,
-        ].contains(fp),
-      ),
+    return ViewFightProps(
+      asDashboard: true,
+      fightProps: fightProps,
+      shouldHighlight: (FightProp fp) => [
+        ...?builds?.artifactMainPropTypes?.values.expand((e) => e),
+        ...?builds?.artifactAffixPropTypes,
+      ].contains(fp),
     );
   }
 
@@ -433,150 +512,363 @@ class PageCharacter extends HookWidget {
     );
   }
 
-  Widget _buildBuild(
-    BuildContext context,
-    GSDB db,
-    int uid,
-    CharacterWithState current,
-    ValueNotifier<CharacterWithState> state,
-    FightProps fightProps,
-    GSCharacterBuild builds,
-  ) {
+  Widget _buildEquipWeapon(
+    BuildContext context, {
+    required ValueNotifier<CharacterWithState> state,
+    required CharacterWithState current,
+    required GSDB db,
+    required FightProps fightProps,
+    required GSCharacterBuild builds,
+  }) {
     var c = state.value;
-    var roles = c.character.characterBuilds?.keys.toList() ?? [];
 
-    List<WeaponListTile> weapons = [
-      WeaponListTile(
+    List<WeaponCard> weapons = [
+      WeaponCard(
         fightProps: fightProps,
         weapon: db.weapon.find(current.w.key),
         level: c.w.level,
         refinement: c.w.refinement,
+        builds: builds,
         backup: '当前配装',
       ),
       ...?builds.weapons?.let(
         (weapons) => weapons.expandIndexed(
           (i, list) => list.map(
-            (e) => WeaponListTile(
+            (e) => WeaponCard(
               fightProps: fightProps,
               weapon: db.weapon.find(e),
               level: c.w.level,
+              builds: builds,
               refinement: c.w.refinement,
-              backup: '强度 ${weapons.length - i + (10 - weapons.length)}',
+              backup: '契合度 ${weapons.length - i + (10 - weapons.length)}',
             ),
           ),
         ),
       ),
     ];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Wrap(
-            runSpacing: 8,
-            spacing: 8,
-            alignment: WrapAlignment.center,
-            children: [
-              Select<String>(
-                title: const Text('角色定位切换'),
-                options: c.character.characterBuilds?.keys.toList() ?? [],
-                value: c.c.role,
-                onSelected: (role) {
-                  BlocGameData.read(context).updateCharacter(
-                    uid,
-                    c.c.key,
-                    (c) => c.copyWith(
-                      role: role,
-                    ),
-                  );
-                },
-                tileBuilder: (ctx, s) {
-                  return InkWell(
-                    onTap: () {
-                      if (roles.length > 1) {
-                        s.showOptions(ctx);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        builds.role ?? '',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
-                },
-                optionBuilder: (
-                  BuildContext context,
-                  SelectOption<dynamic> item,
-                  Selected<dynamic> selected,
-                ) {
-                  return ListTile(
-                    title: Text(item.value),
-                    selected: c.c.role == item.value,
-                    trailing: c
-                        .character.characterBuilds?[item.value]?.recommended
-                        ?.ifTrueOrNull(() => const Text('推荐')),
-                    onTap: () {
-                      item.select();
-                    },
-                  );
-                },
-                builder: (context, children) {
-                  return SingleChildScrollView(
-                    child: Wrap(
-                      children: children,
-                    ),
-                  );
-                },
-              ),
-              Select<WeaponListTile>(
-                title: const Text('武器'),
-                value: weapons.firstWhereOrNull((w) => w.weapon.key == c.w.key),
-                onSelected: (w) {
-                  state.value = c.copyWith(
-                    w: c.w.copyWith(
-                      key: w.weapon.key,
-                    ),
-                  );
-                },
-                options: weapons,
-                optionBuilder: (context, item, selected) {
-                  return GestureDetector(
-                    onTap: () {
-                      item.select();
-                    },
-                    child: item.value.asFull(),
-                  );
-                },
-                tileBuilder: (context, selected) {
-                  return GestureDetector(
-                    child: selected.value ?? const Text(''),
-                    onTap: () {
-                      selected.showOptions(context);
-                    },
-                  );
-                },
-              ),
-              ViewArtifactBuilder(
-                current: current,
-                state: state,
-                fightProps: fightProps,
-              ),
-            ],
+    return Select<WeaponCard>(
+      title: const Text('武器'),
+      value: weapons.firstWhereOrNull((w) => w.weapon.key == c.w.key),
+      onSelected: (w) {
+        state.value = c.copyWith(
+          w: c.w.copyWith(
+            key: w.weapon.key,
           ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: ViewBuildArtifacts(
-              current: current,
+        );
+      },
+      options: weapons,
+      builder: (BuildContext context, List<Widget> children) {
+        return FractionallySizedBox(
+          heightFactor: 1,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: children,
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      optionBuilder: (context, item, selected) {
+        return InkWell(
+          onTap: () {
+            item.select();
+          },
+          child: item.value,
+        );
+      },
+      tileBuilder: (context, selected) {
+        return InkWell(
+          child: selected.value ?? const Text(''),
+          onTap: () {
+            selected.showOptions(context);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildEquipArtifact(
+    BuildContext context,
+    GOODArtifact artifact, {
+    required ValueNotifier<CharacterWithState> state,
+    required CharacterWithState current,
+    required int uid,
+    required GSDB db,
+    required FightProps fightProps,
+    required GSCharacterBuild builds,
+  }) {
+    var blocGameData = BlocGameData.watch(context);
+    var playerState = blocGameData.playerState(uid);
+    var list = playerState.artifacts
+        .where((a) => a.slotKey == artifact.slotKey)
+        .toList();
+
+    return Select<GOODArtifact>(
+      title: const Text('圣遗物'),
+      options: list,
+      value: artifact,
+      onSelected: (selected) {
+        blocGameData.equipArtifact(
+          uid,
+          selected,
+          artifact,
+        );
+      },
+      builder: (c, list) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            child: Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: [...list],
+            ),
+          ),
+        );
+      },
+      optionBuilder: (context, option, selected) {
+        return GOODArtifactCard(
+          artifact: option.value,
+          onAvatarTap: () {
+            option.select();
+          },
+        );
+      },
+      tileBuilder: (context, selected) {
+        return selected.value!.let(
+          (pa) => GOODArtifactCard(
+            artifact: pa,
+            onAvatarTap: () {
+              selected.showOptions(context);
+            },
+            noHead: true,
+            noDelete: true,
+            mainProps: _buildMainProps(
+              context,
+              artifact,
               builds: builds,
               state: state,
-              fightProps: fightProps,
             ),
-          )
-        ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildMainProps(
+    BuildContext context,
+    GOODArtifact currentArtifact, {
+    required ValueNotifier<CharacterWithState> state,
+    required GSCharacterBuild builds,
+  }) {
+    var dataState = BlocGameData.read(context);
+    var db = dataState.db;
+    var artifact = state.value.artifacts
+        .firstWhereOrNull((a) => a.slotKey == currentArtifact.slotKey);
+
+    return SizedBox(
+      width: 48,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Wrap(
+          runSpacing: 2,
+          children: [
+            ...{
+              ...?builds.artifactMainPropTypes?[
+                  currentArtifact.slotKey.asEquipType()],
+              currentArtifact.mainStatKey.asFightProp(),
+            }.map(
+              (fp) => Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: (fp == artifact?.mainStatKey.asFightProp())
+                          ? Theme.of(context).primaryColor
+                          : Colors.transparent,
+                    ),
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    state.value = state.value.copyWith(
+                      artifacts: [
+                        ...state.value.artifacts.map(
+                          (artifact) =>
+                              artifact.slotKey == currentArtifact.slotKey
+                                  ? artifact.copyWith(
+                                      mainStatKey:
+                                          GOODArtifact.statKeyFromFightProp(fp),
+                                    )
+                                  : artifact,
+                        )
+                      ],
+                    );
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                    child: FightPropView(
+                      fightProp: fp,
+                      value: db.artifact.mainFightProp(
+                        fp,
+                        currentArtifact.rarity,
+                        artifact?.level ?? currentArtifact.level,
+                      ),
+                      highlight: builds.artifactMainPropTypes?[
+                                  currentArtifact.slotKey.asEquipType()]
+                              ?.contains(fp) ??
+                          false,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBuild(
+    BuildContext context, {
+    required ValueNotifier<CharacterWithState> state,
+    required CharacterWithState current,
+    required GSDB db,
+    required int uid,
+    required FightProps fightProps,
+    required GSCharacterBuild builds,
+  }) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                _buildEquipWeapon(
+                  context,
+                  state: state,
+                  db: db,
+                  current: current,
+                  fightProps: fightProps,
+                  builds: builds,
+                ),
+                Divider(),
+                _buildEquipArtifactPair(
+                  context,
+                  current: current,
+                  fightProps: fightProps,
+                  state: state,
+                ),
+                ...state.value.artifacts.map((artifact) => _buildEquipArtifact(
+                      context,
+                      artifact,
+                      state: state,
+                      db: db,
+                      uid: uid,
+                      current: current,
+                      fightProps: fightProps,
+                      builds: builds,
+                    )),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEquipArtifactPair(
+    BuildContext context, {
+    required CharacterWithState current,
+    required ValueNotifier<CharacterWithState> state,
+    required FightProps fightProps,
+  }) {
+    return ViewArtifactBuilder(
+      fightProps: fightProps,
+      state: state,
+      current: current,
+    );
+  }
+
+  Widget _buildRole(
+    BuildContext context,
+    CharacterWithState c,
+    int uid,
+    GSCharacterBuild builds,
+  ) {
+    var roles = c.character.characterBuilds?.keys.toList() ?? [];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Select<String>(
+        title: const Text('角色定位切换'),
+        options: c.character.characterBuilds?.keys.toList() ?? [],
+        value: c.c.role,
+        onSelected: (role) {
+          BlocGameData.read(context).updateCharacter(
+            uid,
+            c.c.key,
+            (c) => c.copyWith(
+              role: role,
+            ),
+          );
+        },
+        tileBuilder: (ctx, s) {
+          return InkWell(
+            onTap: () {
+              if (roles.length > 1) {
+                s.showOptions(ctx);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                builds.role ?? '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
+        },
+        optionBuilder: (
+          BuildContext context,
+          SelectOption<dynamic> item,
+          Selected<dynamic> selected,
+        ) {
+          return ListTile(
+            title: Text(item.value),
+            selected: c.c.role == item.value,
+            trailing: c.character.characterBuilds?[item.value]?.recommended
+                ?.ifTrueOrNull(() => const Text('推荐')),
+            onTap: () {
+              item.select();
+            },
+          );
+        },
+        builder: (context, children) {
+          return SingleChildScrollView(
+            child: Wrap(
+              children: children,
+            ),
+          );
+        },
       ),
     );
   }
@@ -719,8 +1011,8 @@ class PageCharacter extends HookWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                    left: 24,
-                    right: 160 + 16,
+                    left: 18,
+                    right: 160 + 18,
                     bottom: 16,
                   ),
                   child: Column(
