@@ -27,7 +27,7 @@ void main() async {
 
         var d = kIsWeb
             ? HydratedStorage.webStorageDirectory
-            : await getTemporaryDirectory();
+            : await getApplicationDocumentsDirectory();
 
         return HydratedStorage.build(
           storageDirectory: d,
