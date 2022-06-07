@@ -13,7 +13,7 @@ import 'theme.dart';
 
 void main() async {
   try {
-    var syncer = WebDAVSyncer();
+    var syncer = DataSyncer();
 
     HydratedBlocOverrides.runZoned(
       () => runApp(
@@ -40,7 +40,7 @@ void main() async {
 }
 
 class AppRoot extends HookWidget {
-  final WebDAVSyncer syncer;
+  final DataSyncer syncer;
 
   const AppRoot({
     required this.syncer,
@@ -77,14 +77,17 @@ class AppRoot extends HookWidget {
               create: (_) => BlocDailyNote(),
             ),
             BlocProvider<BlocGameData>(
-                lazy: false,
-                create: (_) => BlocGameData(blocGameData.requireData),),
+              lazy: false,
+              create: (_) => BlocGameData(blocGameData.requireData),
+            ),
           ],
-          child: syncer.provide(MaterialApp(
-            title: '原神工具箱',
-            theme: theme,
-            home: AppMain(),
-          ),),
+          child: syncer.provide(
+            MaterialApp(
+              title: '原神工具箱',
+              theme: theme,
+              home: AppMain(),
+            ),
+          ),
         );
       },
     );

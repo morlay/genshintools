@@ -39,11 +39,14 @@ class AppMain extends HookWidget {
 
     useUpgrader(context, BlocAuth.read(context).state.currentChannel);
 
-    useObservableEffect(() {
-      return Stream.periodic(const Duration(minutes: 1)).doOnData((v) {
-        WebDAVSyncer.read(context).sync();
-      });
-    }, [],);
+    useObservableEffect(
+      () {
+        return Stream.periodic(const Duration(minutes: 1)).doOnData((v) {
+          DataSyncer.read(context).sync();
+        });
+      },
+      [],
+    );
 
     return Provider<BottomNavigationBar>.value(
       value: BottomNavigationBar(

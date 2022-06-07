@@ -33,13 +33,18 @@ class AppBarWithAccount extends AppBar {
           centerTitle: false,
           actions: actions,
           titleSpacing: 0,
-          title: BlocBuilder<BlocAuth, AuthState>(builder: (context, state) {
-            return Row(
-              children: [
-                if (state.hasLogon()) ViewGameRole(gameRole: state.currentGameRole) else const Text('请添加游戏账号'),
-              ],
-            );
-          },),
+          title: BlocBuilder<BlocAuth, AuthState>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  if (state.hasLogon())
+                    ViewGameRole(gameRole: state.currentGameRole)
+                  else
+                    const Text('请添加游戏账号'),
+                ],
+              );
+            },
+          ),
         );
 }
 
@@ -67,9 +72,11 @@ class ViewGameRole extends HookWidget {
           ],
         ),
         Text.rich(
-          TextSpan(children: [
-            TextSpan(text: '${gameRole.regionName} / ${gameRole.gameUid}'),
-          ],),
+          TextSpan(
+            children: [
+              TextSpan(text: '${gameRole.regionName} / ${gameRole.gameUid}'),
+            ],
+          ),
           style: const TextStyle(
             fontSize: 10,
           ),
@@ -84,69 +91,71 @@ class CommonDrawer extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BlocAuth, AuthState>(builder: (context, state) {
-      var blocAuth = BlocAuth.read(context);
+    return BlocBuilder<BlocAuth, AuthState>(
+      builder: (context, state) {
+        var blocAuth = BlocAuth.read(context);
 
-      return ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              gradient: linearGradientForRarity(5),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Expanded(child: Text('')),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    '原神工具箱',
-                    style: TextStyle(color: Colors.white, fontSize: 22),
-                  ),
-                )
-              ],
-            ),
-          ),
-          ...state.roles.values.map(
-            (role) => ListTile(
-              leading: const Icon(Icons.remove),
-              title: ViewGameRole(
-                gameRole: role,
+        return ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: linearGradientForRarity(5),
               ),
-              tileColor: (state.currentUID == role.gameUid)
-                  .ifTrueOrNull(() => Theme.of(context).focusColor),
-              onTap: () => blocAuth.switchAccount(role.gameUid),
-              onLongPress: () => _removeAccount(context, role),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Expanded(child: Text('')),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      '原神工具箱',
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text('添加游戏账号'),
-            onTap: () {
-              PageAddAccount.show(context);
-            },
-          ),
-          const Divider(
-            height: 0,
-          ),
-          ListTile(
-            leading: const Icon(Icons.sync),
-            title: const Text('WebDAV 数据同步'),
-            onTap: () {
-              PageSyncSetting.show(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.help),
-            title: const Text('关于'),
-            onTap: () {
-              PageAbout.show(context);
-            },
-          ),
-        ],
-      );
-    },);
+            ...state.roles.values.map(
+              (role) => ListTile(
+                leading: const Icon(Icons.remove),
+                title: ViewGameRole(
+                  gameRole: role,
+                ),
+                tileColor: (state.currentUID == role.gameUid)
+                    .ifTrueOrNull(() => Theme.of(context).focusColor),
+                onTap: () => blocAuth.switchAccount(role.gameUid),
+                onLongPress: () => _removeAccount(context, role),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text('添加游戏账号'),
+              onTap: () {
+                PageAddAccount.show(context);
+              },
+            ),
+            const Divider(
+              height: 0,
+            ),
+            ListTile(
+              leading: const Icon(Icons.sync),
+              title: const Text('数据同步'),
+              onTap: () {
+                PageSyncSetting.show(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('关于'),
+              onTap: () {
+                PageAbout.show(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   _removeAccount(BuildContext context, GameRole role) {

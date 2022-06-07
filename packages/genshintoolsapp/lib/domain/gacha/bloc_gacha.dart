@@ -8,7 +8,7 @@ import 'gacha_state.dart';
 
 typedef GachaStates = Map<int, GachaState>;
 
-class BlocGacha extends HydratedCubit<GachaStates> with WebDAVSyncMixin {
+class BlocGacha extends HydratedCubit<GachaStates> with DataSyncMixin {
   BlocGacha() : super({});
 
   static BlocGacha read(BuildContext context) {
