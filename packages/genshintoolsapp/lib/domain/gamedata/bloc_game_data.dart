@@ -27,17 +27,19 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
 
   static Future<GSDB> dbFromAssetBundle(AssetBundle assetBundle) async {
     try {
-      final jsons = await Future.wait([
-        'assets/genshindb/artifacts.json',
-        'assets/genshindb/characters.json',
-        'assets/genshindb/enemies.json',
-        'assets/genshindb/materials.json',
-        'assets/genshindb/weapons.json',
-      ].map(
-        (e) => assetBundle
-            .loadString(e)
-            .then((v) => jsonDecode(v) as Map<String, dynamic>),
-      ),);
+      final jsons = await Future.wait(
+        [
+          'assets/genshindb/artifacts.json',
+          'assets/genshindb/characters.json',
+          'assets/genshindb/enemies.json',
+          'assets/genshindb/materials.json',
+          'assets/genshindb/weapons.json',
+        ].map(
+          (e) => assetBundle
+              .loadString(e)
+              .then((v) => jsonDecode(v) as Map<String, dynamic>),
+        ),
+      );
 
       return GSDB.fromJsons(jsons);
     } catch (err) {
@@ -52,31 +54,44 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
       ...findCharacterWithState(uid, '班尼特').let((c) {
         var fps = c.computeFightProps(db);
         return [
-          FightProps({
-            FightProp.ATTACK: c.calcSkillValue(
-                fps, SkillType.ELEMENTAL_BURST, '攻击力加成比例', fps.calcAttackAdd,),
-          }, name: '班尼特 加攻',)
+          FightProps(
+            {
+              FightProp.ATTACK: c.calcSkillValue(
+                fps,
+                SkillType.ELEMENTAL_BURST,
+                '攻击力加成比例',
+                fps.calcAttackAdd,
+              ),
+            },
+            name: '班尼特 加攻',
+          )
         ];
       }),
       ...findCharacterWithState(uid, '云堇').let((c) {
         var fps = c.computeFightProps(db);
         return [
-          FightProps({
-            FightProp.NORMAL_ATTACK_EXTRA_HURT: c.calcSkillValue(
-              fps,
-              SkillType.ELEMENTAL_BURST,
-              '伤害值提升',
-              (t, params) =>
-                  fps.calc(t, params) + fps.calc('{param1:F2P}防御力', [0.05]),
-            ),
-          }, name: '云堇 普攻附伤',)
+          FightProps(
+            {
+              FightProp.NORMAL_ATTACK_EXTRA_HURT: c.calcSkillValue(
+                fps,
+                SkillType.ELEMENTAL_BURST,
+                '伤害值提升',
+                (t, params) =>
+                    fps.calc(t, params) + fps.calc('{param1:F2P}防御力', [0.05]),
+              ),
+            },
+            name: '云堇 普攻附伤',
+          )
         ];
       }),
     ];
   }
 
-  syncGameInfo(MiHoYoBBSClient client, int uid,
-      [Iterable<PlayerArtifact>? playerArtifacts,]) async {
+  syncGameInfo(
+    MiHoYoBBSClient client,
+    int uid, [
+    Iterable<PlayerArtifact>? playerArtifacts,
+  ]) async {
     var data = await client.getUserInfo(uid);
 
     var ids = data.avatars?.map<int>((e) => e.id).toList() ?? [];
@@ -96,6 +111,8 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         uid: next,
       });
 
+      _syncCharacterGameData(client, uid);
+
       for (final c in next.characters) {
         if (c.level > 0) {
           _syncCharacterSkillLevels(client, uid, c.key);
@@ -105,6 +122,28 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
   }
 
   final Map<String, DateTime> _talentLastSyncAts = {};
+
+  _syncCharacterGameData(MiHoYoBBSClient client, int uid) async {
+    try {
+      var data = await EnkaClient(dio: client.dio).getGameData(uid: uid);
+      for (final c in data.avatarInfoList) {
+        var location = db.character.findOrNull("${c.avatarId}")?.key;
+
+        if (location != null) {
+          for (final e in c.equipList) {
+            if (e.isReliquary()) {
+              var setKey = db.artifact.findSetOrNull("${e.setID()}")?.key;
+              if (setKey != null) {
+                equipArtifact(uid, e.toGOODArtifact(location, setKey));
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   _syncCharacterSkillLevels(MiHoYoBBSClient client, int uid, String key) async {
     var c = db.character.find(key);
@@ -179,21 +218,27 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
 
     return db.character
         .toList()
-        .map((c) => CharacterWithState(
-              character: c,
-              c: ps.character(c.key),
-              w: ps.weaponOn(
-                c.key,
-                c.initialWeaponKey,
-              ),
-              artifacts: ps.artifactsOn(c.key),
-            ),)
+        .map(
+          (c) => CharacterWithState(
+            character: c,
+            c: ps.character(c.key),
+            w: ps.weaponOn(
+              c.key,
+              c.initialWeaponKey,
+            ),
+            artifacts: ps.artifactsOn(c.key),
+          ),
+        )
         .toList()
       ..sort((a, b) => a.weight() > b.weight() ? -1 : 1);
   }
 
-  GOOD _patchGOODFromMiYoBBS(int uid, GOOD good, List<Avatar> avatars,
-      [Iterable<PlayerArtifact>? playerArtifacts,]) {
+  GOOD _patchGOODFromMiYoBBS(
+    int uid,
+    GOOD good,
+    List<Avatar> avatars, [
+    Iterable<PlayerArtifact>? playerArtifacts,
+  ]) {
     playerArtifacts?.forEach((pa) {
       db.character.findOrNull('${pa.usedBy}')?.let((c) {
         final location = c.key;
@@ -234,13 +279,14 @@ class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
         final location = c.key;
 
         good = good.updateCharacter(
-            location,
-            (gc) => gc.copyWith(
-                  role: c.defaultCharacterBuildRole(gc.role),
-                  level: avatar.level,
-                  constellation: avatar.activedConstellationNum,
-                  ascension: GOODCharacter.ascensionByLevel(avatar.level),
-                ),);
+          location,
+          (gc) => gc.copyWith(
+            role: c.defaultCharacterBuildRole(gc.role),
+            level: avatar.level,
+            constellation: avatar.activedConstellationNum,
+            ascension: GOODCharacter.ascensionByLevel(avatar.level),
+          ),
+        );
 
         owned[location] = true;
 
