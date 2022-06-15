@@ -111,6 +111,8 @@ class BlocGameData extends HydratedCubit<PlayerStates> with DataSyncMixin {
         uid: next,
       });
 
+      _syncCharacterGameData(client, uid);
+
       for (final c in next.characters) {
         if (c.level > 0) {
           _syncCharacterSkillLevels(client, uid, c.key);
@@ -120,6 +122,28 @@ class BlocGameData extends HydratedCubit<PlayerStates> with DataSyncMixin {
   }
 
   final Map<String, DateTime> _talentLastSyncAts = {};
+
+  _syncCharacterGameData(MiHoYoBBSClient client, int uid) async {
+    try {
+      var data = await EnkaClient(dio: client.dio).getGameData(uid: uid);
+      for (final c in data.avatarInfoList) {
+        var location = db.character.findOrNull("${c.avatarId}")?.key;
+
+        if (location != null) {
+          for (final e in c.equipList) {
+            if (e.isReliquary()) {
+              var setKey = db.artifact.findSetOrNull("${e.setID()}")?.key;
+              if (setKey != null) {
+                equipArtifact(uid, e.toGOODArtifact(location, setKey));
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   _syncCharacterSkillLevels(MiHoYoBBSClient client, int uid, String key) async {
     var c = db.character.find(key);

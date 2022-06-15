@@ -4,6 +4,7 @@ import 'package:genshindb/genshindb.dart';
 import 'package:collection/collection.dart';
 
 part '__generated__/good.freezed.dart';
+
 part '__generated__/good.g.dart';
 
 @freezed
@@ -52,8 +53,10 @@ class GOOD with _$GOOD {
     String key,
     GOODCharacter Function(GOODCharacter c) update,
   ) {
-    final updated = update(characters.firstWhereOrNull((e) => e.key == key) ??
-        GOODCharacter.create(key),);
+    final updated = update(
+      characters.firstWhereOrNull((e) => e.key == key) ??
+          GOODCharacter.create(key),
+    );
 
     return copyWith(
       version: 1,
@@ -73,9 +76,11 @@ class GOOD with _$GOOD {
 
     if (found != null) {
       return copyWith(
-        weapons: _cleanupWeapons(weapons
-            .map((a) => a.location == found.location ? update(found) : a)
-            .toList(),),
+        weapons: _cleanupWeapons(
+          weapons
+              .map((a) => a.location == found.location ? update(found) : a)
+              .toList(),
+        ),
       );
     }
 
@@ -92,22 +97,26 @@ class GOOD with _$GOOD {
     String location,
     GOODArtifact Function(GOODArtifact artifact) update,
   ) {
-    var found = artifacts.firstWhereOrNull((e) =>
-        (e.slotKey == sk && e.location == location) ||
-        // 为圣遗物匹配不同元素的旅行者
-        (e.slotKey == sk && e.location == 'Traveler') &&
-            location.startsWith('Traveler'),);
+    var found = artifacts.firstWhereOrNull(
+      (e) =>
+          (e.slotKey == sk && e.location == location) ||
+          // 为圣遗物匹配不同元素的旅行者
+          (e.slotKey == sk && e.location == 'Traveler') &&
+              location.startsWith('Traveler'),
+    );
 
     if (found != null) {
       return copyWith(
         artifacts: _cleanupArtifacts(
-            artifacts.map((a) => a == found ? update(found) : a).toList(),),
+          artifacts.map((a) => a == found ? update(found) : a).toList(),
+        ),
       );
     }
 
     return copyWith(
       artifacts: _cleanupArtifacts(
-          [...artifacts, update(GOODArtifact.create(sk, location))],),
+        [...artifacts, update(GOODArtifact.create(sk, location))],
+      ),
     );
   }
 
@@ -138,7 +147,7 @@ class GOOD with _$GOOD {
         return copyWith(
             artifacts: [
           ...artifacts.map((a) => from == a ? artifact : a),
-        ].uniqBy((e) => e.hashCode),);
+        ].uniqBy((e) => e.hashCode));
       } else {
         return copyWith(
             artifacts: [
@@ -155,9 +164,20 @@ class GOOD with _$GOOD {
             }
             return a;
           })
-        ].uniqBy((e) => e.hashCode),);
+        ].uniqBy((e) => e.hashCode));
       }
     }
+
+    if (artifact.location != "") {
+      return copyWith(
+        artifacts: [
+          ...artifacts.where((a) => !(a.slotKey == artifact.slotKey &&
+              a.location == artifact.location)),
+          artifact,
+        ].uniqBy((e) => e.hashCode),
+      );
+    }
+
     return copyWith(
       artifacts: [
         ...artifacts,
@@ -207,15 +227,16 @@ class GOODCharacter with _$GOODCharacter {
   }) = _GOODCharacter;
 
   factory GOODCharacter.create(String key) => GOODCharacter(
-          key: key,
-          level: 1,
-          constellation: 0,
-          ascension: 0,
-          talent: {
-            TalentType.auto: 1,
-            TalentType.skill: 1,
-            TalentType.burst: 1,
-          },);
+        key: key,
+        level: 1,
+        constellation: 0,
+        ascension: 0,
+        talent: {
+          TalentType.auto: 1,
+          TalentType.skill: 1,
+          TalentType.burst: 1,
+        },
+      );
 
   factory GOODCharacter.fromJson(Map<String, dynamic> json) =>
       _GOODCharacter.fromJson(json);
