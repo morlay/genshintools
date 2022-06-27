@@ -28,7 +28,7 @@ jobs:
       - run: make convert gen lint
       - run: make build.android
 
-      - uses: JamesIves/github-pages-deploy-action@v4.3.3
+      - uses: JamesIves/github-pages-deploy-action@v4.3.4
         with:
           folder: ./packages/genshintoolsapp/build/.release
           branch: release-stable
