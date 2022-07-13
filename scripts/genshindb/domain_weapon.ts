@@ -1,7 +1,7 @@
 import {addPropSet, createIndexes, groupMulti, groupOne, i18n, i18nWithKey} from "./common";
 import {Materials, toMaterialCosts} from "./domain_material";
 import {EquipAffixes} from "./domain_equip_affix";
-import {mapKeys} from "lodash-es";
+import {filter, mapKeys} from "lodash-es";
 import {
     WeaponCurveExcelConfigData,
     WeaponExcelConfigData,
@@ -64,8 +64,8 @@ export const Weapons = groupOne(
             Rarity: a.rankLevel,
             WeaponType: a.weaponType,
             PromoteId: a.weaponPromoteId,
-            PropGrowCurveAndInitials: a.weaponProp.filter((p) => p.propType).reduce(
-                (ret, curve) => ({
+            PropGrowCurveAndInitials: filter(a.weaponProp || [], (p: any) => p.propType).reduce(
+                (ret: any, curve: any) => ({
                     ...ret,
                     [curve.propType as string]: {
                         GrowCurve: curve.type,

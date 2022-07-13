@@ -318,23 +318,26 @@ const fromCSV = async (csv: string, grid: Grid) => {
 };
 
 export let Builds: { [key: string]: Array<ReturnType<typeof characterBuild>> } = {
-    KukiShinobu: [
+    ShikanoinHeizou: [
         {
             Recommended: false,
-            Role: "SUPPORT",
+            Role: "DPS",
             Weapons: [
-                ["西风剑"]
+                ["天空之卷"]
             ],
             ArtifactMainPropTypes: {
-                EQUIP_SHOES: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
-                EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
-                EQUIP_DRESS: [FightProp[FightProp.FIGHT_PROP_HP_PERCENT]],
+                EQUIP_SHOES: [FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT]],
+                EQUIP_RING: [FightProp[FightProp.FIGHT_PROP_WIND_ADD_HURT]],
+                EQUIP_DRESS: [
+                    FightProp[FightProp.FIGHT_PROP_CRITICAL],
+                    FightProp[FightProp.FIGHT_PROP_CRITICAL_HURT]
+                ],
             },
             ArtifactAffixPropTypes: [
                 FightProp[FightProp.FIGHT_PROP_CHARGE_EFFICIENCY],
-                FightProp[FightProp.FIGHT_PROP_HP_PERCENT],
+                FightProp[FightProp.FIGHT_PROP_ATTACK_PERCENT],
             ],
-            ArtifactSetPairs: [["千岩牢固"]],
+            ArtifactSetPairs: [["翠绿之影"]],
             SkillPriority: [["E"], ["Q"]],
         },
     ],

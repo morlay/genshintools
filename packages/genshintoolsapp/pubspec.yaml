@@ -1,7 +1,7 @@
 name: genshintoolsapp
 description: genshin tools app
 publish_to: 'none'
-version: 2.7.0
+version: 2.8.0
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

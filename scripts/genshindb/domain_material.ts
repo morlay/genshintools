@@ -75,7 +75,7 @@ export const Materials = groupOne(
     (m) => {
         const n = i18nWithKey(m.nameTextMapHash);
 
-        if (n.CHS.includes("test")) {
+        if (n.CHS == "" || n.CHS.includes("test")) {
             return null;
         }
 
