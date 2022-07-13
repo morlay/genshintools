@@ -151,5 +151,13 @@ enum GSMaterialType {
 
   @EnumMeta(label: '机器人')
   @JsonValue('MATERIAL_ACTIVITY_ROBOT')
-  ACTIVITY_ROBOT
+  ACTIVITY_ROBOT,
+
+  @EnumMeta(label: '齿轮')
+  @JsonValue('MATERIAL_ACTIVITY_GEAR')
+  ACTIVITY_GEAR,
+
+  @EnumMeta(label: '拼图')
+  @JsonValue('MATERIAL_ACTIVITY_JIGSAW')
+  ACTIVITY_JIGSAW
 }

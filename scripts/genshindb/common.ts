@@ -18,8 +18,8 @@ const process =
         };
 
 export const i18n = (hash: number, ...textProcesses: Array<(s: string) => string>) => ({
-    CHS: process(textProcesses)(chsText(hash)),
-    EN: process(textProcesses)(enText(hash)),
+    CHS: process(textProcesses)(chsText(hash) || ""),
+    EN: process(textProcesses)(enText(hash) || ""),
 });
 
 export const pascalCase = (s: string) => upperFirst(camelCase(s));
@@ -27,12 +27,12 @@ export const pascalCase = (s: string) => upperFirst(camelCase(s));
 export const i18nWithKey = (hash: number, ...textProcesses: Array<(s: string) => string>) => {
     const i = i18n(hash, ...textProcesses);
     return {
-        ...i,
         KEY: pascalCase(i.EN),
+        ...i,
     };
 };
 
-export const cleanText = (t: string): string => {
+export const cleanText = (t: string = ""): string => {
     return t
         .replace(new RegExp(/<color=#[0-9A-F]+>([^<]+)<\/color>/, "g"), "$1")
         .replace(new RegExp(/<i>([^<]+)<\/i>/, "g"), "$1");
