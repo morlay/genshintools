@@ -42,11 +42,15 @@ class Transformer with _$Transformer {
   factory Transformer.fromJson(Map<String, dynamic> json) =>
       _Transformer.fromJson(json);
 
+  int get(String prop) {
+    return recoveryTime?[prop] ?? 0;
+  }
+
   String cd() {
-    return recoveryTime?['Day'] != null
-        ? "${recoveryTime?['Day']}d"
-        : recoveryTime?['Hour'] != null
-            ? "${recoveryTime?['Hour']}h"
+    return get('Day') != 0
+        ? "${get('Day')}d"
+        : get('Hour') != 0
+            ? "${get('Hour')}h"
             : "${0}";
   }
 }
