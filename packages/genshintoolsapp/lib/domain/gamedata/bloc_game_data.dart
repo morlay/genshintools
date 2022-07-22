@@ -12,7 +12,7 @@ import 'player_state.dart';
 
 typedef PlayerStates = Map<int, GOOD>;
 
-class BlocGameData extends HydratedCubit<PlayerStates> with WebDAVSyncMixin {
+class BlocGameData extends HydratedCubit<PlayerStates> with DataSyncMixin {
   GSDB db;
 
   BlocGameData(this.db) : super({});

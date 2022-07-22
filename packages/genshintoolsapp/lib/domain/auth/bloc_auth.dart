@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'auth_state.dart';
 
-class BlocAuth extends HydratedCubit<AuthState> with WebDAVSyncMixin {
+class BlocAuth extends HydratedCubit<AuthState> with DataSyncMixin {
   static BlocAuth read(BuildContext context) {
     return context.read<BlocAuth>();
   }
@@ -16,9 +16,11 @@ class BlocAuth extends HydratedCubit<AuthState> with WebDAVSyncMixin {
   }
 
   BlocAuth()
-      : super(AuthState(
-          currentUID: '',
-        ),);
+      : super(
+          AuthState(
+            currentUID: '',
+          ),
+        );
 
   addAccounts({
     required List<GameRole> gameRoles,
@@ -32,15 +34,19 @@ class BlocAuth extends HydratedCubit<AuthState> with WebDAVSyncMixin {
   }
 
   switchAccount(String uid) {
-    emit(state.copyWith(
-      currentUID: uid,
-    ),);
+    emit(
+      state.copyWith(
+        currentUID: uid,
+      ),
+    );
   }
 
   switchChannel(String channel) {
-    emit(state.copyWith(
-      channel: channel,
-    ),);
+    emit(
+      state.copyWith(
+        channel: channel,
+      ),
+    );
   }
 
   @override
